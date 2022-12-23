@@ -12,12 +12,8 @@ void demo_drive_leds ();
 void handle_command ();
 void print_distance ();
 void read_imu ();
-void backward_command ();
 void command_mode_command ();
 void demo_mode_command ();
-void forward_command ();
-void clockwise_command ();
-void counterclockwise_command ();
 void stop_command ();
 void motor_0_command ();
 void motor_1_command ();
@@ -153,19 +149,23 @@ void handle_command ()
             switch (cmd)
             {
                 case '<':
-                    backward_command();
+                    reverse(SPEED_FULL, 500);
+                    all_stop();
                     break;
                 case '>':
-                    forward_command();
+                    forward(SPEED_FULL, 500);
+                    all_stop();
                     break;
                 case '=':
                     stop_command();
                     break;
                 case 'd':
-                    clockwise_command();
+                    turn_clockwise(SPEED_FULL, 500);
+                    all_stop();
                     break;
                 case 'u':
-                    counterclockwise_command();
+                    turn_counterclockwise(SPEED_FULL, 500);
+                    all_stop();
                     break;
             }
             delay(500);
@@ -196,13 +196,16 @@ void handle_command ()
                 demo_drive_leds();
                 break;
             case 'f':
-                forward_command();
+                forward(SPEED_FULL, 500);
+                all_stop();
                 break;
             case 'l':
-                clockwise_command();
+                turn_clockwise(SPEED_FULL, 500);
+                all_stop();
                 break;
             case 'r':
-                counterclockwise_command();
+                turn_counterclockwise(SPEED_FULL, 500);
+                all_stop();
                 break;
             case 's':
                 stop_command();
@@ -303,22 +306,10 @@ void demo_mode_command ()
     Serial.println("Current mode is DEMO MODE");
 }
 
-void forward_command ()
-{
-    forward(SPEED_FULL, 500);
-    all_stop();
-}
 
-void clockwise_command ()
-{
-    turn_clockwise(SPEED_FULL, 500);
-    all_stop();
-}
 
 void counterclockwise_command ()
 {
-    turn_counterclockwise(SPEED_FULL, 500);
-    all_stop();
 }
 
 void stop_command ()
@@ -328,7 +319,6 @@ void stop_command ()
 
 void motor_0_command ()
 {
-    all_stop();
     set_motor_forward(0, SPEED_FULL);
     delay(5000);
     all_stop();
@@ -336,7 +326,6 @@ void motor_0_command ()
 
 void motor_1_command ()
 {
-    all_stop();
     set_motor_forward(1, SPEED_FULL);
     delay(5000);
     all_stop();
@@ -344,7 +333,6 @@ void motor_1_command ()
 
 void motor_2_command ()
 {
-    all_stop();
     set_motor_reverse(0, SPEED_FULL);
     delay(5000);
     all_stop();
@@ -352,7 +340,6 @@ void motor_2_command ()
 
 void motor_3_command ()
 {
-    all_stop();
     set_motor_reverse(1, SPEED_FULL);
     delay(5000);
     all_stop();
