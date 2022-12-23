@@ -3,11 +3,10 @@
 #include "IRremote.h"
 #include <MPU6050.h>
 #include <Wire.h>
+#include "Motor.hpp"
 
-// Early program for robot car
+// Program for robot car
 
-void setup_drive_motors ();
-void setup_drive_leds ();
 void setup_imu ();
 void demo_drive_leds ();
 void handle_command ();
@@ -17,8 +16,8 @@ void backward_command ();
 void command_mode_command ();
 void demo_mode_command ();
 void forward_command ();
-void left_command ();
-void right_command ();
+void clockwise_command ();
+void counterclockwise_command ();
 void stop_command ();
 void motor_0_command ();
 void motor_1_command ();
@@ -27,31 +26,27 @@ void motor_3_command ();
 void help_command ();
 void forward (const int speed, const int duration);
 void reverse (const int speed, const int duration);
-void forward_right (const int speed, const int duration);
-void forward_left (const int speed, const int duration);
+void turn_clockwise (const int speed, const int duration);
+void turn_counterclockwise (const int speed, const int duration);
 void all_stop ();
 void set_motor_forward (const int motor, const int speed);
 void set_motor_reverse (const int motor, int speed);
 const char translate_ir (const unsigned long value);
-
-const int MOTOR_COUNT = 2;
 
 // pins
 // 2 yellow = in1
 // 3 orange = in2
 // 4 purple = in3
 // 5 blue = in4
+// 6 blue = enA
+// 7 green = enB
 
-int enable_pin[] =
-{ 6, 7 };  // Enable motor
-int dir_a_pin[] =
-{ 2, 4 };     // Forward if high
-int dir_b_pin[] =
-{ 3, 5 };     // reverse if high
-int forward_led[] =
-{ 26, 22 };
-int reverse_led[] =
-{ 28, 24 };
+// LED_0 = 22;  // red led
+// LED_1 = 24;  // green led
+// LED_2 = 26;  // red led
+// LED_3 = 28;  // green led
+Motor motors[] =
+{ Motor(6, 2, 3, 26, 28), Motor(7, 5, 4, 22, 24) };
 
 const int SPEED_FULL = 255;
 const int SPEED_Q3 = 196;
@@ -59,11 +54,6 @@ const int SPEED_160 = 175;
 const int SPEED_HALF = 128;
 const int SPEED_Q1 = 64;
 const int SPEED_CRAWL = 32;
-
-//const int LED_0 = 22;  // red led
-//const int LED_1 = 24;  // green led
-//const int LED_2 = 26;  // red led
-//const int LED_3 = 28;  // green led
 
 const int ULTRASOUND_TRIGGER = 12;  // blue
 const int ULTRASOUND_ECHO = 11;     // green
@@ -94,48 +84,25 @@ void setup ()
     Serial.println("Smart car");
     //Serial.println("IR Receiver Button Decode");
     //irrecv.enableIRIn();  // Start the receiver
-    setup_drive_motors();
-    setup_drive_leds();
+    for (int motor = 0; motor < MOTOR_COUNT; motor++)
+    {
+        motors[motor].setup();
+    }
     //setup_imu();
     demo_drive_leds();
     Serial.println("Ready");
 }
 
-void setup_drive_motors ()
-{
-    for (int motor = 0; motor < MOTOR_COUNT; motor++)
-    {
-        //---set pin direction
-        pinMode(enable_pin[motor], OUTPUT);
-        pinMode(dir_a_pin[motor], OUTPUT);
-        pinMode(dir_b_pin[motor], OUTPUT);
-    }
-}
-
-void setup_drive_leds ()
-{
-    for (int motor = 0; motor < MOTOR_COUNT; motor++)
-    {
-        pinMode(forward_led[motor], OUTPUT);
-        pinMode(reverse_led[motor], OUTPUT);
-    }
-}
-
 void demo_drive_leds ()
 {
+    int duration = 150;
     for (int i = 0; i < 3; i++)
     {
         for (int motor = 0; motor < MOTOR_COUNT; motor++)
         {
-            digitalWrite(forward_led[motor], HIGH);
-            delay(100);
-            digitalWrite(forward_led[motor], LOW);
-            delay(100);
-            digitalWrite(forward_led[motor], HIGH);
-            delay(100);
-            digitalWrite(forward_led[motor], LOW);
-            delay(100);
+            motors[motor].led_demo(duration);
         }
+        duration /= 2;
     }
 }
 
@@ -165,10 +132,10 @@ void loop ()
         delay(5000);
         reverse(SPEED_FULL, 1500);
         delay(5000);
-        forward_right(SPEED_FULL, 1500);
-        delay(5000);
-        forward_left(SPEED_FULL, 1500);
-        delay(5000);
+//        turn_clockwise(SPEED_FULL, 1500);
+//        delay(5000);
+//        turn_counterclockwise(SPEED_FULL, 1500);
+//        delay(5000);
     }
 }
 
@@ -195,10 +162,10 @@ void handle_command ()
                     stop_command();
                     break;
                 case 'd':
-                    left_command();
+                    clockwise_command();
                     break;
                 case 'u':
-                    right_command();
+                    counterclockwise_command();
                     break;
             }
             delay(500);
@@ -216,22 +183,26 @@ void handle_command ()
         switch (cmd)
         {
             case 'b':
-                backward_command();
+                reverse(SPEED_FULL, 500);
+                all_stop();
                 break;
             case 'c':
                 command_mode_command();
                 break;
+//            case 'd':
+//                demo_mode_command();
+//                break;
             case 'd':
-                demo_mode_command();
+                demo_drive_leds();
                 break;
             case 'f':
                 forward_command();
                 break;
             case 'l':
-                left_command();
+                clockwise_command();
                 break;
             case 'r':
-                right_command();
+                counterclockwise_command();
                 break;
             case 's':
                 stop_command();
@@ -249,32 +220,32 @@ void handle_command ()
                 motor_3_command();
                 break;
             case 'A':  // Red m0
-                digitalWrite(forward_led[0], HIGH);
+                motors[0].drive_forward(SPEED_FULL);
                 delay(1000);
-                digitalWrite(forward_led[0], LOW);
+                motors[0].drive_stop();
                 break;
             case 'B':  // Green m0
-                digitalWrite(reverse_led[0], HIGH);
+                motors[0].drive_reverse(SPEED_FULL);
                 delay(1000);
-                digitalWrite(reverse_led[0], LOW);
+                motors[0].drive_stop();
                 break;
             case 'C':  // Red m1
-                digitalWrite(forward_led[1], HIGH);
+                motors[1].drive_forward(SPEED_FULL);
                 delay(1000);
-                digitalWrite(forward_led[1], LOW);
+                motors[1].drive_stop();
                 break;
             case 'D':  // Green m1
-                digitalWrite(reverse_led[1], HIGH);
+                motors[1].drive_reverse(SPEED_FULL);
                 delay(1000);
-                digitalWrite(reverse_led[1], LOW);
+                motors[1].drive_stop();
                 break;
             case 'x':  // motor 0 forward
-                set_motor_forward(0, SPEED_FULL);
+                motors[0].drive_forward(SPEED_FULL);
                 delay(1000);
                 all_stop();
                 break;
             case 'X':  // motor 0 reverse
-                set_motor_reverse(0, SPEED_FULL);
+                motors[0].drive_reverse(SPEED_FULL);
                 delay(1000);
                 all_stop();
                 break;
@@ -318,12 +289,6 @@ void handle_command ()
     }
 }
 
-void backward_command ()
-{
-    reverse(SPEED_FULL, 1500);
-    all_stop();
-}
-
 void command_mode_command ()
 {
     all_stop();
@@ -340,19 +305,19 @@ void demo_mode_command ()
 
 void forward_command ()
 {
-    forward(SPEED_FULL, 1500);
+    forward(SPEED_FULL, 500);
     all_stop();
 }
 
-void left_command ()
+void clockwise_command ()
 {
-    forward_left(SPEED_FULL, 1500);
+    turn_clockwise(SPEED_FULL, 500);
     all_stop();
 }
 
-void right_command ()
+void counterclockwise_command ()
 {
-    forward_right(SPEED_FULL, 1500);
+    turn_counterclockwise(SPEED_FULL, 500);
     all_stop();
 }
 
@@ -364,7 +329,7 @@ void stop_command ()
 void motor_0_command ()
 {
     all_stop();
-    set_motor_forward(0, HIGH);
+    set_motor_forward(0, SPEED_FULL);
     delay(5000);
     all_stop();
 }
@@ -372,7 +337,7 @@ void motor_0_command ()
 void motor_1_command ()
 {
     all_stop();
-    set_motor_forward(1, HIGH);
+    set_motor_forward(1, SPEED_FULL);
     delay(5000);
     all_stop();
 }
@@ -380,7 +345,7 @@ void motor_1_command ()
 void motor_2_command ()
 {
     all_stop();
-    set_motor_reverse(0, HIGH);
+    set_motor_reverse(0, SPEED_FULL);
     delay(5000);
     all_stop();
 }
@@ -388,7 +353,7 @@ void motor_2_command ()
 void motor_3_command ()
 {
     all_stop();
-    set_motor_reverse(1, HIGH);
+    set_motor_reverse(1, SPEED_FULL);
     delay(5000);
     all_stop();
 }
@@ -415,8 +380,8 @@ void help_command ()
     {
         Serial.println("Current mode is UNKNOWN MODE");
     }
-    read_imu();
-    print_distance();
+//    read_imu();
+//    print_distance();
 }
 
 void print_distance ()
@@ -457,46 +422,8 @@ void read_imu ()
     Serial.println();
 }
 
-void set_all_led (int value)
-{
-    for (int motor = 0; motor < MOTOR_COUNT; motor++)
-    {
-        digitalWrite(forward_led[motor], value);
-        digitalWrite(reverse_led[motor], value);
-    }
-}
-
-//void led_forward (int motor)
-//{
-//    if (motor == 0)
-//    {
-//        digitalWrite(LED_0, HIGH);
-//        digitalWrite(LED_1, LOW);
-//    }
-//    else if (motor == 1)
-//    {
-//        digitalWrite(LED_2, HIGH);
-//        digitalWrite(LED_3, LOW);
-//    }
-//}
-
-//void led_reverse (int motor)
-//{
-//    if (motor == 0)
-//    {
-//        digitalWrite(LED_0, LOW);
-//        digitalWrite(LED_1, HIGH);
-//    }
-//    else if (motor == 1)
-//    {
-//        digitalWrite(LED_2, LOW);
-//        digitalWrite(LED_3, HIGH);
-//    }
-//}
-
 void forward (const int speed, const int duration)
 {
-    set_all_led(LOW);
     Serial.print("forward ");
     Serial.print(speed);
     Serial.print(" for ");
@@ -504,7 +431,8 @@ void forward (const int speed, const int duration)
     Serial.println(" ms");
     for (int i = 0; i < MOTOR_COUNT; i++)
     {
-        set_motor_forward(i, speed);
+        motors[i].drive_forward(speed);
+        delay(10);
     }
     delay(duration);
     Serial.println("stop");
@@ -513,7 +441,6 @@ void forward (const int speed, const int duration)
 
 void reverse (const int speed, const int duration)
 {
-    set_all_led(LOW);
     Serial.print("reverse ");
     Serial.print(speed);
     Serial.print(" for ");
@@ -521,41 +448,40 @@ void reverse (const int speed, const int duration)
     Serial.println(" ms");
     for (int i = 0; i < MOTOR_COUNT; i++)
     {
-        set_motor_reverse(i, speed);
+        motors[i].drive_reverse(speed);
+        delay(10);
     }
     delay(duration);
     Serial.println("stop");
     all_stop();
 }
 
-void forward_right (const int speed, const int duration)
+void turn_clockwise (const int speed, const int duration)
 {
-    set_all_led(LOW);
-    Serial.print("forward right ");
+    Serial.print("turn clockwise ");
     Serial.print(speed);
     Serial.print(" for ");
     Serial.print(duration);
     Serial.println(" ms");
 
-    set_motor_reverse(0, HIGH);
-    set_motor_forward(1, HIGH);
+    set_motor_forward(0, SPEED_FULL);
+    set_motor_reverse(1, SPEED_FULL);
 
     delay(duration);
     Serial.println("stop");
     all_stop();
 }
 
-void forward_left (const int speed, const int duration)
+void turn_counterclockwise (const int speed, const int duration)
 {
-    set_all_led(LOW);
-    Serial.print("forward left ");
+    Serial.print("turn counterclockwise ");
     Serial.print(speed);
     Serial.print(" for ");
     Serial.print(duration);
     Serial.println(" ms");
 
-    set_motor_forward(0, HIGH);
-    set_motor_reverse(1, HIGH);
+    set_motor_reverse(0, SPEED_FULL);
+    set_motor_forward(1, SPEED_FULL);
 
     delay(duration);
     Serial.println("stop");
@@ -564,9 +490,7 @@ void forward_left (const int speed, const int duration)
 
 void set_motor_stop (const int motor)
 {
-    analogWrite(enable_pin[motor], LOW);
-    digitalWrite(forward_led[motor], LOW);
-    digitalWrite(reverse_led[motor], LOW);
+    motors[motor].drive_stop();
 }
 
 void all_stop ()
@@ -577,19 +501,13 @@ void all_stop ()
 
 void set_motor_forward (const int motor, const int speed)
 {
-    digitalWrite(forward_led[motor], HIGH);
-    digitalWrite(dir_b_pin[motor], LOW);
-    digitalWrite(dir_a_pin[motor], HIGH);
-    analogWrite(enable_pin[motor], speed);
+    motors[motor].drive_forward(speed);
     delay(10);
 }
 
 void set_motor_reverse (const int motor, int speed)
 {
-    digitalWrite(reverse_led[motor], HIGH);
-    digitalWrite(dir_a_pin[motor], LOW);
-    digitalWrite(dir_b_pin[motor], HIGH);
-    analogWrite(enable_pin[motor], speed);
+    motors[motor].drive_reverse(speed);
     delay(10);
 }
 
