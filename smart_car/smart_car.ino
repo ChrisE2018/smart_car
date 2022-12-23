@@ -5,19 +5,21 @@
 #include <Wire.h>
 #include "Car.hpp"
 #include "Motor.hpp"
+#include "Parser.hpp"
 
 // Program for robot car
 
 void setup_imu ();
 void handle_command ();
+void execute_command (const String input);
+int get_words (const String command, String result[], int max_words);
 void print_distance ();
-void read_imu ();
-void command_mode_command ();
-void demo_mode_command ();
 
 void help_command ();
+void read_imu ();
 
 Car car;
+
 
 const int ULTRASOUND_TRIGGER = 12;  // blue
 const int ULTRASOUND_ECHO = 11;     // green
@@ -123,149 +125,181 @@ void handle_command ()
     }
     if (Serial.available())
     {
-        const char cmd = Serial.read();
-        // Discard newlines
-        if (cmd == '\n' || cmd == '\r')
-            return;
-        Serial.print("Command: ");
-        Serial.println(cmd);
-        switch (cmd)
+        delay(1); // allow time to receive
+        const int size = 256;
+        char buffer[size];
+        int i = 0;
+        while (i < size)
         {
-            case 'b':
-                car.reverse(SPEED_FULL, 500);
-                break;
-            case 'c':
-                command_mode_command();
-                break;
-//            case 'd':
-//                demo_mode_command();
-//                break;
-            case 'd':
-                car.demo_drive_leds();
-                break;
-            case 'f':
-                car.forward(SPEED_FULL, 500);
-                break;
-            case 'l':
-                car.turn_clockwise(SPEED_FULL, 500);
-                break;
-            case 'r':
-                car.turn_counterclockwise(SPEED_FULL, 500);
-                break;
-            case 's':
-                car.all_stop();
-                break;
-            case 'A':  // Red m0
-                car.drive_forward(0, SPEED_FULL);
-                delay(1000);
-                car.drive_stop(0);
-                break;
-            case 'B':  // Green m0
-                car.drive_reverse(0, SPEED_FULL);
-                delay(1000);
-                car.drive_stop(0);
-                break;
-            case 'C':  // Red m1
-                car.drive_forward(1, SPEED_FULL);
-                delay(1000);
-                car.drive_stop(1);
-                break;
-            case 'D':  // Green m1
-                car.drive_reverse(1, SPEED_FULL);
-                delay(1000);
-                car.drive_stop(1);
-                break;
-            case 'x':  // motor 0 forward
-                car.drive_forward(0, SPEED_FULL);
-                delay(1000);
-                car.all_stop();
-                break;
-            case 'X':  // motor 0 reverse
-                car.drive_reverse(0, SPEED_FULL);
-                delay(1000);
-                car.all_stop();
-                break;
-            case 'y':  // motor 1 forward
-                car.drive_forward(1, SPEED_FULL);
-                delay(1000);
-                car.all_stop();
-                break;
-            case 'Y':  // motor 1 reverse
-                car.drive_reverse(1, SPEED_FULL);
-                delay(1000);
-                car.all_stop();
-                break;
-            case 'z':  // motors forward
-                car.drive_forward(0, SPEED_FULL);
-                car.drive_forward(1, SPEED_FULL);
-                delay(1000);
-                car.all_stop();
-                break;
-            case 'Z':  // motors reverse
-                car.drive_reverse(1, SPEED_FULL);
-                car.drive_reverse(1, SPEED_FULL);
-                delay(1000);
-                car.all_stop();
-                break;
-            case '?':
-                help_command();
-                break;
-            default:
-                Serial.println("Invalid command");
-                break;
-        }
-        while (Serial.available())
-        {
-            const char cmd = Serial.peek();
-            // Discard newlines
-            if (cmd == '\n' || cmd == '\r')
-                return;
-            Serial.read();
+            if (Serial.available())
+            {
+                const char cmd = Serial.read();
+                if (cmd == '\n' || cmd == '\r')
+                {
+                    buffer[i] = '\0';
+                    String command(buffer);
+                    execute_command(command);
+                    return;
+                }
+                else
+                {
+                    buffer[i] = cmd;
+                    i++;
+                }
+            }
+            else
+            {
+                delay(1); // allow time to receive
+            }
         }
     }
 }
 
-void command_mode_command ()
+int get_words (const String command, String result[], int max_words)
 {
-    car.all_stop();
-    mode = COMMAND_MODE;
-    Serial.println("Current mode is COMMAND MODE");
+    int word = 0;
+    int start = 0;
+    bool in_word = false;
+    for (int i = 0; i < command.length(); i++)
+    {
+        const char chr = command[i];
+        if (isWhitespace(chr))
+        {
+            if (in_word)
+            {
+                result[word] = command.substring(start, i);
+                word++;
+                in_word = false;
+                if (word >= max_words)
+                    return word;
+            }
+        }
+        else if (!in_word)
+        {
+            in_word = true;
+            start = i;
+        }
+        // else continue this word
+    }
+    if (in_word)
+    {
+        result[word] = command.substring(start);
+        word++;
+    }
+    return word;
 }
 
-void demo_mode_command ()
+/** Execute a command from a buffer.
+ @param command The full command string with no newline.
+ */
+void execute_command (const String input)
 {
-    car.all_stop();
-    mode = DEMO_MODE;
-    Serial.println("Current mode is DEMO MODE");
+    Serial.print("execute_command: ");
+    Serial.println(input);
+    const int word_limit = 10;
+    String words[word_limit];
+    int n = get_words(input, words, word_limit);
+//    for (int i = 0; i < n; i++)
+//    {
+//        Serial.print("Word ");
+//        Serial.print(i);
+//        Serial.print(": ");
+//        Serial.println(words[i]);
+//    }
+    if (n > 0)
+    {
+        String command = words[0];
+        Serial.print("Command: ");
+        Serial.println(command);
+        if (command == "b")
+        {
+            int speed = SPEED_FULL;
+            int duration = 500;
+            if (n > 1)
+            {
+                speed = words[1].toInt();
+            }
+            if (n > 2)
+            {
+                duration = words[2].toInt();
+            }
+            car.reverse(speed, duration);
+        }
+        else if (command == "c")
+        {
+            mode = COMMAND_MODE;
+            Serial.println("Current mode is COMMAND MODE");
+        }
+        else if (command == "demo")
+        {
+            mode = DEMO_MODE;
+            Serial.println("Current mode is DEMO_MODE MODE");
+        }
+        else if (command == "led")
+        {
+            car.demo_drive_leds();
+        }
+        else if (command == "f")
+        {
+            int speed = SPEED_FULL;
+            int duration = 500;
+            if (n > 1)
+            {
+                speed = words[1].toInt();
+            }
+            if (n > 2)
+            {
+                duration = words[2].toInt();
+            }
+            car.forward(speed, duration);
+        }
+        else if (command == "l")
+        {
+            int speed = SPEED_FULL;
+            int duration = 500;
+            if (n > 1)
+            {
+                speed = words[1].toInt();
+            }
+            if (n > 2)
+            {
+                duration = words[2].toInt();
+            }
+            car.turn_clockwise(speed, duration);
+        }
+        else if (command == "r")
+        {
+            int speed = SPEED_FULL;
+            int duration = 500;
+            if (n > 1)
+            {
+                speed = words[1].toInt();
+            }
+            if (n > 2)
+            {
+                duration = words[2].toInt();
+            }
+            car.turn_counterclockwise(speed, duration);
+        }
+        else if (command == "s")
+        {
+            car.all_stop();
+        }
+        else if (command == "?")
+        {
+            help_command();
+        }
+        else
+        {
+            Serial.print("Invalid command: ");
+            Serial.println(command);
+        }
+    }
+    else
+    {
+        Serial.println("no command input");
+    }
 }
-
-//void motor_0_command ()
-//{
-//    car.drive_forward(0, SPEED_FULL);
-//    delay(5000);
-//    car.all_stop();
-//}
-//
-//void motor_1_command ()
-//{
-//    car.drive_forward(1, SPEED_FULL);
-//    delay(5000);
-//    car.all_stop();
-//}
-//
-//void motor_2_command ()
-//{
-//    car.drive_reverse(0, SPEED_FULL);
-//    delay(5000);
-//    car.all_stop();
-//}
-//
-//void motor_3_command ()
-//{
-//    car.drive_reverse(1, SPEED_FULL);
-//    delay(5000);
-//    car.all_stop();
-//}
 
 void help_command ()
 {
@@ -330,75 +364,4 @@ void read_imu ()
     Serial.println(GyZ);
     Serial.println();
 }
-
-//void forward (const int speed, const int duration)
-//{
-//    Serial.print("forward ");
-//    Serial.print(speed);
-//    Serial.print(" for ");
-//    Serial.print(duration);
-//    Serial.println(" ms");
-//    for (int i = 0; i < MOTOR_COUNT; i++)
-//    {
-//        car.drive_forward(i, speed);
-//        delay(10);
-//    }
-//    delay(duration);
-//    Serial.println("stop");
-//    car.all_stop();
-//}
-//
-//void reverse (const int speed, const int duration)
-//{
-//    Serial.print("reverse ");
-//    Serial.print(speed);
-//    Serial.print(" for ");
-//    Serial.print(duration);
-//    Serial.println(" ms");
-//    for (int i = 0; i < MOTOR_COUNT; i++)
-//    {
-//        car.drive_reverse(i, speed);
-//        delay(10);
-//    }
-//    delay(duration);
-//    Serial.println("stop");
-//    car.all_stop();
-//}
-//
-//void turn_clockwise (const int speed, const int duration)
-//{
-//    Serial.print("turn clockwise ");
-//    Serial.print(speed);
-//    Serial.print(" for ");
-//    Serial.print(duration);
-//    Serial.println(" ms");
-//
-//    car.drive_forward(0, SPEED_FULL);
-//    car.drive_reverse(1, SPEED_FULL);
-//
-//    delay(duration);
-//    Serial.println("stop");
-//    car.all_stop();
-//}
-//
-//void turn_counterclockwise (const int speed, const int duration)
-//{
-//    Serial.print("turn counterclockwise ");
-//    Serial.print(speed);
-//    Serial.print(" for ");
-//    Serial.print(duration);
-//    Serial.println(" ms");
-//
-//    car.drive_reverse(0, SPEED_FULL);
-//    car.drive_forward(1, SPEED_FULL);
-//
-//    delay(duration);
-//    Serial.println("stop");
-//    car.all_stop();
-//}
-
-//void set_motor_stop (const int motor)
-//{
-//    car.drive_stop(motor);
-//}
 

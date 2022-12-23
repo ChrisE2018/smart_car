@@ -2,7 +2,7 @@
 //This is a automatic generated file
 //Please do not modify this file
 //If you touch this file your change will be overwritten during the next build
-//This file has been generated on 2022-12-23 17:17:12
+//This file has been generated on 2022-12-23 18:10:49
 
 #include "Arduino.h"
 #include "Arduino.h"
@@ -17,8 +17,8 @@ void setup () ;
 void setup_imu () ;
 void loop () ;
 void handle_command () ;
-void command_mode_command () ;
-void demo_mode_command () ;
+int get_words (const String command, String result[], int max_words) ;
+void execute_command (const String input) ;
 void help_command () ;
 void print_distance () ;
 void read_imu () ;
