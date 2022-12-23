@@ -15,6 +15,8 @@ class Parser
     public:
         Parser (Executor& executor);
         void handle_command ();
+
+    private:
         int get_words (const String command, String result[], int max_words);
 
     private:

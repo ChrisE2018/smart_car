@@ -8,10 +8,11 @@
 #pragma once
 
 #include "Motor.hpp"
+#include "Parser.hpp"
 
 const int MOTOR_COUNT = 2;
 
-class Car
+class Car : public Executor
 {
     public:
         Car ();
@@ -42,5 +43,7 @@ class Car
         // LED_3 = 28;  // green led
         Motor motors[MOTOR_COUNT] =
         { Motor(6, 2, 3, 26, 28), Motor(7, 5, 4, 22, 24) };
+
+        Parser parser;
 };
 
