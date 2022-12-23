@@ -3,53 +3,21 @@
 #include "IRremote.h"
 #include <MPU6050.h>
 #include <Wire.h>
+#include "Car.hpp"
 #include "Motor.hpp"
 
 // Program for robot car
 
 void setup_imu ();
-void demo_drive_leds ();
 void handle_command ();
 void print_distance ();
 void read_imu ();
 void command_mode_command ();
 void demo_mode_command ();
-void stop_command ();
-void motor_0_command ();
-void motor_1_command ();
-void motor_2_command ();
-void motor_3_command ();
+
 void help_command ();
-void forward (const int speed, const int duration);
-void reverse (const int speed, const int duration);
-void turn_clockwise (const int speed, const int duration);
-void turn_counterclockwise (const int speed, const int duration);
-void all_stop ();
-void set_motor_forward (const int motor, const int speed);
-void set_motor_reverse (const int motor, int speed);
-const char translate_ir (const unsigned long value);
 
-// pins
-// 2 yellow = in1
-// 3 orange = in2
-// 4 purple = in3
-// 5 blue = in4
-// 6 blue = enA
-// 7 green = enB
-
-// LED_0 = 22;  // red led
-// LED_1 = 24;  // green led
-// LED_2 = 26;  // red led
-// LED_3 = 28;  // green led
-Motor motors[] =
-{ Motor(6, 2, 3, 26, 28), Motor(7, 5, 4, 22, 24) };
-
-const int SPEED_FULL = 255;
-const int SPEED_Q3 = 196;
-const int SPEED_160 = 175;
-const int SPEED_HALF = 128;
-const int SPEED_Q1 = 64;
-const int SPEED_CRAWL = 32;
+Car car;
 
 const int ULTRASOUND_TRIGGER = 12;  // blue
 const int ULTRASOUND_ECHO = 11;     // green
@@ -78,28 +46,13 @@ void setup ()
 {
     Serial.begin(9600);
     Serial.println("Smart car");
+    car.setup();
+    car.demo_drive_leds();
     //Serial.println("IR Receiver Button Decode");
     //irrecv.enableIRIn();  // Start the receiver
-    for (int motor = 0; motor < MOTOR_COUNT; motor++)
-    {
-        motors[motor].setup();
-    }
-    //setup_imu();
-    demo_drive_leds();
-    Serial.println("Ready");
-}
 
-void demo_drive_leds ()
-{
-    int duration = 150;
-    for (int i = 0; i < 3; i++)
-    {
-        for (int motor = 0; motor < MOTOR_COUNT; motor++)
-        {
-            motors[motor].led_demo(duration);
-        }
-        duration /= 2;
-    }
+    //setup_imu();
+    Serial.println("Ready");
 }
 
 void setup_imu ()
@@ -124,14 +77,14 @@ void loop ()
     }
     if (mode == DEMO_MODE)
     {
-        forward(SPEED_FULL, 1500);
+        car.forward(SPEED_FULL, 1500);
         delay(5000);
-        reverse(SPEED_FULL, 1500);
+        car.reverse(SPEED_FULL, 1500);
         delay(5000);
-//        turn_clockwise(SPEED_FULL, 1500);
-//        delay(5000);
-//        turn_counterclockwise(SPEED_FULL, 1500);
-//        delay(5000);
+        car.turn_clockwise(SPEED_FULL, 1500);
+        delay(5000);
+        car.turn_counterclockwise(SPEED_FULL, 1500);
+        delay(5000);
     }
 }
 
@@ -142,30 +95,26 @@ void handle_command ()
         if (irrecv.decode(&ir_results))  // have we received an IR signal?
         {
             const unsigned long value = ir_results.value;
-            const char cmd = translate_ir(value);
+            const char cmd = '.'; //translate_ir(value);
             Serial.print(value);
             Serial.print(" IR Command: ");
             Serial.println(cmd);
             switch (cmd)
             {
                 case '<':
-                    reverse(SPEED_FULL, 500);
-                    all_stop();
+                    car.reverse(SPEED_FULL, 500);
                     break;
                 case '>':
-                    forward(SPEED_FULL, 500);
-                    all_stop();
+                    car.forward(SPEED_FULL, 500);
                     break;
                 case '=':
-                    stop_command();
+                    car.all_stop();
                     break;
                 case 'd':
-                    turn_clockwise(SPEED_FULL, 500);
-                    all_stop();
+                    car.turn_clockwise(SPEED_FULL, 500);
                     break;
                 case 'u':
-                    turn_counterclockwise(SPEED_FULL, 500);
-                    all_stop();
+                    car.turn_counterclockwise(SPEED_FULL, 500);
                     break;
             }
             delay(500);
@@ -183,8 +132,7 @@ void handle_command ()
         switch (cmd)
         {
             case 'b':
-                reverse(SPEED_FULL, 500);
-                all_stop();
+                car.reverse(SPEED_FULL, 500);
                 break;
             case 'c':
                 command_mode_command();
@@ -193,86 +141,71 @@ void handle_command ()
 //                demo_mode_command();
 //                break;
             case 'd':
-                demo_drive_leds();
+                car.demo_drive_leds();
                 break;
             case 'f':
-                forward(SPEED_FULL, 500);
-                all_stop();
+                car.forward(SPEED_FULL, 500);
                 break;
             case 'l':
-                turn_clockwise(SPEED_FULL, 500);
-                all_stop();
+                car.turn_clockwise(SPEED_FULL, 500);
                 break;
             case 'r':
-                turn_counterclockwise(SPEED_FULL, 500);
-                all_stop();
+                car.turn_counterclockwise(SPEED_FULL, 500);
                 break;
             case 's':
-                stop_command();
-                break;
-            case '0':
-                motor_0_command();
-                break;
-            case '1':
-                motor_1_command();
-                break;
-            case '2':
-                motor_2_command();
-                break;
-            case '3':
-                motor_3_command();
+                car.all_stop();
                 break;
             case 'A':  // Red m0
-                motors[0].drive_forward(SPEED_FULL);
+                car.drive_forward(0, SPEED_FULL);
                 delay(1000);
-                motors[0].drive_stop();
+                car.drive_stop(0);
                 break;
             case 'B':  // Green m0
-                motors[0].drive_reverse(SPEED_FULL);
+                car.drive_reverse(0, SPEED_FULL);
                 delay(1000);
-                motors[0].drive_stop();
+                car.drive_stop(0);
                 break;
             case 'C':  // Red m1
-                motors[1].drive_forward(SPEED_FULL);
+                car.drive_forward(1, SPEED_FULL);
                 delay(1000);
-                motors[1].drive_stop();
+                car.drive_stop(1);
                 break;
             case 'D':  // Green m1
-                motors[1].drive_reverse(SPEED_FULL);
+                car.drive_reverse(1, SPEED_FULL);
                 delay(1000);
-                motors[1].drive_stop();
+                car.drive_stop(1);
                 break;
             case 'x':  // motor 0 forward
-                motors[0].drive_forward(SPEED_FULL);
+                car.drive_forward(0, SPEED_FULL);
                 delay(1000);
-                all_stop();
+                car.all_stop();
                 break;
             case 'X':  // motor 0 reverse
-                motors[0].drive_reverse(SPEED_FULL);
+                car.drive_reverse(0, SPEED_FULL);
                 delay(1000);
-                all_stop();
+                car.all_stop();
                 break;
             case 'y':  // motor 1 forward
-                set_motor_forward(1, SPEED_FULL);
+                car.drive_forward(1, SPEED_FULL);
                 delay(1000);
-                all_stop();
+                car.all_stop();
                 break;
             case 'Y':  // motor 1 reverse
-                set_motor_reverse(1, SPEED_FULL);
+                car.drive_reverse(1, SPEED_FULL);
                 delay(1000);
-                all_stop();
+                car.all_stop();
                 break;
             case 'z':  // motors forward
-                set_motor_forward(0, SPEED_FULL);
-                set_motor_forward(1, SPEED_FULL);
+                car.drive_forward(0, SPEED_FULL);
+                car.drive_forward(1, SPEED_FULL);
                 delay(1000);
-                all_stop();
+                car.all_stop();
                 break;
             case 'Z':  // motors reverse
-                set_motor_reverse(0, SPEED_FULL);
-                set_motor_reverse(1, SPEED_FULL);
+                car.drive_reverse(1, SPEED_FULL);
+                car.drive_reverse(1, SPEED_FULL);
                 delay(1000);
-                all_stop();
+                car.all_stop();
                 break;
             case '?':
                 help_command();
@@ -294,56 +227,45 @@ void handle_command ()
 
 void command_mode_command ()
 {
-    all_stop();
+    car.all_stop();
     mode = COMMAND_MODE;
     Serial.println("Current mode is COMMAND MODE");
 }
 
 void demo_mode_command ()
 {
-    all_stop();
+    car.all_stop();
     mode = DEMO_MODE;
     Serial.println("Current mode is DEMO MODE");
 }
 
-
-
-void counterclockwise_command ()
-{
-}
-
-void stop_command ()
-{
-    all_stop();
-}
-
-void motor_0_command ()
-{
-    set_motor_forward(0, SPEED_FULL);
-    delay(5000);
-    all_stop();
-}
-
-void motor_1_command ()
-{
-    set_motor_forward(1, SPEED_FULL);
-    delay(5000);
-    all_stop();
-}
-
-void motor_2_command ()
-{
-    set_motor_reverse(0, SPEED_FULL);
-    delay(5000);
-    all_stop();
-}
-
-void motor_3_command ()
-{
-    set_motor_reverse(1, SPEED_FULL);
-    delay(5000);
-    all_stop();
-}
+//void motor_0_command ()
+//{
+//    car.drive_forward(0, SPEED_FULL);
+//    delay(5000);
+//    car.all_stop();
+//}
+//
+//void motor_1_command ()
+//{
+//    car.drive_forward(1, SPEED_FULL);
+//    delay(5000);
+//    car.all_stop();
+//}
+//
+//void motor_2_command ()
+//{
+//    car.drive_reverse(0, SPEED_FULL);
+//    delay(5000);
+//    car.all_stop();
+//}
+//
+//void motor_3_command ()
+//{
+//    car.drive_reverse(1, SPEED_FULL);
+//    delay(5000);
+//    car.all_stop();
+//}
 
 void help_command ()
 {
@@ -409,281 +331,74 @@ void read_imu ()
     Serial.println();
 }
 
-void forward (const int speed, const int duration)
-{
-    Serial.print("forward ");
-    Serial.print(speed);
-    Serial.print(" for ");
-    Serial.print(duration);
-    Serial.println(" ms");
-    for (int i = 0; i < MOTOR_COUNT; i++)
-    {
-        motors[i].drive_forward(speed);
-        delay(10);
-    }
-    delay(duration);
-    Serial.println("stop");
-    all_stop();
-}
+//void forward (const int speed, const int duration)
+//{
+//    Serial.print("forward ");
+//    Serial.print(speed);
+//    Serial.print(" for ");
+//    Serial.print(duration);
+//    Serial.println(" ms");
+//    for (int i = 0; i < MOTOR_COUNT; i++)
+//    {
+//        car.drive_forward(i, speed);
+//        delay(10);
+//    }
+//    delay(duration);
+//    Serial.println("stop");
+//    car.all_stop();
+//}
+//
+//void reverse (const int speed, const int duration)
+//{
+//    Serial.print("reverse ");
+//    Serial.print(speed);
+//    Serial.print(" for ");
+//    Serial.print(duration);
+//    Serial.println(" ms");
+//    for (int i = 0; i < MOTOR_COUNT; i++)
+//    {
+//        car.drive_reverse(i, speed);
+//        delay(10);
+//    }
+//    delay(duration);
+//    Serial.println("stop");
+//    car.all_stop();
+//}
+//
+//void turn_clockwise (const int speed, const int duration)
+//{
+//    Serial.print("turn clockwise ");
+//    Serial.print(speed);
+//    Serial.print(" for ");
+//    Serial.print(duration);
+//    Serial.println(" ms");
+//
+//    car.drive_forward(0, SPEED_FULL);
+//    car.drive_reverse(1, SPEED_FULL);
+//
+//    delay(duration);
+//    Serial.println("stop");
+//    car.all_stop();
+//}
+//
+//void turn_counterclockwise (const int speed, const int duration)
+//{
+//    Serial.print("turn counterclockwise ");
+//    Serial.print(speed);
+//    Serial.print(" for ");
+//    Serial.print(duration);
+//    Serial.println(" ms");
+//
+//    car.drive_reverse(0, SPEED_FULL);
+//    car.drive_forward(1, SPEED_FULL);
+//
+//    delay(duration);
+//    Serial.println("stop");
+//    car.all_stop();
+//}
 
-void reverse (const int speed, const int duration)
-{
-    Serial.print("reverse ");
-    Serial.print(speed);
-    Serial.print(" for ");
-    Serial.print(duration);
-    Serial.println(" ms");
-    for (int i = 0; i < MOTOR_COUNT; i++)
-    {
-        motors[i].drive_reverse(speed);
-        delay(10);
-    }
-    delay(duration);
-    Serial.println("stop");
-    all_stop();
-}
+//void set_motor_stop (const int motor)
+//{
+//    car.drive_stop(motor);
+//}
 
-void turn_clockwise (const int speed, const int duration)
-{
-    Serial.print("turn clockwise ");
-    Serial.print(speed);
-    Serial.print(" for ");
-    Serial.print(duration);
-    Serial.println(" ms");
-
-    set_motor_forward(0, SPEED_FULL);
-    set_motor_reverse(1, SPEED_FULL);
-
-    delay(duration);
-    Serial.println("stop");
-    all_stop();
-}
-
-void turn_counterclockwise (const int speed, const int duration)
-{
-    Serial.print("turn counterclockwise ");
-    Serial.print(speed);
-    Serial.print(" for ");
-    Serial.print(duration);
-    Serial.println(" ms");
-
-    set_motor_reverse(0, SPEED_FULL);
-    set_motor_forward(1, SPEED_FULL);
-
-    delay(duration);
-    Serial.println("stop");
-    all_stop();
-}
-
-void set_motor_stop (const int motor)
-{
-    motors[motor].drive_stop();
-}
-
-void all_stop ()
-{
-    set_motor_stop(0);
-    set_motor_stop(1);
-}
-
-void set_motor_forward (const int motor, const int speed)
-{
-    motors[motor].drive_forward(speed);
-    delay(10);
-}
-
-void set_motor_reverse (const int motor, int speed)
-{
-    motors[motor].drive_reverse(speed);
-    delay(10);
-}
-
-const char translate_ir (const unsigned long value)
-{
-    switch (value)
-    {
-        case 0xFFA25D:
-            Serial.println("POWER");
-            return 'P';
-        case 0xFFE21D:
-            Serial.println("FUNC/STOP");
-            return 'S';
-        case 0xFF629D:
-            Serial.println("VOL+");
-            return '+';
-        case 0xFF22DD:
-            Serial.println("FAST BACK");
-            return '<';
-        case 0xFF02FD:
-            Serial.println("PAUSE");
-            return '=';
-        case 0xFFC23D:
-            Serial.println("FAST FORWARD");
-            return '>';
-        case 0xFFE01F:
-            Serial.println("DOWN");
-            return 'd';
-        case 0xFFA857:
-            Serial.println("VOL-");
-            return '-';
-        case 0xFF906F:
-            Serial.println("UP");
-            return 'u';
-        case 0xFF9867:
-            Serial.println("EQ");
-            return 'Q';
-        case 0xFFB04F:
-            Serial.println("ST/REPT");
-            return 'R';
-        case 0xFF6897:
-            Serial.println("ir 0");
-            return '0';
-        case 0xFF30CF:
-            Serial.println("ir 1");
-            return '1';
-        case 0xFF18E7:
-            Serial.println("ir 2");
-            return '2';
-        case 0xFF7A85:
-            Serial.println("ir 3");
-            return '3';
-        case 0xFF10EF:
-            Serial.println("ir 4");
-            return '4';
-        case 0xFF38C7:
-            Serial.println("ir 5");
-            return '5';
-        case 0xFF5AA5:
-            Serial.println("ir 6");
-            return '6';
-        case 0xFF42BD:
-            Serial.println("ir 7");
-            return '7';
-        case 0xFF4AB5:
-            Serial.println("ir 8");
-            return '8';
-        case 0xFF52AD:
-            Serial.println("ir 9");
-            return '9';
-        case 0xFFFFFFFF:
-            Serial.println(" REPEAT");
-            return '*';
-
-        default:
-            Serial.println(" other button   ");
-            return '?';
-    }
-}
-
-/*
- class Event {
- public:
- unsigned long m_when;
- bool m_enable;
- struct Event *m_next;
-
- Event(unsigned long when)
- : m_when(when), m_enable(true), m_next(NULL) {}
-
- virtual void execute() {}
- };
-
- class DigitalWriteEvent : public Event {
- public:
- int m_pin;
- int m_value;
-
- DigitalWriteEvent(unsigned long when, int pin, int value)
- : Event(when), m_pin(pin), m_value(value) {}
-
- void execute() {
- m_enable = false;
- digitalWrite(m_pin, m_value);
- }
- };
-
- class AllStopEvent : public Event {
- public:
-
- AllStopEvent(unsigned long when)
- : Event(when) {}
-
- void execute() {
- m_enable = false;
- all_stop();
- }
- };
-
- Event *next_event = NULL;
-
- void clear_queue() {
- Event *next = NULL;
- Event e = next_event;
- next_event = NULL;
- while (e != NULL) {
- next = e->m_next;
- delete e;
- e = next;
- }
- }
-
- void process_events(unsigned long duration) {
- unsigned long deadline = millis() + duration;
- while (millis() < deadline) {
- wait_for_event(deadline - millis());
- check_events();
- }
- }
-
- void wait_for_event(unsigned long pause) {
- if (next_event == NULL) {
- delay(pause);
- } else {
- while (millis() < next_event->m_when) {
- delay(next_event->m_when - millis());
- }
- }
- }
-
- void live_delay(unsigned long pause) {
- unsigned long deadline = millis() + pause;
- while (millis() < deadline) {
- handle_command();
- delay(10);
- }
- }
-
- void check_events() {
- Event *event = next_event;
- if (event != NULL) {
- const unsigned long now = millis();
- if (event->m_when <= now) {
- next_event = event->m_next;
- event->execute();
- delete event;
- }
- }
- }
-
- void queue_event(Event *event) {
- if (next_event == NULL) {
- event->m_next = NULL;
- next_event = event;
- } else {
- for (Event *e = next_event; e != NULL; e = e->m_next) {
- if (e->m_next == NULL || event->m_when < e->m_next->m_when) {
- event->m_next = e->m_next;
- e->m_next = event;
- }
- }
- }
- }
-
- void queue_all_stop(const unsigned long when) {
- queue_event(new AllStopEvent(when));
- }
-
- void queue_write_event(unsigned long when, int pin, int value) {
- queue_event(new DigitalWriteEvent(when, pin, value));
- }
- */

@@ -9,7 +9,12 @@
 
 #include "Arduino.h"
 
-const int MOTOR_COUNT = 2;
+const int SPEED_FULL = 255;
+const int SPEED_Q3 = 196;
+const int SPEED_160 = 175;
+const int SPEED_HALF = 128;
+const int SPEED_Q1 = 64;
+const int SPEED_CRAWL = 32;
 
 class Motor
 {
