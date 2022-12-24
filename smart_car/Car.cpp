@@ -7,7 +7,8 @@
 
 #include "Car.hpp"
 
-Car::Car () : parser(*this)
+Car::Car () :
+        sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)
 {
 }
 
@@ -17,7 +18,247 @@ void Car::setup ()
     {
         motors[motor].setup();
     }
+    setup_imu();
 }
+
+void Car::setup_imu ()
+{
+    Wire.begin();
+    Wire.beginTransmission(MPU_addr);
+    Wire.write(0x6B);  // PWR_MGMT_1 register
+    Wire.write(0);     // set to zero (wakes up the MPU-6050)
+    Wire.endTransmission(true);
+    Serial.println("imu setup");
+}
+
+void Car::cycle ()
+{
+    handle_command();
+    if (show_distance)
+    {
+        print_distance();
+    }
+    if (show_imu)
+    {
+        read_imu();
+    }
+    if (mode == DEMO_MODE)
+    {
+        forward(SPEED_FULL, 1500);
+        delay(5000);
+        reverse(SPEED_FULL, 1500);
+        delay(5000);
+        turn_clockwise(SPEED_FULL, 1500);
+        delay(5000);
+        turn_counterclockwise(SPEED_FULL, 1500);
+        delay(5000);
+    }
+    if (mode == WALL_MODE)
+    {
+        long d = sr04.Distance();
+        Serial.print("Distance ");
+        Serial.print(d);
+        Serial.println(" cm");
+        if (d < 10)
+        {
+            all_stop();
+            mode = COMMAND_MODE;
+        }
+        else if (d < 25)
+        {
+            for (int i = 0; i < MOTOR_COUNT; i++)
+            {
+                drive_forward(i, SPEED_HALF);
+            }
+        }
+    }
+}
+
+void Car::print_distance ()
+{
+    long d = sr04.Distance();
+    Serial.print("Distance ");
+    Serial.print(d);
+    Serial.println(" cm");
+}
+
+void Car::read_imu ()
+{
+    Wire.beginTransmission(MPU_addr);
+    Wire.write(0x3B);  // starting with register 0x3B (ACCEL_XOUT_H)
+    Wire.endTransmission(false);
+    Wire.requestFrom(MPU_addr, 14, true);  // request a total of 14 registers
+    AcX = Wire.read() << 8 | Wire.read();  // 0x3B (ACCEL_XOUT_H) & 0x3C (ACCEL_XOUT_L)
+    AcY = Wire.read() << 8 | Wire.read();  // 0x3D (ACCEL_YOUT_H) & 0x3E (ACCEL_YOUT_L)
+    AcZ = Wire.read() << 8 | Wire.read();  // 0x3F (ACCEL_ZOUT_H) & 0x40 (ACCEL_ZOUT_L)
+    Tmp = Wire.read() << 8 | Wire.read();  // 0x41 (TEMP_OUT_H) & 0x42 (TEMP_OUT_L)
+    GyX = Wire.read() << 8 | Wire.read();  // 0x43 (GYRO_XOUT_H) & 0x44 (GYRO_XOUT_L)
+    GyY = Wire.read() << 8 | Wire.read();  // 0x45 (GYRO_YOUT_H) & 0x46 (GYRO_YOUT_L)
+    GyZ = Wire.read() << 8 | Wire.read();  // 0x47 (GYRO_ZOUT_H) & 0x48 (GYRO_ZOUT_L)
+
+    Serial.print(" | AcX = "); // Accelerator
+    Serial.print(AcX);
+    Serial.print(" | AcY = ");
+    Serial.print(AcY);
+    Serial.print(" | AcZ = ");
+    Serial.print(AcZ);
+    Serial.print(" | Tmp = ");
+    Serial.print(Tmp / 340.00 + 36.53);  //equation for temperature in degrees C from datasheet
+    Serial.print(" | GyX = "); // Gyro
+    Serial.print(GyX);
+    Serial.print(" | GyY = ");
+    Serial.print(GyY);
+    Serial.print(" | GyZ = ");
+    Serial.print(GyZ);
+    Serial.println();
+}
+
+void Car::handle_command ()
+{
+    parser.handle_command(*this);
+}
+
+/** Execute a command from a buffer.
+ @param command The full command string with no newline.
+ */
+void Car::execute_command (const int n, const String words[])
+{
+    String command = words[0];
+    Serial.print("Command: ");
+    Serial.println(command);
+    if (command == "b")
+    {
+        int speed = SPEED_FULL;
+        int duration = 500;
+        if (n > 1)
+        {
+            speed = words[1].toInt();
+        }
+        if (n > 2)
+        {
+            duration = words[2].toInt();
+        }
+        reverse(speed, duration);
+    }
+    else if (command == "c")
+    {
+        mode = COMMAND_MODE;
+        Serial.println("Current mode is COMMAND MODE");
+    }
+    else if (command == "demo")
+    {
+        mode = DEMO_MODE;
+        Serial.println("Current mode is DEMO_MODE MODE");
+    }
+    else if (command == "wall")
+    {
+        mode = WALL_MODE;
+        Serial.println("Current mode is WALL_MODE MODE");
+        int speed = SPEED_FULL;
+        if (n > 1)
+        {
+            speed = words[1].toInt();
+        }
+        for (int i = 0; i < MOTOR_COUNT; i++)
+        {
+            drive_forward(i, speed);
+        }
+    }
+    else if (command == "distance")
+    {
+        show_distance = !show_distance;
+    }
+    else if (command == "imu")
+    {
+        show_imu = !show_imu;
+    }
+    else if (command == "led")
+    {
+        demo_drive_leds();
+    }
+    else if (command == "f")
+    {
+        int speed = SPEED_FULL;
+        int duration = 500;
+        if (n > 1)
+        {
+            speed = words[1].toInt();
+        }
+        if (n > 2)
+        {
+            duration = words[2].toInt();
+        }
+        forward(speed, duration);
+    }
+    else if (command == "l")
+    {
+        int speed = SPEED_FULL;
+        int duration = 500;
+        if (n > 1)
+        {
+            speed = words[1].toInt();
+        }
+        if (n > 2)
+        {
+            duration = words[2].toInt();
+        }
+        turn_clockwise(speed, duration);
+    }
+    else if (command == "r")
+    {
+        int speed = SPEED_FULL;
+        int duration = 500;
+        if (n > 1)
+        {
+            speed = words[1].toInt();
+        }
+        if (n > 2)
+        {
+            duration = words[2].toInt();
+        }
+        turn_counterclockwise(speed, duration);
+    }
+    else if (command == "s")
+    {
+        all_stop();
+    }
+    else if (command == "?")
+    {
+        help_command();
+    }
+    else
+    {
+        Serial.print("Invalid command: ");
+        Serial.println(command);
+    }
+}
+
+void Car::help_command ()
+{
+    Serial.println("b - backward");
+    Serial.println("c - command mode");
+    Serial.println("d - demo mode");
+    Serial.println("f - forward");
+    Serial.println("l - left turn");
+    Serial.println("r - right turn");
+    Serial.println("s - stop moving");
+    Serial.println("? - help");
+    if (mode == COMMAND_MODE)
+    {
+        Serial.println("Current mode is COMMAND MODE");
+    }
+    else if (mode == DEMO_MODE)
+    {
+        Serial.println("Current mode is DEMO MODE");
+    }
+    else
+    {
+        Serial.println("Current mode is UNKNOWN MODE");
+    }
+    read_imu();
+    print_distance();
+}
+
 void Car::demo_drive_leds ()
 {
     int duration = 150;

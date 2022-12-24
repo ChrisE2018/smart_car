@@ -13,13 +13,10 @@
 class Parser
 {
     public:
-        Parser (Executor& executor);
-        void handle_command ();
+        Parser ();
+        void handle_command (Executor &executor);
 
     private:
         int get_words (const String command, String result[], int max_words);
-
-    private:
-        Executor& executor;
 };
 

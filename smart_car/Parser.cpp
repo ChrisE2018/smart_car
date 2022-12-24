@@ -7,12 +7,11 @@
 
 #include "Parser.hpp"
 
-Parser::Parser (Executor &executor) :
-        executor(executor)
+Parser::Parser ()
 {
 }
 
-void Parser::handle_command ()
+void Parser::handle_command (Executor &executor)
 {
 //    if (false)
 //    {

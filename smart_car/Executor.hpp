@@ -13,7 +13,8 @@ class Executor
 {
     public:
         Executor ();
+        virtual ~Executor () = default;
 
-        void execute_command (const int word_counts, String words[]);
+        virtual void execute_command (const int word_counts, const String words[]);
 };
 

@@ -9,24 +9,34 @@
 
 #include "Motor.hpp"
 #include "Parser.hpp"
+#include <SR04.h>
+#include <MPU6050.h>
+#include <Wire.h> // Needed for IMU
 
 const int MOTOR_COUNT = 2;
+const int COMMAND_MODE = 0;
+const int DEMO_MODE = 1;
+const int WALL_MODE = 2;
 
-class Car : public Executor
+const int ULTRASOUND_TRIGGER = 12;  // blue
+const int ULTRASOUND_ECHO = 11;     // green
+
+class Car: public Executor
 {
     public:
         Car ();
 
         void setup ();
         void demo_drive_leds ();
-        void all_stop();
-        void drive_stop(int motor);
-        void drive_forward(int motor, int speed);
-        void drive_reverse(int motor, int speed);
+        void all_stop ();
+        void drive_stop (int motor);
+        void drive_forward (int motor, int speed);
+        void drive_reverse (int motor, int speed);
         void forward (const int speed, const int duration);
         void reverse (const int speed, const int duration);
         void turn_clockwise (const int speed, const int duration);
         void turn_counterclockwise (const int speed, const int duration);
+        void cycle ();
 
     private:
         // pins
@@ -45,5 +55,27 @@ class Car : public Executor
         { Motor(6, 2, 3, 26, 28), Motor(7, 5, 4, 22, 24) };
 
         Parser parser;
+
+        int mode = COMMAND_MODE;
+
+        SR04 sr04;
+        bool show_distance = false;
+        bool show_imu = false;
+
+        const int MPU_addr = 0x68;  // I2C address of the MPU-6050
+        int16_t AcX = 0;
+        int16_t AcY = 0;
+        int16_t AcZ = 0;
+        int16_t Tmp = 0;
+        int16_t GyX = 0;
+        int16_t GyY = 0;
+        int16_t GyZ = 0;
+
+        void setup_imu ();
+        void read_imu ();
+        void handle_command ();
+        void execute_command (const int n, const String words[]);
+        void help_command ();
+        void print_distance ();
 };
 
