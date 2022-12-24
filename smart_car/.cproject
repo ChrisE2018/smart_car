@@ -12,7 +12,7 @@
 				</extensions>
 			</storageModule>
 			<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-				<configuration artifactName="${ProjName}" buildProperties="" cleanCommand="rm -f" description="" id="io.sloeber.core.sketch.0" name="Release" optionalBuildProperties="org.eclipse.cdt.docker.launcher.containerbuild.property.volumes=,org.eclipse.cdt.docker.launcher.containerbuild.property.selectedvolumes=" parent="io.sloeber.core.configuration.release">
+				<configuration artifactName="${ProjName}" buildProperties="" cleanCommand="rm -f" description="" id="io.sloeber.core.sketch.0" name="Release" optionalBuildProperties="org.eclipse.cdt.docker.launcher.containerbuild.property.selectedvolumes=,org.eclipse.cdt.docker.launcher.containerbuild.property.volumes=" parent="io.sloeber.core.configuration.release">
 					<folderInfo id="io.sloeber.core.sketch.0." name="/" resourcePath="">
 						<toolChain id="io.sloeber.core.toolChain.release.1168115064" name="Arduino Toolchain (Sloeber edition)" superClass="io.sloeber.core.toolChain.release">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="io.sloeber.targetplatform.413726108" name="Arduino Target" osList="all" superClass="io.sloeber.targetplatform"/>
@@ -26,6 +26,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/HC-SR04}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/IRremote}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/Wire/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/ArduinoSTL-master/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.cpp.sketch.input.2057250309" name="CPP source files" superClass="io.sloeber.compiler.cpp.sketch.input"/>
 							</tool>
@@ -38,6 +39,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/HC-SR04}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/IRremote}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/Wire/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/ArduinoSTL-master/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.c.sketch.input.232163605" name="C Source Files" superClass="io.sloeber.compiler.c.sketch.input"/>
 							</tool>
@@ -50,6 +52,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/HC-SR04}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/IRremote}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/Wire/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/ArduinoSTL-master/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.S.sketch.input.885800370" name="Assembly source files" superClass="io.sloeber.compiler.S.sketch.input"/>
 							</tool>
@@ -90,7 +93,7 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="libraries/?*/**/?xamples/**|libraries/?*/**/?xtras/**|libraries/?*/**/test*/**|libraries/?*/**/third-party/**|libraries/**/._*|libraries/?*/utility/*/*" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="libraries/ArduinoSTL-master/.github|libraries/?*/**/?xamples/**|libraries/?*/**/?xtras/**|libraries/?*/**/test*/**|libraries/?*/**/third-party/**|libraries/**/._*|libraries/?*/utility/*/*" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

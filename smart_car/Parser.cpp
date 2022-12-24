@@ -57,16 +57,19 @@ void Parser::handle_command (Executor &executor)
                 const char cmd = Serial.read();
                 if (cmd == '\n' || cmd == '\r')
                 {
-                    buffer[i] = '\0';
-                    String command(buffer);
-                    Serial.print("execute_command: ");
-                    Serial.println(command);
-                    const int word_limit = 10;
-                    String words[word_limit];
-                    int n = get_words(command, words, word_limit);
-                    if (n > 0)
+                    if (i > 0)
                     {
-                        executor.execute_command(n, words);
+                        buffer[i] = '\0';
+                        String command(buffer);
+                        Serial.print("execute_command: ");
+                        Serial.println(command);
+                        const int word_limit = 10;
+                        String words[word_limit];
+                        int n = get_words(command, words, word_limit);
+                        if (n > 0)
+                        {
+                            executor.execute_command(n, words);
+                        }
                     }
                     return;
                 }

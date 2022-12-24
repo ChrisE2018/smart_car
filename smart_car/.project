@@ -42,6 +42,11 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/arduino/hardware/avr/1.8.6/variants/mega</locationURI>
 		</link>
 		<link>
+			<name>libraries/ArduinoSTL-master</name>
+			<type>2</type>
+			<location>/Users/cre/Documents/Arduino/libraries/ArduinoSTL-master</location>
+		</link>
+		<link>
 			<name>libraries/HC-SR04</name>
 			<type>2</type>
 			<location>/Users/cre/Documents/Arduino/libraries/HC-SR04</location>

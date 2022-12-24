@@ -7,8 +7,7 @@
 
 #include "Car.hpp"
 
-Car::Car () :
-        sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)
+Car::Car () : sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)
 {
 }
 
@@ -48,9 +47,9 @@ void Car::cycle ()
         delay(5000);
         reverse(SPEED_FULL, 1500);
         delay(5000);
-        turn_clockwise(SPEED_FULL, 1500);
+        rotate_clockwise(SPEED_FULL, 1500);
         delay(5000);
-        turn_counterclockwise(SPEED_FULL, 1500);
+        rotate_counterclockwise(SPEED_FULL, 1500);
         delay(5000);
     }
     if (mode == WALL_MODE)
@@ -202,7 +201,7 @@ void Car::execute_command (const int n, const String words[])
         {
             duration = words[2].toInt();
         }
-        turn_clockwise(speed, duration);
+        rotate_clockwise(speed, duration);
     }
     else if (command == "r")
     {
@@ -216,7 +215,7 @@ void Car::execute_command (const int n, const String words[])
         {
             duration = words[2].toInt();
         }
-        turn_counterclockwise(speed, duration);
+        rotate_counterclockwise(speed, duration);
     }
     else if (command == "s")
     {
@@ -271,6 +270,7 @@ void Car::demo_drive_leds ()
         duration /= 2;
     }
 }
+
 void Car::all_stop ()
 {
     for (int motor = 0; motor < MOTOR_COUNT; motor++)
@@ -294,6 +294,7 @@ void Car::drive_reverse (const int motor, int speed)
     motors[motor].drive_reverse(speed);
 }
 
+// [TODO] Nothing with duration
 void Car::forward (const int speed, const int duration)
 {
     Serial.print("forward ");
@@ -311,6 +312,7 @@ void Car::forward (const int speed, const int duration)
     all_stop();
 }
 
+// [TODO] Nothing with duration
 void Car::reverse (const int speed, const int duration)
 {
     Serial.print("reverse ");
@@ -328,7 +330,44 @@ void Car::reverse (const int speed, const int duration)
     all_stop();
 }
 
-void Car::turn_clockwise (const int speed, const int duration)
+// [TODO] Nothing with duration
+void Car::forward_turn (const int speed_right, const int speed_left, const int duration)
+{
+    Serial.print("forward");
+    Serial.print(" right ");
+    Serial.print(speed_right);
+    Serial.print(" left ");
+    Serial.print(speed_left);
+    Serial.print(" for ");
+    Serial.print(duration);
+    Serial.println(" ms");
+    drive_forward(0, speed_right);
+    drive_forward(1, speed_left);
+    delay(duration);
+    Serial.println("stop");
+    all_stop();
+}
+
+// [TODO] Nothing with duration
+void Car::reverse_turn (const int speed_right, const int speed_left, const int duration)
+{
+    Serial.print("reverse");
+    Serial.print(" right ");
+    Serial.print(speed_right);
+    Serial.print(" left ");
+    Serial.print(speed_left);
+    Serial.print(" for ");
+    Serial.print(duration);
+    Serial.println(" ms");
+    drive_reverse(0, speed_right);
+    drive_reverse(1, speed_left);
+    delay(duration);
+    Serial.println("stop");
+    all_stop();
+}
+
+// [TODO] Nothing with duration
+void Car::rotate_clockwise (const int speed, const int duration)
 {
     Serial.print("turn clockwise ");
     Serial.print(speed);
@@ -344,7 +383,8 @@ void Car::turn_clockwise (const int speed, const int duration)
     all_stop();
 }
 
-void Car::turn_counterclockwise (const int speed, const int duration)
+// [TODO] Nothing with duration
+void Car::rotate_counterclockwise (const int speed, const int duration)
 {
     Serial.print("turn counterclockwise ");
     Serial.print(speed);

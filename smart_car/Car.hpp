@@ -7,11 +7,12 @@
 
 #pragma once
 
-#include "Motor.hpp"
-#include "Parser.hpp"
 #include <SR04.h>
 #include <MPU6050.h>
 #include <Wire.h> // Needed for IMU
+
+#include "Motor.hpp"
+#include "Parser.hpp"
 
 const int MOTOR_COUNT = 2;
 const int COMMAND_MODE = 0;
@@ -34,8 +35,10 @@ class Car: public Executor
         void drive_reverse (int motor, int speed);
         void forward (const int speed, const int duration);
         void reverse (const int speed, const int duration);
-        void turn_clockwise (const int speed, const int duration);
-        void turn_counterclockwise (const int speed, const int duration);
+        void forward_turn (const int speed_right, const int speed_left, const int duration);
+        void reverse_turn (const int speed_right, const int speed_left, const int duration);
+        void rotate_clockwise (const int speed, const int duration);
+        void rotate_counterclockwise (const int speed, const int duration);
         void cycle ();
 
     private:
@@ -62,6 +65,7 @@ class Car: public Executor
         bool show_distance = false;
         bool show_imu = false;
 
+        MPU6050 mpu;
         const int MPU_addr = 0x68;  // I2C address of the MPU-6050
         int16_t AcX = 0;
         int16_t AcY = 0;
