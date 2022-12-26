@@ -8,13 +8,13 @@
 #include "DemoMode.hpp"
 #include "Car.hpp"
 
-DemoMode::DemoMode (Car &car) : car(car)
+DemoMode::DemoMode (Car &car) : Plugin(DEMO_PLUGIN), car(car)
 {
 }
 
 void DemoMode::set_mode (Mode mode)
 {
-    Cyclic::set_mode(mode);
+    Plugin::set_mode(mode);
     if (mode == DEMO_MODE)
     {
         Serial.println("Starting DemoMode");

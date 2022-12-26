@@ -7,11 +7,11 @@
 
 #pragma once
 
-#include "Cyclic.hpp"
 #include "Motor.hpp"
+#include "Plugin.hpp"
 class Car;
 
-class DriveMode: public Cyclic
+class DriveMode: public Plugin
 {
     public:
         DriveMode (Car &car, Mode mode, const int duration,

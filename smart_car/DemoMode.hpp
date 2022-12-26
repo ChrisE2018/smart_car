@@ -7,7 +7,7 @@
 
 #pragma once
 
-#include "Cyclic.hpp"
+#include "Plugin.hpp"
 class Car;
 
 enum DemoPhase
@@ -23,7 +23,7 @@ enum DemoPhase
     idle_phase4,
 };
 
-class DemoMode: public Cyclic
+class DemoMode: public Plugin
 {
     public:
         DemoMode (Car &car);

@@ -9,7 +9,7 @@
 #include "Car.hpp"
 
 DriveMode::DriveMode (Car &car, Mode mode, const int duration,
-        const MotorDirection right_motor_direction, const MotorDirection left_motor_direction) : car(
+        const MotorDirection right_motor_direction, const MotorDirection left_motor_direction) : Plugin(mode), car(
         car), mode(mode), duration(duration), right_motor_direction(right_motor_direction), left_motor_direction(
         left_motor_direction)
 {
@@ -18,7 +18,7 @@ DriveMode::DriveMode (Car &car, Mode mode, const int duration,
 
 void DriveMode::set_mode (Mode new_mode)
 {
-    Cyclic::set_mode(new_mode);
+    Plugin::set_mode(new_mode);
     if (mode == new_mode)
     {
         deadline = millis() + duration;

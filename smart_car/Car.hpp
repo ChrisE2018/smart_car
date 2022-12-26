@@ -12,12 +12,12 @@
 #include <Wire.h> // Needed for IMU
 #include <vector>
 
-#include "Cyclic.hpp"
 #include "Motor.hpp"
 #include "Parser.hpp"
 #include "Mode.hpp"
 #include "DemoMode.hpp"
 #include "DriveMode.hpp"
+#include "Plugin.hpp"
 #include "WallMode.hpp"
 
 const int MOTOR_COUNT = 2;
@@ -54,7 +54,7 @@ class Car: public Executor
         DriveMode *reverse_mode;
         DriveMode *clockwise_mode;
         DriveMode *counterclockwise_mode;
-        std::vector<Cyclic*> plugins;
+        std::vector<Plugin*> plugins;
 
         // pins
         // 2 yellow = in1

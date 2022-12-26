@@ -22,7 +22,7 @@ Car::Car () : sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER), parser(Serial), parser1
 
 Car::~Car ()
 {
-    for (Cyclic *plugin : plugins)
+    for (Plugin *plugin : plugins)
     {
         delete plugin;
     }
@@ -61,7 +61,7 @@ void Car::set_mode (Mode _mode)
     Serial.print(" plugin modes: ");
     Serial.println(_mode);
     mode = _mode;
-    for (Cyclic *plugin : plugins)
+    for (Plugin *plugin : plugins)
     {
         plugin->set_mode(_mode);
     }
@@ -80,7 +80,7 @@ void Car::cycle ()
     {
         read_imu();
     }
-    for (Cyclic *plugin : plugins)
+    for (Plugin *plugin : plugins)
     {
         plugin->cycle();
     }

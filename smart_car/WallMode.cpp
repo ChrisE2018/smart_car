@@ -8,13 +8,13 @@
 #include "WallMode.hpp"
 #include "Car.hpp"
 
-WallMode::WallMode (Car &car) : car(car)
+WallMode::WallMode (Car &car) : Plugin(WALL_PLUGIN), car(car)
 {
 }
 
 void WallMode::set_mode (Mode mode)
 {
-    Cyclic::set_mode(mode);
+    Plugin::set_mode(mode);
     if (mode == WALL_MODE)
     {
         speed = SPEED_FULL;

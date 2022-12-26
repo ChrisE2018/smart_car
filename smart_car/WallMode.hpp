@@ -7,11 +7,11 @@
 
 #pragma once
 
-#include "Cyclic.hpp"
+#include "Plugin.hpp"
 
 class Car;
 
-class WallMode: public Cyclic
+class WallMode: public Plugin
 {
     public:
         WallMode (Car &car);
