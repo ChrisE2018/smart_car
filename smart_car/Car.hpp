@@ -10,14 +10,14 @@
 #include <SR04.h>
 #include <MPU6050.h>
 #include <Wire.h> // Needed for IMU
+#include <vector>
 
+#include "Cyclic.hpp"
 #include "Motor.hpp"
 #include "Parser.hpp"
+#include "Mode.hpp"
 
 const int MOTOR_COUNT = 2;
-const int COMMAND_MODE = 0;
-const int DEMO_MODE = 1;
-const int WALL_MODE = 2;
 
 const int ULTRASOUND_TRIGGER = 12;  // blue
 const int ULTRASOUND_ECHO = 11;     // green
@@ -26,8 +26,10 @@ class Car: public Executor
 {
     public:
         Car ();
+        ~Car ();
 
         void setup ();
+        void set_mode(Mode mode);
         void demo_drive_leds ();
         void all_stop ();
         void drive_stop (int motor);
@@ -40,8 +42,13 @@ class Car: public Executor
         void rotate_clockwise (const int speed, const int duration);
         void rotate_counterclockwise (const int speed, const int duration);
         void cycle ();
+        long get_distance();
 
     private:
+        long cycle_count = 0;
+        long total_cycle_us = 0;
+        std::vector<Cyclic *> plugins;
+
         // pins
         // 2 yellow = in1
         // 3 orange = in2
@@ -60,7 +67,7 @@ class Car: public Executor
         Parser parser;
         Parser parser1;
 
-        int mode = COMMAND_MODE;
+        Mode mode = COMMAND_MODE;
 
         SR04 sr04;
         bool show_distance = false;

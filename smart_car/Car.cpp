@@ -6,9 +6,20 @@
  */
 
 #include "Car.hpp"
+#include "DemoMode.hpp"
+#include "WallMode.hpp"
 
 Car::Car () : sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER), parser(Serial), parser1(Serial1)
 {
+}
+
+Car::~Car ()
+{
+    for (Cyclic *plugin : plugins)
+    {
+        delete plugin;
+    }
+    plugins.clear();
 }
 
 void Car::setup ()
@@ -18,6 +29,8 @@ void Car::setup ()
         motors[motor].setup();
     }
     setup_imu();
+    plugins.push_back(new WallMode(*this));
+    plugins.push_back(new DemoMode(*this));
 }
 
 void Car::setup_imu ()
@@ -30,8 +43,23 @@ void Car::setup_imu ()
     Serial.println("imu setup");
 }
 
+void Car::set_mode (Mode _mode)
+{
+    Serial.print("Setting ");
+    Serial.print(plugins.size());
+    Serial.print(" plugin modes: ");
+    Serial.println(_mode);
+    mode = _mode;
+    for (Cyclic *plugin : plugins)
+    {
+        plugin->set_mode(_mode);
+    }
+}
+
 void Car::cycle ()
 {
+    const long cycle_start_us = micros();
+
     handle_command();
     if (show_distance)
     {
@@ -41,36 +69,18 @@ void Car::cycle ()
     {
         read_imu();
     }
-    if (mode == DEMO_MODE)
+    for (Cyclic *plugin : plugins)
     {
-        forward(SPEED_FULL, 1500);
-        delay(5000);
-        reverse(SPEED_FULL, 1500);
-        delay(5000);
-        rotate_clockwise(SPEED_FULL, 1500);
-        delay(5000);
-        rotate_counterclockwise(SPEED_FULL, 1500);
-        delay(5000);
+        plugin->cycle();
     }
-    if (mode == WALL_MODE)
-    {
-        long d = sr04.Distance();
-        Serial.print("Distance ");
-        Serial.print(d);
-        Serial.println(" cm");
-        if (d < 10)
-        {
-            all_stop();
-            mode = COMMAND_MODE;
-        }
-        else if (d < 25)
-        {
-            for (int i = 0; i < MOTOR_COUNT; i++)
-            {
-                drive_forward(i, SPEED_HALF);
-            }
-        }
-    }
+
+    total_cycle_us += micros() - cycle_start_us;
+    cycle_count++;
+}
+
+long Car::get_distance ()
+{
+    return sr04.Distance();
 }
 
 void Car::print_distance ()
@@ -142,27 +152,18 @@ void Car::execute_command (const int n, const String words[])
     }
     else if (command == "c")
     {
-        mode = COMMAND_MODE;
         Serial.println("Current mode is COMMAND MODE");
+        set_mode(COMMAND_MODE);
     }
     else if (command == "demo")
     {
-        mode = DEMO_MODE;
         Serial.println("Current mode is DEMO_MODE MODE");
+        set_mode(DEMO_MODE);
     }
     else if (command == "wall")
     {
-        mode = WALL_MODE;
         Serial.println("Current mode is WALL_MODE MODE");
-        int speed = SPEED_FULL;
-        if (n > 1)
-        {
-            speed = words[1].toInt();
-        }
-        for (int i = 0; i < MOTOR_COUNT; i++)
-        {
-            drive_forward(i, speed);
-        }
+        set_mode(WALL_MODE);
     }
     else if (command == "distance")
     {
@@ -251,12 +252,26 @@ void Car::help_command ()
     {
         Serial.println("Current mode is DEMO MODE");
     }
+    else if (mode == WALL_MODE)
+    {
+        Serial.println("Current mode is WALL_MODE");
+    }
     else
     {
-        Serial.println("Current mode is UNKNOWN MODE");
+        Serial.print("Current mode is UNKNOWN MODE: ");
+        Serial.println(mode);
     }
     read_imu();
     print_distance();
+
+    Serial.print("Cycle Count: ");
+    Serial.print(cycle_count);
+    Serial.print(" total cycle micros ");
+    Serial.println(total_cycle_us);
+    Serial.print(" average micros per cycle ");
+    Serial.println(total_cycle_us / (double) cycle_count);
+    Serial.print("Plugins: ");
+    Serial.println(plugins.size());
 }
 
 void Car::demo_drive_leds ()

@@ -15,6 +15,7 @@ const int SPEED_160 = 175;
 const int SPEED_HALF = 128;
 const int SPEED_Q1 = 64;
 const int SPEED_CRAWL = 32;
+const int SPEED_STOP = 0;
 
 class Motor
 {

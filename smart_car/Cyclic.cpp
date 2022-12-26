@@ -5,16 +5,29 @@
  *      Author: cre
  */
 
+#include "Arduino.h"
 #include "Cyclic.hpp"
 
 Cyclic::Cyclic ()
 {
-    // TODO Auto-generated constructor stub
-
 }
 
 Cyclic::~Cyclic ()
 {
-    // TODO Auto-generated destructor stub
 }
 
+Mode Cyclic::get_mode ()
+{
+    return mode;
+}
+
+void Cyclic::set_mode (Mode _mode)
+{
+    mode = _mode;
+    Serial.print("Cyclic mode: ");
+    Serial.println(_mode);
+}
+
+void Cyclic::cycle ()
+{
+}
