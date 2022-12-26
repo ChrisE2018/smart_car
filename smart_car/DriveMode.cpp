@@ -18,7 +18,6 @@ DriveMode::DriveMode (Car &car, Mode mode, const int duration,
 
 void DriveMode::set_mode (Mode new_mode)
 {
-    Plugin::set_mode(new_mode);
     if (mode == new_mode)
     {
         deadline = millis() + duration;
@@ -57,7 +56,7 @@ void DriveMode::set_mode (Mode new_mode)
 
 void DriveMode::cycle ()
 {
-    if (get_mode() == mode)
+    if (car.is_mode(mode))
     {
         if (deadline < millis())
         {

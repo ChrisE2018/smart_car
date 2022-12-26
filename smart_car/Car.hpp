@@ -32,6 +32,8 @@ class Car: public Executor
         ~Car ();
 
         void setup ();
+        Mode get_mode();
+        bool is_mode(Mode mode);
         void set_mode (Mode mode);
         void cycle ();
         void demo_drive_leds ();

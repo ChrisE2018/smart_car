@@ -14,21 +14,21 @@ WallMode::WallMode (Car &car) : Plugin(WALL_PLUGIN), car(car)
 
 void WallMode::set_mode (Mode mode)
 {
-    Plugin::set_mode(mode);
     if (mode == WALL_MODE)
     {
-        speed = SPEED_FULL;
         Serial.println("Starting WallMode");
+        speed = SPEED_FULL;
+        active = true;
     }
     else
     {
-        speed = 0;
+        active = false;
     }
 }
 
 void WallMode::cycle ()
 {
-    if (get_mode() == WALL_MODE)
+    if (active)
     {
         long d = car.get_distance();
         Serial.print("Distance ");

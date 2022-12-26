@@ -14,7 +14,6 @@ DemoMode::DemoMode (Car &car) : Plugin(DEMO_PLUGIN), car(car)
 
 void DemoMode::set_mode (Mode mode)
 {
-    Plugin::set_mode(mode);
     if (mode == DEMO_MODE)
     {
         Serial.println("Starting DemoMode");
@@ -100,7 +99,7 @@ void DemoMode::set_phase (DemoPhase phase)
 
 void DemoMode::cycle ()
 {
-    if (get_mode() == DEMO_MODE)
+    if (phase != inactive_phase)
     {
         if (phase_change < millis())
         {

@@ -18,6 +18,12 @@ Car::Car () : sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER), parser(Serial), parser1
     reverse_mode = new DriveMode(*this, REVERSE_MODE, 500, REVERSE, REVERSE);
     clockwise_mode = new DriveMode(*this, CLOCKWISE_MODE, 500, FORWARD, REVERSE);
     counterclockwise_mode = new DriveMode(*this, COUNTERCLOCKWISE_MODE, 500, REVERSE, FORWARD);
+    plugins.push_back(wall_mode);
+    plugins.push_back(demo_mode);
+    plugins.push_back(forward_mode);
+    plugins.push_back(reverse_mode);
+    plugins.push_back(clockwise_mode);
+    plugins.push_back(counterclockwise_mode);
 }
 
 Car::~Car ()
@@ -36,12 +42,6 @@ void Car::setup ()
         motors[motor].setup();
     }
     setup_imu();
-    plugins.push_back(wall_mode);
-    plugins.push_back(demo_mode);
-    plugins.push_back(forward_mode);
-    plugins.push_back(reverse_mode);
-    plugins.push_back(clockwise_mode);
-    plugins.push_back(counterclockwise_mode);
 }
 
 void Car::setup_imu ()
@@ -52,6 +52,16 @@ void Car::setup_imu ()
     Wire.write(0);     // set to zero (wakes up the MPU-6050)
     Wire.endTransmission(true);
     Serial.println("imu setup");
+}
+
+Mode Car::get_mode ()
+{
+    return mode;
+}
+
+bool Car::is_mode (Mode _mode)
+{
+    return mode == _mode;
 }
 
 void Car::set_mode (Mode _mode)
@@ -288,14 +298,14 @@ void Car::help_command ()
     read_imu();
     print_distance();
 
+    Serial.print("Plugins: ");
+    Serial.println(plugins.size());
     Serial.print("Cycle Count: ");
     Serial.print(cycle_count);
     Serial.print(" total cycle micros ");
-    Serial.println(total_cycle_us);
+    Serial.print(total_cycle_us);
     Serial.print(" average micros per cycle ");
     Serial.println(total_cycle_us / (double) cycle_count);
-    Serial.print("Plugins: ");
-    Serial.println(plugins.size());
 }
 
 void Car::demo_drive_leds ()

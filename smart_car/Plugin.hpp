@@ -31,11 +31,9 @@ class Plugin
         virtual ~Plugin ();
 
         PluginId get_id ();
-        Mode get_mode ();
         virtual void set_mode (Mode mode);
         virtual void cycle ();
     private:
         const PluginId id;
-        Mode mode = COMMAND_MODE;
 };
 

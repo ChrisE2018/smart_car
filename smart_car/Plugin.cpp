@@ -87,16 +87,8 @@ PluginId Plugin::get_id ()
     return id;
 }
 
-Mode Plugin::get_mode ()
+void Plugin::set_mode (Mode mode)
 {
-    return mode;
-}
-
-void Plugin::set_mode (Mode _mode)
-{
-    mode = _mode;
-    Serial.print("Cyclic mode: ");
-    Serial.println(_mode);
 }
 
 void Plugin::cycle ()

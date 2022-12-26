@@ -21,6 +21,7 @@ class WallMode: public Plugin
 
     private:
         Car &car;
+        bool active = false;
         int speed = 0;
 };
 
