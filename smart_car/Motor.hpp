@@ -17,6 +17,17 @@ const int SPEED_Q1 = 64;
 const int SPEED_CRAWL = 32;
 const int SPEED_STOP = 0;
 
+enum MotorDirection
+{
+    STOP, FORWARD, REVERSE
+};
+
+enum MotorLocation
+{
+    right = 0,
+    left = 1
+};
+
 class Motor
 {
         int enable_pin;
@@ -29,7 +40,6 @@ class Motor
                 enable_pin(enable), forward_pin(forward), reverse_pin(reverse), forward_led(f_led), reverse_led(
                         r_led)
         {
-
         }
 
         void setup ();

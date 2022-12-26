@@ -7,6 +7,7 @@
 
 #include "Car.hpp"
 #include "DemoMode.hpp"
+#include "DriveMode.hpp"
 #include "WallMode.hpp"
 
 Car::Car () : sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER), parser(Serial), parser1(Serial1)
@@ -31,6 +32,10 @@ void Car::setup ()
     setup_imu();
     plugins.push_back(new WallMode(*this));
     plugins.push_back(new DemoMode(*this));
+    plugins.push_back(new DriveMode(*this, FORWARD_MODE, 500, FORWARD, FORWARD));
+    plugins.push_back(new DriveMode(*this, REVERSE_MODE, 500, REVERSE, REVERSE));
+    plugins.push_back(new DriveMode(*this, CLOCKWISE_MODE, 500, FORWARD, REVERSE));
+    plugins.push_back(new DriveMode(*this, COUNTERCLOCKWISE_MODE, 500, REVERSE, FORWARD));
 }
 
 void Car::setup_imu ()
@@ -138,17 +143,7 @@ void Car::execute_command (const int n, const String words[])
     Serial.println(command);
     if (command == "b")
     {
-        int speed = SPEED_FULL;
-        int duration = 500;
-        if (n > 1)
-        {
-            speed = words[1].toInt();
-        }
-        if (n > 2)
-        {
-            duration = words[2].toInt();
-        }
-        reverse(speed, duration);
+        set_mode(REVERSE_MODE);
     }
     else if (command == "c")
     {
@@ -179,49 +174,42 @@ void Car::execute_command (const int n, const String words[])
     }
     else if (command == "f")
     {
-        int speed = SPEED_FULL;
-        int duration = 500;
-        if (n > 1)
-        {
-            speed = words[1].toInt();
-        }
-        if (n > 2)
-        {
-            duration = words[2].toInt();
-        }
-        forward(speed, duration);
+        set_mode(FORWARD_MODE);
     }
     else if (command == "l")
     {
-        int speed = SPEED_FULL;
-        int duration = 500;
-        if (n > 1)
-        {
-            speed = words[1].toInt();
-        }
-        if (n > 2)
-        {
-            duration = words[2].toInt();
-        }
-        rotate_clockwise(speed, duration);
+//        int speed = SPEED_FULL;
+//        int duration = 500;
+//        if (n > 1)
+//        {
+//            speed = words[1].toInt();
+//        }
+//        if (n > 2)
+//        {
+//            duration = words[2].toInt();
+//        }
+//        rotate_clockwise(speed, duration);
+        set_mode(CLOCKWISE_MODE);
     }
     else if (command == "r")
     {
-        int speed = SPEED_FULL;
-        int duration = 500;
-        if (n > 1)
-        {
-            speed = words[1].toInt();
-        }
-        if (n > 2)
-        {
-            duration = words[2].toInt();
-        }
-        rotate_counterclockwise(speed, duration);
+//        int speed = SPEED_FULL;
+//        int duration = 500;
+//        if (n > 1)
+//        {
+//            speed = words[1].toInt();
+//        }
+//        if (n > 2)
+//        {
+//            duration = words[2].toInt();
+//        }
+//        rotate_counterclockwise(speed, duration);
+        set_mode(COUNTERCLOCKWISE_MODE);
     }
     else if (command == "s")
     {
         all_stop();
+        set_mode(COMMAND_MODE);
     }
     else if (command == "?")
     {
@@ -310,108 +298,3 @@ void Car::drive_reverse (const int motor, int speed)
     motors[motor].drive_reverse(speed);
 }
 
-// [TODO] Nothing with duration
-void Car::forward (const int speed, const int duration)
-{
-    Serial.print("forward ");
-    Serial.print(speed);
-    Serial.print(" for ");
-    Serial.print(duration);
-    Serial.println(" ms");
-    for (int i = 0; i < MOTOR_COUNT; i++)
-    {
-        drive_forward(i, speed);
-        delay(10);
-    }
-    delay(duration);
-    Serial.println("stop");
-    all_stop();
-}
-
-// [TODO] Nothing with duration
-void Car::reverse (const int speed, const int duration)
-{
-    Serial.print("reverse ");
-    Serial.print(speed);
-    Serial.print(" for ");
-    Serial.print(duration);
-    Serial.println(" ms");
-    for (int i = 0; i < MOTOR_COUNT; i++)
-    {
-        drive_reverse(i, speed);
-        delay(10);
-    }
-    delay(duration);
-    Serial.println("stop");
-    all_stop();
-}
-
-// [TODO] Nothing with duration
-void Car::forward_turn (const int speed_right, const int speed_left, const int duration)
-{
-    Serial.print("forward");
-    Serial.print(" right ");
-    Serial.print(speed_right);
-    Serial.print(" left ");
-    Serial.print(speed_left);
-    Serial.print(" for ");
-    Serial.print(duration);
-    Serial.println(" ms");
-    drive_forward(0, speed_right);
-    drive_forward(1, speed_left);
-    delay(duration);
-    Serial.println("stop");
-    all_stop();
-}
-
-// [TODO] Nothing with duration
-void Car::reverse_turn (const int speed_right, const int speed_left, const int duration)
-{
-    Serial.print("reverse");
-    Serial.print(" right ");
-    Serial.print(speed_right);
-    Serial.print(" left ");
-    Serial.print(speed_left);
-    Serial.print(" for ");
-    Serial.print(duration);
-    Serial.println(" ms");
-    drive_reverse(0, speed_right);
-    drive_reverse(1, speed_left);
-    delay(duration);
-    Serial.println("stop");
-    all_stop();
-}
-
-// [TODO] Nothing with duration
-void Car::rotate_clockwise (const int speed, const int duration)
-{
-    Serial.print("turn clockwise ");
-    Serial.print(speed);
-    Serial.print(" for ");
-    Serial.print(duration);
-    Serial.println(" ms");
-
-    drive_forward(0, SPEED_FULL);
-    drive_reverse(1, SPEED_FULL);
-
-    delay(duration);
-    Serial.println("stop");
-    all_stop();
-}
-
-// [TODO] Nothing with duration
-void Car::rotate_counterclockwise (const int speed, const int duration)
-{
-    Serial.print("turn counterclockwise ");
-    Serial.print(speed);
-    Serial.print(" for ");
-    Serial.print(duration);
-    Serial.println(" ms");
-
-    drive_reverse(0, SPEED_FULL);
-    drive_forward(1, SPEED_FULL);
-
-    delay(duration);
-    Serial.println("stop");
-    all_stop();
-}

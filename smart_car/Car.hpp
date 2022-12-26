@@ -30,18 +30,12 @@ class Car: public Executor
 
         void setup ();
         void set_mode(Mode mode);
+        void cycle ();
         void demo_drive_leds ();
         void all_stop ();
         void drive_stop (int motor);
         void drive_forward (int motor, int speed);
         void drive_reverse (int motor, int speed);
-        void forward (const int speed, const int duration);
-        void reverse (const int speed, const int duration);
-        void forward_turn (const int speed_right, const int speed_left, const int duration);
-        void reverse_turn (const int speed_right, const int speed_left, const int duration);
-        void rotate_clockwise (const int speed, const int duration);
-        void rotate_counterclockwise (const int speed, const int duration);
-        void cycle ();
         long get_distance();
 
     private:

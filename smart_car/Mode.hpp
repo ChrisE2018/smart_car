@@ -10,7 +10,11 @@
 enum Mode
 {
     COMMAND_MODE = 0,
-    DEMO_MODE = 1,
-    WALL_MODE = 2,
+    DEMO_MODE,
+    WALL_MODE,
+    FORWARD_MODE,
+    REVERSE_MODE,
+    CLOCKWISE_MODE,
+    COUNTERCLOCKWISE_MODE
 };
 
