@@ -7,4 +7,6 @@
 
 #pragma once
 
+void setup_ir();
 const char translate_ir (const unsigned long value);
+const char get_ir_command();

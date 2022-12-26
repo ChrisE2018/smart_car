@@ -7,44 +7,13 @@
 
 #include "Parser.hpp"
 
-Parser::Parser ()
+Parser::Parser (HardwareSerial& serial) : serial(serial)
 {
 }
 
 void Parser::handle_command (Executor &executor)
 {
-//    if (false)
-//    {
-//        if (irrecv.decode(&ir_results))  // have we received an IR signal?
-//        {
-//            const unsigned long value = ir_results.value;
-//            const char cmd = '.'; //translate_ir(value);
-//            Serial.print(value);
-//            Serial.print(" IR Command: ");
-//            Serial.println(cmd);
-//            switch (cmd)
-//            {
-//                case '<':
-//                    car.reverse(SPEED_FULL, 500);
-//                    break;
-//                case '>':
-//                    car.forward(SPEED_FULL, 500);
-//                    break;
-//                case '=':
-//                    car.all_stop();
-//                    break;
-//                case 'd':
-//                    car.turn_clockwise(SPEED_FULL, 500);
-//                    break;
-//                case 'u':
-//                    car.turn_counterclockwise(SPEED_FULL, 500);
-//                    break;
-//            }
-//            delay(500);
-//            irrecv.resume();  // receive the next value
-//        }
-//    }
-    if (Serial.available())
+    if (serial.available())
     {
         delay(1); // allow time to receive
         const int size = 256;
@@ -52,9 +21,9 @@ void Parser::handle_command (Executor &executor)
         int i = 0;
         while (i < size)
         {
-            if (Serial.available())
+            if (serial.available())
             {
-                const char cmd = Serial.read();
+                const char cmd = serial.read();
                 if (cmd == '\n' || cmd == '\r')
                 {
                     if (i > 0)

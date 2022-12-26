@@ -13,10 +13,11 @@
 class Parser
 {
     public:
-        Parser ();
+        Parser (HardwareSerial& serial);
         void handle_command (Executor &executor);
 
     private:
+        HardwareSerial& serial;
         int get_words (const String command, String result[], int max_words);
 };
 

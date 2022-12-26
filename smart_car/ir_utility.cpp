@@ -7,6 +7,18 @@
 
 #include "ir_utility.h"
 #include "Arduino.h"
+#include "IRremote.h"
+
+/*-----Infrared remote-----*/
+const int ir_receiver_pin = 30;  // Signal Pin of IR receiver to Arduino Digital Pin 11
+IRrecv irrecv(ir_receiver_pin);  // create instance of 'irrecv'
+decode_results ir_results;       // create instance of 'decode_results'
+
+void setup_ir ()
+{
+    Serial.println("IR Receiver Button Decode");
+    irrecv.enableIRIn();  // Start the receiver
+}
 
 const char translate_ir (const unsigned long value)
 {
@@ -83,5 +95,20 @@ const char translate_ir (const unsigned long value)
             Serial.println(" other button   ");
             return '?';
     }
+}
+
+const char get_ir_command ()
+{
+    if (irrecv.decode(&ir_results))  // have we received an IR signal?
+    {
+        const unsigned long value = ir_results.value;
+        const char cmd = translate_ir(value);
+        Serial.print(value);
+        Serial.print(" IR Command: ");
+        Serial.println(cmd);
+        irrecv.resume();  // receive the next value
+        return cmd;
+    }
+    return '.';
 }
 

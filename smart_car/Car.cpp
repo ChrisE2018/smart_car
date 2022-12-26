@@ -7,7 +7,7 @@
 
 #include "Car.hpp"
 
-Car::Car () : sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)
+Car::Car () : sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER), parser(Serial), parser1(Serial1)
 {
 }
 
@@ -115,6 +115,7 @@ void Car::read_imu ()
 void Car::handle_command ()
 {
     parser.handle_command(*this);
+    parser1.handle_command(*this);
 }
 
 /** Execute a command from a buffer.

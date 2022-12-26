@@ -58,6 +58,7 @@ class Car: public Executor
         { Motor(6, 2, 3, 26, 28), Motor(7, 5, 4, 22, 24) };
 
         Parser parser;
+        Parser parser1;
 
         int mode = COMMAND_MODE;
 
