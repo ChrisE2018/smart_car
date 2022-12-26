@@ -14,10 +14,10 @@ Car::Car () : sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER), parser(Serial), parser1
 {
     wall_mode = new WallMode(*this);
     demo_mode = new DemoMode(*this);
-    forward_mode = new DriveMode(*this, FORWARD_MODE, 500, FORWARD, FORWARD);
-    reverse_mode = new DriveMode(*this, REVERSE_MODE, 500, REVERSE, REVERSE);
-    clockwise_mode = new DriveMode(*this, CLOCKWISE_MODE, 500, FORWARD, REVERSE);
-    counterclockwise_mode = new DriveMode(*this, COUNTERCLOCKWISE_MODE, 500, REVERSE, FORWARD);
+    forward_mode = new DriveMode(FORWARD_PLUGIN, *this, 500, FORWARD, FORWARD);
+    reverse_mode = new DriveMode(REVERSE_PLUGIN, *this, 500, REVERSE, REVERSE);
+    clockwise_mode = new DriveMode(CLOCKWISE_PLUGIN, *this, 500, FORWARD, REVERSE);
+    counterclockwise_mode = new DriveMode(COUNTERCLOCKWISE_PLUGIN, *this, 500, REVERSE, FORWARD);
     plugins.push_back(wall_mode);
     plugins.push_back(demo_mode);
     plugins.push_back(forward_mode);
@@ -54,16 +54,6 @@ void Car::setup_imu ()
     Serial.println("imu setup");
 }
 
-Mode Car::get_mode ()
-{
-    return mode;
-}
-
-bool Car::is_mode (Mode _mode)
-{
-    return mode == _mode;
-}
-
 void Car::set_mode (Mode _mode)
 {
     Serial.print("Setting ");
@@ -71,6 +61,10 @@ void Car::set_mode (Mode _mode)
     Serial.print(" plugin modes: ");
     Serial.println(_mode);
     mode = _mode;
+    for (Plugin *plugin : plugins)
+    {
+        plugin->set_enabled(false);
+    }
     for (Plugin *plugin : plugins)
     {
         plugin->set_mode(_mode);
@@ -169,10 +163,11 @@ void Car::execute_command (const int n, const String words[])
         {
             duration = words[2].toInt();
         }
+        set_mode(COMMAND_MODE);
         reverse_mode->set_duration(duration);
         reverse_mode->set_right_speed(speed);
         reverse_mode->set_left_speed(speed);
-        set_mode(REVERSE_MODE);
+        reverse_mode->set_enabled(true);
     }
     else if (command == "c")
     {
@@ -213,10 +208,11 @@ void Car::execute_command (const int n, const String words[])
         {
             duration = words[2].toInt();
         }
+        set_mode(COMMAND_MODE);
         forward_mode->set_duration(duration);
         forward_mode->set_right_speed(speed);
         forward_mode->set_left_speed(speed);
-        set_mode(FORWARD_MODE);
+        forward_mode->set_enabled(true);
     }
     else if (command == "l")
     {
@@ -230,10 +226,11 @@ void Car::execute_command (const int n, const String words[])
         {
             duration = words[2].toInt();
         }
+        set_mode(COMMAND_MODE);
         clockwise_mode->set_duration(duration);
         clockwise_mode->set_right_speed(speed);
         clockwise_mode->set_left_speed(speed);
-        set_mode(CLOCKWISE_MODE);
+        clockwise_mode->set_enabled(true);
     }
     else if (command == "r")
     {
@@ -247,10 +244,11 @@ void Car::execute_command (const int n, const String words[])
         {
             duration = words[2].toInt();
         }
+        set_mode(COMMAND_MODE);
         counterclockwise_mode->set_duration(duration);
         counterclockwise_mode->set_right_speed(speed);
         counterclockwise_mode->set_left_speed(speed);
-        set_mode(COUNTERCLOCKWISE_MODE);
+        counterclockwise_mode->set_enabled(true);
     }
     else if (command == "s")
     {
@@ -329,17 +327,17 @@ void Car::all_stop ()
     }
 }
 
-void Car::drive_stop (int motor)
+void Car::drive_stop (const MotorLocation motor)
 {
     motors[motor].drive_stop();
 }
 
-void Car::drive_forward (const int motor, const int speed)
+void Car::drive_forward (const MotorLocation motor, const int speed)
 {
     motors[motor].drive_forward(speed);
 }
 
-void Car::drive_reverse (const int motor, int speed)
+void Car::drive_reverse (const MotorLocation motor, int speed)
 {
     motors[motor].drive_reverse(speed);
 }

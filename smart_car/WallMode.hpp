@@ -15,8 +15,8 @@ class WallMode: public Plugin
 {
     public:
         WallMode (Car &car);
-
-        void set_mode (Mode mode) override;
+        void set_mode (Mode mode);
+        void set_enabled (const bool enable);
         void cycle () override;
 
     private:

@@ -7,6 +7,37 @@
 
 #include "Motor.hpp"
 
+std::ostream& operator<< (std::ostream &lhs, MotorDirection direction)
+{
+    switch (direction)
+    {
+        case STOP:
+            lhs << "STOP";
+            break;
+        case FORWARD:
+            lhs << "FORWARD";
+            break;
+        case REVERSE:
+            lhs << "REVERSE";
+            break;
+    }
+    return lhs;
+}
+
+std::ostream& operator<< (std::ostream &lhs, MotorLocation location)
+{
+    switch (location)
+    {
+        case RIGHT:
+            lhs << "RIGHT";
+            break;
+        case LEFT:
+            lhs << "LEFT";
+            break;
+    }
+    return lhs;
+}
+
 void Motor::setup ()
 {
     pinMode(enable_pin, OUTPUT);

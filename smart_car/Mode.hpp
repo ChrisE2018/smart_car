@@ -7,14 +7,11 @@
 
 #pragma once
 
+#include <ostream>
+
 enum Mode
 {
-    COMMAND_MODE = 0,
-    DEMO_MODE,
-    WALL_MODE,
-    FORWARD_MODE,
-    REVERSE_MODE,
-    CLOCKWISE_MODE,
-    COUNTERCLOCKWISE_MODE
+    COMMAND_MODE = 0, DEMO_MODE, WALL_MODE
 };
 
+std::ostream& operator<< (std::ostream &lhs, Mode mode);

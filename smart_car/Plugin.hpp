@@ -20,8 +20,10 @@ enum PluginId
     COUNTERCLOCKWISE_PLUGIN
 };
 
-PluginId translate_mode(const Mode mode);
-Mode translate_mode(const PluginId id);
+std::ostream& operator<< (std::ostream &lhs, PluginId id);
+
+PluginId translate_mode (const Mode mode);
+Mode translate_mode (const PluginId id);
 
 class Plugin
 {
@@ -33,7 +35,10 @@ class Plugin
         PluginId get_id ();
         virtual void set_mode (Mode mode);
         virtual void cycle ();
+        bool is_enabled ();
+        virtual void set_enabled (const bool enable);
     private:
         const PluginId id;
+        bool enable = false;
 };
 

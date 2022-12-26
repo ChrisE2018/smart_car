@@ -14,11 +14,12 @@ class Car;
 class DriveMode: public Plugin
 {
     public:
-        DriveMode (Car &car, Mode mode, const int duration,
+        DriveMode (const PluginId id, Car &car, const int duration,
                 const MotorDirection right_motor_direction,
                 const MotorDirection left_motor_direction);
 
-        void set_mode (Mode mode) override;
+        void set_enabled (const bool enable);
+
         void cycle () override;
 
         void set_duration (const int _duration)
@@ -38,7 +39,6 @@ class DriveMode: public Plugin
 
     private:
         Car &car;
-        Mode mode;
         int duration;
         long deadline = 0;
         MotorDirection right_motor_direction;

@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Arduino.h"
+#include <ostream>
 
 const int SPEED_FULL = 255;
 const int SPEED_Q3 = 196;
@@ -22,11 +23,14 @@ enum MotorDirection
     STOP, FORWARD, REVERSE
 };
 
+std::ostream& operator<< (std::ostream &lhs, MotorDirection direction);
+
 enum MotorLocation
 {
-    right = 0,
-    left = 1
+    RIGHT = 0, LEFT = 1
 };
+
+std::ostream& operator<< (std::ostream &lhs, MotorLocation location);
 
 class Motor
 {
@@ -36,9 +40,8 @@ class Motor
         int forward_led;
         int reverse_led;
     public:
-        Motor (int enable, int forward, int reverse, int f_led, int r_led) :
-                enable_pin(enable), forward_pin(forward), reverse_pin(reverse), forward_led(f_led), reverse_led(
-                        r_led)
+        Motor (int enable, int forward, int reverse, int f_led, int r_led) : enable_pin(enable), forward_pin(
+                forward), reverse_pin(reverse), forward_led(f_led), reverse_led(r_led)
         {
         }
 

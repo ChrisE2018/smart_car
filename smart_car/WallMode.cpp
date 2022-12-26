@@ -14,7 +14,13 @@ WallMode::WallMode (Car &car) : Plugin(WALL_PLUGIN), car(car)
 
 void WallMode::set_mode (Mode mode)
 {
-    if (mode == WALL_MODE)
+    set_enabled(mode == WALL_MODE);
+}
+
+void WallMode::set_enabled (const bool enable)
+{
+    Plugin::set_enabled(enable);
+    if (enable)
     {
         Serial.println("Starting WallMode");
         speed = SPEED_FULL;

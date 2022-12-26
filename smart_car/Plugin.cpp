@@ -9,6 +9,39 @@
 
 #include "Arduino.h"
 
+std::ostream& operator<< (std::ostream &lhs, PluginId id)
+{
+    switch (id)
+    {
+        case COMMAND_PLUGIN:
+            lhs << "COMMAND_PLUGIN";
+            break;
+        case DEMO_PLUGIN:
+            lhs << "DEMO_PLUGIN";
+            break;
+        case WALL_PLUGIN:
+            lhs << "WALL_PLUGIN";
+            break;
+        case FORWARD_PLUGIN:
+            lhs << "FORWARD_PLUGIN";
+            break;
+        case REVERSE_PLUGIN:
+            lhs << "REVERSE_PLUGIN";
+            break;
+        case CLOCKWISE_PLUGIN:
+            lhs << "CLOCKWISE_PLUGIN";
+            break;
+        case COUNTERCLOCKWISE_PLUGIN:
+            lhs << "COUNTERCLOCKWISE_PLUGIN";
+            break;
+        default:
+            lhs << "???_PLUGIN";
+            break;
+
+    }
+    return lhs;
+}
+
 PluginId translate_mode (const Mode mode)
 {
     switch (mode)
@@ -21,18 +54,6 @@ PluginId translate_mode (const Mode mode)
 
         case WALL_MODE:
             return WALL_PLUGIN;
-
-        case FORWARD_MODE:
-            return FORWARD_PLUGIN;
-
-        case REVERSE_MODE:
-            return REVERSE_PLUGIN;
-
-        case CLOCKWISE_MODE:
-            return CLOCKWISE_PLUGIN;
-
-        case COUNTERCLOCKWISE_MODE:
-            return COUNTERCLOCKWISE_PLUGIN;
 
         default:
             return COMMAND_PLUGIN;
@@ -51,18 +72,6 @@ Mode translate_mode (const PluginId id)
 
         case WALL_PLUGIN:
             return WALL_MODE;
-
-        case FORWARD_PLUGIN:
-            return FORWARD_MODE;
-
-        case REVERSE_PLUGIN:
-            return REVERSE_MODE;
-
-        case CLOCKWISE_PLUGIN:
-            return CLOCKWISE_MODE;
-
-        case COUNTERCLOCKWISE_PLUGIN:
-            return COUNTERCLOCKWISE_MODE;
 
         default:
             return COMMAND_MODE;
@@ -89,6 +98,16 @@ PluginId Plugin::get_id ()
 
 void Plugin::set_mode (Mode mode)
 {
+}
+
+bool Plugin::is_enabled ()
+{
+    return enable;
+}
+
+void Plugin::set_enabled (const bool _enable)
+{
+    enable = _enable;
 }
 
 void Plugin::cycle ()

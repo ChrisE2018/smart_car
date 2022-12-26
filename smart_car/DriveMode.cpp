@@ -8,21 +8,21 @@
 #include "DriveMode.hpp"
 #include "Car.hpp"
 
-DriveMode::DriveMode (Car &car, Mode mode, const int duration,
-        const MotorDirection right_motor_direction, const MotorDirection left_motor_direction) : Plugin(mode), car(
-        car), mode(mode), duration(duration), right_motor_direction(right_motor_direction), left_motor_direction(
+DriveMode::DriveMode (PluginId id, Car &car, const int duration,
+        const MotorDirection right_motor_direction, const MotorDirection left_motor_direction) : Plugin(
+        id), car(car), duration(duration), right_motor_direction(right_motor_direction), left_motor_direction(
         left_motor_direction)
 {
-
 }
 
-void DriveMode::set_mode (Mode new_mode)
+void DriveMode::set_enabled (const bool enable)
 {
-    if (mode == new_mode)
+    Plugin::set_enabled(enable);
+    if (enable)
     {
         deadline = millis() + duration;
         Serial.print("Starting DriveMode: ");
-        Serial.print(mode);
+        Serial.print(get_id());
         Serial.print(" for ");
         Serial.print(duration);
         Serial.print(" until ");
@@ -30,25 +30,25 @@ void DriveMode::set_mode (Mode new_mode)
         switch (right_motor_direction)
         {
             case STOP:
-                car.drive_stop(0);
+                car.drive_stop(RIGHT);
                 break;
             case FORWARD:
-                car.drive_forward(0, right_motor_speed);
+                car.drive_forward(RIGHT, right_motor_speed);
                 break;
             case REVERSE:
-                car.drive_reverse(0, right_motor_speed);
+                car.drive_reverse(RIGHT, right_motor_speed);
                 break;
         }
         switch (left_motor_direction)
         {
             case STOP:
-                car.drive_stop(1);
+                car.drive_stop(LEFT);
                 break;
             case FORWARD:
-                car.drive_forward(1, left_motor_speed);
+                car.drive_forward(LEFT, left_motor_speed);
                 break;
             case REVERSE:
-                car.drive_reverse(1, left_motor_speed);
+                car.drive_reverse(LEFT, left_motor_speed);
                 break;
         }
     }
@@ -56,14 +56,14 @@ void DriveMode::set_mode (Mode new_mode)
 
 void DriveMode::cycle ()
 {
-    if (car.is_mode(mode))
+    if (is_enabled())
     {
         if (deadline < millis())
         {
             Serial.print("Stopping DriveMode: ");
-            Serial.println(mode);
+            Serial.println(get_id());
             car.all_stop();
-            car.set_mode(COMMAND_MODE);
+            set_enabled(false);
         }
     }
 }

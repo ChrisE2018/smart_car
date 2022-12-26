@@ -32,16 +32,46 @@ class Car: public Executor
         ~Car ();
 
         void setup ();
-        Mode get_mode();
-        bool is_mode(Mode mode);
+        Mode get_mode ();
+        bool is_mode (Mode mode);
         void set_mode (Mode mode);
         void cycle ();
         void demo_drive_leds ();
         void all_stop ();
-        void drive_stop (int motor);
-        void drive_forward (int motor, int speed);
-        void drive_reverse (int motor, int speed);
+        void drive_stop (MotorLocation motor);
+        void drive_forward (MotorLocation motor, int speed);
+        void drive_reverse (MotorLocation motor, int speed);
         long get_distance ();
+
+        WallMode* get_wall_mode ()
+        {
+            return wall_mode;
+        }
+
+        DemoMode* get_demo_mode ()
+        {
+            return demo_mode;
+        }
+
+        DriveMode* get_forward_mode ()
+        {
+            return forward_mode;
+        }
+
+        DriveMode* get_reverse_mode ()
+        {
+            return reverse_mode;
+        }
+
+        DriveMode* get_clockwise_mode ()
+        {
+            return clockwise_mode;
+        }
+
+        DriveMode* get_counterclockwise_mode ()
+        {
+            return counterclockwise_mode;
+        }
 
     private:
         long cycle_count = 0;

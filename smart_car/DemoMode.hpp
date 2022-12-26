@@ -27,8 +27,8 @@ class DemoMode: public Plugin
 {
     public:
         DemoMode (Car &car);
-
-        void set_mode (Mode mode) override;
+        void set_mode (Mode mode);
+        void set_enabled(const bool enable);
         void cycle () override;
         void set_phase (DemoPhase phase);
 
