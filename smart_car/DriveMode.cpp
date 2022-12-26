@@ -25,7 +25,9 @@ void DriveMode::set_mode (Mode new_mode)
         Serial.print("Starting DriveMode: ");
         Serial.print(mode);
         Serial.print(" for ");
-        Serial.println(duration);
+        Serial.print(duration);
+        Serial.print(" until ");
+        Serial.println(deadline);
         switch (right_motor_direction)
         {
             case STOP:

@@ -7,15 +7,16 @@
 
 #pragma once
 
-#include "Car.hpp"
 #include "Cyclic.hpp"
+
+class Car;
 
 class WallMode: public Cyclic
 {
     public:
         WallMode (Car &car);
 
-        void set_mode(Mode mode) override;
+        void set_mode (Mode mode) override;
         void cycle () override;
 
     private:

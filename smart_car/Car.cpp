@@ -12,6 +12,12 @@
 
 Car::Car () : sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER), parser(Serial), parser1(Serial1)
 {
+    wall_mode = new WallMode(*this);
+    demo_mode = new DemoMode(*this);
+    forward_mode = new DriveMode(*this, FORWARD_MODE, 500, FORWARD, FORWARD);
+    reverse_mode = new DriveMode(*this, REVERSE_MODE, 500, REVERSE, REVERSE);
+    clockwise_mode = new DriveMode(*this, CLOCKWISE_MODE, 500, FORWARD, REVERSE);
+    counterclockwise_mode = new DriveMode(*this, COUNTERCLOCKWISE_MODE, 500, REVERSE, FORWARD);
 }
 
 Car::~Car ()
@@ -30,12 +36,12 @@ void Car::setup ()
         motors[motor].setup();
     }
     setup_imu();
-    plugins.push_back(new WallMode(*this));
-    plugins.push_back(new DemoMode(*this));
-    plugins.push_back(new DriveMode(*this, FORWARD_MODE, 500, FORWARD, FORWARD));
-    plugins.push_back(new DriveMode(*this, REVERSE_MODE, 500, REVERSE, REVERSE));
-    plugins.push_back(new DriveMode(*this, CLOCKWISE_MODE, 500, FORWARD, REVERSE));
-    plugins.push_back(new DriveMode(*this, COUNTERCLOCKWISE_MODE, 500, REVERSE, FORWARD));
+    plugins.push_back(wall_mode);
+    plugins.push_back(demo_mode);
+    plugins.push_back(forward_mode);
+    plugins.push_back(reverse_mode);
+    plugins.push_back(clockwise_mode);
+    plugins.push_back(counterclockwise_mode);
 }
 
 void Car::setup_imu ()
@@ -143,6 +149,19 @@ void Car::execute_command (const int n, const String words[])
     Serial.println(command);
     if (command == "b")
     {
+        int speed = SPEED_FULL;
+        int duration = 500;
+        if (n > 1)
+        {
+            speed = words[1].toInt();
+        }
+        if (n > 2)
+        {
+            duration = words[2].toInt();
+        }
+        reverse_mode->set_duration(duration);
+        reverse_mode->set_right_speed(speed);
+        reverse_mode->set_left_speed(speed);
         set_mode(REVERSE_MODE);
     }
     else if (command == "c")
@@ -174,36 +193,53 @@ void Car::execute_command (const int n, const String words[])
     }
     else if (command == "f")
     {
+        int speed = SPEED_FULL;
+        int duration = 500;
+        if (n > 1)
+        {
+            speed = words[1].toInt();
+        }
+        if (n > 2)
+        {
+            duration = words[2].toInt();
+        }
+        forward_mode->set_duration(duration);
+        forward_mode->set_right_speed(speed);
+        forward_mode->set_left_speed(speed);
         set_mode(FORWARD_MODE);
     }
     else if (command == "l")
     {
-//        int speed = SPEED_FULL;
-//        int duration = 500;
-//        if (n > 1)
-//        {
-//            speed = words[1].toInt();
-//        }
-//        if (n > 2)
-//        {
-//            duration = words[2].toInt();
-//        }
-//        rotate_clockwise(speed, duration);
+        int speed = SPEED_FULL;
+        int duration = 500;
+        if (n > 1)
+        {
+            speed = words[1].toInt();
+        }
+        if (n > 2)
+        {
+            duration = words[2].toInt();
+        }
+        clockwise_mode->set_duration(duration);
+        clockwise_mode->set_right_speed(speed);
+        clockwise_mode->set_left_speed(speed);
         set_mode(CLOCKWISE_MODE);
     }
     else if (command == "r")
     {
-//        int speed = SPEED_FULL;
-//        int duration = 500;
-//        if (n > 1)
-//        {
-//            speed = words[1].toInt();
-//        }
-//        if (n > 2)
-//        {
-//            duration = words[2].toInt();
-//        }
-//        rotate_counterclockwise(speed, duration);
+        int speed = SPEED_FULL;
+        int duration = 500;
+        if (n > 1)
+        {
+            speed = words[1].toInt();
+        }
+        if (n > 2)
+        {
+            duration = words[2].toInt();
+        }
+        counterclockwise_mode->set_duration(duration);
+        counterclockwise_mode->set_right_speed(speed);
+        counterclockwise_mode->set_left_speed(speed);
         set_mode(COUNTERCLOCKWISE_MODE);
     }
     else if (command == "s")

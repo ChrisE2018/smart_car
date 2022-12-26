@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "Car.hpp"
 #include "Cyclic.hpp"
+class Car;
 
 enum DemoPhase
 {

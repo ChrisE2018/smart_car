@@ -6,6 +6,7 @@
  */
 
 #include "DemoMode.hpp"
+#include "Car.hpp"
 
 DemoMode::DemoMode (Car &car) : car(car)
 {

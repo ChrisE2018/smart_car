@@ -6,6 +6,7 @@
  */
 
 #include "WallMode.hpp"
+#include "Car.hpp"
 
 WallMode::WallMode (Car &car) : car(car)
 {

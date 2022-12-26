@@ -16,6 +16,9 @@
 #include "Motor.hpp"
 #include "Parser.hpp"
 #include "Mode.hpp"
+#include "DemoMode.hpp"
+#include "DriveMode.hpp"
+#include "WallMode.hpp"
 
 const int MOTOR_COUNT = 2;
 
@@ -29,19 +32,29 @@ class Car: public Executor
         ~Car ();
 
         void setup ();
-        void set_mode(Mode mode);
+        void set_mode (Mode mode);
         void cycle ();
         void demo_drive_leds ();
         void all_stop ();
         void drive_stop (int motor);
         void drive_forward (int motor, int speed);
         void drive_reverse (int motor, int speed);
-        long get_distance();
+        long get_distance ();
 
     private:
         long cycle_count = 0;
         long total_cycle_us = 0;
-        std::vector<Cyclic *> plugins;
+
+        Parser parser;
+        Parser parser1;
+
+        WallMode *wall_mode;
+        DemoMode *demo_mode;
+        DriveMode *forward_mode;
+        DriveMode *reverse_mode;
+        DriveMode *clockwise_mode;
+        DriveMode *counterclockwise_mode;
+        std::vector<Cyclic*> plugins;
 
         // pins
         // 2 yellow = in1
@@ -57,9 +70,6 @@ class Car: public Executor
         // LED_3 = 28;  // green led
         Motor motors[MOTOR_COUNT] =
         { Motor(6, 2, 3, 26, 28), Motor(7, 5, 4, 22, 24) };
-
-        Parser parser;
-        Parser parser1;
 
         Mode mode = COMMAND_MODE;
 
