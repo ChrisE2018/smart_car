@@ -53,10 +53,7 @@ void Car::setup ()
 
 void Car::set_mode (const Mode _mode)
 {
-    Serial.print("Setting ");
-    Serial.print(plugins.size());
-    Serial.print(" plugin modes: ");
-    Serial.println(_mode);
+    cout << "Setting " << plugins.size() << " plugins to mode " << _mode << std::endl;
     mode = _mode;
     for (Plugin *plugin : plugins)
     {
@@ -64,7 +61,7 @@ void Car::set_mode (const Mode _mode)
     }
     for (Plugin *plugin : plugins)
     {
-        plugin->set_mode(_mode);
+        plugin->set_mode(mode);
     }
 }
 
@@ -88,8 +85,7 @@ void Car::handle_command ()
     parser1.handle_command(*this);
 }
 
-/** Execute a command from a buffer.
- * @param n The number of command words.
+/** Execute a command from the user.
  @param words Command string broken into words.
  */
 void Car::execute_command (const std::vector<String> words)
