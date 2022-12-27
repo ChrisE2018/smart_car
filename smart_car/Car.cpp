@@ -11,20 +11,25 @@
 #include "DrivePlugin.hpp"
 #include "WallPlugin.hpp"
 
-Car::Car () : sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER), parser(Serial), parser1(Serial1)
+Car::Car () : parser(Serial), parser1(Serial1)
 {
-    wall_mode = new WallPlugin(*this);
-    demo_mode = new DemoPlugin(*this);
-    forward_mode = new DrivePlugin(FORWARD_PLUGIN, *this, 500, FORWARD, FORWARD);
-    reverse_mode = new DrivePlugin(REVERSE_PLUGIN, *this, 500, REVERSE, REVERSE);
-    clockwise_mode = new DrivePlugin(CLOCKWISE_PLUGIN, *this, 500, FORWARD, REVERSE);
-    counterclockwise_mode = new DrivePlugin(COUNTERCLOCKWISE_PLUGIN, *this, 500, REVERSE, FORWARD);
-    plugins.push_back(wall_mode);
-    plugins.push_back(demo_mode);
-    plugins.push_back(forward_mode);
-    plugins.push_back(reverse_mode);
-    plugins.push_back(clockwise_mode);
-    plugins.push_back(counterclockwise_mode);
+    wall_plugin = new WallPlugin(*this);
+    demo_plugin = new DemoPlugin(*this);
+    forward_plugin = new DrivePlugin(FORWARD_PLUGIN, *this, 500, FORWARD, FORWARD);
+    reverse_plugin = new DrivePlugin(REVERSE_PLUGIN, *this, 500, REVERSE, REVERSE);
+    clockwise_plugin = new DrivePlugin(CLOCKWISE_PLUGIN, *this, 500, FORWARD, REVERSE);
+    counterclockwise_plugin = new DrivePlugin(COUNTERCLOCKWISE_PLUGIN, *this, 500, REVERSE,
+            FORWARD);
+    imu_plugin = new ImuPlugin();
+    ultrasound_plugin = new UltrasoundPlugin();
+    plugins.push_back(wall_plugin);
+    plugins.push_back(demo_plugin);
+    plugins.push_back(forward_plugin);
+    plugins.push_back(reverse_plugin);
+    plugins.push_back(clockwise_plugin);
+    plugins.push_back(counterclockwise_plugin);
+    plugins.push_back(imu_plugin);
+    plugins.push_back(ultrasound_plugin);
 }
 
 Car::~Car ()
@@ -42,20 +47,10 @@ void Car::setup ()
     {
         motors[motor].setup();
     }
-    setup_imu();
+    imu_plugin->setup_imu();
 }
 
-void Car::setup_imu ()
-{
-    Wire.begin();
-    Wire.beginTransmission(MPU_addr);
-    Wire.write(0x6B);  // PWR_MGMT_1 register
-    Wire.write(0);     // set to zero (wakes up the MPU-6050)
-    Wire.endTransmission(true);
-    Serial.println("imu setup");
-}
-
-void Car::set_mode (Mode _mode)
+void Car::set_mode (const Mode _mode)
 {
     Serial.print("Setting ");
     Serial.print(plugins.size());
@@ -77,14 +72,6 @@ void Car::cycle ()
     const long cycle_start_us = micros();
 
     handle_command();
-    if (show_distance)
-    {
-        print_distance();
-    }
-    if (show_imu)
-    {
-        read_imu();
-    }
     for (Plugin *plugin : plugins)
     {
         plugin->cycle();
@@ -92,50 +79,6 @@ void Car::cycle ()
 
     total_cycle_us += micros() - cycle_start_us;
     cycle_count++;
-}
-
-long Car::get_distance ()
-{
-    return sr04.Distance();
-}
-
-void Car::print_distance ()
-{
-    long d = sr04.Distance();
-    Serial.print("Distance ");
-    Serial.print(d);
-    Serial.println(" cm");
-}
-
-void Car::read_imu ()
-{
-    Wire.beginTransmission(MPU_addr);
-    Wire.write(0x3B);  // starting with register 0x3B (ACCEL_XOUT_H)
-    Wire.endTransmission(false);
-    Wire.requestFrom(MPU_addr, 14, true);  // request a total of 14 registers
-    AcX = Wire.read() << 8 | Wire.read();  // 0x3B (ACCEL_XOUT_H) & 0x3C (ACCEL_XOUT_L)
-    AcY = Wire.read() << 8 | Wire.read();  // 0x3D (ACCEL_YOUT_H) & 0x3E (ACCEL_YOUT_L)
-    AcZ = Wire.read() << 8 | Wire.read();  // 0x3F (ACCEL_ZOUT_H) & 0x40 (ACCEL_ZOUT_L)
-    Tmp = Wire.read() << 8 | Wire.read();  // 0x41 (TEMP_OUT_H) & 0x42 (TEMP_OUT_L)
-    GyX = Wire.read() << 8 | Wire.read();  // 0x43 (GYRO_XOUT_H) & 0x44 (GYRO_XOUT_L)
-    GyY = Wire.read() << 8 | Wire.read();  // 0x45 (GYRO_YOUT_H) & 0x46 (GYRO_YOUT_L)
-    GyZ = Wire.read() << 8 | Wire.read();  // 0x47 (GYRO_ZOUT_H) & 0x48 (GYRO_ZOUT_L)
-
-    Serial.print(" | AcX = "); // Accelerator
-    Serial.print(AcX);
-    Serial.print(" | AcY = ");
-    Serial.print(AcY);
-    Serial.print(" | AcZ = ");
-    Serial.print(AcZ);
-    Serial.print(" | Tmp = ");
-    Serial.print(Tmp / 340.00 + 36.53);  //equation for temperature in degrees C from datasheet
-    Serial.print(" | GyX = "); // Gyro
-    Serial.print(GyX);
-    Serial.print(" | GyY = ");
-    Serial.print(GyY);
-    Serial.print(" | GyZ = ");
-    Serial.print(GyZ);
-    Serial.println();
 }
 
 void Car::handle_command ()
@@ -165,10 +108,10 @@ void Car::execute_command (const int n, const String words[])
             duration = words[2].toInt();
         }
         set_mode(COMMAND_MODE);
-        reverse_mode->set_duration(duration);
-        reverse_mode->set_right_speed(speed);
-        reverse_mode->set_left_speed(speed);
-        reverse_mode->set_enabled(true);
+        reverse_plugin->set_duration(duration);
+        reverse_plugin->set_right_speed(speed);
+        reverse_plugin->set_left_speed(speed);
+        reverse_plugin->set_enabled(true);
     }
     else if (command == "c")
     {
@@ -187,11 +130,11 @@ void Car::execute_command (const int n, const String words[])
     }
     else if (command == "distance")
     {
-        show_distance = !show_distance;
+        ultrasound_plugin->set_enabled(!ultrasound_plugin->is_enabled());
     }
     else if (command == "imu")
     {
-        show_imu = !show_imu;
+        imu_plugin->set_enabled(!imu_plugin->is_enabled());
     }
     else if (command == "led")
     {
@@ -210,10 +153,10 @@ void Car::execute_command (const int n, const String words[])
             duration = words[2].toInt();
         }
         set_mode(COMMAND_MODE);
-        forward_mode->set_duration(duration);
-        forward_mode->set_right_speed(speed);
-        forward_mode->set_left_speed(speed);
-        forward_mode->set_enabled(true);
+        forward_plugin->set_duration(duration);
+        forward_plugin->set_right_speed(speed);
+        forward_plugin->set_left_speed(speed);
+        forward_plugin->set_enabled(true);
     }
     else if (command == "l")
     {
@@ -228,10 +171,10 @@ void Car::execute_command (const int n, const String words[])
             duration = words[2].toInt();
         }
         set_mode(COMMAND_MODE);
-        clockwise_mode->set_duration(duration);
-        clockwise_mode->set_right_speed(speed);
-        clockwise_mode->set_left_speed(speed);
-        clockwise_mode->set_enabled(true);
+        clockwise_plugin->set_duration(duration);
+        clockwise_plugin->set_right_speed(speed);
+        clockwise_plugin->set_left_speed(speed);
+        clockwise_plugin->set_enabled(true);
     }
     else if (command == "r")
     {
@@ -246,10 +189,10 @@ void Car::execute_command (const int n, const String words[])
             duration = words[2].toInt();
         }
         set_mode(COMMAND_MODE);
-        counterclockwise_mode->set_duration(duration);
-        counterclockwise_mode->set_right_speed(speed);
-        counterclockwise_mode->set_left_speed(speed);
-        counterclockwise_mode->set_enabled(true);
+        counterclockwise_plugin->set_duration(duration);
+        counterclockwise_plugin->set_right_speed(speed);
+        counterclockwise_plugin->set_left_speed(speed);
+        counterclockwise_plugin->set_enabled(true);
     }
     else if (command == "s")
     {
@@ -294,8 +237,8 @@ void Car::help_command ()
         Serial.print("Current mode is UNKNOWN MODE: ");
         Serial.println(mode);
     }
-    read_imu();
-    print_distance();
+    imu_plugin->read_imu();
+    ultrasound_plugin->print_distance();
 
     Serial.print("Plugins: ");
     Serial.println(plugins.size());
@@ -343,32 +286,42 @@ void Car::drive_reverse (const MotorLocation motor, const int speed)
     motors[motor].drive_reverse(speed);
 }
 
-WallPlugin* Car::get_wall_mode ()
+WallPlugin* Car::get_wall_plugin ()
 {
-    return wall_mode;
+    return wall_plugin;
 }
 
-DemoPlugin* Car::get_demo_mode ()
+DemoPlugin* Car::get_demo_plugin ()
 {
-    return demo_mode;
+    return demo_plugin;
 }
 
-DrivePlugin* Car::get_forward_mode ()
+DrivePlugin* Car::get_forward_plugin ()
 {
-    return forward_mode;
+    return forward_plugin;
 }
 
-DrivePlugin* Car::get_reverse_mode ()
+DrivePlugin* Car::get_reverse_plugin ()
 {
-    return reverse_mode;
+    return reverse_plugin;
 }
 
-DrivePlugin* Car::get_clockwise_mode ()
+DrivePlugin* Car::get_clockwise_plugin ()
 {
-    return clockwise_mode;
+    return clockwise_plugin;
 }
 
-DrivePlugin* Car::get_counterclockwise_mode ()
+DrivePlugin* Car::get_counterclockwise_plugin ()
 {
-    return counterclockwise_mode;
+    return counterclockwise_plugin;
+}
+
+ImuPlugin* Car::get_imu_plugin ()
+{
+    return imu_plugin;
+}
+
+UltrasoundPlugin* Car::get_ultrasound_plugin ()
+{
+    return ultrasound_plugin;
 }

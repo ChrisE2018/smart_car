@@ -7,23 +7,19 @@
 
 #pragma once
 
-#include <SR04.h>
-#include <MPU6050.h>
-#include <Wire.h> // Needed for IMU
 #include <vector>
-#include "DemoPlugin.hpp"
-#include "DrivePlugin.hpp"
 
 #include "Motor.hpp"
 #include "Parser.hpp"
 #include "Mode.hpp"
 #include "Plugin.hpp"
 #include "WallPlugin.hpp"
+#include "DemoPlugin.hpp"
+#include "DrivePlugin.hpp"
+#include "ImuPlugin.hpp"
+#include "UltrasoundPlugin.hpp"
 
 const int MOTOR_COUNT = 2;
-
-const int ULTRASOUND_TRIGGER = 12;  // blue
-const int ULTRASOUND_ECHO = 11;     // green
 
 class Car: public Executor
 {
@@ -33,22 +29,23 @@ class Car: public Executor
 
         void setup ();
         Mode get_mode ();
-        bool is_mode (Mode mode);
-        void set_mode (Mode mode);
+        bool is_mode (const Mode mode);
+        void set_mode (const Mode mode);
         void cycle ();
         void demo_drive_leds ();
         void all_stop ();
-        void drive_stop (MotorLocation motor);
-        void drive_forward (MotorLocation motor, int speed);
-        void drive_reverse (MotorLocation motor, int speed);
-        long get_distance ();
+        void drive_stop (const MotorLocation motor);
+        void drive_forward (const MotorLocation motor, const int speed);
+        void drive_reverse (const MotorLocation motor, const int speed);
 
-        WallPlugin* get_wall_mode ();
-        DemoPlugin* get_demo_mode ();
-        DrivePlugin* get_forward_mode ();
-        DrivePlugin* get_reverse_mode ();
-        DrivePlugin* get_clockwise_mode ();
-        DrivePlugin* get_counterclockwise_mode ();
+        WallPlugin* get_wall_plugin ();
+        DemoPlugin* get_demo_plugin ();
+        DrivePlugin* get_forward_plugin ();
+        DrivePlugin* get_reverse_plugin ();
+        DrivePlugin* get_clockwise_plugin ();
+        DrivePlugin* get_counterclockwise_plugin ();
+        ImuPlugin* get_imu_plugin ();
+        UltrasoundPlugin* get_ultrasound_plugin ();
 
     private:
         long cycle_count = 0;
@@ -57,12 +54,14 @@ class Car: public Executor
         Parser parser;
         Parser parser1;
 
-        WallPlugin *wall_mode;
-        DemoPlugin *demo_mode;
-        DrivePlugin *forward_mode;
-        DrivePlugin *reverse_mode;
-        DrivePlugin *clockwise_mode;
-        DrivePlugin *counterclockwise_mode;
+        WallPlugin *wall_plugin;
+        DemoPlugin *demo_plugin;
+        DrivePlugin *forward_plugin;
+        DrivePlugin *reverse_plugin;
+        DrivePlugin *clockwise_plugin;
+        DrivePlugin *counterclockwise_plugin;
+        ImuPlugin *imu_plugin;
+        UltrasoundPlugin *ultrasound_plugin;
         std::vector<Plugin*> plugins;
 
         // pins
@@ -82,22 +81,6 @@ class Car: public Executor
 
         Mode mode = COMMAND_MODE;
 
-        SR04 sr04;
-        bool show_distance = false;
-        bool show_imu = false;
-
-        MPU6050 mpu;
-        const int MPU_addr = 0x68;  // I2C address of the MPU-6050
-        int16_t AcX = 0;
-        int16_t AcY = 0;
-        int16_t AcZ = 0;
-        int16_t Tmp = 0;
-        int16_t GyX = 0;
-        int16_t GyY = 0;
-        int16_t GyZ = 0;
-
-        void setup_imu ();
-        void read_imu ();
         void handle_command ();
         void execute_command (const int n, const String words[]);
         void help_command ();

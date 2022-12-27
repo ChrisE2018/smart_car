@@ -5,9 +5,9 @@
  *      Author: cre
  */
 
-#include "WallPlugin.hpp"
-
 #include "Car.hpp"
+#include "WallPlugin.hpp"
+#include "UltrasoundPlugin.hpp"
 
 WallPlugin::WallPlugin (Car &car) : Plugin(WALL_PLUGIN), car(car)
 {
@@ -37,7 +37,8 @@ void WallPlugin::cycle ()
 {
     if (active)
     {
-        long d = car.get_distance();
+        UltrasoundPlugin* ultrasound_plugin = car.get_ultrasound_plugin();
+        long d = ultrasound_plugin->get_distance();
         Serial.print("Distance ");
         Serial.print(d);
         Serial.println(" cm");

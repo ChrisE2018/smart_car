@@ -44,7 +44,7 @@ void DemoPlugin::set_phase (DemoPhase phase)
             const int duration = 1500;
             phase_change = phase_start + duration;
             next_phase = idle_phase1;
-            DrivePlugin* drive_mode = car.get_forward_mode();
+            DrivePlugin* drive_mode = car.get_forward_plugin();
             if (drive_mode != nullptr)
             {
                 drive_mode->set_right_speed(speed);
@@ -69,7 +69,7 @@ void DemoPlugin::set_phase (DemoPhase phase)
             const int duration = 1500;
             phase_change = phase_start + duration;
             next_phase = idle_phase2;
-            DrivePlugin *drive_mode = car.get_reverse_mode();
+            DrivePlugin *drive_mode = car.get_reverse_plugin();
             if (drive_mode != nullptr)
             {
                 drive_mode->set_right_speed(speed);
@@ -94,7 +94,7 @@ void DemoPlugin::set_phase (DemoPhase phase)
             const int duration = 1500;
             phase_change = phase_start + duration;
             next_phase = idle_phase3;
-            DrivePlugin *drive_mode = car.get_clockwise_mode();
+            DrivePlugin *drive_mode = car.get_clockwise_plugin();
             if (drive_mode != nullptr)
             {
                 drive_mode->set_right_speed(speed);
@@ -119,7 +119,7 @@ void DemoPlugin::set_phase (DemoPhase phase)
             const int duration = 1500;
             phase_change = phase_start + duration;
             next_phase = idle_phase4;
-            DrivePlugin *drive_mode = car.get_counterclockwise_mode();
+            DrivePlugin *drive_mode = car.get_counterclockwise_plugin();
             if (drive_mode != nullptr)
             {
                 drive_mode->set_right_speed(speed);

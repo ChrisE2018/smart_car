@@ -17,7 +17,9 @@ enum PluginId
     FORWARD_PLUGIN,
     REVERSE_PLUGIN,
     CLOCKWISE_PLUGIN,
-    COUNTERCLOCKWISE_PLUGIN
+    COUNTERCLOCKWISE_PLUGIN,
+    IMU_PLUGIN,
+    ULTRASOUND_PLUGIN
 };
 
 std::ostream& operator<< (std::ostream &lhs, PluginId id);
