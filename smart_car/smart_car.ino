@@ -1,9 +1,12 @@
 #include "Arduino.h"
 #include "Car.hpp"
+#include "smart_car.hpp"
 
 /* Program for robot car. */
 
 Car car;
+
+std::ohserialstream cout(Serial);
 
 /* Control program. */
 

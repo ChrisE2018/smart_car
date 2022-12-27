@@ -6,6 +6,7 @@
  */
 
 #include "Car.hpp"
+#include "smart_car.hpp"
 
 #include "DemoPlugin.hpp"
 #include "DrivePlugin.hpp"
@@ -115,18 +116,18 @@ void Car::execute_command (const int n, const String words[])
     }
     else if (command == "c")
     {
-        Serial.println("Current mode is COMMAND MODE");
         set_mode(COMMAND_MODE);
+        cout << "Current mode is " << mode << std::endl;
     }
     else if (command == "demo")
     {
-        Serial.println("Current mode is DEMO_MODE MODE");
         set_mode(DEMO_MODE);
+        cout << "Current mode is " << mode << std::endl;
     }
     else if (command == "wall")
     {
-        Serial.println("Current mode is WALL_MODE MODE");
         set_mode(WALL_MODE);
+        cout << "Current mode is " << mode << std::endl;
     }
     else if (command == "distance")
     {
@@ -220,23 +221,8 @@ void Car::help_command ()
     Serial.println("r - right turn");
     Serial.println("s - stop moving");
     Serial.println("? - help");
-    if (mode == COMMAND_MODE)
-    {
-        Serial.println("Current mode is COMMAND MODE");
-    }
-    else if (mode == DEMO_MODE)
-    {
-        Serial.println("Current mode is DEMO MODE");
-    }
-    else if (mode == WALL_MODE)
-    {
-        Serial.println("Current mode is WALL_MODE");
-    }
-    else
-    {
-        Serial.print("Current mode is UNKNOWN MODE: ");
-        Serial.println(mode);
-    }
+
+    cout << "Current mode is " << mode << std::endl;
     imu_plugin->read_imu();
     ultrasound_plugin->print_distance();
 

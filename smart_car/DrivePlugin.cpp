@@ -5,6 +5,7 @@
  *      Author: cre
  */
 
+#include "smart_car.hpp"
 #include "DrivePlugin.hpp"
 
 #include "Car.hpp"
@@ -22,16 +23,8 @@ void DrivePlugin::set_enabled (const bool enable)
     if (enable)
     {
         deadline = millis() + duration;
-        Serial.print("Starting DriveMode: ");
-        Serial.print(get_id());
-        Serial.print(" at ");
-        Serial.print(right_motor_speed);
-        Serial.print(", ");
-        Serial.print(left_motor_speed);
-        Serial.print(" for ");
-        Serial.print(duration);
-        Serial.print(" until ");
-        Serial.println(deadline);
+        cout << "Starting DriveMode: " << get_id() << " speed " << right_motor_speed << ", "
+                << left_motor_speed << " for " << duration << " until " << deadline << std::endl;
         switch (right_motor_direction)
         {
             case STOP:
@@ -65,8 +58,7 @@ void DrivePlugin::cycle ()
     {
         if (deadline < millis())
         {
-            Serial.print("Stopping DriveMode: ");
-            Serial.println(get_id());
+            cout << "Stopping DriveMode: " << get_id() << " at " << millis() << std::endl;
             car.all_stop();
             set_enabled(false);
         }

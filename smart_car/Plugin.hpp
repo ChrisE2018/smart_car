@@ -24,14 +24,10 @@ enum PluginId
 
 std::ostream& operator<< (std::ostream &lhs, PluginId id);
 
-PluginId translate_mode (const Mode mode);
-Mode translate_mode (const PluginId id);
-
 class Plugin
 {
     public:
         Plugin (const PluginId id);
-        Plugin (const Mode mode_id);
         virtual ~Plugin ();
 
         PluginId get_id ();
