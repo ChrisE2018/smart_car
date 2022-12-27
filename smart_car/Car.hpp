@@ -11,14 +11,14 @@
 #include <MPU6050.h>
 #include <Wire.h> // Needed for IMU
 #include <vector>
+#include "DemoPlugin.hpp"
+#include "DrivePlugin.hpp"
 
 #include "Motor.hpp"
 #include "Parser.hpp"
 #include "Mode.hpp"
-#include "DemoMode.hpp"
-#include "DriveMode.hpp"
 #include "Plugin.hpp"
-#include "WallMode.hpp"
+#include "WallPlugin.hpp"
 
 const int MOTOR_COUNT = 2;
 
@@ -43,12 +43,12 @@ class Car: public Executor
         void drive_reverse (MotorLocation motor, int speed);
         long get_distance ();
 
-        WallMode* get_wall_mode ();
-        DemoMode* get_demo_mode ();
-        DriveMode* get_forward_mode ();
-        DriveMode* get_reverse_mode ();
-        DriveMode* get_clockwise_mode ();
-        DriveMode* get_counterclockwise_mode ();
+        WallPlugin* get_wall_mode ();
+        DemoPlugin* get_demo_mode ();
+        DrivePlugin* get_forward_mode ();
+        DrivePlugin* get_reverse_mode ();
+        DrivePlugin* get_clockwise_mode ();
+        DrivePlugin* get_counterclockwise_mode ();
 
     private:
         long cycle_count = 0;
@@ -57,12 +57,12 @@ class Car: public Executor
         Parser parser;
         Parser parser1;
 
-        WallMode *wall_mode;
-        DemoMode *demo_mode;
-        DriveMode *forward_mode;
-        DriveMode *reverse_mode;
-        DriveMode *clockwise_mode;
-        DriveMode *counterclockwise_mode;
+        WallPlugin *wall_mode;
+        DemoPlugin *demo_mode;
+        DrivePlugin *forward_mode;
+        DrivePlugin *reverse_mode;
+        DrivePlugin *clockwise_mode;
+        DrivePlugin *counterclockwise_mode;
         std::vector<Plugin*> plugins;
 
         // pins

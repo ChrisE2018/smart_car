@@ -1,8 +1,7 @@
 #include "Arduino.h"
 #include "Car.hpp"
-#include "Motor.hpp"
 
-// Program for robot car
+/* Program for robot car. */
 
 Car car;
 

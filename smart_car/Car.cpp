@@ -6,18 +6,19 @@
  */
 
 #include "Car.hpp"
-#include "DemoMode.hpp"
-#include "DriveMode.hpp"
-#include "WallMode.hpp"
+
+#include "DemoPlugin.hpp"
+#include "DrivePlugin.hpp"
+#include "WallPlugin.hpp"
 
 Car::Car () : sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER), parser(Serial), parser1(Serial1)
 {
-    wall_mode = new WallMode(*this);
-    demo_mode = new DemoMode(*this);
-    forward_mode = new DriveMode(FORWARD_PLUGIN, *this, 500, FORWARD, FORWARD);
-    reverse_mode = new DriveMode(REVERSE_PLUGIN, *this, 500, REVERSE, REVERSE);
-    clockwise_mode = new DriveMode(CLOCKWISE_PLUGIN, *this, 500, FORWARD, REVERSE);
-    counterclockwise_mode = new DriveMode(COUNTERCLOCKWISE_PLUGIN, *this, 500, REVERSE, FORWARD);
+    wall_mode = new WallPlugin(*this);
+    demo_mode = new DemoPlugin(*this);
+    forward_mode = new DrivePlugin(FORWARD_PLUGIN, *this, 500, FORWARD, FORWARD);
+    reverse_mode = new DrivePlugin(REVERSE_PLUGIN, *this, 500, REVERSE, REVERSE);
+    clockwise_mode = new DrivePlugin(CLOCKWISE_PLUGIN, *this, 500, FORWARD, REVERSE);
+    counterclockwise_mode = new DrivePlugin(COUNTERCLOCKWISE_PLUGIN, *this, 500, REVERSE, FORWARD);
     plugins.push_back(wall_mode);
     plugins.push_back(demo_mode);
     plugins.push_back(forward_mode);
@@ -342,32 +343,32 @@ void Car::drive_reverse (const MotorLocation motor, const int speed)
     motors[motor].drive_reverse(speed);
 }
 
-WallMode* Car::get_wall_mode ()
+WallPlugin* Car::get_wall_mode ()
 {
     return wall_mode;
 }
 
-DemoMode* Car::get_demo_mode ()
+DemoPlugin* Car::get_demo_mode ()
 {
     return demo_mode;
 }
 
-DriveMode* Car::get_forward_mode ()
+DrivePlugin* Car::get_forward_mode ()
 {
     return forward_mode;
 }
 
-DriveMode* Car::get_reverse_mode ()
+DrivePlugin* Car::get_reverse_mode ()
 {
     return reverse_mode;
 }
 
-DriveMode* Car::get_clockwise_mode ()
+DrivePlugin* Car::get_clockwise_mode ()
 {
     return clockwise_mode;
 }
 
-DriveMode* Car::get_counterclockwise_mode ()
+DrivePlugin* Car::get_counterclockwise_mode ()
 {
     return counterclockwise_mode;
 }

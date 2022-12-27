@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Plugin.hpp"
+#include "Motor.hpp"
 class Car;
 
 enum DemoPhase
@@ -23,10 +24,10 @@ enum DemoPhase
     idle_phase4,
 };
 
-class DemoMode: public Plugin
+class DemoPlugin: public Plugin
 {
     public:
-        DemoMode (Car &car);
+        DemoPlugin (Car &car);
         void set_mode (Mode mode);
         void set_enabled(const bool enable);
         void cycle () override;

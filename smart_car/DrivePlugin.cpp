@@ -5,17 +5,18 @@
  *      Author: cre
  */
 
-#include "Car.hpp"
-#include "DriveMode.hpp"
+#include "DrivePlugin.hpp"
 
-DriveMode::DriveMode (PluginId id, Car &car, const int duration,
+#include "Car.hpp"
+
+DrivePlugin::DrivePlugin (PluginId id, Car &car, const int duration,
         const MotorDirection right_motor_direction, const MotorDirection left_motor_direction) : Plugin(
         id), car(car), duration(duration), right_motor_direction(right_motor_direction), left_motor_direction(
         left_motor_direction)
 {
 }
 
-void DriveMode::set_enabled (const bool enable)
+void DrivePlugin::set_enabled (const bool enable)
 {
     Plugin::set_enabled(enable);
     if (enable)
@@ -58,7 +59,7 @@ void DriveMode::set_enabled (const bool enable)
     }
 }
 
-void DriveMode::cycle ()
+void DrivePlugin::cycle ()
 {
     if (is_enabled())
     {

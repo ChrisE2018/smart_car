@@ -11,10 +11,10 @@
 
 class Car;
 
-class WallMode: public Plugin
+class WallPlugin: public Plugin
 {
     public:
-        WallMode (Car &car);
+        WallPlugin (Car &car);
         void set_mode (Mode mode);
         void set_enabled (const bool enable);
         void cycle () override;

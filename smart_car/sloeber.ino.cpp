@@ -2,12 +2,11 @@
 //This is a automatic generated file
 //Please do not modify this file
 //If you touch this file your change will be overwritten during the next build
-//This file has been generated on 2022-12-25 13:53:52
+//This file has been generated on 2022-12-26 19:13:51
 
 #include "Arduino.h"
 #include "Arduino.h"
 #include "Car.hpp"
-#include "Motor.hpp"
 
 void setup () ;
 void loop () ;

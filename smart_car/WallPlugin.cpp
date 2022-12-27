@@ -5,19 +5,20 @@
  *      Author: cre
  */
 
-#include "Car.hpp"
-#include "WallMode.hpp"
+#include "WallPlugin.hpp"
 
-WallMode::WallMode (Car &car) : Plugin(WALL_PLUGIN), car(car)
+#include "Car.hpp"
+
+WallPlugin::WallPlugin (Car &car) : Plugin(WALL_PLUGIN), car(car)
 {
 }
 
-void WallMode::set_mode (Mode mode)
+void WallPlugin::set_mode (Mode mode)
 {
     set_enabled(mode == WALL_MODE);
 }
 
-void WallMode::set_enabled (const bool enable)
+void WallPlugin::set_enabled (const bool enable)
 {
     Plugin::set_enabled(enable);
     if (enable)
@@ -32,7 +33,7 @@ void WallMode::set_enabled (const bool enable)
     }
 }
 
-void WallMode::cycle ()
+void WallPlugin::cycle ()
 {
     if (active)
     {

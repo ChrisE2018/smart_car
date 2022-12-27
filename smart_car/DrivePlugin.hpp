@@ -11,10 +11,10 @@
 #include "Plugin.hpp"
 class Car;
 
-class DriveMode: public Plugin
+class DrivePlugin: public Plugin
 {
     public:
-        DriveMode (const PluginId id, Car &car, const int duration,
+        DrivePlugin (const PluginId id, Car &car, const int duration,
                 const MotorDirection right_motor_direction,
                 const MotorDirection left_motor_direction);
 
