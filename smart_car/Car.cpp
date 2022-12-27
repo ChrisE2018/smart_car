@@ -92,8 +92,9 @@ void Car::handle_command ()
  * @param n The number of command words.
  @param words Command string broken into words.
  */
-void Car::execute_command (const int n, const String words[])
+void Car::execute_command (const std::vector<String> words)
 {
+    const int n = words.size();
     String command = words[0];
     Serial.print("Command: ");
     Serial.println(command);

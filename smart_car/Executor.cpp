@@ -11,7 +11,7 @@ Executor::Executor ()
 {
 }
 
-void Executor::execute_command (const int word_counts, const String words[])
+void Executor::execute_command (const std::vector<String> words)
 {
 }
 

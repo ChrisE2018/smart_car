@@ -31,12 +31,15 @@ void Parser::handle_command (Executor &executor)
                         String command(buffer);
                         Serial.print("execute_command: ");
                         Serial.println(command);
-                        const int word_limit = 10;
-                        String words[word_limit];
-                        int n = get_words(command, words, word_limit);
-                        if (n > 0)
+                        std::vector<String> words;
+                        get_words(command, words);
+                        if (!words.empty())
                         {
-                            executor.execute_command(n, words);
+                            executor.execute_command(words);
+                        }
+                        else
+                        {
+                            Serial.println("[Empty command]");
                         }
                     }
                     return;
@@ -55,9 +58,8 @@ void Parser::handle_command (Executor &executor)
     }
 }
 
-int Parser::get_words (const String command, String result[], int max_words)
+void Parser::get_words (const String command, std::vector<String>& result)
 {
-    int word = 0;
     int start = 0;
     bool in_word = false;
     for (int i = 0; i < command.length(); i++)
@@ -67,11 +69,8 @@ int Parser::get_words (const String command, String result[], int max_words)
         {
             if (in_word)
             {
-                result[word] = command.substring(start, i);
-                word++;
+                result.push_back(command.substring(start, i));
                 in_word = false;
-                if (word >= max_words)
-                    return word;
             }
         }
         else if (!in_word)
@@ -83,9 +82,7 @@ int Parser::get_words (const String command, String result[], int max_words)
     }
     if (in_word)
     {
-        result[word] = command.substring(start);
-        word++;
+        result.push_back(command.substring(start));
     }
-    return word;
 }
 

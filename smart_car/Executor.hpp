@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Arduino.h"
+#include <vector>
 
 class Executor
 {
@@ -15,6 +16,6 @@ class Executor
         Executor ();
         virtual ~Executor () = default;
 
-        virtual void execute_command (const int word_counts, const String words[]);
+        virtual void execute_command (const std::vector<String> words);
 };
 

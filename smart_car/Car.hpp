@@ -82,7 +82,7 @@ class Car: public Executor
         Mode mode = COMMAND_MODE;
 
         void handle_command ();
-        void execute_command (const int n, const String words[]);
+        void execute_command (const std::vector<String> words);
         void help_command ();
         void print_distance ();
 };

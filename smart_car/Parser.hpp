@@ -9,6 +9,7 @@
 
 #include "Arduino.h"
 #include "Executor.hpp"
+#include <vector>
 
 class Parser
 {
@@ -18,6 +19,6 @@ class Parser
 
     private:
         HardwareSerial& serial;
-        int get_words (const String command, String result[], int max_words);
+        void get_words (const String command, std::vector<String>& words);
 };
 
