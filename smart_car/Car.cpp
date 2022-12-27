@@ -89,7 +89,8 @@ void Car::handle_command ()
 }
 
 /** Execute a command from a buffer.
- @param command The full command string with no newline.
+ * @param n The number of command words.
+ @param words Command string broken into words.
  */
 void Car::execute_command (const int n, const String words[])
 {
@@ -124,22 +125,9 @@ void Car::execute_command (const int n, const String words[])
         set_mode(DEMO_MODE);
         cout << "Current mode is " << mode << std::endl;
     }
-    else if (command == "wall")
-    {
-        set_mode(WALL_MODE);
-        cout << "Current mode is " << mode << std::endl;
-    }
     else if (command == "distance")
     {
         ultrasound_plugin->set_enabled(!ultrasound_plugin->is_enabled());
-    }
-    else if (command == "imu")
-    {
-        imu_plugin->set_enabled(!imu_plugin->is_enabled());
-    }
-    else if (command == "led")
-    {
-        demo_drive_leds();
     }
     else if (command == "f")
     {
@@ -158,6 +146,14 @@ void Car::execute_command (const int n, const String words[])
         forward_plugin->set_right_speed(speed);
         forward_plugin->set_left_speed(speed);
         forward_plugin->set_enabled(true);
+    }
+    else if (command == "imu")
+    {
+        imu_plugin->set_enabled(!imu_plugin->is_enabled());
+    }
+    else if (command == "led")
+    {
+        demo_drive_leds();
     }
     else if (command == "l")
     {
@@ -199,6 +195,11 @@ void Car::execute_command (const int n, const String words[])
     {
         all_stop();
         set_mode(COMMAND_MODE);
+    }
+    else if (command == "wall")
+    {
+        set_mode(WALL_MODE);
+        cout << "Current mode is " << mode << std::endl;
     }
     else if (command == "?")
     {

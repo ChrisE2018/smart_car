@@ -15,7 +15,6 @@ void Parser::handle_command (Executor &executor)
 {
     if (serial.available())
     {
-        delay(1); // allow time to receive
         const int size = 256;
         char buffer[size];
         int i = 0;
