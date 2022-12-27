@@ -5,8 +5,8 @@
  *      Author: cre
  */
 
-#include "WallMode.hpp"
 #include "Car.hpp"
+#include "WallMode.hpp"
 
 WallMode::WallMode (Car &car) : Plugin(WALL_PLUGIN), car(car)
 {
@@ -42,19 +42,21 @@ void WallMode::cycle ()
         Serial.println(" cm");
         if (d < 10)
         {
+            car.all_stop();
             car.set_mode(COMMAND_MODE);
         }
-        else if (d < 50)
+        else
         {
-            speed = SPEED_Q3;
-        }
-        else if (d < 25)
-        {
-            speed = SPEED_HALF;
-        }
-        for (int i = 0; i < MOTOR_COUNT; i++)
-        {
-            car.drive_forward(i, speed);
+            if (d < 50)
+            {
+                speed = SPEED_Q3;
+            }
+            else if (d < 25)
+            {
+                speed = SPEED_HALF;
+            }
+            car.drive_forward(RIGHT, speed);
+            car.drive_forward(LEFT, speed);
         }
     }
 }

@@ -37,6 +37,7 @@ class Plugin
         virtual void cycle ();
         bool is_enabled ();
         virtual void set_enabled (const bool enable);
+
     private:
         const PluginId id;
         bool enable = false;

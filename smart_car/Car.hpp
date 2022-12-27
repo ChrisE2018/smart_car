@@ -43,35 +43,12 @@ class Car: public Executor
         void drive_reverse (MotorLocation motor, int speed);
         long get_distance ();
 
-        WallMode* get_wall_mode ()
-        {
-            return wall_mode;
-        }
-
-        DemoMode* get_demo_mode ()
-        {
-            return demo_mode;
-        }
-
-        DriveMode* get_forward_mode ()
-        {
-            return forward_mode;
-        }
-
-        DriveMode* get_reverse_mode ()
-        {
-            return reverse_mode;
-        }
-
-        DriveMode* get_clockwise_mode ()
-        {
-            return clockwise_mode;
-        }
-
-        DriveMode* get_counterclockwise_mode ()
-        {
-            return counterclockwise_mode;
-        }
+        WallMode* get_wall_mode ();
+        DemoMode* get_demo_mode ();
+        DriveMode* get_forward_mode ();
+        DriveMode* get_reverse_mode ();
+        DriveMode* get_clockwise_mode ();
+        DriveMode* get_counterclockwise_mode ();
 
     private:
         long cycle_count = 0;

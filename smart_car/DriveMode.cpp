@@ -5,8 +5,8 @@
  *      Author: cre
  */
 
-#include "DriveMode.hpp"
 #include "Car.hpp"
+#include "DriveMode.hpp"
 
 DriveMode::DriveMode (PluginId id, Car &car, const int duration,
         const MotorDirection right_motor_direction, const MotorDirection left_motor_direction) : Plugin(
@@ -23,6 +23,10 @@ void DriveMode::set_enabled (const bool enable)
         deadline = millis() + duration;
         Serial.print("Starting DriveMode: ");
         Serial.print(get_id());
+        Serial.print(" at ");
+        Serial.print(right_motor_speed);
+        Serial.print(", ");
+        Serial.print(left_motor_speed);
         Serial.print(" for ");
         Serial.print(duration);
         Serial.print(" until ");

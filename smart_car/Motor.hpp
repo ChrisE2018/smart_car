@@ -47,11 +47,11 @@ class Motor
 
         void setup ();
 
-        void led_demo (int duration);
+        void led_demo (const int duration);
 
-        void drive_forward (int speed);
+        void drive_forward (const int speed);
 
-        void drive_reverse (int speed);
+        void drive_reverse (const int speed);
 
         void drive_stop ();
 };

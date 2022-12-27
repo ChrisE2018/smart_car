@@ -34,7 +34,7 @@ class DemoMode: public Plugin
 
     private:
         Car &car;
-        int speed = 0;
+        int speed = SPEED_FULL;
         DemoPhase phase = inactive_phase;
         DemoPhase next_phase = inactive_phase;
         long phase_start = 0;

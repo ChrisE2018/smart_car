@@ -48,7 +48,7 @@ void Motor::setup ()
     drive_stop();
 }
 
-void Motor::led_demo (int duration)
+void Motor::led_demo (const int duration)
 {
     digitalWrite(forward_led, HIGH);
     delay(duration);
@@ -60,7 +60,7 @@ void Motor::led_demo (int duration)
     delay(duration);
 }
 
-void Motor::drive_forward (int speed)
+void Motor::drive_forward (const int speed)
 {
     digitalWrite(forward_led, HIGH);
     digitalWrite(reverse_led, LOW);
@@ -69,7 +69,7 @@ void Motor::drive_forward (int speed)
     analogWrite(enable_pin, speed);
 }
 
-void Motor::drive_reverse (int speed)
+void Motor::drive_reverse (const int speed)
 {
     digitalWrite(forward_led, LOW);
     digitalWrite(reverse_led, HIGH);

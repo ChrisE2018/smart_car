@@ -337,8 +337,37 @@ void Car::drive_forward (const MotorLocation motor, const int speed)
     motors[motor].drive_forward(speed);
 }
 
-void Car::drive_reverse (const MotorLocation motor, int speed)
+void Car::drive_reverse (const MotorLocation motor, const int speed)
 {
     motors[motor].drive_reverse(speed);
 }
 
+WallMode* Car::get_wall_mode ()
+{
+    return wall_mode;
+}
+
+DemoMode* Car::get_demo_mode ()
+{
+    return demo_mode;
+}
+
+DriveMode* Car::get_forward_mode ()
+{
+    return forward_mode;
+}
+
+DriveMode* Car::get_reverse_mode ()
+{
+    return reverse_mode;
+}
+
+DriveMode* Car::get_clockwise_mode ()
+{
+    return clockwise_mode;
+}
+
+DriveMode* Car::get_counterclockwise_mode ()
+{
+    return counterclockwise_mode;
+}

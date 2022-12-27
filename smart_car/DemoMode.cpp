@@ -5,8 +5,9 @@
  *      Author: cre
  */
 
-#include "DemoMode.hpp"
 #include "Car.hpp"
+#include "DemoMode.hpp"
+#include "DriveMode.hpp"
 
 DemoMode::DemoMode (Car &car) : Plugin(DEMO_PLUGIN), car(car)
 {
@@ -42,7 +43,7 @@ void DemoMode::set_phase (DemoPhase phase)
             const int duration = 1500;
             phase_change = phase_start + duration;
             next_phase = idle_phase1;
-            DriveMode *drive_mode = car.get_forward_mode();
+            DriveMode* drive_mode = car.get_forward_mode();
             if (drive_mode != nullptr)
             {
                 drive_mode->set_right_speed(speed);
@@ -57,8 +58,8 @@ void DemoMode::set_phase (DemoPhase phase)
         {
             phase_change = phase_start + 5000;
             next_phase = reverse_phase;
-            car.drive_stop(0);
-            car.drive_stop(1);
+            car.drive_stop(RIGHT);
+            car.drive_stop(LEFT);
             break;
         }
 
@@ -82,8 +83,8 @@ void DemoMode::set_phase (DemoPhase phase)
         {
             phase_change = phase_start + 5000;
             next_phase = clockwise_phase;
-            car.drive_stop(0);
-            car.drive_stop(1);
+            car.drive_stop(RIGHT);
+            car.drive_stop(LEFT);
             break;
         }
 
@@ -107,8 +108,8 @@ void DemoMode::set_phase (DemoPhase phase)
         {
             phase_change = phase_start + 5000;
             next_phase = counterclockwise_phase;
-            car.drive_stop(0);
-            car.drive_stop(1);
+            car.drive_stop(RIGHT);
+            car.drive_stop(LEFT);
             break;
         }
 
@@ -133,8 +134,8 @@ void DemoMode::set_phase (DemoPhase phase)
             phase_change = phase_start + 5000;
             next_phase = forward_phase;
             speed = SPEED_STOP;
-            car.drive_stop(0);
-            car.drive_stop(1);
+            car.drive_stop(RIGHT);
+            car.drive_stop(LEFT);
             break;
         }
     }
