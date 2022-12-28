@@ -12,12 +12,13 @@
 #include "Motor.hpp"
 #include "Parser.hpp"
 #include "Mode.hpp"
-#include "Plugin.hpp"
-#include "WallPlugin.hpp"
+
+#include "ClockPlugin.hpp"
 #include "DemoPlugin.hpp"
 #include "DrivePlugin.hpp"
 #include "ImuPlugin.hpp"
 #include "UltrasoundPlugin.hpp"
+#include "WallPlugin.hpp"
 
 const int MOTOR_COUNT = 2;
 
@@ -54,7 +55,7 @@ class Car: public Executor
         Parser parser;
         Parser parser1;
 
-        WallPlugin *wall_plugin;
+        ClockPlugin *clock_plugin;
         DemoPlugin *demo_plugin;
         DrivePlugin *forward_plugin;
         DrivePlugin *reverse_plugin;
@@ -62,6 +63,8 @@ class Car: public Executor
         DrivePlugin *counterclockwise_plugin;
         ImuPlugin *imu_plugin;
         UltrasoundPlugin *ultrasound_plugin;
+        WallPlugin *wall_plugin;
+        std::vector<Plugin*> available_plugins;
         std::vector<Plugin*> plugins;
 
         // pins

@@ -19,7 +19,8 @@ enum PluginId
     CLOCKWISE_PLUGIN,
     COUNTERCLOCKWISE_PLUGIN,
     IMU_PLUGIN,
-    ULTRASOUND_PLUGIN
+    ULTRASOUND_PLUGIN,
+    CLOCK_PLUGIN
 };
 
 std::ostream& operator<< (std::ostream &lhs, PluginId id);
@@ -32,6 +33,7 @@ class Plugin
 
         PluginId get_id ();
         virtual void set_mode (Mode mode);
+        virtual bool setup ();
         virtual void cycle ();
         bool is_enabled ();
         virtual void set_enabled (const bool enable);

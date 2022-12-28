@@ -13,8 +13,8 @@ std::ohserialstream cout(Serial);
 void setup ()
 {
     Serial.begin(9600);
-    Serial1.begin(9600);
     Serial.println("Smart car");
+    Serial1.begin(9600);
     car.setup();
     car.demo_drive_leds();
     Serial.println("Ready");

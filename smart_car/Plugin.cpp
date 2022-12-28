@@ -56,6 +56,11 @@ PluginId Plugin::get_id ()
     return id;
 }
 
+bool Plugin::setup ()
+{
+    return true;
+}
+
 void Plugin::set_mode (Mode mode)
 {
 }

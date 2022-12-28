@@ -8,13 +8,10 @@
 #include "Car.hpp"
 #include "smart_car.hpp"
 
-#include "DemoPlugin.hpp"
-#include "DrivePlugin.hpp"
-#include "WallPlugin.hpp"
-
 Car::Car () : parser(Serial), parser1(Serial1)
 {
-    wall_plugin = new WallPlugin(*this);
+    clock_plugin = new ClockPlugin();
+    clock_plugin = nullptr;
     demo_plugin = new DemoPlugin(*this);
     forward_plugin = new DrivePlugin(FORWARD_PLUGIN, *this, 500, FORWARD, FORWARD);
     reverse_plugin = new DrivePlugin(REVERSE_PLUGIN, *this, 500, REVERSE, REVERSE);
@@ -23,14 +20,7 @@ Car::Car () : parser(Serial), parser1(Serial1)
             FORWARD);
     imu_plugin = new ImuPlugin();
     ultrasound_plugin = new UltrasoundPlugin();
-    plugins.push_back(wall_plugin);
-    plugins.push_back(demo_plugin);
-    plugins.push_back(forward_plugin);
-    plugins.push_back(reverse_plugin);
-    plugins.push_back(clockwise_plugin);
-    plugins.push_back(counterclockwise_plugin);
-    plugins.push_back(imu_plugin);
-    plugins.push_back(ultrasound_plugin);
+    wall_plugin = new WallPlugin(*this);
 }
 
 Car::~Car ()
@@ -48,7 +38,23 @@ void Car::setup ()
     {
         motors[motor].setup();
     }
-    imu_plugin->setup_imu();
+
+    //available_plugins.push_back(clock_plugin);
+    available_plugins.push_back(demo_plugin);
+    available_plugins.push_back(forward_plugin);
+    available_plugins.push_back(reverse_plugin);
+    available_plugins.push_back(clockwise_plugin);
+    available_plugins.push_back(counterclockwise_plugin);
+    available_plugins.push_back(imu_plugin);
+    available_plugins.push_back(ultrasound_plugin);
+    available_plugins.push_back(wall_plugin);
+    for (Plugin *plugin : available_plugins)
+    {
+        if (plugin->setup())
+        {
+            plugins.push_back(plugin);
+        }
+    }
 }
 
 void Car::set_mode (const Mode _mode)
@@ -116,6 +122,10 @@ void Car::execute_command (const std::vector<String> words)
     {
         set_mode(COMMAND_MODE);
         cout << "Current mode is " << mode << std::endl;
+    }
+    else if (command == "clock")
+    {
+        clock_plugin->set_enabled(!clock_plugin->is_enabled());
     }
     else if (command == "demo")
     {
