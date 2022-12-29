@@ -29,6 +29,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/ArduinoSTL-master/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/I2Cdev}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/DS3231}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/BasicLinearAlgebra}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/Kalman}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.cpp.sketch.input.2057250309" name="CPP source files" superClass="io.sloeber.compiler.cpp.sketch.input"/>
 							</tool>
@@ -44,21 +46,25 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/ArduinoSTL-master/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/I2Cdev}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/DS3231}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/BasicLinearAlgebra}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/Kalman}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.c.sketch.input.232163605" name="C Source Files" superClass="io.sloeber.compiler.c.sketch.input"/>
 							</tool>
 							<tool id="io.sloeber.tool.sketch.compiler.s.24935811" name="Arduino Assembler" superClass="io.sloeber.tool.sketch.compiler.s">
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="io.sloeber.compiler.asm.sketch.option.incpath.202271794" name="Include Paths (-I)" superClass="io.sloeber.compiler.asm.sketch.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/core/variant}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/IRremote}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/core/core}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/MPU6050}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/HC-SR04}&quot;"/>
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/IRremote}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/Wire/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/ArduinoSTL-master/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/I2Cdev}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/DS3231}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/BasicLinearAlgebra}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/Kalman}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.S.sketch.input.885800370" name="Assembly source files" superClass="io.sloeber.compiler.S.sketch.input"/>
 							</tool>
@@ -99,11 +105,16 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="libraries/ArduinoSTL-master/.github|libraries/?*/**/?xamples/**|libraries/?*/**/?xtras/**|libraries/?*/**/test*/**|libraries/?*/**/third-party/**|libraries/**/._*|libraries/?*/utility/*/*" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="libraries/BasicLinearAlgebra/impl|libraries/ArduinoSTL-master/.github|libraries/?*/**/?xamples/**|libraries/?*/**/?xtras/**|libraries/?*/**/test*/**|libraries/?*/**/third-party/**|libraries/**/._*|libraries/?*/utility/*/*" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
+			<storageModule buildDir="build/${ConfigName}" moduleId="de.marw.cdt.cmake.core.settings">
+				<options/>
+				<defs/>
+				<undefs/>
+			</storageModule>
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>

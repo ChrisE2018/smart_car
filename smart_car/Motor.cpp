@@ -48,7 +48,7 @@ void Motor::setup ()
     drive_stop();
 }
 
-void Motor::led_demo (const int duration)
+void Motor::led_demo (const int duration) const
 {
     digitalWrite(forward_led, HIGH);
     delay(duration);
@@ -60,22 +60,26 @@ void Motor::led_demo (const int duration)
     delay(duration);
 }
 
-void Motor::drive_forward (const int speed)
+void Motor::drive_forward (const int _speed)
 {
     digitalWrite(forward_led, HIGH);
     digitalWrite(reverse_led, LOW);
     digitalWrite(reverse_pin, LOW);
     digitalWrite(forward_pin, HIGH);
-    analogWrite(enable_pin, speed);
+    analogWrite(enable_pin, _speed);
+    speed = _speed;
+    direction = FORWARD;
 }
 
-void Motor::drive_reverse (const int speed)
+void Motor::drive_reverse (const int _speed)
 {
     digitalWrite(forward_led, LOW);
     digitalWrite(reverse_led, HIGH);
     digitalWrite(forward_pin, LOW);
     digitalWrite(reverse_pin, HIGH);
-    analogWrite(enable_pin, speed);
+    analogWrite(enable_pin, _speed);
+    speed = _speed;
+    direction = REVERSE;
 }
 
 void Motor::drive_stop ()
@@ -85,4 +89,28 @@ void Motor::drive_stop ()
     digitalWrite(forward_pin, LOW);
     digitalWrite(reverse_pin, LOW);
     analogWrite(enable_pin, LOW);
+    direction = STOP;
+    speed = 0;
+}
+
+MotorDirection Motor::get_direction () const
+{
+    return direction;
+}
+
+int Motor::get_speed () const
+{
+    return speed;
+}
+
+float Motor::get_velocity () const
+{
+    if (direction != REVERSE)
+    {
+        return speed / 256.0;
+    }
+    else
+    {
+        return -speed / 256.0;
+    }
 }

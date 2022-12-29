@@ -7,9 +7,9 @@
 
 #pragma once
 
-#include "Arduino.h"
-#include "Executor.hpp"
+#include <HardwareSerial.h>
 #include <vector>
+#include "Executor.hpp"
 
 class Parser
 {

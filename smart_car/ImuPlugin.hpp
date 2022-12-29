@@ -16,8 +16,7 @@ class ImuPlugin: public Plugin
     public:
         ImuPlugin ();
         bool setup () override;
-        void setOffsets (int16_t ax_offset, int16_t ay_offset, int16_t az_offset, int16_t gx_offset,
-                int16_t gy_offset, int16_t gz_offset);
+        void calibrate();
         void read_imu ();
         void cycle () override;
 

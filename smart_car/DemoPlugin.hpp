@@ -14,6 +14,7 @@ class Car;
 enum DemoPhase
 {
     inactive_phase,
+    init_phase,
     forward_phase,
     idle_phase1,
     reverse_phase,

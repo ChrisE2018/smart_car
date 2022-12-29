@@ -61,6 +61,10 @@ bool Plugin::setup ()
     return true;
 }
 
+void Plugin::reset ()
+{
+}
+
 void Plugin::set_mode (Mode mode)
 {
 }

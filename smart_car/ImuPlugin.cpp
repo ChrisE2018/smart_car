@@ -22,12 +22,6 @@ bool ImuPlugin::setup ()
     mpu.initialize();
     if (mpu.testConnection())
     {
-        Serial.println("imu calibration...please wait 15 seconds");
-        // 17:08:16: >...............>...............-1152.00000,   -3917.00000,    1930.00000, 9.00000,    -78.00000,  -17.00000
-        mpu.CalibrateGyro(); // Fine tune after setting offsets with less Loops.
-        mpu.CalibrateAccel(); // Fine tune after setting offsets with less Loops.
-        mpu.PrintActiveOffsets(); // See the results of the Calibration
-
         Serial.println("imu setup");
         return true;
     }
@@ -36,6 +30,15 @@ bool ImuPlugin::setup ()
         Serial.println("imu failed");
         return false;
     }
+}
+
+void ImuPlugin::calibrate ()
+{
+    Serial.println("imu calibration...please wait 15 seconds");
+    // 17:08:16: >...............>...............-1152.00000,   -3917.00000,    1930.00000, 9.00000,    -78.00000,  -17.00000
+    mpu.CalibrateGyro(); // Fine tune after setting offsets with less Loops.
+    mpu.CalibrateAccel(); // Fine tune after setting offsets with less Loops.
+    mpu.PrintActiveOffsets(); // See the results of the Calibration
 }
 
 void ImuPlugin::cycle ()

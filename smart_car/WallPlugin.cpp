@@ -31,6 +31,10 @@ void WallPlugin::set_enabled (const bool enable)
     {
         active = false;
     }
+    car.get_forward_plugin()->set_enabled(false);
+    car.get_reverse_plugin()->set_enabled(false);
+    car.get_clockwise_plugin()->set_enabled(false);
+    car.get_counterclockwise_plugin()->set_enabled(false);
 }
 
 void WallPlugin::cycle ()

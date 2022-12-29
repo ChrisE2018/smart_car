@@ -8,19 +8,34 @@
 #include "Car.hpp"
 #include "smart_car.hpp"
 
-Car::Car () : parser(Serial), parser1(Serial1)
+// This should be available but does not seem to work.
+extern HardwareSerial Serial;
+
+Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
 {
-    clock_plugin = new ClockPlugin();
+//    clock_plugin = new ClockPlugin();
     clock_plugin = nullptr;
-    demo_plugin = new DemoPlugin(*this);
-    forward_plugin = new DrivePlugin(FORWARD_PLUGIN, *this, 500, FORWARD, FORWARD);
-    reverse_plugin = new DrivePlugin(REVERSE_PLUGIN, *this, 500, REVERSE, REVERSE);
     clockwise_plugin = new DrivePlugin(CLOCKWISE_PLUGIN, *this, 500, FORWARD, REVERSE);
     counterclockwise_plugin = new DrivePlugin(COUNTERCLOCKWISE_PLUGIN, *this, 500, REVERSE,
             FORWARD);
+    demo_plugin = new DemoPlugin(*this);
+    forward_plugin = new DrivePlugin(FORWARD_PLUGIN, *this, 500, FORWARD, FORWARD);
     imu_plugin = new ImuPlugin();
+    navigation_plugin = new NavigationPlugin(NAVIGATION_PLUGIN, *this);
+    reverse_plugin = new DrivePlugin(REVERSE_PLUGIN, *this, 500, REVERSE, REVERSE);
     ultrasound_plugin = new UltrasoundPlugin();
     wall_plugin = new WallPlugin(*this);
+
+    //available_plugins.push_back(clock_plugin);
+    available_plugins.push_back(demo_plugin);
+    available_plugins.push_back(forward_plugin);
+    available_plugins.push_back(reverse_plugin);
+    available_plugins.push_back(clockwise_plugin);
+    available_plugins.push_back(counterclockwise_plugin);
+    available_plugins.push_back(imu_plugin);
+    available_plugins.push_back(navigation_plugin);
+    available_plugins.push_back(ultrasound_plugin);
+    available_plugins.push_back(wall_plugin);
 }
 
 Car::~Car ()
@@ -39,32 +54,23 @@ void Car::setup ()
         motors[motor].setup();
     }
 
-    //available_plugins.push_back(clock_plugin);
-    available_plugins.push_back(demo_plugin);
-    available_plugins.push_back(forward_plugin);
-    available_plugins.push_back(reverse_plugin);
-    available_plugins.push_back(clockwise_plugin);
-    available_plugins.push_back(counterclockwise_plugin);
-    available_plugins.push_back(imu_plugin);
-    available_plugins.push_back(ultrasound_plugin);
-    available_plugins.push_back(wall_plugin);
     for (Plugin *plugin : available_plugins)
     {
-        if (plugin->setup())
+        if (plugin != nullptr)
         {
-            plugins.push_back(plugin);
+            if (plugin->setup())
+            {
+                plugins.push_back(plugin);
+            }
         }
     }
+    navigation_plugin->set_enabled(true);
 }
 
 void Car::set_mode (const Mode _mode)
 {
     cout << "Setting " << plugins.size() << " plugins to mode " << _mode << std::endl;
     mode = _mode;
-    for (Plugin *plugin : plugins)
-    {
-        plugin->set_enabled(false);
-    }
     for (Plugin *plugin : plugins)
     {
         plugin->set_mode(mode);
@@ -87,8 +93,8 @@ void Car::cycle ()
 
 void Car::handle_command ()
 {
-    parser.handle_command(*this);
-    parser1.handle_command(*this);
+    serial_parser.handle_command(*this);
+    bluetooth_parser.handle_command(*this);
 }
 
 /** Execute a command from the user.
@@ -117,6 +123,10 @@ void Car::execute_command (const std::vector<String> words)
         reverse_plugin->set_right_speed(speed);
         reverse_plugin->set_left_speed(speed);
         reverse_plugin->set_enabled(true);
+    }
+    else if (command == "calibrate")
+    {
+        imu_plugin->calibrate();
     }
     else if (command == "c")
     {
@@ -180,6 +190,10 @@ void Car::execute_command (const std::vector<String> words)
         clockwise_plugin->set_left_speed(speed);
         clockwise_plugin->set_enabled(true);
     }
+    else if (command == "nav")
+    {
+        navigation_plugin->set_enabled(!navigation_plugin->is_enabled());
+    }
     else if (command == "r")
     {
         int speed = SPEED_FULL;
@@ -207,6 +221,11 @@ void Car::execute_command (const std::vector<String> words)
     {
         set_mode(WALL_MODE);
         cout << "Current mode is " << mode << std::endl;
+    }
+    else if (command == "zero")
+    {
+        set_mode(COMMAND_MODE);
+        navigation_plugin->reset();
     }
     else if (command == "?")
     {
@@ -255,6 +274,11 @@ void Car::demo_drive_leds ()
         }
         duration /= 2;
     }
+}
+
+Motor& Car::get_motor (const MotorLocation motor)
+{
+    return motors[motor];
 }
 
 void Car::all_stop ()
@@ -313,6 +337,11 @@ DrivePlugin* Car::get_counterclockwise_plugin ()
 ImuPlugin* Car::get_imu_plugin ()
 {
     return imu_plugin;
+}
+
+NavigationPlugin* Car::get_navigation_plugin ()
+{
+    return navigation_plugin;
 }
 
 UltrasoundPlugin* Car::get_ultrasound_plugin ()

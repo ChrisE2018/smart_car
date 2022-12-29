@@ -8,21 +8,23 @@
 #pragma once
 
 #include <vector>
+#include <arduino.h>
 
+#include "Mode.hpp"
 #include "Motor.hpp"
 #include "Parser.hpp"
-#include "Mode.hpp"
 
 #include "ClockPlugin.hpp"
 #include "DemoPlugin.hpp"
 #include "DrivePlugin.hpp"
 #include "ImuPlugin.hpp"
+#include "NavigationPlugin.hpp"
 #include "UltrasoundPlugin.hpp"
 #include "WallPlugin.hpp"
 
 const int MOTOR_COUNT = 2;
 
-class Car: public Executor
+class Car : public Executor
 {
     public:
         Car ();
@@ -34,36 +36,41 @@ class Car: public Executor
         void set_mode (const Mode mode);
         void cycle ();
         void demo_drive_leds ();
+
+        Motor& get_motor (const MotorLocation motor);
         void all_stop ();
         void drive_stop (const MotorLocation motor);
         void drive_forward (const MotorLocation motor, const int speed);
         void drive_reverse (const MotorLocation motor, const int speed);
 
-        WallPlugin* get_wall_plugin ();
         DemoPlugin* get_demo_plugin ();
         DrivePlugin* get_forward_plugin ();
         DrivePlugin* get_reverse_plugin ();
         DrivePlugin* get_clockwise_plugin ();
         DrivePlugin* get_counterclockwise_plugin ();
         ImuPlugin* get_imu_plugin ();
+        NavigationPlugin* get_navigation_plugin ();
         UltrasoundPlugin* get_ultrasound_plugin ();
+        WallPlugin* get_wall_plugin ();
 
     private:
         long cycle_count = 0;
         long total_cycle_us = 0;
 
-        Parser parser;
-        Parser parser1;
+        Parser serial_parser;
+        Parser bluetooth_parser;
 
         ClockPlugin *clock_plugin;
-        DemoPlugin *demo_plugin;
-        DrivePlugin *forward_plugin;
-        DrivePlugin *reverse_plugin;
         DrivePlugin *clockwise_plugin;
         DrivePlugin *counterclockwise_plugin;
+        DemoPlugin *demo_plugin;
+        DrivePlugin *forward_plugin;
         ImuPlugin *imu_plugin;
+        NavigationPlugin *navigation_plugin;
+        DrivePlugin *reverse_plugin;
         UltrasoundPlugin *ultrasound_plugin;
         WallPlugin *wall_plugin;
+
         std::vector<Plugin*> available_plugins;
         std::vector<Plugin*> plugins;
 

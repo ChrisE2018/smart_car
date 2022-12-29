@@ -25,7 +25,7 @@ void DemoPlugin::set_enabled (const bool enable)
     if (enable)
     {
         Serial.println("Starting DemoMode");
-        set_phase(forward_phase);
+        set_phase(init_phase);
     }
     else
     {
@@ -39,6 +39,18 @@ void DemoPlugin::set_phase (DemoPhase phase)
     phase_start = millis();
     switch (phase)
     {
+        case init_phase:
+        {
+            const int duration = 10;
+            phase_change = phase_start + duration;
+            next_phase = forward_phase;
+            car.get_forward_plugin()->set_enabled(false);
+            car.get_reverse_plugin()->set_enabled(false);
+            car.get_clockwise_plugin()->set_enabled(false);
+            car.get_counterclockwise_plugin()->set_enabled(false);
+            break;
+        }
+
         case forward_phase:
         {
             const int duration = 1500;
