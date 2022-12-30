@@ -18,24 +18,9 @@ const String Logger::get_category ()
     return name;
 }
 
-void Logger::enable (Level _level)
+void Logger::set_level (Level _level)
 {
     level = _level;
-    if (level == WARN)
-    {
-        warn_enabled = true;
-        info_enabled = false;
-    }
-    else if (level == INFO)
-    {
-        warn_enabled = true;
-        info_enabled = true;
-    }
-    else if (level == NONE)
-    {
-        warn_enabled = false;
-        info_enabled = false;
-    }
 }
 
 bool Logger::is_enabled (Level _level)

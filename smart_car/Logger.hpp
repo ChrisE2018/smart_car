@@ -11,7 +11,7 @@ class Logging;
 
 enum Level
 {
-    NONE, WARN, INFO, ALL
+    NONE, WARN, INFO, DEBUG, ALL
 };
 
 #define loginfo(logger, format, args...) logger.log(__FILE__, __LINE__, INFO, format, args)
@@ -21,17 +21,15 @@ class Logger
 {
     public:
         Logger (Logging &logging, const String name);
-        void enable (Level level);
-        bool is_enabled(Level level);
+        void set_level (Level level);
+        bool is_enabled (Level level);
         void log (const char *file, int line, Level level, const char *format, ...);
-        const String get_category();
+        const String get_category ();
 
     private:
         Logging &logging;
         const String name;
         const int buffer_size = 256;
         Level level = INFO;
-        bool warn_enabled = true;
-        bool info_enabled = true;
 };
 

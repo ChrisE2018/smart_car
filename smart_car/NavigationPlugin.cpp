@@ -93,6 +93,8 @@ void NavigationPlugin::reset ()
 
 void NavigationPlugin::cycle ()
 {
+    update_transforms();
+
 // eventually update your model matrix inside the loop
 //    K.F =
 //    { 1.0, 0.0, 1.0, 0.0 };
@@ -106,7 +108,7 @@ void NavigationPlugin::cycle ()
     if (is_enabled())
     {
         // PRINT RESULTS: measures and estimated state
-        Serial << obs << ' ' << K.x << '\n';
+        Serial << obs << ' ' << K.x << " b2w " << body_2_world << "\n";
     }
 }
 
@@ -114,8 +116,8 @@ void NavigationPlugin::get_sensor_data ()
 {
     const Motor &right_motor = car.get_motor(RIGHT);
     const Motor &left_motor = car.get_motor(LEFT);
-    const float right_velocity = right_motor.get_velocity() * 0.01;
-    const float left_velocity = left_motor.get_velocity() * 0.01;
+    const float right_velocity = right_motor.get_velocity();
+    const float left_velocity = left_motor.get_velocity();
 
     // Counterclockwise
     const float angular_velocity = right_velocity - left_velocity;

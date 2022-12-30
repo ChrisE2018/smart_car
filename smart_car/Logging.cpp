@@ -8,6 +8,8 @@
 #include "Logging.hpp"
 #include "Arduino.h"
 #include <time.h>
+// This should be available but does not seem to be.
+extern HardwareSerial Serial;
 
 Logging::Logging ()
 {
@@ -37,7 +39,7 @@ void Logging::log (const Level level, const char *file, const int line, Logger *
         }
         else
         {
-            i++;
+            i++; // Increment loop control variable
             const char s = format[i];
             switch (s)
             {
@@ -46,23 +48,23 @@ void Logging::log (const Level level, const char *file, const int line, Logger *
                 case '%':
                     Serial.print(s);
                     break;
-                case 'm':
-                    Serial.print(msg);
-                    break;
-                case 'n':
-                    Serial.println();
-                    break;
                 case 'c':
                     Serial.print(logger->get_category());
-                    break;
-                case 't':
-                    Serial.print((double)millis(), 3);
                     break;
                 case 'f':
                     Serial.print(file);
                     break;
                 case 'l':
                     Serial.print(line);
+                    break;
+                case 'm':
+                    Serial.print(msg);
+                    break;
+                case 'n':
+                    Serial.println();
+                    break;
+                case 't':
+                    Serial.print((double)millis(), 3);
                     break;
             }
         }
