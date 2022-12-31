@@ -8,6 +8,9 @@
 #include "Car.hpp"
 #include "OdomPlugin.hpp"
 
+// This is needed or the matrices won't print
+using namespace BLA;
+
 OdomPlugin::OdomPlugin (Car &car) : Plugin(ODOM_PLUGIN), car(car), t(0)
 {
 
@@ -15,7 +18,7 @@ OdomPlugin::OdomPlugin (Car &car) : Plugin(ODOM_PLUGIN), car(car), t(0)
 
 bool OdomPlugin::setup ()
 {
-    set_enabled(true);
+    set_enabled(false);
 
     // x, y, a, dx, dy, da
     state =
@@ -75,8 +78,8 @@ void OdomPlugin::cycle ()
     if (is_enabled())
     {
         // PRINT RESULTS: measures and estimated state
-        Serial << " State: " << state << "dt: " << dt << " Obs: " << obs << " rm: "
-                << right_velocity << " lm: " << left_velocity << " b2w" << body_2_world << "\n";
+        Serial << "State: " << state << " dt: " << dt << " Obs: " << obs << " rm: " << right_velocity
+                << " lm: " << left_velocity << " b2w" << body_2_world << "\n";
     }
 }
 

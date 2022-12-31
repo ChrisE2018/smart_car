@@ -7,20 +7,15 @@
 
 #pragma once
 
-#include <Kalman.h>
+#include <Arduino.h>
+#include <BasicLinearAlgebra.h>
 #include "Plugin.hpp"
 
 class Car;
 
-//------------------------------------
-/****       KALMAN PARAMETERS    ****/
-//------------------------------------
 // Dimensions of the matrices
 #define Nstate 9 // length of the state vector
 #define Nobs 9   // length of the measurement vector
-
-// Note: I made 'obs' a global variable so memory is allocated before the loop.
-//       This might provide slightly better speed efficiency in loop.
 
 class NavigationPlugin : public Plugin
 {
@@ -35,11 +30,11 @@ class NavigationPlugin : public Plugin
 
         Car &car;
         long t = 0;
-        KALMAN<Nstate, Nobs> K; // your Kalman filter
+        // Px, Py, Pa, Vx, Vy, Va, Ax, Ay, Aa
+        BLA::Matrix<Nstate> state; // state vector
         BLA::Matrix<Nobs> obs; // observation vector
+        BLA::Matrix<Nstate, Nstate> time_update;   // time update
         BLA::Matrix<2, 2> body_2_world;
         BLA::Matrix<2, 2> world_2_body;
-
-        void get_sensor_data ();
 };
 

@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <Arduino.h>
 #include <BasicLinearAlgebra.h>
 #include "Plugin.hpp"
 

@@ -11,14 +11,25 @@
 #include <MPU6050.h>
 #include <Wire.h> // Needed for IMU
 
-class ImuPlugin: public Plugin
+class ImuPlugin : public Plugin
 {
     public:
         ImuPlugin ();
         bool setup () override;
-        void calibrate();
+        void calibrate ();
         void read_imu ();
+        void print_imu () const;
         void cycle () override;
+
+        float get_Ax();
+        float get_Ay();
+        float get_Az();
+
+        float get_Gx();
+        float get_Gy();
+        float get_Gz();
+
+        float get_temp();
 
     private:
         // Use AD0_HIGH address after wiring pin ad0 to vcc = 3.3 v

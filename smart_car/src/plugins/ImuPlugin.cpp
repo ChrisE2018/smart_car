@@ -16,7 +16,7 @@ bool ImuPlugin::setup ()
 {
     Wire.begin();
     Wire.beginTransmission(MPU_addr);
-    Wire.write(0x6B);  // PWR_MGMT_1 register
+    Wire.write(MPU6050_RA_PWR_MGMT_1);  // PWR_MGMT_1 register
     Wire.write(0);     // set to zero (wakes up the MPU-6050)
     Wire.endTransmission(true);
     mpu.initialize();
@@ -52,7 +52,7 @@ void ImuPlugin::cycle ()
 void ImuPlugin::read_imu ()
 {
     Wire.beginTransmission(MPU_addr);
-    Wire.write(0x3B);  // starting with register 0x3B (ACCEL_XOUT_H)
+    Wire.write(MPU6050_RA_ACCEL_XOUT_H);  // starting with register 0x3B (ACCEL_XOUT_H)
     Wire.endTransmission(false);
     Wire.requestFrom(MPU_addr, 14, true);  // request a total of 14 registers
     AcX = Wire.read() << 8 | Wire.read();  // 0x3B (ACCEL_XOUT_H) & 0x3C (ACCEL_XOUT_L)
@@ -62,7 +62,45 @@ void ImuPlugin::read_imu ()
     GyX = Wire.read() << 8 | Wire.read();  // 0x43 (GYRO_XOUT_H) & 0x44 (GYRO_XOUT_L)
     GyY = Wire.read() << 8 | Wire.read();  // 0x45 (GYRO_YOUT_H) & 0x46 (GYRO_YOUT_L)
     GyZ = Wire.read() << 8 | Wire.read();  // 0x47 (GYRO_ZOUT_H) & 0x48 (GYRO_ZOUT_L)
+}
 
+float ImuPlugin::get_Ax ()
+{
+    return mpu.getAccelerationX();
+}
+
+float ImuPlugin::get_Ay ()
+{
+    return mpu.getAccelerationY();
+}
+
+float ImuPlugin::get_Az ()
+{
+    return mpu.getAccelerationZ();
+}
+
+float ImuPlugin::get_Gx ()
+{
+    return mpu.getRotationX();
+}
+
+float ImuPlugin::get_Gy ()
+{
+    return mpu.getRotationY();
+}
+
+float ImuPlugin::get_Gz ()
+{
+    return mpu.getRotationZ();
+}
+
+float ImuPlugin::get_temp ()
+{
+    return mpu.getTemperature() / 340.00 + 36.53;
+}
+
+void ImuPlugin::print_imu () const
+{
     Serial.print("AcX = "); // Accelerator
     Serial.print(AcX);
     Serial.print(" | AcY = ");
