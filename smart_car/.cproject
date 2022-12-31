@@ -31,6 +31,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/DS3231}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/BasicLinearAlgebra}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/Kalman}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/src/robot}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/src/plugins}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.cpp.sketch.input.2057250309" name="CPP source files" superClass="io.sloeber.compiler.cpp.sketch.input"/>
 							</tool>
@@ -48,6 +50,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/DS3231}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/BasicLinearAlgebra}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/Kalman}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/src/robot}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/src/plugins}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.c.sketch.input.232163605" name="C Source Files" superClass="io.sloeber.compiler.c.sketch.input"/>
 							</tool>
@@ -65,6 +69,8 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/DS3231}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/BasicLinearAlgebra}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/Kalman}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/src/robot}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/src/plugins}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.S.sketch.input.885800370" name="Assembly source files" superClass="io.sloeber.compiler.S.sketch.input"/>
 							</tool>
@@ -105,8 +111,10 @@
 						</toolChain>
 					</folderInfo>
 					<sourceEntries>
-						<entry excluding="src|libraries/BasicLinearAlgebra/impl|libraries/ArduinoSTL-master/.github|libraries/?*/**/?xamples/**|libraries/?*/**/?xtras/**|libraries/?*/**/test*/**|libraries/?*/**/third-party/**|libraries/**/._*|libraries/?*/utility/*/*" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
-						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry excluding="plugins|src|libraries/BasicLinearAlgebra/impl|libraries/ArduinoSTL-master/.github|libraries/?*/**/?xamples/**|libraries/?*/**/?xtras/**|libraries/?*/**/test*/**|libraries/?*/**/third-party/**|libraries/**/._*|libraries/?*/utility/*/*" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name=""/>
+						<entry excluding="robot|plugins" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/plugins"/>
+						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src/robot"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>

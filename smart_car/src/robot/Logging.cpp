@@ -5,9 +5,9 @@
  *      Author: cre
  */
 
-#include "Logging.hpp"
-#include "Arduino.h"
+#include <Arduino.h>
 #include <time.h>
+#include "Logging.hpp"
 
 Logging::Logging ()
 {

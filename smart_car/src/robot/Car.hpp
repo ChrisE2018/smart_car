@@ -8,7 +8,6 @@
 #pragma once
 
 #include <vector>
-#include <arduino.h>
 
 #include "Mode.hpp"
 #include "Motor.hpp"

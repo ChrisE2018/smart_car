@@ -5,6 +5,7 @@
  *      Author: cre
  */
 
+#include <arduino.h>
 #include "Car.hpp"
 #include "smart_car.hpp"
 
