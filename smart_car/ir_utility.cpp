@@ -5,8 +5,8 @@
  *      Author: cre
  */
 
-#include "ir_utility.h"
 #include "Arduino.h"
+#include "ir_utility.h"
 #include "IRremote.h"
 
 /*-----Infrared remote-----*/

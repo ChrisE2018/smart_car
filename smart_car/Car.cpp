@@ -8,9 +8,6 @@
 #include "Car.hpp"
 #include "smart_car.hpp"
 
-// This should be available but does not seem to work.
-extern HardwareSerial Serial;
-
 Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
 {
     clock_plugin = new ClockPlugin();

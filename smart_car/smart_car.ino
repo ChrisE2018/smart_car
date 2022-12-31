@@ -4,8 +4,6 @@
 
 /* Program for robot car. */
 
-// This should be available but does not seem to work.
-extern HardwareSerial Serial;
 std::ohserialstream cout(Serial);
 
 Car *car;

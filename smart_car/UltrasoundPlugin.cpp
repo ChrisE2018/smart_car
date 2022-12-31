@@ -5,6 +5,7 @@
  *      Author: cre
  */
 
+#include "Arduino.h"
 #include "UltrasoundPlugin.hpp"
 
 UltrasoundPlugin::UltrasoundPlugin () : Plugin(ULTRASOUND_PLUGIN), sr04(ULTRASOUND_ECHO,
