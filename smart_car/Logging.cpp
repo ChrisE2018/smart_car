@@ -8,8 +8,6 @@
 #include "Logging.hpp"
 #include "Arduino.h"
 #include <time.h>
-// This should be available but does not seem to be.
-extern HardwareSerial Serial;
 
 Logging::Logging ()
 {
