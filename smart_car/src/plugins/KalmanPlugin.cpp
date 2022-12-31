@@ -5,8 +5,9 @@
  *      Author: cre
  */
 
+#include "KalmanPlugin.hpp"
+
 #include "Car.hpp"
-#include "NavigationPlugin.hpp"
 
 // This is needed or the matrices won't print
 using namespace BLA;
@@ -23,14 +24,14 @@ using namespace BLA;
 #define m2 0.01
 #define m3 0.01
 
-NavigationPlugin::NavigationPlugin (Car &car) : Plugin(NAVIGATION_PLUGIN), car(car)
+KalmanPlugin::KalmanPlugin (Car &car) : Plugin(KALMAN_PLUGIN), car(car)
 {
 }
 
 // Use this to get dmp values from IMU
 // https://mjwhite8119.github.io/Robots/mpu6050
 
-bool NavigationPlugin::setup ()
+bool KalmanPlugin::setup ()
 {
     set_enabled(false);
 
@@ -57,12 +58,12 @@ bool NavigationPlugin::setup ()
     return true;
 }
 
-void NavigationPlugin::reset ()
+void KalmanPlugin::reset ()
 {
     setup();
 }
 
-void NavigationPlugin::cycle ()
+void KalmanPlugin::cycle ()
 {
     const long now = millis();
     const float dt = (now - t) * 0.001;
@@ -78,16 +79,16 @@ void NavigationPlugin::cycle ()
     const BLA::Matrix<2> body_velocity =
     { right_velocity, left_velocity };
     const BLA::Matrix<2> world_velocity = body_2_world * body_velocity;
-    const float vx = world_velocity(0);
-    const float vy = world_velocity(1);
+    const float odom_vx = world_velocity(0);
+    const float odom_vy = world_velocity(1);
     const float angular_velocity = left_velocity - right_velocity;  // Clockwise
     // Get yaw and acceleration from MPU
     MpuPlugin *mpu_plugin = car.get_mpu_plugin();
-    const float yaw = mpu_plugin->get_yaw();  // clockwise
-    const float Ax = mpu_plugin->get_Ax();
-    const float Ay = mpu_plugin->get_Ay();
+    const float mpu_yaw = mpu_plugin->get_yaw();  // clockwise
+    const float mpu_Ax = mpu_plugin->get_Ax();
+    const float mpu_Ay = mpu_plugin->get_Ay();
     obs =
-    { state(0), state(1), yaw, vx, vy, angular_velocity, Ax, Ay, 0.0 };
+    { state(0), state(1), mpu_yaw, odom_vx, odom_vy, angular_velocity, mpu_Ax, mpu_Ay, 0.0 };
 
     state = (state + obs) * 0.5;
 
@@ -104,7 +105,7 @@ void NavigationPlugin::cycle ()
     }
 }
 
-void NavigationPlugin::update_transforms (const float angle)
+void KalmanPlugin::update_transforms (const float angle)
 {
     const float sin_angle = sin(angle);
     const float cos_angle = cos(angle);

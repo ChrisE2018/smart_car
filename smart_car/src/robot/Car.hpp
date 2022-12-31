@@ -9,6 +9,7 @@
 
 #include <arduino.h>
 #include <vector>
+#include "../plugins/KalmanPlugin.hpp"
 
 #include "Mode.hpp"
 #include "Motor.hpp"
@@ -18,7 +19,6 @@
 #include "DemoPlugin.hpp"
 #include "DrivePlugin.hpp"
 #include "MpuPlugin.hpp"
-#include "NavigationPlugin.hpp"
 #include "OdomPlugin.hpp"
 #include "UltrasoundPlugin.hpp"
 #include "WallPlugin.hpp"
@@ -50,7 +50,7 @@ class Car : public Executor
         DrivePlugin* get_clockwise_plugin ();
         DrivePlugin* get_counterclockwise_plugin ();
         MpuPlugin* get_mpu_plugin ();
-        NavigationPlugin* get_navigation_plugin ();
+        KalmanPlugin* get_navigation_plugin ();
         OdomPlugin* get_odom_plugin ();
         UltrasoundPlugin* get_ultrasound_plugin ();
         WallPlugin* get_wall_plugin ();
@@ -68,7 +68,7 @@ class Car : public Executor
         DemoPlugin *demo_plugin;
         DrivePlugin *forward_plugin;
         MpuPlugin* mpu_plugin;
-        NavigationPlugin *navigation_plugin;
+        KalmanPlugin *kalman_plugin;
         OdomPlugin* odom_plugin;
         DrivePlugin *reverse_plugin;
         UltrasoundPlugin *ultrasound_plugin;

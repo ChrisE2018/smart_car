@@ -8,6 +8,9 @@
 #include "Car.hpp"
 #include "smart_car.hpp"
 
+// For some reason this does not resolve.
+extern HardwareSerial Serial;
+
 Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
 {
     clock_plugin = new ClockPlugin();
@@ -18,7 +21,7 @@ Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
     forward_plugin = new DrivePlugin(FORWARD_PLUGIN, *this, 500, FORWARD, FORWARD);
     //imu_plugin = new ImuPlugin();
     mpu_plugin = new MpuPlugin();
-    navigation_plugin = new NavigationPlugin(*this);
+    kalman_plugin = new KalmanPlugin(*this);
     odom_plugin = new OdomPlugin(*this);
     reverse_plugin = new DrivePlugin(REVERSE_PLUGIN, *this, 500, REVERSE, REVERSE);
     ultrasound_plugin = new UltrasoundPlugin();
@@ -32,7 +35,7 @@ Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
     available_plugins.push_back(counterclockwise_plugin);
     //available_plugins.push_back(imu_plugin);
     available_plugins.push_back(mpu_plugin);
-    available_plugins.push_back(navigation_plugin);
+    available_plugins.push_back(kalman_plugin);
     available_plugins.push_back(odom_plugin);
     available_plugins.push_back(ultrasound_plugin);
     available_plugins.push_back(wall_plugin);
@@ -200,7 +203,7 @@ void Car::execute_command (const std::vector<String> words)
     }
     else if (command == "nav")
     {
-        navigation_plugin->set_enabled(!navigation_plugin->is_enabled());
+        kalman_plugin->set_enabled(!kalman_plugin->is_enabled());
     }
     else if (command == "odom")
     {
@@ -244,7 +247,7 @@ void Car::execute_command (const std::vector<String> words)
     else if (command == "zero")
     {
         set_mode(COMMAND_MODE);
-        navigation_plugin->reset();
+        kalman_plugin->reset();
         odom_plugin->reset();
     }
     else if (command == "?")
@@ -364,9 +367,9 @@ MpuPlugin* Car::get_mpu_plugin ()
     return mpu_plugin;
 }
 
-NavigationPlugin* Car::get_navigation_plugin ()
+KalmanPlugin* Car::get_navigation_plugin ()
 {
-    return navigation_plugin;
+    return kalman_plugin;
 }
 
 OdomPlugin* Car::get_odom_plugin ()
