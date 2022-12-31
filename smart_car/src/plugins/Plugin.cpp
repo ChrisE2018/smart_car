@@ -25,8 +25,8 @@ const std::string stringify (const PluginId id)
             return "DEMO_PLUGIN";
         case FORWARD_PLUGIN:
             return "FORWARD_PLUGIN";
-        case IMU_PLUGIN:
-            return "IMU_PLUGIN";
+        case MPU_PLUGIN:
+            return "MPU_PLUGIN";
         case NAVIGATION_PLUGIN:
             return "NAVIGATION_PLUGIN";
         case ODOM_PLUGIN:

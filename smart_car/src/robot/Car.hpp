@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <arduino.h>
 #include <vector>
 
 #include "Mode.hpp"
@@ -16,7 +17,7 @@
 #include "ClockPlugin.hpp"
 #include "DemoPlugin.hpp"
 #include "DrivePlugin.hpp"
-#include "ImuPlugin.hpp"
+#include "MpuPlugin.hpp"
 #include "NavigationPlugin.hpp"
 #include "OdomPlugin.hpp"
 #include "UltrasoundPlugin.hpp"
@@ -48,7 +49,7 @@ class Car : public Executor
         DrivePlugin* get_reverse_plugin ();
         DrivePlugin* get_clockwise_plugin ();
         DrivePlugin* get_counterclockwise_plugin ();
-        ImuPlugin* get_imu_plugin ();
+        MpuPlugin* get_mpu_plugin ();
         NavigationPlugin* get_navigation_plugin ();
         OdomPlugin* get_odom_plugin ();
         UltrasoundPlugin* get_ultrasound_plugin ();
@@ -66,7 +67,7 @@ class Car : public Executor
         DrivePlugin *counterclockwise_plugin;
         DemoPlugin *demo_plugin;
         DrivePlugin *forward_plugin;
-        ImuPlugin *imu_plugin;
+        MpuPlugin* mpu_plugin;
         NavigationPlugin *navigation_plugin;
         OdomPlugin* odom_plugin;
         DrivePlugin *reverse_plugin;
@@ -77,19 +78,19 @@ class Car : public Executor
         std::vector<Plugin*> plugins;
 
         // pins
-        // 2 yellow = in1
-        // 3 orange = in2
-        // 4 purple = in3
-        // 5 blue = in4
-        // 6 blue = enA
-        // 7 green = enB
+        // 3 yellow = in1
+        // 4 orange = in2
+        // 5 purple = in3
+        // 6 blue = in4
+        // 7 blue = enA
+        // 8 green = enB
 
         // LED_0 = 22;  // red led
         // LED_1 = 24;  // green led
         // LED_2 = 26;  // red led
         // LED_3 = 28;  // green led
         Motor motors[MOTOR_COUNT] =
-        { Motor(6, 2, 3, 26, 28), Motor(7, 5, 4, 22, 24) };
+        { Motor(7, 3, 4, 26, 28), Motor(8, 6, 5, 22, 24) };
 
         Mode mode = COMMAND_MODE;
 

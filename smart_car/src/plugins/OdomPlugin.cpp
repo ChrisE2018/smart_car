@@ -78,7 +78,7 @@ void OdomPlugin::cycle ()
     if (is_enabled())
     {
         // PRINT RESULTS: measures and estimated state
-        Serial << "State: " << state << " dt: " << dt << " Obs: " << obs << " rm: " << right_velocity
+        Serial << "Odom State: " << state << " dt: " << dt << " Obs: " << obs << " rm: " << right_velocity
                 << " lm: " << left_velocity << " b2w" << body_2_world << "\n";
     }
 }

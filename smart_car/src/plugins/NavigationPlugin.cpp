@@ -27,9 +27,12 @@ NavigationPlugin::NavigationPlugin (Car &car) : Plugin(NAVIGATION_PLUGIN), car(c
 {
 }
 
+// Use this to get dmp values from IMU
+// https://mjwhite8119.github.io/Robots/mpu6050
+
 bool NavigationPlugin::setup ()
 {
-    set_enabled(true);
+    set_enabled(false);
 
     // Initial state of the system
     // Px, Py, Pa, Vx, Vy, Va, Ax, Ay, Aa
@@ -77,9 +80,14 @@ void NavigationPlugin::cycle ()
     const BLA::Matrix<2> world_velocity = body_2_world * body_velocity;
     const float vx = world_velocity(0);
     const float vy = world_velocity(1);
-    const float angular_velocity = right_velocity - left_velocity;  // Counterclockwise
+    const float angular_velocity = left_velocity - right_velocity;  // Clockwise
+    // Get yaw and acceleration from MPU
+    MpuPlugin *mpu_plugin = car.get_mpu_plugin();
+    const float yaw = mpu_plugin->get_yaw();  // clockwise
+    const float Ax = mpu_plugin->get_Ax();
+    const float Ay = mpu_plugin->get_Ay();
     obs =
-    { state(0), state(1), state(2), vx, vy, angular_velocity, 0.0, 0.0, 0.0 };
+    { state(0), state(1), yaw, vx, vy, angular_velocity, Ax, Ay, 0.0 };
 
     state = (state + obs) * 0.5;
 
@@ -90,7 +98,7 @@ void NavigationPlugin::cycle ()
     if (is_enabled())
     {
         // PRINT RESULTS: measures and estimated state
-        Serial << "State: " << state << " dt: " << dt << " Obs: " << obs
+        Serial << "Nav State: " << state << " dt: " << dt << " Obs: " << obs
         // << " rm: " << right_velocity << " lm: " << left_velocity << " b2w" << body_2_world
                 << "\n";
     }
@@ -100,10 +108,10 @@ void NavigationPlugin::update_transforms (const float angle)
 {
     const float sin_angle = sin(angle);
     const float cos_angle = cos(angle);
-    // Counterclockwise
-    body_2_world =
-    { cos_angle, -sin_angle, sin_angle, cos_angle };
     // Clockwise
-    world_2_body =
+    body_2_world =
     { cos_angle, sin_angle, sin_angle, -cos_angle };
+    // Counterclockwise
+    world_2_body =
+    { cos_angle, -sin_angle, sin_angle, cos_angle };
 }

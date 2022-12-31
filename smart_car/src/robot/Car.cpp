@@ -5,7 +5,6 @@
  *      Author: cre
  */
 
-#include <arduino.h>
 #include "Car.hpp"
 #include "smart_car.hpp"
 
@@ -17,7 +16,8 @@ Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
             FORWARD);
     demo_plugin = new DemoPlugin(*this);
     forward_plugin = new DrivePlugin(FORWARD_PLUGIN, *this, 500, FORWARD, FORWARD);
-    imu_plugin = new ImuPlugin();
+    //imu_plugin = new ImuPlugin();
+    mpu_plugin = new MpuPlugin();
     navigation_plugin = new NavigationPlugin(*this);
     odom_plugin = new OdomPlugin(*this);
     reverse_plugin = new DrivePlugin(REVERSE_PLUGIN, *this, 500, REVERSE, REVERSE);
@@ -30,7 +30,8 @@ Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
     available_plugins.push_back(reverse_plugin);
     available_plugins.push_back(clockwise_plugin);
     available_plugins.push_back(counterclockwise_plugin);
-    available_plugins.push_back(imu_plugin);
+    //available_plugins.push_back(imu_plugin);
+    available_plugins.push_back(mpu_plugin);
     available_plugins.push_back(navigation_plugin);
     available_plugins.push_back(odom_plugin);
     available_plugins.push_back(ultrasound_plugin);
@@ -128,7 +129,8 @@ void Car::execute_command (const std::vector<String> words)
     }
     else if (command == "calibrate")
     {
-        imu_plugin->calibrate();
+//        imu_plugin->calibrate();
+        mpu_plugin->calibrate();
     }
     else if (command == "c")
     {
@@ -166,10 +168,10 @@ void Car::execute_command (const std::vector<String> words)
         forward_plugin->set_left_speed(speed);
         forward_plugin->set_enabled(true);
     }
-    else if (command == "imu")
-    {
-        imu_plugin->set_enabled(!imu_plugin->is_enabled());
-    }
+//    else if (command == "imu")
+//    {
+//        imu_plugin->set_enabled(!imu_plugin->is_enabled());
+//    }
     else if (command == "led")
     {
         demo_drive_leds();
@@ -191,6 +193,10 @@ void Car::execute_command (const std::vector<String> words)
         clockwise_plugin->set_right_speed(speed);
         clockwise_plugin->set_left_speed(speed);
         clockwise_plugin->set_enabled(true);
+    }
+    else if (command == "mpu")
+    {
+        mpu_plugin->set_enabled(!mpu_plugin->is_enabled());
     }
     else if (command == "nav")
     {
@@ -264,7 +270,7 @@ void Car::help_command ()
     Serial.println("? - help");
 
     cout << "Current mode is " << mode << std::endl;
-    imu_plugin->read_imu();
+//    imu_plugin->read_imu();
     ultrasound_plugin->print_distance();
 
     Serial.print("Plugins: ");
@@ -348,9 +354,14 @@ DrivePlugin* Car::get_counterclockwise_plugin ()
     return counterclockwise_plugin;
 }
 
-ImuPlugin* Car::get_imu_plugin ()
+//ImuPlugin* Car::get_imu_plugin ()
+//{
+//    return imu_plugin;
+//}
+
+MpuPlugin* Car::get_mpu_plugin ()
 {
-    return imu_plugin;
+    return mpu_plugin;
 }
 
 NavigationPlugin* Car::get_navigation_plugin ()
