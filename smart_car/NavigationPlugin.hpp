@@ -9,9 +9,8 @@
 
 #include "Plugin.hpp"
 #include <Kalman.h>
-#ifndef Car
-    class Car;
-#endif
+
+class Car;
 
 //------------------------------------
 /****       KALMAN PARAMETERS    ****/
@@ -26,7 +25,7 @@
 class NavigationPlugin : public Plugin
 {
     public:
-        NavigationPlugin (const PluginId id, Car &car);
+        NavigationPlugin (Car &car);
         bool setup () override;
         void reset () override;
         void cycle () override;
@@ -37,8 +36,8 @@ class NavigationPlugin : public Plugin
         Car &car;
         KALMAN<Nstate, Nobs> K; // your Kalman filter
         BLA::Matrix<Nobs> obs; // observation vector
-        BLA::Matrix<2,2> body_2_world;
-        BLA::Matrix<2,2> world_2_body;
+        BLA::Matrix<2, 2> body_2_world;
+        BLA::Matrix<2, 2> world_2_body;
 
         void get_sensor_data ();
 };

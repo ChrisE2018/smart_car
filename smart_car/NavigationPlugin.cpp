@@ -20,12 +20,14 @@
 #define m2 0.01
 #define m3 0.01
 
-NavigationPlugin::NavigationPlugin (const PluginId id, Car &car) : Plugin(id), car(car)
+NavigationPlugin::NavigationPlugin (Car &car) : Plugin(NAVIGATION_PLUGIN), car(car)
 {
 }
 
 bool NavigationPlugin::setup ()
 {
+    set_enabled(false);
+
     // Initial state of the system
     // Px, Py, Pa, Vx, Vy, Va, Ax, Ay, Aa
     K.x =

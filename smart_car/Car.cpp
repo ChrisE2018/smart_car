@@ -13,20 +13,19 @@ extern HardwareSerial Serial;
 
 Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
 {
-//    clock_plugin = new ClockPlugin();
-    clock_plugin = nullptr;
+    clock_plugin = new ClockPlugin();
     clockwise_plugin = new DrivePlugin(CLOCKWISE_PLUGIN, *this, 500, FORWARD, REVERSE);
     counterclockwise_plugin = new DrivePlugin(COUNTERCLOCKWISE_PLUGIN, *this, 500, REVERSE,
             FORWARD);
     demo_plugin = new DemoPlugin(*this);
     forward_plugin = new DrivePlugin(FORWARD_PLUGIN, *this, 500, FORWARD, FORWARD);
     imu_plugin = new ImuPlugin();
-    navigation_plugin = new NavigationPlugin(NAVIGATION_PLUGIN, *this);
+    navigation_plugin = new NavigationPlugin(*this);
     reverse_plugin = new DrivePlugin(REVERSE_PLUGIN, *this, 500, REVERSE, REVERSE);
     ultrasound_plugin = new UltrasoundPlugin();
     wall_plugin = new WallPlugin(*this);
 
-    //available_plugins.push_back(clock_plugin);
+    available_plugins.push_back(clock_plugin);
     available_plugins.push_back(demo_plugin);
     available_plugins.push_back(forward_plugin);
     available_plugins.push_back(reverse_plugin);
@@ -54,17 +53,20 @@ void Car::setup ()
         motors[motor].setup();
     }
 
+    cout << "Attempting setup of " << available_plugins.size() << " available plugins" << std::endl;
     for (Plugin *plugin : available_plugins)
     {
-        if (plugin != nullptr)
+        if (plugin->setup())
         {
-            if (plugin->setup())
-            {
-                plugins.push_back(plugin);
-            }
+            cout << "Setup " << plugin->get_id() << std::endl;
+            plugins.push_back(plugin);
+        }
+        else
+        {
+            cout << "Disabled " << plugin->get_id() << std::endl;
         }
     }
-    navigation_plugin->set_enabled(true);
+    cout << "Completed Setup of " << plugins.size() << " enabled plugins" << std::endl;
 }
 
 void Car::set_mode (const Mode _mode)
@@ -193,6 +195,13 @@ void Car::execute_command (const std::vector<String> words)
     else if (command == "nav")
     {
         navigation_plugin->set_enabled(!navigation_plugin->is_enabled());
+    }
+    else if (command == "plugins")
+    {
+        for (Plugin *plugin : plugins)
+        {
+            cout << "Plugin " << plugin->get_id() << std::endl;
+        }
     }
     else if (command == "r")
     {

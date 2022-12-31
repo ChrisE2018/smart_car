@@ -7,22 +7,25 @@
 
 #pragma once
 
+#include <string>
 #include "Mode.hpp"
 
 enum PluginId
 {
-    COMMAND_PLUGIN,
-    DEMO_PLUGIN,
-    WALL_PLUGIN,
-    FORWARD_PLUGIN,
-    REVERSE_PLUGIN,
-    CLOCKWISE_PLUGIN,
-    COUNTERCLOCKWISE_PLUGIN,
-    IMU_PLUGIN,
-    ULTRASOUND_PLUGIN,
     CLOCK_PLUGIN,
-    NAVIGATION_PLUGIN
+    CLOCKWISE_PLUGIN,
+    COMMAND_PLUGIN,
+    COUNTERCLOCKWISE_PLUGIN,
+    DEMO_PLUGIN,
+    FORWARD_PLUGIN,
+    IMU_PLUGIN,
+    NAVIGATION_PLUGIN,
+    REVERSE_PLUGIN,
+    ULTRASOUND_PLUGIN,
+    WALL_PLUGIN
 };
+
+const std::string stringify(const PluginId id);
 
 std::ostream& operator<< (std::ostream &lhs, PluginId id);
 
@@ -32,12 +35,12 @@ class Plugin
         Plugin (const PluginId id);
         virtual ~Plugin ();
 
-        PluginId get_id ();
+        const PluginId get_id () const;
         virtual void set_mode (Mode mode);
         virtual bool setup ();
         virtual void reset ();
         virtual void cycle ();
-        bool is_enabled ();
+        const bool is_enabled () const;
         virtual void set_enabled (const bool enable);
 
     private:

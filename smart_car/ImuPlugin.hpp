@@ -21,8 +21,11 @@ class ImuPlugin: public Plugin
         void cycle () override;
 
     private:
+        // Use AD0_HIGH address after wiring pin ad0 to vcc = 3.3 v
+        // This is done to avoid conflict with the I2C address of the RTC (clock).
+        const int MPU_addr = MPU6050_ADDRESS_AD0_HIGH;  // I2C address of the MPU-6050
+
         MPU6050 mpu;
-        const int MPU_addr = 0x68;  // I2C address of the MPU-6050
         int16_t AcX = 0;
         int16_t AcY = 0;
         int16_t AcZ = 0;

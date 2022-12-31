@@ -8,7 +8,7 @@
 #include "Arduino.h"
 #include "ImuPlugin.hpp"
 
-ImuPlugin::ImuPlugin () : Plugin(IMU_PLUGIN), mpu(0x68)
+ImuPlugin::ImuPlugin () : Plugin(IMU_PLUGIN), mpu(MPU_addr)
 {
 }
 
