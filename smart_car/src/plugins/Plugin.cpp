@@ -71,10 +71,6 @@ void Plugin::reset ()
 {
 }
 
-void Plugin::set_mode (Mode mode)
-{
-}
-
 const bool Plugin::is_enabled () const
 {
     return enable;

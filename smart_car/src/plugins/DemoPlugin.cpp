@@ -14,11 +14,6 @@ DemoPlugin::DemoPlugin (Car &car) : Plugin(DEMO_PLUGIN), car(car)
 {
 }
 
-void DemoPlugin::set_mode (Mode mode)
-{
-    set_enabled(mode == DEMO_MODE);
-}
-
 void DemoPlugin::set_enabled (const bool enable)
 {
     Plugin::set_enabled(enable);

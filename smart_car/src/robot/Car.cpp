@@ -19,7 +19,6 @@ Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
             FORWARD);
     demo_plugin = new DemoPlugin(*this);
     forward_plugin = new DrivePlugin(FORWARD_PLUGIN, *this, 500, FORWARD, FORWARD);
-    //imu_plugin = new ImuPlugin();
     mpu_plugin = new MpuPlugin();
     kalman_plugin = new KalmanPlugin(*this);
     odom_plugin = new OdomPlugin(*this);
@@ -33,7 +32,6 @@ Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
     available_plugins.push_back(reverse_plugin);
     available_plugins.push_back(clockwise_plugin);
     available_plugins.push_back(counterclockwise_plugin);
-    //available_plugins.push_back(imu_plugin);
     available_plugins.push_back(mpu_plugin);
     available_plugins.push_back(kalman_plugin);
     available_plugins.push_back(odom_plugin);
@@ -48,6 +46,11 @@ Car::~Car ()
         delete plugin;
     }
     plugins.clear();
+}
+
+std::ostream& operator<< (std::ostream &lhs, const Car &car)
+{
+    return lhs << "#[car " << car.kalman_plugin->get_x() << ", " << car.kalman_plugin->get_y() << "]";
 }
 
 void Car::setup ()
@@ -75,11 +78,25 @@ void Car::setup ()
 
 void Car::set_mode (const Mode _mode)
 {
-    cout << "Setting " << plugins.size() << " plugins to mode " << _mode << std::endl;
+    cout << "Setting " << *this << " to " << _mode << std::endl;
     mode = _mode;
-    for (Plugin *plugin : plugins)
+    switch (mode)
     {
-        plugin->set_mode(mode);
+        case DEMO_MODE:
+            all_stop ();
+            demo_plugin->set_enabled(true);
+            wall_plugin->set_enabled(false);
+            break;
+        case WALL_MODE:
+            all_stop ();
+            demo_plugin->set_enabled(false);
+            wall_plugin->set_enabled(true);
+            break;
+        case COMMAND_MODE:
+            all_stop ();
+            demo_plugin->set_enabled(false);
+            wall_plugin->set_enabled(false);
+            break;
     }
 }
 
@@ -171,10 +188,10 @@ void Car::execute_command (const std::vector<String> words)
         forward_plugin->set_left_speed(speed);
         forward_plugin->set_enabled(true);
     }
-//    else if (command == "imu")
-//    {
-//        imu_plugin->set_enabled(!imu_plugin->is_enabled());
-//    }
+    else if (command == "kalman")
+    {
+        kalman_plugin->set_enabled(!kalman_plugin->is_enabled());
+    }
     else if (command == "led")
     {
         demo_drive_leds();
@@ -200,10 +217,6 @@ void Car::execute_command (const std::vector<String> words)
     else if (command == "mpu")
     {
         mpu_plugin->set_enabled(!mpu_plugin->is_enabled());
-    }
-    else if (command == "nav")
-    {
-        kalman_plugin->set_enabled(!kalman_plugin->is_enabled());
     }
     else if (command == "odom")
     {
@@ -310,6 +323,10 @@ void Car::all_stop ()
     {
         motors[motor].drive_stop();
     }
+    forward_plugin->set_enabled(false);
+    reverse_plugin->set_enabled(false);
+    clockwise_plugin->set_enabled(false);
+    counterclockwise_plugin->set_enabled(false);
 }
 
 void Car::drive_stop (const MotorLocation motor)

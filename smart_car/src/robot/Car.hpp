@@ -30,6 +30,7 @@ class Car : public Executor
     public:
         Car ();
         ~Car ();
+        friend std::ostream& operator<<(std::ostream& os, const Car& car);
 
         void setup ();
         Mode get_mode ();

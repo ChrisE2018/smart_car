@@ -25,6 +25,15 @@ class KalmanPlugin : public Plugin
         void reset () override;
         void cycle () override;
         void update_transforms (const float angle);
+        float get_x();
+        float get_y();
+        float get_angle();
+        float get_dx();
+        float get_dy();
+        float get_dangle();
+        float get_ax();
+        float get_ay();
+        float get_aangle();
 
     private:
 

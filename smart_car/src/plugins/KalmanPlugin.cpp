@@ -116,3 +116,48 @@ void KalmanPlugin::update_transforms (const float angle)
     world_2_body =
     { cos_angle, -sin_angle, sin_angle, cos_angle };
 }
+
+float KalmanPlugin::get_x ()
+{
+    return state(0);
+}
+
+float KalmanPlugin::get_y ()
+{
+    return state(1);
+}
+
+float KalmanPlugin::get_angle ()
+{
+    return state(2);
+}
+
+float KalmanPlugin::get_dx ()
+{
+    return state(3);
+}
+
+float KalmanPlugin::get_dy ()
+{
+    return state(4);
+}
+
+float KalmanPlugin::get_dangle ()
+{
+    return state(5);
+}
+
+float KalmanPlugin::get_ax ()
+{
+    return state(6);
+}
+
+float KalmanPlugin::get_ay ()
+{
+    return state(7);
+}
+
+float KalmanPlugin::get_aangle ()
+{
+    return state(8);
+}

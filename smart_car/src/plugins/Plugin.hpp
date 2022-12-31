@@ -37,7 +37,6 @@ class Plugin
         virtual ~Plugin ();
 
         const PluginId get_id () const;
-        virtual void set_mode (Mode mode);
         virtual bool setup ();
         virtual void reset ();
         virtual void cycle ();

@@ -13,11 +13,6 @@ WallPlugin::WallPlugin (Car &car) : Plugin(WALL_PLUGIN), car(car)
 {
 }
 
-void WallPlugin::set_mode (Mode mode)
-{
-    set_enabled(mode == WALL_MODE);
-}
-
 void WallPlugin::set_enabled (const bool enable)
 {
     Plugin::set_enabled(enable);
