@@ -95,11 +95,10 @@ void NavigationPlugin::reset ()
 
 void NavigationPlugin::cycle ()
 {
-    update_transforms();
+    const long now = millis();
+    const float dt = (now - t) * 0.001;
 
-// eventually update your model matrix inside the loop
-//    K.F =
-//    { 1.0, 0.0, 1.0, 0.0 };
+    update_transforms(K.x(2));
 
 // GRAB MEASUREMENT and WRITE IT INTO 'obs'
     get_sensor_data();
@@ -135,14 +134,14 @@ void NavigationPlugin::get_sensor_data ()
             7), K.x(8) };
 }
 
-void NavigationPlugin::update_transforms ()
+void NavigationPlugin::update_transforms (const float angle)
 {
-    const float angle = K.x(2);
     const float sin_angle = sin(angle);
     const float cos_angle = cos(angle);
+    // Counterclockwise
     body_2_world =
     { cos_angle, -sin_angle, sin_angle, cos_angle };
+    // Clockwise
     world_2_body =
-    { cos_angle, -sin_angle, sin_angle, cos_angle };
-    Inverse(world_2_body);
+    { cos_angle, sin_angle, sin_angle, -cos_angle };
 }

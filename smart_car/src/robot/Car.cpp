@@ -19,6 +19,7 @@ Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
     forward_plugin = new DrivePlugin(FORWARD_PLUGIN, *this, 500, FORWARD, FORWARD);
     imu_plugin = new ImuPlugin();
     navigation_plugin = new NavigationPlugin(*this);
+    odom_plugin = new OdomPlugin(*this);
     reverse_plugin = new DrivePlugin(REVERSE_PLUGIN, *this, 500, REVERSE, REVERSE);
     ultrasound_plugin = new UltrasoundPlugin();
     wall_plugin = new WallPlugin(*this);
@@ -31,6 +32,7 @@ Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
     available_plugins.push_back(counterclockwise_plugin);
     available_plugins.push_back(imu_plugin);
     available_plugins.push_back(navigation_plugin);
+    available_plugins.push_back(odom_plugin);
     available_plugins.push_back(ultrasound_plugin);
     available_plugins.push_back(wall_plugin);
 }
@@ -194,6 +196,10 @@ void Car::execute_command (const std::vector<String> words)
     {
         navigation_plugin->set_enabled(!navigation_plugin->is_enabled());
     }
+    else if (command == "odom")
+    {
+        odom_plugin->set_enabled(!odom_plugin->is_enabled());
+    }
     else if (command == "plugins")
     {
         for (Plugin *plugin : plugins)
@@ -233,6 +239,7 @@ void Car::execute_command (const std::vector<String> words)
     {
         set_mode(COMMAND_MODE);
         navigation_plugin->reset();
+        odom_plugin->reset();
     }
     else if (command == "?")
     {
@@ -349,6 +356,11 @@ ImuPlugin* Car::get_imu_plugin ()
 NavigationPlugin* Car::get_navigation_plugin ()
 {
     return navigation_plugin;
+}
+
+OdomPlugin* Car::get_odom_plugin ()
+{
+    return odom_plugin;
 }
 
 UltrasoundPlugin* Car::get_ultrasound_plugin ()

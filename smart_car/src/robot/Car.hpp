@@ -18,6 +18,7 @@
 #include "DrivePlugin.hpp"
 #include "ImuPlugin.hpp"
 #include "NavigationPlugin.hpp"
+#include "OdomPlugin.hpp"
 #include "UltrasoundPlugin.hpp"
 #include "WallPlugin.hpp"
 
@@ -49,6 +50,7 @@ class Car : public Executor
         DrivePlugin* get_counterclockwise_plugin ();
         ImuPlugin* get_imu_plugin ();
         NavigationPlugin* get_navigation_plugin ();
+        OdomPlugin* get_odom_plugin ();
         UltrasoundPlugin* get_ultrasound_plugin ();
         WallPlugin* get_wall_plugin ();
 
@@ -66,6 +68,7 @@ class Car : public Executor
         DrivePlugin *forward_plugin;
         ImuPlugin *imu_plugin;
         NavigationPlugin *navigation_plugin;
+        OdomPlugin* odom_plugin;
         DrivePlugin *reverse_plugin;
         UltrasoundPlugin *ultrasound_plugin;
         WallPlugin *wall_plugin;

@@ -7,8 +7,8 @@
 
 #pragma once
 
-#include "Plugin.hpp"
 #include <Kalman.h>
+#include "Plugin.hpp"
 
 class Car;
 
@@ -29,11 +29,12 @@ class NavigationPlugin : public Plugin
         bool setup () override;
         void reset () override;
         void cycle () override;
-        void update_transforms ();
+        void update_transforms (const float angle);
 
     private:
 
         Car &car;
+        long t = 0;
         KALMAN<Nstate, Nobs> K; // your Kalman filter
         BLA::Matrix<Nobs> obs; // observation vector
         BLA::Matrix<2, 2> body_2_world;
