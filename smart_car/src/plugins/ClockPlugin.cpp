@@ -16,10 +16,8 @@ ClockPlugin::ClockPlugin () : Plugin(CLOCK_PLUGIN)
 
 bool ClockPlugin::setup ()
 {
-    Serial.println("Initialize RTC module");
+    cout << "Initialize RTC module" << std::endl;
     clock.begin();
-    // Send sketch compiling time to Arduino
-//    clock.setDateTime(__DATE__, __TIME__);
     return true;
 }
 
@@ -28,26 +26,22 @@ void ClockPlugin::cycle ()
     if (is_enabled())
     {
         dt = clock.getDateTime();
-        Serial.print("Raw data: ");
-        Serial.print(dt.year);
-        Serial.print("-");
-        if (dt.month < 10)
-            Serial.print("0");
-        Serial.print(dt.month);
-        Serial.print("-");
-        if (dt.day < 10)
-            Serial.print("0");
-        Serial.print(dt.day);
-        Serial.print(" ");
-        Serial.print(dt.hour);
-        Serial.print(":");
-        if (dt.minute < 10)
-            Serial.print("0");
-        Serial.print(dt.minute);
-        Serial.print(":");
-        if (dt.second < 10)
-            Serial.print("0");
-        Serial.print(dt.second);
-        Serial.println("");
+        cout << "Raw data: " << static_cast<int>(dt.year) << "-";
+        const int month = static_cast<int>(dt.month);
+        if (month < 10)
+            cout << "0";
+        cout << month << "-";
+        const int day = static_cast<int>(dt.day);
+        if (day < 10)
+            cout << "0";
+        cout << day << " " << static_cast<int>(dt.hour) << ":";
+        const int minute = static_cast<int>(dt.minute);
+        if (minute < 10)
+            cout << "0";
+        cout << minute << ":";
+        const int second = static_cast<int>(dt.second);
+        if (second < 10)
+            cout << "0";
+        cout << second << std::endl;
     }
 }
