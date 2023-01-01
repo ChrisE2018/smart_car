@@ -20,29 +20,21 @@ void WallPlugin::set_enabled (const bool enable)
     {
         Serial.println("Starting WallMode");
         speed = SPEED_FULL;
-        active = true;
     }
-    else
-    {
-        active = false;
-    }
-    car.get_forward_plugin()->set_enabled(false);
-    car.get_reverse_plugin()->set_enabled(false);
-    car.get_clockwise_plugin()->set_enabled(false);
-    car.get_counterclockwise_plugin()->set_enabled(false);
 }
 
 void WallPlugin::cycle ()
 {
-    if (active)
+    if (is_enabled())
     {
         UltrasoundPlugin* ultrasound_plugin = car.get_ultrasound_plugin();
-        long d = ultrasound_plugin->get_distance();
+        const long d = ultrasound_plugin->get_distance();
         Serial.print("Distance ");
         Serial.print(d);
         Serial.println(" cm");
         if (d < 10)
         {
+            set_enabled(false);
             car.all_stop();
             car.set_mode(COMMAND_MODE);
         }

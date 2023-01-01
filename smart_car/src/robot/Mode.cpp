@@ -17,6 +17,9 @@ std::ostream& operator<< (std::ostream &lhs, Mode mode)
         case DEMO_MODE:
             lhs << "DEMO_MODE";
             break;
+        case GOAL_MODE:
+            lhs << "GOAL_MODE";
+            break;
         case WALL_MODE:
             lhs << "WALL_MODE";
             break;

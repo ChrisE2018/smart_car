@@ -11,7 +11,7 @@
 
 enum Mode
 {
-    COMMAND_MODE = 0, DEMO_MODE, WALL_MODE
+    COMMAND_MODE = 0, DEMO_MODE, GOAL_MODE, WALL_MODE
 };
 
 std::ostream& operator<< (std::ostream &lhs, Mode mode);

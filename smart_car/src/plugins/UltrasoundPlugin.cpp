@@ -21,7 +21,7 @@ long UltrasoundPlugin::get_distance ()
 
 void UltrasoundPlugin::print_distance ()
 {
-    long d = sr04.Distance();
+    const long d = sr04.Distance();
     Serial.print("Distance ");
     Serial.print(d);
     Serial.println(" cm");

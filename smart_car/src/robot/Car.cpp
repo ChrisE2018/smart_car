@@ -82,20 +82,25 @@ void Car::set_mode (const Mode _mode)
     mode = _mode;
     switch (mode)
     {
+        case COMMAND_MODE:
+            all_stop ();
+            demo_plugin->set_enabled(false);
+            wall_plugin->set_enabled(false);
+            break;
         case DEMO_MODE:
             all_stop ();
             demo_plugin->set_enabled(true);
+            wall_plugin->set_enabled(false);
+            break;
+        case GOAL_MODE:
+            all_stop ();
+            demo_plugin->set_enabled(false);
             wall_plugin->set_enabled(false);
             break;
         case WALL_MODE:
             all_stop ();
             demo_plugin->set_enabled(false);
             wall_plugin->set_enabled(true);
-            break;
-        case COMMAND_MODE:
-            all_stop ();
-            demo_plugin->set_enabled(false);
-            wall_plugin->set_enabled(false);
             break;
     }
 }
