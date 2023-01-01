@@ -19,6 +19,7 @@ Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
             FORWARD);
     demo_plugin = new DemoPlugin(*this);
     forward_plugin = new DrivePlugin(FORWARD_PLUGIN, *this, 500, FORWARD, FORWARD);
+    goal_plugin = new GoalPlugin(*this);
     mpu_plugin = new MpuPlugin();
     kalman_plugin = new KalmanPlugin(*this);
     odom_plugin = new OdomPlugin(*this);
@@ -29,6 +30,7 @@ Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
     available_plugins.push_back(clock_plugin);
     available_plugins.push_back(demo_plugin);
     available_plugins.push_back(forward_plugin);
+    available_plugins.push_back(goal_plugin);
     available_plugins.push_back(reverse_plugin);
     available_plugins.push_back(clockwise_plugin);
     available_plugins.push_back(counterclockwise_plugin);
@@ -50,8 +52,8 @@ Car::~Car ()
 
 std::ostream& operator<< (std::ostream &lhs, const Car &car)
 {
-    return lhs << "#[car " << car.kalman_plugin->get_x() << ", " << car.kalman_plugin->get_y()
-            << "]";
+    return lhs << "#[car " << car.mode << " " << car.kalman_plugin->get_x() << ", "
+            << car.kalman_plugin->get_y() << " ang " << car.kalman_plugin->get_angle() << "]";
 }
 
 void Car::setup ()
@@ -85,8 +87,8 @@ void Car::set_mode (const Mode _mode)
 void Car::set_mode (HardwareSerial &serial, const Mode _mode)
 {
     std::ohserialstream c(serial);
-    c << "Setting " << *this << " to " << _mode << std::endl;
     mode = _mode;
+    c << "Set " << *this << " to " << _mode << std::endl;
     switch (mode)
     {
         case COMMAND_MODE:
@@ -142,7 +144,15 @@ void Car::execute_command (HardwareSerial &serial, const std::vector<String> wor
     String command = words[0];
     serial.print("Command: ");
     serial.println(command);
-    if (command == "b")
+    if (command == "angle")
+    {
+        if (n > 1)
+        {
+            set_mode(GOAL_MODE);
+            goal_plugin->set_goal(words[1].toFloat());
+        }
+    }
+    else if (command == "b")
     {
         int speed = SPEED_FULL;
         int duration = 500;
@@ -287,21 +297,19 @@ void Car::execute_command (HardwareSerial &serial, const std::vector<String> wor
     }
 }
 
-void Car::help_command (HardwareSerial& serial)
+void Car::help_command (HardwareSerial &serial)
 {
     std::ohserialstream c(serial);
-    serial.println("b - backward");
-    serial.println("c - command mode");
-    serial.println("d - demo mode");
-    serial.println("f - forward");
-    serial.println("l - left turn");
-    serial.println("r - right turn");
-    serial.println("s - stop moving");
-    serial.println("? - help");
 
-    c << "Current mode is " << mode << std::endl;
+    c << "Robot " << *this << std::endl;
     long d = ultrasound_plugin->get_distance();
-    c << " Distance " << d << " cm" << std::endl;
+    c << "Distance " << d << " cm" << std::endl;
+
+    const BLA::Matrix<Nstate> &state = kalman_plugin->get_state();
+    c << "Position " << state(0) << ", " << state(1) << " angle " << state(2) << " Velocity "
+            << state(3) << ", " << state(4) << " angle " << state(5) << " Acceleration " << state(6)
+            << ", " << state(7) << " angle " << state(8) << std::endl;
+    c << "Angle: " << kalman_plugin->get_angle() << std::endl;
 
     serial.print("Plugins: ");
     serial.println(plugins.size());
@@ -328,7 +336,7 @@ void Car::demo_drive_leds ()
 
 Motor& Car::get_motor (const MotorLocation motor)
 {
-    return motors[motor];
+    return motors[static_cast<int>(motor)];
 }
 
 void Car::all_stop ()
@@ -341,21 +349,68 @@ void Car::all_stop ()
     reverse_plugin->set_enabled(false);
     clockwise_plugin->set_enabled(false);
     counterclockwise_plugin->set_enabled(false);
+    goal_plugin->set_enabled(false);
+//    goal_plugin->reset();
 }
 
 void Car::drive_stop (const MotorLocation motor)
 {
-    motors[motor].drive_stop();
+    if (motor == RIGHT || motor == LEFT)
+    {
+        motors[static_cast<int>(motor)].drive_stop();
+    }
+}
+
+void Car::drive (const MotorLocation motor, const int speed)
+{
+    if (speed > 0)
+    {
+        motors[static_cast<int>(motor)].drive_forward(speed);
+    }
+    else if (speed < 0)
+    {
+        motors[static_cast<int>(motor)].drive_reverse(-speed);
+    }
+    else
+    {
+        motors[static_cast<int>(motor)].drive_stop();
+    }
+}
+
+int Car::get_drive_speed (const MotorLocation motor)
+{
+    const int speed = motors[static_cast<int>(motor)].get_speed();
+    if (motors[static_cast<int>(motor)].get_direction() == REVERSE)
+    {
+        return -speed;
+    }
+    return speed;
+}
+
+float Car::get_drive_velocity (const MotorLocation motor)
+{
+    return motors[static_cast<int>(motor)].get_velocity();
+}
+
+MotorDirection Car::get_drive_direction (const MotorLocation motor)
+{
+    return motors[static_cast<int>(motor)].get_direction();
 }
 
 void Car::drive_forward (const MotorLocation motor, const int speed)
 {
-    motors[motor].drive_forward(speed);
+    if (motor == RIGHT || motor == LEFT)
+    {
+        motors[static_cast<int>(motor)].drive_forward(speed);
+    }
 }
 
 void Car::drive_reverse (const MotorLocation motor, const int speed)
 {
-    motors[motor].drive_reverse(speed);
+    if (motor == RIGHT || motor == LEFT)
+    {
+        motors[static_cast<int>(motor)].drive_reverse(speed);
+    }
 }
 
 WallPlugin* Car::get_wall_plugin ()
@@ -373,6 +428,11 @@ DrivePlugin* Car::get_forward_plugin ()
     return forward_plugin;
 }
 
+GoalPlugin* Car::get_goal_plugin ()
+{
+    return goal_plugin;
+}
+
 DrivePlugin* Car::get_reverse_plugin ()
 {
     return reverse_plugin;
@@ -388,17 +448,12 @@ DrivePlugin* Car::get_counterclockwise_plugin ()
     return counterclockwise_plugin;
 }
 
-//ImuPlugin* Car::get_imu_plugin ()
-//{
-//    return imu_plugin;
-//}
-
 MpuPlugin* Car::get_mpu_plugin ()
 {
     return mpu_plugin;
 }
 
-KalmanPlugin* Car::get_navigation_plugin ()
+KalmanPlugin* Car::get_kalman_plugin ()
 {
     return kalman_plugin;
 }

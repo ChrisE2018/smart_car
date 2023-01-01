@@ -24,6 +24,6 @@ void UltrasoundPlugin::cycle ()
     if (is_enabled())
     {
         const long d = sr04.Distance();
-        cout << " Distance " << d << " cm" << std::endl;
+        cout << "Distance " << d << " cm" << std::endl;
     }
 }

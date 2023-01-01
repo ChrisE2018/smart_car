@@ -18,6 +18,7 @@
 #include "ClockPlugin.hpp"
 #include "DemoPlugin.hpp"
 #include "DrivePlugin.hpp"
+#include "GoalPlugin.hpp"
 #include "MpuPlugin.hpp"
 #include "OdomPlugin.hpp"
 #include "UltrasoundPlugin.hpp"
@@ -30,30 +31,35 @@ class Car : public Executor
     public:
         Car ();
         ~Car ();
-        friend std::ostream& operator<<(std::ostream& os, const Car& car);
+        friend std::ostream& operator<< (std::ostream &os, const Car &car);
 
         void setup ();
         Mode get_mode ();
         bool is_mode (const Mode mode);
         void set_mode (const Mode mode);
-        void set_mode (HardwareSerial& serial, const Mode mode);
+        void set_mode (HardwareSerial &serial, const Mode mode);
         void cycle ();
         void demo_drive_leds ();
-        void execute_command (HardwareSerial& serial, const std::vector<String> words);
+        void execute_command (HardwareSerial &serial, const std::vector<String> words);
 
         Motor& get_motor (const MotorLocation motor);
         void all_stop ();
         void drive_stop (const MotorLocation motor);
+        void drive (const MotorLocation motor, const int speed);
+        int get_drive_speed (const MotorLocation motor);
+        float get_drive_velocity (const MotorLocation motor);
+        MotorDirection get_drive_direction (const MotorLocation motor);
         void drive_forward (const MotorLocation motor, const int speed);
         void drive_reverse (const MotorLocation motor, const int speed);
 
         DemoPlugin* get_demo_plugin ();
         DrivePlugin* get_forward_plugin ();
+        GoalPlugin* get_goal_plugin ();
         DrivePlugin* get_reverse_plugin ();
         DrivePlugin* get_clockwise_plugin ();
         DrivePlugin* get_counterclockwise_plugin ();
         MpuPlugin* get_mpu_plugin ();
-        KalmanPlugin* get_navigation_plugin ();
+        KalmanPlugin* get_kalman_plugin ();
         OdomPlugin* get_odom_plugin ();
         UltrasoundPlugin* get_ultrasound_plugin ();
         WallPlugin* get_wall_plugin ();
@@ -70,9 +76,10 @@ class Car : public Executor
         DrivePlugin *counterclockwise_plugin;
         DemoPlugin *demo_plugin;
         DrivePlugin *forward_plugin;
-        MpuPlugin* mpu_plugin;
+        GoalPlugin *goal_plugin;
+        MpuPlugin *mpu_plugin;
         KalmanPlugin *kalman_plugin;
-        OdomPlugin* odom_plugin;
+        OdomPlugin *odom_plugin;
         DrivePlugin *reverse_plugin;
         UltrasoundPlugin *ultrasound_plugin;
         WallPlugin *wall_plugin;
@@ -88,16 +95,16 @@ class Car : public Executor
         // 7 blue = enA
         // 8 green = enB
 
-        // LED_0 = 22;  // red led
-        // LED_1 = 24;  // green led
-        // LED_2 = 26;  // red led
-        // LED_3 = 28;  // green led
+        // LED_0 = 22;  // red led right
+        // LED_1 = 24;  // green led right
+        // LED_2 = 26;  // red led left
+        // LED_3 = 28;  // green led left
         Motor motors[MOTOR_COUNT] =
-        { Motor(7, 3, 4, 26, 28), Motor(8, 6, 5, 22, 24) };
+        { Motor(RIGHT, 8, 6, 5, 22, 24), Motor(LEFT, 7, 3, 4, 26, 28) };
 
         Mode mode = COMMAND_MODE;
 
         void handle_command ();
-        void help_command (HardwareSerial& serial);
+        void help_command (HardwareSerial &serial);
 };
 

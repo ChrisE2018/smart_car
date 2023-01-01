@@ -76,10 +76,9 @@ void MpuPlugin::calibrate ()
 
 void MpuPlugin::cycle ()
 {
+    readFifoBuffer();
     if (is_enabled())
     {
-        readFifoBuffer();
-
         cout << "Yaw: " << get_yaw() << " Pitch: " << get_pitch() << " Roll: " << get_roll()
                 << " Ax: " << get_Ax() << " Ay: " << get_Ay() << " Az: " << get_Az() << "\n";
     }

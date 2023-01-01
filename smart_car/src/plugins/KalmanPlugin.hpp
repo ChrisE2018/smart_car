@@ -25,15 +25,16 @@ class KalmanPlugin : public Plugin
         void reset () override;
         void cycle () override;
         void update_transforms (const float angle);
-        float get_x();
-        float get_y();
-        float get_angle();
-        float get_dx();
-        float get_dy();
-        float get_dangle();
-        float get_ax();
-        float get_ay();
-        float get_aangle();
+        float get_x () const;
+        float get_y () const;
+        float get_angle () const;
+        float get_dx () const;
+        float get_dy () const;
+        float get_dangle () const;
+        float get_ax () const;
+        float get_ay () const;
+        float get_aangle () const;
+        const BLA::Matrix<Nstate>& get_state () const;
 
     private:
 

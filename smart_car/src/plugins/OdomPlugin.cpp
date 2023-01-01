@@ -22,7 +22,7 @@ bool OdomPlugin::setup ()
 
     // x, y, a, dx, dy, da
     state =
-    { 1.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+    { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 
     // x,y, a,dx, dy, da
     obs =

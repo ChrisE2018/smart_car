@@ -24,7 +24,8 @@ void DrivePlugin::set_enabled (const bool enable)
     {
         deadline = millis() + duration;
         cout << "Starting DriveMode: " << get_id() << " speed " << right_motor_speed << ", "
-                << left_motor_speed << " for " << duration << " until " << deadline << std::endl;
+                << left_motor_speed << " for " << duration << " from " << millis() << " until "
+                << deadline << std::endl;
         switch (right_motor_direction)
         {
             case STOP:
@@ -59,8 +60,8 @@ void DrivePlugin::cycle ()
         if (deadline < millis())
         {
             cout << "Stopping DriveMode: " << get_id() << " at " << millis() << std::endl;
-            car.all_stop();
             set_enabled(false);
+            car.all_stop();
         }
     }
 }

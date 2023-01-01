@@ -99,7 +99,7 @@ void KalmanPlugin::cycle ()
     if (is_enabled())
     {
         // PRINT RESULTS: measures and estimated state
-        Serial << "Nav State: " << state << " dt: " << dt << " Obs: " << obs
+        Serial << "Kalman State: " << state << " dt: " << dt << " Obs: " << obs
         // << " rm: " << right_velocity << " lm: " << left_velocity << " b2w" << body_2_world
                 << "\n";
     }
@@ -117,47 +117,52 @@ void KalmanPlugin::update_transforms (const float angle)
     { cos_angle, -sin_angle, sin_angle, cos_angle };
 }
 
-float KalmanPlugin::get_x ()
+float KalmanPlugin::get_x ()  const
 {
     return state(0);
 }
 
-float KalmanPlugin::get_y ()
+float KalmanPlugin::get_y () const
 {
     return state(1);
 }
 
-float KalmanPlugin::get_angle ()
+float KalmanPlugin::get_angle () const
 {
     return state(2);
 }
 
-float KalmanPlugin::get_dx ()
+float KalmanPlugin::get_dx () const
 {
     return state(3);
 }
 
-float KalmanPlugin::get_dy ()
+float KalmanPlugin::get_dy () const
 {
     return state(4);
 }
 
-float KalmanPlugin::get_dangle ()
+float KalmanPlugin::get_dangle () const
 {
     return state(5);
 }
 
-float KalmanPlugin::get_ax ()
+float KalmanPlugin::get_ax () const
 {
     return state(6);
 }
 
-float KalmanPlugin::get_ay ()
+float KalmanPlugin::get_ay () const
 {
     return state(7);
 }
 
-float KalmanPlugin::get_aangle ()
+float KalmanPlugin::get_aangle () const
 {
     return state(8);
+}
+
+const BLA::Matrix<Nstate>& KalmanPlugin::get_state () const
+{
+    return state;
 }

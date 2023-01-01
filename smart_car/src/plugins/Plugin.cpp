@@ -25,6 +25,8 @@ const std::string stringify (const PluginId id)
             return "DEMO_PLUGIN";
         case FORWARD_PLUGIN:
             return "FORWARD_PLUGIN";
+        case GOAL_PLUGIN:
+            return "GOAL_PLUGIN";
         case MPU_PLUGIN:
             return "MPU_PLUGIN";
         case KALMAN_PLUGIN:
@@ -39,7 +41,6 @@ const std::string stringify (const PluginId id)
             return "WALL_PLUGIN";
         default:
             return "???_PLUGIN";
-
     }
 }
 

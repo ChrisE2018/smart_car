@@ -12,7 +12,9 @@
 
 const int SPEED_FULL = 255;
 const int SPEED_Q3 = 196;
-const int SPEED_160 = 175;
+const int SPEED_175 = 175;
+const int SPEED_160 = 160;
+const int SPEED_150 = 150;
 const int SPEED_HALF = 128;
 const int SPEED_Q1 = 64;
 const int SPEED_CRAWL = 32;
@@ -35,8 +37,9 @@ std::ostream& operator<< (std::ostream &lhs, MotorLocation location);
 class Motor
 {
     public:
-        Motor (int enable, int forward, int reverse, int f_led, int r_led) : enable_pin(enable), forward_pin(
-                forward), reverse_pin(reverse), forward_led(f_led), reverse_led(r_led)
+        Motor (const MotorLocation location, int enable, int forward, int reverse, int f_led,
+                int r_led) : location(location), enable_pin(enable), forward_pin(forward), reverse_pin(
+                reverse), forward_led(f_led), reverse_led(r_led)
         {
         }
 
@@ -50,11 +53,12 @@ class Motor
         float get_velocity () const;
 
     private:
-        int enable_pin;
-        int forward_pin;
-        int reverse_pin;
-        int forward_led;
-        int reverse_led;
+        const MotorLocation location;
+        const int enable_pin;
+        const int forward_pin;
+        const int reverse_pin;
+        const int forward_led;
+        const int reverse_led;
         MotorDirection direction = STOP;
         int speed = 0;
 };

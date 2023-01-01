@@ -6,6 +6,7 @@
  */
 
 #include "Motor.hpp"
+#include "smart_car.hpp"
 
 std::ostream& operator<< (std::ostream &lhs, MotorDirection direction)
 {
@@ -62,35 +63,47 @@ void Motor::led_demo (const int duration) const
 
 void Motor::drive_forward (const int _speed)
 {
-    digitalWrite(forward_led, HIGH);
-    digitalWrite(reverse_led, LOW);
-    digitalWrite(reverse_pin, LOW);
-    digitalWrite(forward_pin, HIGH);
-    analogWrite(enable_pin, _speed);
-    speed = _speed;
-    direction = FORWARD;
+    if (direction != FORWARD || speed != _speed)
+    {
+        speed = _speed;
+        direction = FORWARD;
+        digitalWrite(forward_led, HIGH);
+        digitalWrite(reverse_led, LOW);
+        digitalWrite(reverse_pin, LOW);
+        digitalWrite(forward_pin, HIGH);
+        analogWrite(enable_pin, _speed);
+        cout << "drive " << location << " " << direction << " at " << speed << std::endl;
+    }
 }
 
 void Motor::drive_reverse (const int _speed)
 {
-    digitalWrite(forward_led, LOW);
-    digitalWrite(reverse_led, HIGH);
-    digitalWrite(forward_pin, LOW);
-    digitalWrite(reverse_pin, HIGH);
-    analogWrite(enable_pin, _speed);
-    speed = _speed;
-    direction = REVERSE;
+    if (direction != REVERSE || speed != _speed)
+    {
+        speed = _speed;
+        direction = REVERSE;
+        digitalWrite(forward_led, LOW);
+        digitalWrite(reverse_led, HIGH);
+        digitalWrite(forward_pin, LOW);
+        digitalWrite(reverse_pin, HIGH);
+        analogWrite(enable_pin, _speed);
+        cout << "drive " << location << " " << direction << " at " << speed << std::endl;
+    }
 }
 
 void Motor::drive_stop ()
 {
-    digitalWrite(forward_led, LOW);
-    digitalWrite(reverse_led, LOW);
-    digitalWrite(forward_pin, LOW);
-    digitalWrite(reverse_pin, LOW);
-    analogWrite(enable_pin, LOW);
-    direction = STOP;
-    speed = 0;
+    if (direction != STOP || speed != 0)
+    {
+        direction = STOP;
+        speed = 0;
+        digitalWrite(forward_led, LOW);
+        digitalWrite(reverse_led, LOW);
+        digitalWrite(forward_pin, LOW);
+        digitalWrite(reverse_pin, LOW);
+        analogWrite(enable_pin, LOW);
+        cout << "drive " << location << " " << direction << " at " << speed << std::endl;
+    }
 }
 
 MotorDirection Motor::get_direction () const
