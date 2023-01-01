@@ -43,7 +43,7 @@ class MpuPlugin : public Plugin
         float euler[3];
         int packetSize = 0;
 
-        const int interval = 5;
+        const int interval = 10;
         long deadline = 0;
 };
 
