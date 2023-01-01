@@ -46,5 +46,8 @@ class KalmanPlugin : public Plugin
         BLA::Matrix<Nstate, Nstate> time_update;   // time update
         BLA::Matrix<2, 2> body_2_world;
         BLA::Matrix<2, 2> world_2_body;
+
+        const int interval = 5;
+        long deadline = 0;
 };
 

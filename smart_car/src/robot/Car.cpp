@@ -121,7 +121,9 @@ void Car::cycle ()
     handle_command();
     for (Plugin *plugin : plugins)
     {
+        plugin->start_cycle();
         plugin->cycle();
+        plugin->end_cycle();
     }
 
     total_cycle_us += micros() - cycle_start_us;
@@ -257,7 +259,13 @@ void Car::execute_command (HardwareSerial &serial, const std::vector<String> wor
     {
         for (Plugin *plugin : plugins)
         {
-            c << "Plugin " << plugin->get_id() << std::endl;
+            const long cycle_count = plugin->get_cycle_count();
+            const long total_micros = plugin->get_total_micros();
+            if (cycle_count > 0)
+            {
+                c << "Plugin " << plugin->get_id() << " average " << total_micros / cycle_count
+                        << " us over " << cycle_count << " cycles" << std::endl;
+            }
         }
     }
     else if (command == "r")

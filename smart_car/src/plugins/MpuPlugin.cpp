@@ -72,15 +72,20 @@ void MpuPlugin::calibrate ()
     mpu.CalibrateGyro(7);     // Fine tune after setting offsets with less Loops.
     mpu.CalibrateAccel(7);     // Fine tune after setting offsets with less Loops.
     mpu.PrintActiveOffsets();     // See the results of the Calibration
+    cout1 << "calibrated" << std::endl;
 }
 
 void MpuPlugin::cycle ()
 {
-    readFifoBuffer();
-    if (is_enabled())
+    if (deadline < millis())
     {
-        cout << "Yaw: " << get_yaw() << " Pitch: " << get_pitch() << " Roll: " << get_roll()
-                << " Ax: " << get_Ax() << " Ay: " << get_Ay() << " Az: " << get_Az() << "\n";
+        readFifoBuffer();
+        if (is_enabled())
+        {
+            cout << "Yaw: " << get_yaw() << " Pitch: " << get_pitch() << " Roll: " << get_roll()
+                    << " Ax: " << get_Ax() << " Ay: " << get_Ay() << " Az: " << get_Az() << "\n";
+        }
+        deadline = millis() + interval;
     }
 }
 

@@ -66,44 +66,44 @@ void KalmanPlugin::reset ()
 void KalmanPlugin::cycle ()
 {
     const long now = millis();
-    const float dt = (now - t) * 0.001;
-
-    const Motor &right_motor = car.get_motor(RIGHT);
-    const Motor &left_motor = car.get_motor(LEFT);
-    const float right_velocity = right_motor.get_velocity();
-    const float left_velocity = left_motor.get_velocity();
-
-    // Rotation from body to world for current angle
-    update_transforms(state(2));
-
-    const BLA::Matrix<2> body_velocity =
-    { (right_velocity + left_velocity) * 0.5, 0 };
-    const BLA::Matrix<2> world_velocity = body_2_world * body_velocity;
-    const float odom_vx = world_velocity(0);
-    const float odom_vy = world_velocity(1);
-    const float angular_velocity = left_velocity - right_velocity;  // Clockwise
-    // Get yaw and acceleration from MPU
-    MpuPlugin *mpu_plugin = car.get_mpu_plugin();
-    const float mpu_yaw = mpu_plugin->get_yaw();  // clockwise
-    const float mpu_Ax = mpu_plugin->get_Ax();
-    const float mpu_Ay = mpu_plugin->get_Ay();
-    obs =
-    { state(0), state(1), mpu_yaw, odom_vx, odom_vy, angular_velocity, 0, 0, 0.0 };
-//    obs =
-//    { state(0), state(1), mpu_yaw, state(3), state(4), state(5), mpu_Ax, mpu_Ay, state(8) };
-
-    state = (state + obs) * 0.5;
-
-    state = state + time_update * state * dt;
-
-    t = now;
-
-    if (is_enabled())
+    if (deadline < now)
     {
-        // PRINT RESULTS: measures and estimated state
-        Serial << "Kalman State: " << state << " dt: " << dt << " Obs: " << obs
-        // << " rm: " << right_velocity << " lm: " << left_velocity << " b2w" << body_2_world
-                << "\n";
+        const float dt = (now - t) * 0.001;
+
+        const float right_velocity = car.get_drive_velocity(RIGHT);
+        const float left_velocity = car.get_drive_velocity(LEFT);
+
+        // Rotation from body to world for current angle
+        update_transforms(state(2));
+
+        const BLA::Matrix<2> body_velocity =
+        { (right_velocity + left_velocity) * 0.5, 0 };
+        const BLA::Matrix<2> world_velocity = body_2_world * body_velocity;
+        const float odom_vx = world_velocity(0);
+        const float odom_vy = world_velocity(1);
+        const float angular_velocity = left_velocity - right_velocity;  // Clockwise
+        // Get yaw and acceleration from MPU
+        MpuPlugin *mpu_plugin = car.get_mpu_plugin();
+        const float mpu_yaw = mpu_plugin->get_yaw();  // clockwise
+        const float mpu_Ax = mpu_plugin->get_Ax();
+        const float mpu_Ay = mpu_plugin->get_Ay();
+        obs =
+        { state(0), state(1), mpu_yaw, odom_vx, odom_vy, angular_velocity, 0.0, 0.0, 0.0 };
+
+        state = (state + obs) * 0.5;
+
+        state = state + time_update * state * dt;
+
+        t = now;
+
+        if (is_enabled())
+        {
+            // PRINT RESULTS: measures and estimated state
+            Serial << "Kalman State: " << state << " dt: " << dt << " Obs: " << obs
+            // << " rm: " << right_velocity << " lm: " << left_velocity << " b2w" << body_2_world
+                    << "\n";
+        }
+        deadline = millis() + interval;
     }
 }
 

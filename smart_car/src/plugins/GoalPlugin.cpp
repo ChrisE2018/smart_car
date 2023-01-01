@@ -64,41 +64,41 @@ void GoalPlugin::cycle ()
     }
 }
 
-bool GoalPlugin::angle_cycle (const float angle)
+bool GoalPlugin::angle_cycle (const float desired_angle)
 {
     const float current_angle = car.get_kalman_plugin()->get_angle();
 
     if (!is_overflow(current_angle))
     {
-        const float delta = angle - current_angle;
+        const float delta = angle_delta(desired_angle, current_angle);
         const float abs_delta = abs(delta);
         if (abs_delta > angle_tolerance)
         {
             const int speed = get_angle_speed(abs_delta);
             if (delta > 0)
             {
-                cout << "Clockwise from " << current_angle << " to goal angle " << angle << " at "
-                        << speed << std::endl;
-                cout1 << "Clockwise from " << current_angle << " to goal angle " << angle << " at "
-                        << speed << std::endl;
+                cout << "Clockwise by " << delta << " from " << current_angle << " to goal angle "
+                        << desired_angle << " at " << speed << std::endl;
+                cout1 << "Clockwise by " << delta << " from " << current_angle << " to goal angle "
+                        << desired_angle << " at " << speed << std::endl;
                 car.drive_reverse(MotorLocation::RIGHT, speed);
                 car.drive_forward(MotorLocation::LEFT, speed);
             }
             else
             {
-                cout << "Counterclockwise from " << current_angle << " to goal angle " << angle
-                        << " at " << speed << std::endl;
-                cout1 << "Counterclockwise from " << current_angle << " to goal angle " << angle
-                        << " at " << speed << std::endl;
+                cout << "Counterclockwise by " << delta << " from " << current_angle
+                        << " to goal angle " << desired_angle << " at " << speed << std::endl;
+                cout1 << "Counterclockwise by " << delta << " from " << current_angle
+                        << " to goal angle " << desired_angle << " at " << speed << std::endl;
                 car.drive_forward(MotorLocation::RIGHT, speed);
                 car.drive_reverse(MotorLocation::LEFT, speed);
             }
         }
         else
         {
-            cout << "Car " << car << " at " << current_angle << " is goal angle " << angle
+            cout << "Car " << car << " at " << current_angle << " is goal angle " << desired_angle
                     << std::endl;
-            cout1 << "Car " << car << " at " << current_angle << " is goal angle " << angle
+            cout1 << "Car " << car << " at " << current_angle << " is goal angle " << desired_angle
                     << std::endl;
             car.drive_stop(MotorLocation::RIGHT);
             car.drive_stop(MotorLocation::LEFT);
@@ -124,30 +124,30 @@ bool GoalPlugin::position_cycle ()
         const float current_y = car.get_kalman_plugin()->get_y();
         const float dx = goal_x - current_x;
         const float dy = goal_y - current_y;
-        if (dx < position_tolerance && dy < position_tolerance)
+        if (abs(dx) < position_tolerance && abs(dy) < position_tolerance)
         {
-            cout << "Robot " << car << " at " << goal_x << ", " << goal_y << std::endl;
-            cout1 << "Robot " << car << " at " << goal_x << ", " << goal_y << std::endl;
+            cout << "Robot " << car << " is at goal " << goal_x << ", " << goal_y << std::endl;
+            cout1 << "Robot " << car << " is at goal " << goal_x << ", " << goal_y << std::endl;
             car.drive_stop(MotorLocation::RIGHT);
             car.drive_stop(MotorLocation::LEFT);
             adjust_position = false;
             return false;
         }
-        const float required_angle = atan2(dy, dx);
-        const float delta_angle = required_angle - current_angle;
+        const float desired_angle = atan2(dy, dx);
+        const float delta_angle = angle_delta(desired_angle, current_angle);
         const float abs_delta_angle = abs(delta_angle);
         const float distance = sqrt(dx * dx + dy * dy);
 
-        cout << "Required " << car << " angle " << required_angle << " for " << distance << " to "
-                << goal_x << ", " << goal_y << std::endl;
-        cout1 << "Required " << car << " angle " << required_angle << " for " << distance << " to "
-                << goal_x << ", " << goal_y << std::endl;
+        cout << "Required " << car << " dx " << dx << " dy " << dy << " angle " << desired_angle
+                << " for " << distance << " to " << goal_x << ", " << goal_y << std::endl;
+        cout1 << "Required " << car << " dx " << dx << " dy " << dy << " angle " << desired_angle
+                << " for " << distance << " to " << goal_x << ", " << goal_y << std::endl;
 
         const int speed = get_position_speed(distance);
 
         if (abs_delta_angle > 0.5)
         {
-            angle_cycle(required_angle);
+            angle_cycle(desired_angle);
         }
         else if (abs_delta_angle < angle_tolerance)
         {
@@ -157,10 +157,10 @@ bool GoalPlugin::position_cycle ()
         else if (delta_angle > 0)
         {
             const int speed = get_angle_speed(abs_delta_angle);
-            cout << "Drive Clockwise from " << current_angle << " to goal angle " << required_angle
-                    << " at " << speed << std::endl;
-            cout1 << "Drive Clockwise from " << current_angle << " to goal angle " << required_angle
-                    << " at " << speed << std::endl;
+            cout << "Drive Clockwise by " << delta_angle << " from " << current_angle
+                    << " to goal angle " << desired_angle << " at " << speed << std::endl;
+            cout1 << "Drive Clockwise by " << delta_angle << " from " << current_angle
+                    << " to goal angle " << desired_angle << " at " << speed << std::endl;
             car.drive_forward(MotorLocation::LEFT, speed);
             car.drive_forward(MotorLocation::RIGHT, (speed * 3) / 4);
         }
@@ -168,9 +168,9 @@ bool GoalPlugin::position_cycle ()
         {
             const int speed = get_angle_speed(abs_delta_angle);
             cout << "Drive Counterclockwise from " << current_angle << " to goal angle "
-                    << required_angle << " at " << speed << std::endl;
+                    << desired_angle << " at " << speed << std::endl;
             cout1 << "Drive Counterclockwise from " << current_angle << " to goal angle "
-                    << required_angle << " at " << speed << std::endl;
+                    << desired_angle << " at " << speed << std::endl;
             car.drive_forward(MotorLocation::RIGHT, speed);
             car.drive_forward(MotorLocation::LEFT, (speed * 3) / 4);
         }

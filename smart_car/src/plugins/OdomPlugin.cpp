@@ -36,7 +36,7 @@ bool OdomPlugin::setup ()
             0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 
     t = millis();
-    return true;
+    return false;
 }
 
 void OdomPlugin::reset ()

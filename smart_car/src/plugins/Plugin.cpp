@@ -30,7 +30,7 @@ const std::string stringify (const PluginId id)
         case MPU_PLUGIN:
             return "MPU_PLUGIN";
         case KALMAN_PLUGIN:
-            return "KALMAN_PLUGIN244";
+            return "KALMAN_PLUGIN";
         case ODOM_PLUGIN:
             return "ODOM_PLUGIN";
         case REVERSE_PLUGIN:
@@ -84,4 +84,26 @@ void Plugin::set_enabled (const bool _enable)
 
 void Plugin::cycle ()
 {
+}
+
+void Plugin::start_cycle ()
+{
+    cycle_start_micros = micros();
+}
+
+void Plugin::end_cycle ()
+{
+    const long cycle_micros = micros() - cycle_start_micros;
+    total_micros += cycle_micros;
+    cycle_count++;
+}
+
+long Plugin::get_cycle_count () const
+{
+    return cycle_count;
+}
+
+long Plugin::get_total_micros () const
+{
+    return total_micros;
 }
