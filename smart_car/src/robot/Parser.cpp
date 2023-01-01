@@ -29,17 +29,17 @@ void Parser::handle_command (Executor &executor)
                     {
                         buffer[i] = '\0';
                         String command(buffer);
-//                        Serial.print("execute_command: ");
-//                        Serial.println(command);
+//                        serial.print("execute_command: ");
+//                        serial.println(command);
                         std::vector<String> words;
                         get_words(command, words);
                         if (!words.empty())
                         {
-                            executor.execute_command(words);
+                            executor.execute_command(serial, words);
                         }
 //                        else
 //                        {
-//                            Serial.println("[Empty command]");
+//                            serial.println("[Empty command]");
 //                        }
                     }
                     return;

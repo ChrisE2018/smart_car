@@ -50,7 +50,8 @@ Car::~Car ()
 
 std::ostream& operator<< (std::ostream &lhs, const Car &car)
 {
-    return lhs << "#[car " << car.kalman_plugin->get_x() << ", " << car.kalman_plugin->get_y() << "]";
+    return lhs << "#[car " << car.kalman_plugin->get_x() << ", " << car.kalman_plugin->get_y()
+            << "]";
 }
 
 void Car::setup ()
@@ -78,27 +79,33 @@ void Car::setup ()
 
 void Car::set_mode (const Mode _mode)
 {
-    cout << "Setting " << *this << " to " << _mode << std::endl;
+    set_mode(Serial, _mode);
+}
+
+void Car::set_mode (HardwareSerial &serial, const Mode _mode)
+{
+    std::ohserialstream c(serial);
+    c << "Setting " << *this << " to " << _mode << std::endl;
     mode = _mode;
     switch (mode)
     {
         case COMMAND_MODE:
-            all_stop ();
+            all_stop();
             demo_plugin->set_enabled(false);
             wall_plugin->set_enabled(false);
             break;
         case DEMO_MODE:
-            all_stop ();
+            all_stop();
             demo_plugin->set_enabled(true);
             wall_plugin->set_enabled(false);
             break;
         case GOAL_MODE:
-            all_stop ();
+            all_stop();
             demo_plugin->set_enabled(false);
             wall_plugin->set_enabled(false);
             break;
         case WALL_MODE:
-            all_stop ();
+            all_stop();
             demo_plugin->set_enabled(false);
             wall_plugin->set_enabled(true);
             break;
@@ -128,12 +135,13 @@ void Car::handle_command ()
 /** Execute a command from the user.
  @param words Command string broken into words.
  */
-void Car::execute_command (const std::vector<String> words)
+void Car::execute_command (HardwareSerial &serial, const std::vector<String> words)
 {
+    std::ohserialstream c(serial);
     const int n = words.size();
     String command = words[0];
-    Serial.print("Command: ");
-    Serial.println(command);
+    serial.print("Command: ");
+    serial.println(command);
     if (command == "b")
     {
         int speed = SPEED_FULL;
@@ -160,7 +168,7 @@ void Car::execute_command (const std::vector<String> words)
     else if (command == "c")
     {
         set_mode(COMMAND_MODE);
-        cout << "Current mode is " << mode << std::endl;
+        c << "Current mode is " << mode << std::endl;
     }
     else if (command == "clock")
     {
@@ -169,7 +177,7 @@ void Car::execute_command (const std::vector<String> words)
     else if (command == "demo")
     {
         set_mode(DEMO_MODE);
-        cout << "Current mode is " << mode << std::endl;
+        c << "Current mode is " << mode << std::endl;
     }
     else if (command == "distance")
     {
@@ -231,7 +239,7 @@ void Car::execute_command (const std::vector<String> words)
     {
         for (Plugin *plugin : plugins)
         {
-            cout << "Plugin " << plugin->get_id() << std::endl;
+            c << "Plugin " << plugin->get_id() << std::endl;
         }
     }
     else if (command == "r")
@@ -260,7 +268,7 @@ void Car::execute_command (const std::vector<String> words)
     else if (command == "wall")
     {
         set_mode(WALL_MODE);
-        cout << "Current mode is " << mode << std::endl;
+        c << "Current mode is " << mode << std::endl;
     }
     else if (command == "zero")
     {
@@ -270,38 +278,39 @@ void Car::execute_command (const std::vector<String> words)
     }
     else if (command == "?")
     {
-        help_command();
+        help_command(serial);
     }
     else
     {
-        Serial.print("Invalid command: ");
-        Serial.println(command);
+        serial.print("Invalid command: ");
+        serial.println(command);
     }
 }
 
-void Car::help_command ()
+void Car::help_command (HardwareSerial& serial)
 {
-    Serial.println("b - backward");
-    Serial.println("c - command mode");
-    Serial.println("d - demo mode");
-    Serial.println("f - forward");
-    Serial.println("l - left turn");
-    Serial.println("r - right turn");
-    Serial.println("s - stop moving");
-    Serial.println("? - help");
+    std::ohserialstream c(serial);
+    serial.println("b - backward");
+    serial.println("c - command mode");
+    serial.println("d - demo mode");
+    serial.println("f - forward");
+    serial.println("l - left turn");
+    serial.println("r - right turn");
+    serial.println("s - stop moving");
+    serial.println("? - help");
 
-    cout << "Current mode is " << mode << std::endl;
-//    imu_plugin->read_imu();
-    ultrasound_plugin->print_distance();
+    c << "Current mode is " << mode << std::endl;
+    long d = ultrasound_plugin->get_distance();
+    c << " Distance " << d << " cm" << std::endl;
 
-    Serial.print("Plugins: ");
-    Serial.println(plugins.size());
-    Serial.print("Cycle Count: ");
-    Serial.print(cycle_count);
-    Serial.print(" total cycle micros ");
-    Serial.print(total_cycle_us);
-    Serial.print(" average micros per cycle ");
-    Serial.println(total_cycle_us / (double) cycle_count);
+    serial.print("Plugins: ");
+    serial.println(plugins.size());
+    serial.print("Cycle Count: ");
+    serial.print(cycle_count);
+    serial.print(" total cycle micros ");
+    serial.print(total_cycle_us);
+    serial.print(" average micros per cycle ");
+    serial.println(total_cycle_us / (double) cycle_count);
 }
 
 void Car::demo_drive_leds ()

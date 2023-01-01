@@ -16,6 +16,6 @@ class Executor
         Executor ();
         virtual ~Executor () = default;
 
-        virtual void execute_command (const std::vector<String> words);
+        virtual void execute_command (HardwareSerial& serial, const std::vector<String> words);
 };
 

@@ -7,6 +7,7 @@
 
 #pragma once
 
+#include <Arduino.h>
 #include "Plugin.hpp"
 #include <SR04.h>
 
@@ -18,7 +19,6 @@ class UltrasoundPlugin : public Plugin
     public:
         UltrasoundPlugin ();
         long get_distance ();
-        void print_distance ();
         void cycle () override;
 
     private:
