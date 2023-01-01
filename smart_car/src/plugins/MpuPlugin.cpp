@@ -122,6 +122,7 @@ float MpuPlugin::get_Az ()
 
 float MpuPlugin::get_yaw ()
 {
+    // This is counterclockwise around the z axis
     return euler[0];
 }
 
@@ -154,7 +155,7 @@ void MpuPlugin::print_imu ()
     Serial.print(get_pitch());
     Serial.print(" | roll = ");
     Serial.print(get_roll());
-    Serial.print(" | yaw = ");
+    Serial.print(" | CCW yaw = ");
     Serial.print(get_yaw());
     Serial.println();
 }

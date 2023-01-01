@@ -4,10 +4,13 @@
 
 /* Program for robot car. */
 
+// For some reason this does not resolve.
+extern HardwareSerial Serial;
+
 std::ohserialstream cout(Serial);
+std::ohserialstream cout1(Serial1);
 
 Car *car;
-
 
 /* Control program. */
 

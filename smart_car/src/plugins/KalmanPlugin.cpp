@@ -77,7 +77,7 @@ void KalmanPlugin::cycle ()
     update_transforms(state(2));
 
     const BLA::Matrix<2> body_velocity =
-    { right_velocity, left_velocity };
+    { (right_velocity + left_velocity) * 0.5, 0 };
     const BLA::Matrix<2> world_velocity = body_2_world * body_velocity;
     const float odom_vx = world_velocity(0);
     const float odom_vy = world_velocity(1);
@@ -88,7 +88,9 @@ void KalmanPlugin::cycle ()
     const float mpu_Ax = mpu_plugin->get_Ax();
     const float mpu_Ay = mpu_plugin->get_Ay();
     obs =
-    { state(0), state(1), mpu_yaw, odom_vx, odom_vy, angular_velocity, mpu_Ax, mpu_Ay, 0.0 };
+    { state(0), state(1), mpu_yaw, odom_vx, odom_vy, angular_velocity, 0, 0, 0.0 };
+//    obs =
+//    { state(0), state(1), mpu_yaw, state(3), state(4), state(5), mpu_Ax, mpu_Ay, state(8) };
 
     state = (state + obs) * 0.5;
 
@@ -117,7 +119,7 @@ void KalmanPlugin::update_transforms (const float angle)
     { cos_angle, -sin_angle, sin_angle, cos_angle };
 }
 
-float KalmanPlugin::get_x ()  const
+float KalmanPlugin::get_x () const
 {
     return state(0);
 }

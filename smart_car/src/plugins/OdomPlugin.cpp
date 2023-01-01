@@ -24,7 +24,7 @@ bool OdomPlugin::setup ()
     state =
     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 
-    // x,y, a,dx, dy, da
+    // x, y, a, dx, dy, da
     obs =
     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
     time_update =
@@ -54,14 +54,11 @@ void OdomPlugin::cycle ()
     const float right_velocity = right_motor.get_velocity();
     const float left_velocity = left_motor.get_velocity();
 
-// Counterclockwise
-    const float angular_velocity = right_velocity - left_velocity;
+    // clockwise
+    const float angular_velocity = left_velocity - right_velocity;
 
-// TODO: Scale from motor velocity to meters per second.
-// TODO: estimate rotational velocity from motor difference.
-// TODO: verify that rotational directions are correct
     const BLA::Matrix<2> body_velocity =
-    { right_velocity, left_velocity };
+    { (right_velocity + left_velocity) * 0.5, 0.0 };
     update_transforms(state(2));
     const BLA::Matrix<2> world_velocity = body_2_world * body_velocity;
     const float dx = world_velocity(0);
@@ -78,8 +75,8 @@ void OdomPlugin::cycle ()
     if (is_enabled())
     {
         // PRINT RESULTS: measures and estimated state
-        Serial << "Odom State: " << state << " dt: " << dt << " Obs: " << obs << " rm: " << right_velocity
-                << " lm: " << left_velocity << " b2w" << body_2_world << "\n";
+        Serial << "Odom State: " << state << " dt: " << dt << " Obs: " << obs << " rm: "
+                << right_velocity << " lm: " << left_velocity << " b2w" << body_2_world << "\n";
     }
 }
 
@@ -92,5 +89,5 @@ void OdomPlugin::update_transforms (const float angle)
     { cos_angle, -sin_angle, sin_angle, cos_angle };
     // Clockwise
     world_2_body =
-    { cos_angle, sin_angle, sin_angle, -cos_angle };
+    { cos_angle, sin_angle, -sin_angle, cos_angle };
 }

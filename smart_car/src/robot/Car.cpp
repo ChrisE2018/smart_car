@@ -211,6 +211,14 @@ void Car::execute_command (HardwareSerial &serial, const std::vector<String> wor
         forward_plugin->set_left_speed(speed);
         forward_plugin->set_enabled(true);
     }
+    else if (command == "goal")
+    {
+        if (n > 2)
+        {
+            set_mode(GOAL_MODE);
+            goal_plugin->set_goal(words[1].toFloat(), words[2].toFloat());
+        }
+    }
     else if (command == "kalman")
     {
         kalman_plugin->set_enabled(!kalman_plugin->is_enabled());

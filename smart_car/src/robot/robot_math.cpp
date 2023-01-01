@@ -5,7 +5,7 @@
  *      Author: cre
  */
 
-#include "math.hpp"
+#include "robot_math.hpp"
 
 bool is_overflow (const double x)
 {

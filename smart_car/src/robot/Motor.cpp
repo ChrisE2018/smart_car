@@ -118,12 +118,12 @@ int Motor::get_speed () const
 
 float Motor::get_velocity () const
 {
-    if (direction != REVERSE)
+    if (direction == REVERSE)
     {
-        return speed / 256.0;
+        return -(speed / 256.0);
     }
     else
     {
-        return -speed / 256.0;
+        return (speed / 256.0);
     }
 }

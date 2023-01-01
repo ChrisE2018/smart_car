@@ -11,4 +11,5 @@
 #include <serstream>
 
 extern std::ohserialstream cout;
+extern std::ohserialstream cout1;
 
