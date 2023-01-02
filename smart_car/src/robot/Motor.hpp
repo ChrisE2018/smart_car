@@ -16,6 +16,7 @@ const int SPEED_175 = 175;
 const int SPEED_160 = 160;
 const int SPEED_150 = 150;
 const int SPEED_HALF = 128;
+const int SPEED_100 = 100;
 const int SPEED_Q1 = 64;
 const int SPEED_CRAWL = 32;
 const int SPEED_STOP = 0;
