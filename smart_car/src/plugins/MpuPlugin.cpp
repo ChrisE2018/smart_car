@@ -55,14 +55,14 @@ bool MpuPlugin::setup ()
             // (if it's going to break, usually the code will be 1)
             Serial.print("DMP Initialization failed with devStatus = ");
             Serial.println(devStatus);
+            return false;
         }
     }
     else
     {
         Serial.println("MPU6050 connection failed");
+        return false;
     }
-    Serial.println("MMU Initialization failed");
-    return false;
 }
 
 void MpuPlugin::calibrate ()

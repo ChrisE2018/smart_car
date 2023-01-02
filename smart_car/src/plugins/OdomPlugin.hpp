@@ -18,7 +18,6 @@ class OdomPlugin : public Plugin
     public:
         OdomPlugin (Car &car);
         bool setup () override;
-        void reset () override;
         void cycle () override;
         void update_transforms (const float angle);
 

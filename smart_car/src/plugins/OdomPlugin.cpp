@@ -39,11 +39,6 @@ bool OdomPlugin::setup ()
     return false;
 }
 
-void OdomPlugin::reset ()
-{
-    setup();
-}
-
 void OdomPlugin::cycle ()
 {
     const long now = millis();

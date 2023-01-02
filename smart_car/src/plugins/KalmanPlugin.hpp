@@ -22,7 +22,6 @@ class KalmanPlugin : public Plugin
     public:
         KalmanPlugin (Car &car);
         bool setup () override;
-        void reset () override;
         void cycle () override;
         void update_transforms (const float angle);
         float get_x () const;

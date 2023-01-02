@@ -174,7 +174,6 @@ void Car::execute_command (HardwareSerial &serial, const std::vector<String> wor
     }
     else if (command == "calibrate")
     {
-//        imu_plugin->calibrate();
         mpu_plugin->calibrate();
     }
     else if (command == "c")
@@ -285,6 +284,15 @@ void Car::execute_command (HardwareSerial &serial, const std::vector<String> wor
         counterclockwise_plugin->set_right_speed(speed);
         counterclockwise_plugin->set_left_speed(speed);
         counterclockwise_plugin->set_enabled(true);
+    }
+    else if (command == "reset")
+    {
+        all_stop();
+        for (Plugin *plugin : plugins)
+        {
+            plugin->reset();
+        }
+        set_mode(COMMAND_MODE);
     }
     else if (command == "s")
     {

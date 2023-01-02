@@ -39,7 +39,7 @@ class Plugin
 
         const PluginId get_id () const;
         virtual bool setup ();
-        virtual void reset ();
+        virtual bool reset ();
         virtual void cycle ();
         void start_cycle();
         void end_cycle();

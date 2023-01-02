@@ -58,11 +58,6 @@ bool KalmanPlugin::setup ()
     return true;
 }
 
-void KalmanPlugin::reset ()
-{
-    setup();
-}
-
 void KalmanPlugin::cycle ()
 {
     const long now = millis();
@@ -87,6 +82,8 @@ void KalmanPlugin::cycle ()
         const float mpu_yaw = mpu_plugin->get_yaw();  // clockwise
         const float mpu_Ax = mpu_plugin->get_Ax();
         const float mpu_Ay = mpu_plugin->get_Ay();
+
+        // Separate obs by sensor (odom, mpu) and define gain as a vector
         obs =
         { state(0), state(1), mpu_yaw, odom_vx, odom_vy, angular_velocity, 0.0, 0.0, 0.0 };
 

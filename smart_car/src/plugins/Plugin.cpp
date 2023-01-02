@@ -68,8 +68,9 @@ bool Plugin::setup ()
     return true;
 }
 
-void Plugin::reset ()
+bool Plugin::reset ()
 {
+    return setup();
 }
 
 const bool Plugin::is_enabled () const
