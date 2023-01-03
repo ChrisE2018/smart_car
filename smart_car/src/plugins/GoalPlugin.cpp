@@ -191,9 +191,9 @@ void GoalPlugin::position_step (const float measured_angle, const float measured
 int GoalPlugin::get_angle_speed (const float angle)
 {
     if (angle < slow_speed_angle)
-        return SPEED_HALF;
-    else if (angle < medium_speed_angle)
         return SPEED_150;
+    else if (angle < medium_speed_angle)
+        return SPEED_175;
     return SPEED_FULL;
 }
 
@@ -201,11 +201,11 @@ int GoalPlugin::get_position_speed (const float distance)
 {
     if (distance < slow_speed_distance)
     {
-        return SPEED_HALF;
+        return SPEED_150;
     }
     else if (distance < medium_speed_distance)
     {
-        return SPEED_160;
+        return SPEED_175;
     }
     return SPEED_FULL;
 }

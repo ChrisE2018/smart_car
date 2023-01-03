@@ -6,10 +6,14 @@
  */
 
 #include "Car.hpp"
+
+#include "Logger.hpp"
 #include "smart_car.hpp"
 
 // For some reason this does not resolve.
 extern HardwareSerial Serial;
+
+Logger logger(__FILE__);
 
 Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
 {
@@ -62,21 +66,22 @@ void Car::setup ()
     {
         motors[motor].setup();
     }
-
-    cout << "Attempting setup of " << available_plugins.size() << " available plugins" << std::endl;
+    LOG_INFO(logger, "Attempting setup of %d available plugins", available_plugins.size());
     for (Plugin *plugin : available_plugins)
     {
         if (plugin->setup())
         {
-            cout << "Setup " << plugin->get_id() << std::endl;
+//            cout << "Setup " << plugin->get_id() << std::endl;
+            LOG_INFO(logger, "Setup %s", stringify(plugin->get_id()).c_str());
             plugins.push_back(plugin);
         }
         else
         {
-            cout << "Disabled " << plugin->get_id() << std::endl;
+//            cout << "Disabled " << plugin->get_id() << std::endl;
+            LOG_INFO(logger, "Disabled %s", stringify(plugin->get_id()).c_str());
         }
     }
-    cout << "Completed Setup of " << plugins.size() << " enabled plugins" << std::endl;
+    LOG_INFO(logger, "Completed setup of %d enabled plugins", plugins.size());
 }
 
 void Car::set_mode (const Mode _mode)
@@ -124,6 +129,17 @@ void Car::cycle ()
         plugin->start_cycle();
         plugin->cycle();
         plugin->end_cycle();
+    }
+    long d = ultrasound_plugin->get_distance();
+    if (d < 10)
+    {
+        for (int i = 0; i < MOTOR_COUNT; i++)
+        {
+            if (motors[i].get_velocity() > 0)
+            {
+                motors[i].drive_stop();
+            }
+        }
     }
 
     total_cycle_us += micros() - cycle_start_us;

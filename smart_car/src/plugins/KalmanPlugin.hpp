@@ -41,12 +41,20 @@ class KalmanPlugin : public Plugin
         long t = 0;
         // Px, Py, Pa, Vx, Vy, Va, Ax, Ay, Aa
         BLA::Matrix<Nstate> state; // state vector
-        BLA::Matrix<Nobs> obs; // observation vector
+        BLA::Matrix<Nobs> odom_obs; // observation vector
+        BLA::Matrix<Nobs> odom_gain; // observation vector
+        BLA::Matrix<Nobs> imu_obs; // observation vector
+        BLA::Matrix<Nobs> imu_gain; // observation vector
+        BLA::Matrix<Nobs> total_gain;
+        BLA::Matrix<Nobs> state_gain;
+        BLA::Matrix<Nobs> state_update;
         BLA::Matrix<Nstate, Nstate> time_update;   // time update
         BLA::Matrix<2, 2> body_2_world;
         BLA::Matrix<2, 2> world_2_body;
 
         const int interval = 5;
         long deadline = 0;
+        void hadamard(const BLA::Matrix<Nobs>& a, const BLA::Matrix<Nobs>& b, BLA::Matrix<Nobs>& result) const;
+
 };
 

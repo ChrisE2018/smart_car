@@ -1,35 +1,39 @@
 /*
  * Logger.hpp
  *
- *  Created on: Dec 27, 2022
+ *  Created on: Jan 2, 2023
  *      Author: cre
  */
 
 #pragma once
 
-class Logging;
+#include <Arduino.h>
 
-enum Level
+enum class Level
 {
-    NONE, WARN, INFO, DEBUG, ALL
+    error, warning, info, debug
 };
 
-#define loginfo(logger, format, args...) logger.log(__FILE__, __LINE__, INFO, format, args)
-#define logwarn(logger, format, args...) logger.log(__FILE__, __LINE__, WARN, format, args)
+const char* stringify(const Level level);
+
+#define LOG_ERROR(logger, fmt, args...) logger.logging(Level::error, __LINE__, fmt, args);
+#define LOG_WARNING(logger, fmt, args...) logger.logging(Level::warning, __LINE__, fmt, args);
+#define LOG_INFO(logger, fmt, args...) logger.logging(Level::info, __LINE__, fmt, args);
+#define LOG_DEBUG(logger, fmt, args...) logger.logging(Level::debug, __LINE__, fmt, args);
 
 class Logger
 {
-    public:
-        Logger (Logging &logging, const String name);
-        void set_level (Level level);
-        bool is_enabled (Level level);
-        void log (const char *file, int line, Level level, const char *format, ...);
-        const String get_category ();
-
     private:
-        Logging &logging;
+        const unsigned int buffer_size = 256;
         const String name;
-        const int buffer_size = 256;
-        Level level = INFO;
+        Level level;
+
+    public:
+        Logger (const String name);
+        Logger (const String name, const Level level);
+        const String get_name () const;
+        void set_level (const Level level);
+        const Level get_level () const;
+        void logging (const Level level, const int line, const char *format, ...);
 };
 

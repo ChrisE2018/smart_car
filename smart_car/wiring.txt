@@ -1,0 +1,38 @@
+Power
+GND to GND near side
+5v to +Power near side
+3.3v to IMU vcc pin 10 near side with jumper to pin 16 near side for A00 function
+
+Ultrasound
+pin 11 green ultrasound trigger
+pin 12 blue ultrasound echo
+
+Motor Control
+pin 8 green enaB
+pin 7 blue enaA
+pin 6 blue in4
+pin 5 purple in3
+pin 4 orange in2
+pin 3 yellow in1
+
+Bluetooth
+pin 18 tx1 blue board 22 near side
+	 jumper to pin 20 near side 2k ohm to GND
+	 1k ohm to pin 22 far side to rx0 on hc05
+pin 19 rx1 yellow board 23 far side tx0 on hc05
+
+IMU and Clock
+pin 20 sda (BUS) green pin 13 near side pin 12 far side IMU SDA and clock SDA
+pin 21 scl (BUS) orange pin 12 near side and pin 13 far side IMU SCL and clock SCL
+
+Drive LEDS
+pin 22 yellow to pin 1 far side to 220 ohm to pin 8 near side to RED LED cathode
+pin 24 yellow to pin 2 far side to 220 ohm to pin 9 near side to GREED LED cathode
+pin 26 yellow to pin 30 far side to 220 ohm to pin 30 near side to RED LED cathode
+pin 28 yellow to pin 29 far side to 220 ohm to pin 29 near side to GREEN LED cathode
+
+Micro SD
+pin 50 to MISO pin 4 near side
+pin 51 to MOSI pin 5 near side
+pin 52 to SCK pin 6 near side
+pin 53 to CS pin 7 near side
