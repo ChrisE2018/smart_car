@@ -71,17 +71,17 @@ void Car::setup ()
     {
         if (plugin->setup())
         {
-//            cout << "Setup " << plugin->get_id() << std::endl;
-            LOG_INFO(logger, "Setup %s", stringify(plugin->get_id()).c_str());
+            logger << "Setup " << plugin->get_id() << std::endl;
             plugins.push_back(plugin);
         }
         else
         {
-//            cout << "Disabled " << plugin->get_id() << std::endl;
-            LOG_INFO(logger, "Disabled %s", stringify(plugin->get_id()).c_str());
+            logger << "Disabled " << plugin->get_id() << std::endl;
         }
     }
     LOG_INFO(logger, "Completed setup of %d enabled plugins", plugins.size());
+
+    logger << "Testing log output" << std::endl;
 }
 
 void Car::set_mode (const Mode _mode)

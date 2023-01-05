@@ -23,7 +23,8 @@ void RobotAppender::append (const Logger *logger, const Level level, const int l
     }
     struct tm *lt = localtime(&t);
     char buf[buffer_size];
-    snprintf(buf, buffer_size, "%s [%s %s] %s", isotime(lt), logger->get_short_name().c_str(),
+    const int ms = millis() % 1000;
+    snprintf(buf, buffer_size, "%s.%03d [%s %s] %s", isotime(lt), ms, logger->get_short_name().c_str(),
             stringify(level), message);
     Serial.println(buf);
     Serial1.println(buf);

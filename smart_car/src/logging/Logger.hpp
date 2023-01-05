@@ -9,6 +9,7 @@
 
 #include <Arduino.h>
 #include <vector>
+#include "LogBuffer.hpp"
 
 class Appender;
 
@@ -24,7 +25,7 @@ const char* stringify (const Level level);
 #define LOG_INFO(logger, fmt, args...) logger.logging(Level::info, __LINE__, fmt, args);
 #define LOG_DEBUG(logger, fmt, args...) logger.logging(Level::debug, __LINE__, fmt, args);
 
-class Logger
+class Logger : private LogBuffer, public std::ostream
 {
     public:
         static Logger *ROOT;
@@ -47,5 +48,6 @@ class Logger
         std::vector<Appender*> appenders;
         const String shorten (const String name);
         void append (const Logger *logger, const Level level, const int line, const char *message);
+        virtual void flush() override;
 };
 

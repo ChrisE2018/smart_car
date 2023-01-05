@@ -32,12 +32,12 @@ static Logger *Logger::ROOT = new Logger(nullptr, "root", Level::debug);
 // http://www.angelikalanger.com/Articles/C++Report/IOStreamsDerivation/IOStreamsDerivation.html
 // https://gcc.gnu.org/onlinedocs/libstdc++/manual/streambufs.html
 Logger::Logger (const String name) : parent(Logger::ROOT), name(name), short_name(shorten(name)), level(
-        Level::info)
+        Level::info), std::ios(0), std::ostream((LogBuffer*) this)
 {
 }
 
 Logger::Logger (Logger *parent, const String name, const Level level) : parent(parent), name(name), short_name(
-        shorten(name)), level(level)
+        shorten(name)), level(level), std::ios(0), std::ostream((LogBuffer*) this)
 {
 }
 
@@ -80,6 +80,12 @@ const Level Logger::get_level () const
 void Logger::add_appender (Appender *appender)
 {
     appenders.push_back(appender);
+}
+
+void Logger::flush ()
+{
+    const std::string& buf = LogBuffer::get_buffer();
+    append(this, level, 0, buf.c_str());
 }
 
 void Logger::logging (const Level _level, const int line, const char *format, ...)
