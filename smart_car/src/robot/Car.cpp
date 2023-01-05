@@ -82,7 +82,6 @@ void Car::setup ()
     LOG_INFO(logger, "Completed setup of %d enabled plugins", plugins.size());
 
     logger.info() << "Testing info logging" << std::endl;
-    logger.debug() << "Testing debug logging" << std::endl;
 }
 
 void Car::set_mode (const Mode _mode)

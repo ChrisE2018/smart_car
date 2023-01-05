@@ -29,8 +29,7 @@ const char* stringify (const Level level)
 
 static Logger *Logger::ROOT = new Logger(nullptr, "root", Level::debug);
 
-// http://www.angelikalanger.com/Articles/C++Report/IOStreamsDerivation/IOStreamsDerivation.html
-// https://gcc.gnu.org/onlinedocs/libstdc++/manual/streambufs.html
+static char Logger::buffer[Logger::buffer_size];
 
 Logger::Logger (const String name) : Logger(Logger::ROOT, name, Level::info)
 {
@@ -41,8 +40,7 @@ Logger::Logger (const String name, const Level level) : Logger(Logger::ROOT, nam
 }
 
 Logger::Logger (Logger *parent, const String name, const Level level) : parent(parent), name(name), short_name(
-        shorten(name)), level(level), info_stream(this, Level::info), debug_stream(this,
-        Level::debug)
+        shorten(name)), level(level), info_stream(this, Level::info)
 {
 }
 
@@ -87,24 +85,9 @@ void Logger::add_appender (Appender *appender)
     appenders.push_back(appender);
 }
 
-//LogBuffer& Logger::error ()
-//{
-//    return error_stream;
-//}
-//
-//LogBuffer& Logger::warning ()
-//{
-//    return warning_stream;
-//}
-
 LogBuffer& Logger::info ()
 {
     return info_stream;
-}
-
-LogBuffer& Logger::debug ()
-{
-    return debug_stream;
 }
 
 void Logger::logging (const Level _level, const int line, const char *format, ...)
@@ -113,9 +96,9 @@ void Logger::logging (const Level _level, const int line, const char *format, ..
     {
         va_list args;
         va_start(args, format);
-        char buf[buffer_size];
-        vsnprintf(buf, buffer_size, format, args);
-        append(this, _level, line, buf);
+//        char buf[buffer_size];
+        vsnprintf(buffer, buffer_size, format, args);
+        append(this, _level, line, buffer);
         va_end(args);
     }
 }
