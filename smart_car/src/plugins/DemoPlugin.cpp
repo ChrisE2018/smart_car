@@ -7,7 +7,7 @@
 
 #include "DemoPlugin.hpp"
 
-#include "Car.hpp"
+#include "../robot/Car.hpp"
 #include "DrivePlugin.hpp"
 
 DemoPlugin::DemoPlugin (Car &car) : Plugin(DEMO_PLUGIN), car(car)

@@ -1,6 +1,8 @@
 #include "Arduino.h"
-#include "Car.hpp"
+#include "src/robot/Car.hpp"
 #include "smart_car.hpp"
+#include "src/logging/Logger.hpp"
+#include "src/logging/RobotAppender.hpp"
 
 /* Program for robot car. */
 
@@ -23,6 +25,7 @@ void setup ()
     Serial.begin(9600);
     Serial.println("Smart car");
     Serial1.begin(9600);
+    Logger::ROOT->add_appender(new RobotAppender());
     car = new Car();
     car->setup();
     car->demo_drive_leds();

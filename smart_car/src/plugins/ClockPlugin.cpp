@@ -16,9 +16,17 @@ ClockPlugin::ClockPlugin () : Plugin(CLOCK_PLUGIN)
 
 bool ClockPlugin::setup ()
 {
-    cout << "Initialize RTC module" << std::endl;
-    clock.begin();
-    return true;
+    if (enable_clock)
+    {
+        cout << "Initialize RTC module" << std::endl;
+        clock.begin();
+        return true;
+    }
+    else
+    {
+        cout << "Disabled RTC module" << std::endl;
+        return false;
+    }
 }
 
 void ClockPlugin::cycle ()

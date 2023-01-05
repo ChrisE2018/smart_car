@@ -18,7 +18,7 @@ bool MpuPlugin::setup ()
     mpu.initialize();
 
     // verify connection
-    Serial.println(F("Testing device connections..."));
+    Serial.println(F("Testing MPU connections..."));
     if (mpu.testConnection())
     {
         Serial.println("MPU6050 connection successful");

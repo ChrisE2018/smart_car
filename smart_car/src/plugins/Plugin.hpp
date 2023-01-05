@@ -8,7 +8,7 @@
 #pragma once
 
 #include <string>
-#include "Mode.hpp"
+#include "../robot/Mode.hpp"
 
 enum PluginId
 {

@@ -8,7 +8,7 @@
 #pragma once
 
 #include "Plugin.hpp"
-#include "Motor.hpp"
+#include "../robot/Motor.hpp"
 class Car;
 
 enum DemoPhase

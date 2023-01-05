@@ -18,6 +18,7 @@ class ClockPlugin: public Plugin
         void cycle () override;
 
     private:
+        const bool enable_clock = true;
         DS3231 clock;
         RTCDateTime dt;
 };

@@ -7,8 +7,8 @@
 
 #include "Car.hpp"
 
-#include "Logger.hpp"
 #include "smart_car.hpp"
+#include "../logging/Logger.hpp"
 
 // For some reason this does not resolve.
 extern HardwareSerial Serial;

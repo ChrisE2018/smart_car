@@ -9,20 +9,18 @@
 
 #include <arduino.h>
 #include <vector>
-#include "../plugins/KalmanPlugin.hpp"
-
 #include "Mode.hpp"
 #include "Motor.hpp"
 #include "Parser.hpp"
-
-#include "ClockPlugin.hpp"
-#include "DemoPlugin.hpp"
-#include "DrivePlugin.hpp"
-#include "GoalPlugin.hpp"
-#include "MpuPlugin.hpp"
-#include "OdomPlugin.hpp"
-#include "UltrasoundPlugin.hpp"
-#include "WallPlugin.hpp"
+#include "../plugins/KalmanPlugin.hpp"
+#include "../plugins/ClockPlugin.hpp"
+#include "../plugins/DemoPlugin.hpp"
+#include "../plugins/DrivePlugin.hpp"
+#include "../plugins/GoalPlugin.hpp"
+#include "../plugins/MpuPlugin.hpp"
+#include "../plugins/OdomPlugin.hpp"
+#include "../plugins/UltrasoundPlugin.hpp"
+#include "../plugins/WallPlugin.hpp"
 
 const int MOTOR_COUNT = 2;
 

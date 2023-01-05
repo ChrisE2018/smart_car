@@ -8,7 +8,7 @@
 #include "smart_car.hpp"
 #include "DrivePlugin.hpp"
 
-#include "Car.hpp"
+#include "../robot/Car.hpp"
 
 DrivePlugin::DrivePlugin (PluginId id, Car &car, const int duration,
         const MotorDirection right_motor_direction, const MotorDirection left_motor_direction) : Plugin(
