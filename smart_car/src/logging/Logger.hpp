@@ -25,18 +25,37 @@ const char* stringify (const Level level);
 #define LOG_INFO(logger, fmt, args...) logger.logging(Level::info, __LINE__, fmt, args);
 #define LOG_DEBUG(logger, fmt, args...) logger.logging(Level::debug, __LINE__, fmt, args);
 
-class Logger : private LogBuffer, public std::ostream
+class Logger;
+
+//class LoggerOstream : private LogBuffer, public std::ostream
+//{
+//    public:
+//        LoggerOstream(Level level, Logger* logger);
+//
+//    private:
+//        Level level;
+//        Logger* logger;
+//        virtual void flush () override;
+//};
+
+class Logger
 {
     public:
         static Logger *ROOT;
         Logger (const String name);
+        Logger (const String name, const Level level);
         Logger (Logger *parent, const String name, const Level level);
         const String get_name () const;
         const String get_short_name () const;
         void set_level (const Level level);
         const Level get_level () const;
         void add_appender (Appender *appender);
+//        LogBuffer& error();
+//        LogBuffer& warning();
+        LogBuffer& info();
+//        LogBuffer& debug();
         void logging (const Level level, const int line, const char *format, ...);
+        void append (const Logger *logger, const Level level, const int line, const char *message);
 
     private:
         const unsigned int buffer_size = 256;
@@ -44,10 +63,12 @@ class Logger : private LogBuffer, public std::ostream
         const String name;
         const String short_name;
         Level level;
+//        LogBuffer error_stream;
+//        LogBuffer warning_stream;
+        LogBuffer info_stream;
+//        LogBuffer debug_stream;
 
         std::vector<Appender*> appenders;
         const String shorten (const String name);
-        void append (const Logger *logger, const Level level, const int line, const char *message);
-        virtual void flush() override;
 };
 

@@ -29,15 +29,36 @@ const char* stringify (const Level level)
 
 static Logger *Logger::ROOT = new Logger(nullptr, "root", Level::debug);
 
+//LoggerOstream::LoggerOstream (Level level, Logger *logger) : level(level), logger(logger), std::ios(
+//        0), std::ostream((LogBuffer*) this)
+//{
+//}
+//
+//void LoggerOstream::flush ()
+//{
+//    const std::string &buf = LogBuffer::get_buffer();
+//    logger->append(logger, level, 0, buf.c_str());
+//}
+
 // http://www.angelikalanger.com/Articles/C++Report/IOStreamsDerivation/IOStreamsDerivation.html
 // https://gcc.gnu.org/onlinedocs/libstdc++/manual/streambufs.html
 Logger::Logger (const String name) : parent(Logger::ROOT), name(name), short_name(shorten(name)), level(
-        Level::info), std::ios(0), std::ostream((LogBuffer*) this)
+        Level::info), info_stream(this, Level::info)
+{
+}
+
+//Logger::Logger (const String name) : parent(Logger::ROOT), name(name), short_name(shorten(name)), level(
+//        Level::info), error_stream(this, Level::error), warning_stream(this, Level::warning), info_stream(
+//        this, Level::info), debug_stream(this, Level::debug)
+//{
+//}
+
+Logger::Logger (const String name, const Level level) : Logger(Logger::ROOT, name, level)
 {
 }
 
 Logger::Logger (Logger *parent, const String name, const Level level) : parent(parent), name(name), short_name(
-        shorten(name)), level(level), std::ios(0), std::ostream((LogBuffer*) this)
+        shorten(name)), level(level), info_stream(this, Level::info)
 {
 }
 
@@ -82,11 +103,25 @@ void Logger::add_appender (Appender *appender)
     appenders.push_back(appender);
 }
 
-void Logger::flush ()
+//LogBuffer& Logger::error ()
+//{
+//    return error_stream;
+//}
+//
+//LogBuffer& Logger::warning ()
+//{
+//    return warning_stream;
+//}
+
+LogBuffer& Logger::info ()
 {
-    const std::string& buf = LogBuffer::get_buffer();
-    append(this, level, 0, buf.c_str());
+    return info_stream;
 }
+
+//LogBuffer& Logger::debug ()
+//{
+//    return debug_stream;
+//}
 
 void Logger::logging (const Level _level, const int line, const char *format, ...)
 {

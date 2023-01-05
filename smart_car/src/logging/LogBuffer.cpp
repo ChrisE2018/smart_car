@@ -10,8 +10,10 @@
 #include <cstdio>
 #include <streambuf>
 #include <Arduino.h>
+#include "Logger.hpp"
 
-LogBuffer::LogBuffer ()
+LogBuffer::LogBuffer (Logger *logger, const Level level) : logger(logger), level(level), std::ios(
+        0), std::ostream(this)
 {
 }
 
@@ -30,6 +32,8 @@ void LogBuffer::reset ()
 
 void LogBuffer::flush ()
 {
+    const std::string &buf = LogBuffer::get_buffer();
+    logger->append(logger, level, 0, buf.c_str());
 }
 
 std::streambuf::int_type LogBuffer::overflow (std::streambuf::int_type c)
