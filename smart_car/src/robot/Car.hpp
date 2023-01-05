@@ -39,10 +39,9 @@ class Car : public Executor
         Mode get_mode ();
         bool is_mode (const Mode mode);
         void set_mode (const Mode mode);
-        void set_mode (HardwareSerial &serial, const Mode mode);
         void cycle ();
         void demo_drive_leds ();
-        void execute_command (HardwareSerial &serial, const std::vector<String> words);
+        void execute_command (const std::vector<String> words);
 
         Motor& get_motor (const MotorLocation motor);
         void all_stop ();
@@ -108,6 +107,6 @@ class Car : public Executor
         Mode mode = COMMAND_MODE;
 
         void handle_command ();
-        void help_command (HardwareSerial &serial);
+        void help_command ();
 };
 

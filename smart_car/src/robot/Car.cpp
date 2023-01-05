@@ -87,14 +87,8 @@ void Car::setup ()
 
 void Car::set_mode (const Mode _mode)
 {
-    set_mode(Serial, _mode);
-}
-
-void Car::set_mode (HardwareSerial &serial, const Mode _mode)
-{
-    std::ohserialstream c(serial);
     mode = _mode;
-    c << "Set " << *this << " to " << _mode << std::endl;
+    logger.info() << "Set " << *this << " to " << _mode << std::endl;
     switch (mode)
     {
         case COMMAND_MODE:
@@ -156,13 +150,11 @@ void Car::handle_command ()
 /** Execute a command from the user.
  @param words Command string broken into words.
  */
-void Car::execute_command (HardwareSerial &serial, const std::vector<String> words)
+void Car::execute_command (const std::vector<String> words)
 {
-    std::ohserialstream c(serial);
     const int n = words.size();
     String command = words[0];
-    serial.print("Command: ");
-    serial.println(command);
+    logger.info() << "Command: " << command << std::endl;
     if (command == "angle")
     {
         if (n > 1)
@@ -196,7 +188,7 @@ void Car::execute_command (HardwareSerial &serial, const std::vector<String> wor
     else if (command == "c")
     {
         set_mode(COMMAND_MODE);
-        c << "Current mode is " << mode << std::endl;
+        logger.info() << "Current mode is " << mode << std::endl;
     }
     else if (command == "clock")
     {
@@ -205,7 +197,7 @@ void Car::execute_command (HardwareSerial &serial, const std::vector<String> wor
     else if (command == "demo")
     {
         set_mode(DEMO_MODE);
-        c << "Current mode is " << mode << std::endl;
+        logger.info() << "Current mode is " << mode << std::endl;
     }
     else if (command == "distance")
     {
@@ -279,8 +271,9 @@ void Car::execute_command (HardwareSerial &serial, const std::vector<String> wor
             const long total_micros = plugin->get_total_micros();
             if (cycle_count > 0)
             {
-                c << "Plugin " << plugin->get_id() << " average " << total_micros / cycle_count
-                        << " us over " << cycle_count << " cycles" << std::endl;
+                logger.info() << "Plugin " << plugin->get_id() << " average "
+                        << total_micros / cycle_count << " us over " << cycle_count << " cycles"
+                        << std::endl;
             }
         }
     }
@@ -319,7 +312,7 @@ void Car::execute_command (HardwareSerial &serial, const std::vector<String> wor
     else if (command == "wall")
     {
         set_mode(WALL_MODE);
-        c << "Current mode is " << mode << std::endl;
+        logger.info() << "Current mode is " << mode << std::endl;
     }
     else if (command == "zero")
     {
@@ -329,37 +322,29 @@ void Car::execute_command (HardwareSerial &serial, const std::vector<String> wor
     }
     else if (command == "?")
     {
-        help_command(serial);
+        help_command();
     }
     else
     {
-        serial.print("Invalid command: ");
-        serial.println(command);
+        logger.info() << "Invalid command: " << command << std::endl;
     }
 }
 
-void Car::help_command (HardwareSerial &serial)
+void Car::help_command ()
 {
-    std::ohserialstream c(serial);
-
-    c << "Robot " << *this << std::endl;
+    logger.info() << "Robot " << *this << std::endl;
     long d = ultrasound_plugin->get_distance();
-    c << "Distance " << d << " cm" << std::endl;
+    logger.info() << "Distance " << d << " cm" << std::endl;
 
     const BLA::Matrix<Nstate> &state = kalman_plugin->get_state();
-    c << "Position " << state(0) << ", " << state(1) << " angle " << state(2) << " Velocity "
+    logger.info() << "Position " << state(0) << ", " << state(1) << " angle " << state(2) << " Velocity "
             << state(3) << ", " << state(4) << " angle " << state(5) << " Acceleration " << state(6)
             << ", " << state(7) << " angle " << state(8) << std::endl;
-    c << "Angle: " << kalman_plugin->get_angle() << std::endl;
+    logger.info() << "Angle: " << kalman_plugin->get_angle() << std::endl;
 
-    serial.print("Plugins: ");
-    serial.println(plugins.size());
-    serial.print("Cycle Count: ");
-    serial.print(cycle_count);
-    serial.print(" total cycle micros ");
-    serial.print(total_cycle_us);
-    serial.print(" average micros per cycle ");
-    serial.println(total_cycle_us / (double) cycle_count);
+    LOG_INFO(logger, "Plugins %d", plugins.size());
+    LOG_INFO(logger, "Cycle Count %d total cycle micros %d average micros per cycle %.3f",
+            cycle_count, total_cycle_us, total_cycle_us / (double) cycle_count);
 }
 
 void Car::demo_drive_leds ()

@@ -35,7 +35,7 @@ void Parser::handle_command (Executor &executor)
                         get_words(command, words);
                         if (!words.empty())
                         {
-                            executor.execute_command(serial, words);
+                            executor.execute_command(words);
                         }
 //                        else
 //                        {
