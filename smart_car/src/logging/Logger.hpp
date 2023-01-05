@@ -38,6 +38,7 @@ class Logger
         const Level get_level () const;
         void add_appender (Appender *appender);
         LogBuffer& info ();
+        LogBuffer& debug ();
         void logging (const Level level, const int line, const char *format, ...);
         void append (const Logger *logger, const Level level, const int line, const char *message);
 
@@ -49,6 +50,7 @@ class Logger
         const String short_name;
         Level level;
         LogBuffer info_stream;
+        LogBuffer debug_stream;
 
         std::vector<Appender*> appenders;
         const String shorten (const String name);

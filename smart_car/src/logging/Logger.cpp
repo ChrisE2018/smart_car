@@ -40,7 +40,8 @@ Logger::Logger (const String name, const Level level) : Logger(Logger::ROOT, nam
 }
 
 Logger::Logger (Logger *parent, const String name, const Level level) : parent(parent), name(name), short_name(
-        shorten(name)), level(level), info_stream(this, Level::info)
+        shorten(name)), level(level), info_stream(this, Level::info), debug_stream(this,
+        Level::debug)
 {
 }
 
@@ -90,13 +91,17 @@ LogBuffer& Logger::info ()
     return info_stream;
 }
 
+LogBuffer& Logger::debug ()
+{
+    return debug_stream;
+}
+
 void Logger::logging (const Level _level, const int line, const char *format, ...)
 {
     if (static_cast<int>(_level) <= static_cast<int>(level))
     {
         va_list args;
         va_start(args, format);
-//        char buf[buffer_size];
         vsnprintf(buffer, buffer_size, format, args);
         append(this, _level, line, buffer);
         va_end(args);
