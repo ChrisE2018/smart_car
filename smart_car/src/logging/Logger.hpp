@@ -27,17 +27,6 @@ const char* stringify (const Level level);
 
 class Logger;
 
-//class LoggerOstream : private LogBuffer, public std::ostream
-//{
-//    public:
-//        LoggerOstream(Level level, Logger* logger);
-//
-//    private:
-//        Level level;
-//        Logger* logger;
-//        virtual void flush () override;
-//};
-
 class Logger
 {
     public:
@@ -50,10 +39,10 @@ class Logger
         void set_level (const Level level);
         const Level get_level () const;
         void add_appender (Appender *appender);
-//        LogBuffer& error();
+//        LogBuffer& error ();
 //        LogBuffer& warning();
         LogBuffer& info();
-//        LogBuffer& debug();
+        LogBuffer& debug();
         void logging (const Level level, const int line, const char *format, ...);
         void append (const Logger *logger, const Level level, const int line, const char *message);
 
@@ -66,7 +55,7 @@ class Logger
 //        LogBuffer error_stream;
 //        LogBuffer warning_stream;
         LogBuffer info_stream;
-//        LogBuffer debug_stream;
+        LogBuffer debug_stream;
 
         std::vector<Appender*> appenders;
         const String shorten (const String name);

@@ -13,7 +13,7 @@
 // For some reason this does not resolve.
 extern HardwareSerial Serial;
 
-Logger logger(__FILE__);
+Logger logger(__FILE__, Level::debug);
 
 Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
 {
@@ -71,18 +71,18 @@ void Car::setup ()
     {
         if (plugin->setup())
         {
-            //logger.info() << "Setup " << plugin->get_id() << std::endl;
+            logger.info() << "Setup " << plugin->get_id() << std::endl;
             plugins.push_back(plugin);
         }
         else
         {
-            //logger.info() << "Disabled " << plugin->get_id() << std::endl;
+            logger.info() << "Disabled " << plugin->get_id() << std::endl;
         }
     }
     LOG_INFO(logger, "Completed setup of %d enabled plugins", plugins.size());
 
-   logger.info() << "Testing info logging" << std::endl;
-    //logger.debug() << "Testing debug logging" << std::endl;
+    logger.info() << "Testing info logging" << std::endl;
+    logger.debug() << "Testing debug logging" << std::endl;
 }
 
 void Car::set_mode (const Mode _mode)

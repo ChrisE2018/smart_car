@@ -29,36 +29,20 @@ const char* stringify (const Level level)
 
 static Logger *Logger::ROOT = new Logger(nullptr, "root", Level::debug);
 
-//LoggerOstream::LoggerOstream (Level level, Logger *logger) : level(level), logger(logger), std::ios(
-//        0), std::ostream((LogBuffer*) this)
-//{
-//}
-//
-//void LoggerOstream::flush ()
-//{
-//    const std::string &buf = LogBuffer::get_buffer();
-//    logger->append(logger, level, 0, buf.c_str());
-//}
-
 // http://www.angelikalanger.com/Articles/C++Report/IOStreamsDerivation/IOStreamsDerivation.html
 // https://gcc.gnu.org/onlinedocs/libstdc++/manual/streambufs.html
-Logger::Logger (const String name) : parent(Logger::ROOT), name(name), short_name(shorten(name)), level(
-        Level::info), info_stream(this, Level::info)
+
+Logger::Logger (const String name) : Logger(Logger::ROOT, name, Level::info)
 {
 }
-
-//Logger::Logger (const String name) : parent(Logger::ROOT), name(name), short_name(shorten(name)), level(
-//        Level::info), error_stream(this, Level::error), warning_stream(this, Level::warning), info_stream(
-//        this, Level::info), debug_stream(this, Level::debug)
-//{
-//}
 
 Logger::Logger (const String name, const Level level) : Logger(Logger::ROOT, name, level)
 {
 }
 
 Logger::Logger (Logger *parent, const String name, const Level level) : parent(parent), name(name), short_name(
-        shorten(name)), level(level), info_stream(this, Level::info)
+        shorten(name)), level(level), info_stream(this, Level::info), debug_stream(this,
+        Level::debug)
 {
 }
 
@@ -118,10 +102,10 @@ LogBuffer& Logger::info ()
     return info_stream;
 }
 
-//LogBuffer& Logger::debug ()
-//{
-//    return debug_stream;
-//}
+LogBuffer& Logger::debug ()
+{
+    return debug_stream;
+}
 
 void Logger::logging (const Level _level, const int line, const char *format, ...)
 {
@@ -131,7 +115,7 @@ void Logger::logging (const Level _level, const int line, const char *format, ..
         va_start(args, format);
         char buf[buffer_size];
         vsnprintf(buf, buffer_size, format, args);
-        append(this, level, line, buf);
+        append(this, _level, line, buf);
         va_end(args);
     }
 }
