@@ -453,9 +453,9 @@ void Car::drive_reverse (const MotorLocation motor, const int speed)
     }
 }
 
-WallPlugin* Car::get_wall_plugin ()
+ClockPlugin* Car::get_clock_plugin ()
 {
-    return wall_plugin;
+    return clock_plugin;
 }
 
 DemoPlugin* Car::get_demo_plugin ()
@@ -506,4 +506,9 @@ OdomPlugin* Car::get_odom_plugin ()
 UltrasoundPlugin* Car::get_ultrasound_plugin ()
 {
     return ultrasound_plugin;
+}
+
+WallPlugin* Car::get_wall_plugin ()
+{
+    return wall_plugin;
 }

@@ -20,6 +20,9 @@ bool ClockPlugin::setup ()
     {
         cout << "Initialize RTC module" << std::endl;
         clock.begin();
+        // Send sketch compiling time to Arduino
+//        clock.setDateTime(__DATE__, __TIME__);
+        is_setup = true;
         return true;
     }
     else
@@ -29,27 +32,26 @@ bool ClockPlugin::setup ()
     }
 }
 
+time_t ClockPlugin::get_unixtime ()
+{
+    if (is_setup)
+    {
+        dt = clock.getDateTime();
+        // @see https://forum.arduino.cc/t/result-of-strftime-is-30-years-off/658302/9
+        return dt.unixtime - UNIX_OFFSET + 3600;
+    }
+    else
+    {
+        return 0;
+    }
+}
+
 void ClockPlugin::cycle ()
 {
     if (is_enabled())
     {
-        dt = clock.getDateTime();
-        cout << "Raw data: " << static_cast<int>(dt.year) << "-";
-        const int month = static_cast<int>(dt.month);
-        if (month < 10)
-            cout << "0";
-        cout << month << "-";
-        const int day = static_cast<int>(dt.day);
-        if (day < 10)
-            cout << "0";
-        cout << day << " " << static_cast<int>(dt.hour) << ":";
-        const int minute = static_cast<int>(dt.minute);
-        if (minute < 10)
-            cout << "0";
-        cout << minute << ":";
-        const int second = static_cast<int>(dt.second);
-        if (second < 10)
-            cout << "0";
-        cout << second << std::endl;
+        time_t t = get_unixtime();
+        struct tm *lt = localtime(&t);
+        cout << "ISO time: " << isotime(lt) << std::endl;
     }
 }

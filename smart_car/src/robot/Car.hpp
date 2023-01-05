@@ -12,6 +12,10 @@
 #include "Mode.hpp"
 #include "Motor.hpp"
 #include "Parser.hpp"
+
+class ClockPlugin;
+class DemoPlugin;
+
 #include "../plugins/KalmanPlugin.hpp"
 #include "../plugins/ClockPlugin.hpp"
 #include "../plugins/DemoPlugin.hpp"
@@ -50,6 +54,7 @@ class Car : public Executor
         void drive_forward (const MotorLocation motor, const int speed);
         void drive_reverse (const MotorLocation motor, const int speed);
 
+        ClockPlugin* get_clock_plugin ();
         DemoPlugin* get_demo_plugin ();
         DrivePlugin* get_forward_plugin ();
         GoalPlugin* get_goal_plugin ();
