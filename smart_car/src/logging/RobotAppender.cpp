@@ -27,5 +27,6 @@ void RobotAppender::append (const Logger *logger, const Level level, const int l
     snprintf(buf, buffer_size, "%s.%03d [%s %s] %s", isotime(lt), ms, logger->get_short_name().c_str(),
             stringify(level), message);
     Serial.println(buf);
-    Serial1.println(buf);
+
+    Serial3.println(buf);
 }

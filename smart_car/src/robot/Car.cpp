@@ -15,7 +15,7 @@ extern HardwareSerial Serial;
 
 Logger logger(__FILE__, Level::debug);
 
-Car::Car () : serial_parser(Serial), bluetooth_parser(Serial1)
+Car::Car () : serial_parser(Serial), bluetooth_parser(Serial3)
 {
     clock_plugin = new ClockPlugin();
     clockwise_plugin = new DrivePlugin(CLOCKWISE_PLUGIN, *this, 500, FORWARD, REVERSE);

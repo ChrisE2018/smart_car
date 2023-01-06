@@ -12,9 +12,9 @@ extern HardwareSerial Serial;
 std::ohserialstream cout(Serial);
 
 // Connections for HC05 bluetooth:
-// rx1 19 yellow to 23 (far side)
-// tx1 18 blue to 22 (near side)
-std::ohserialstream cout1(Serial1);
+// rx3 15 yellow to 23 (far side)
+// tx3 14 blue to 22 (near side)
+std::ohserialstream cout1(Serial3);
 
 Car *car;
 
@@ -24,7 +24,8 @@ void setup ()
 {
     Serial.begin(9600);
     Serial.println("Smart car");
-    Serial1.begin(9600);
+    Serial3.begin(9600);
+
     car = new Car();
     Logger::ROOT->add_appender(new RobotAppender(*car));
     car->setup();
