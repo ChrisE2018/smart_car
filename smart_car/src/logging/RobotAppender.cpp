@@ -22,11 +22,11 @@ void RobotAppender::append (const Logger *logger, const Level level, const int l
         t = clock_plugin->get_unixtime();
     }
     struct tm *lt = localtime(&t);
-    char buf[buffer_size];
     const int ms = millis() % 1000;
+    char buf[buffer_size];
     snprintf(buf, buffer_size, "%s.%03d [%s %s] %s", isotime(lt), ms, logger->get_short_name().c_str(),
             stringify(level), message);
     Serial.println(buf);
-
     Serial3.println(buf);
+    // [TODO] Also append to log file
 }
