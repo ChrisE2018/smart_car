@@ -75,8 +75,8 @@ void KalmanPlugin::cycle ()
     {
         const float dt = (now - t) * 0.001;
 
-        const float right_velocity = car.get_drive_velocity(RIGHT);
-        const float left_velocity = car.get_drive_velocity(LEFT);
+        const float right_velocity = car.get_motor(RIGHT).get_speed_counter_velocity();
+        const float left_velocity = car.get_motor(LEFT).get_speed_counter_velocity();
 
         // Rotation from body to world for current angle
         update_transforms(state(2));

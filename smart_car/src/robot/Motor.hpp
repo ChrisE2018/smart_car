@@ -55,6 +55,7 @@ class Motor
         int get_speed () const;
         float get_velocity () const;
         unsigned long get_speed_counter () const;
+        float get_speed_counter_velocity ();
 
     private:
         const MotorLocation location;
@@ -66,5 +67,12 @@ class Motor
         const int reverse_led;
         MotorDirection direction = STOP;
         int speed = 0;
+        unsigned long speed_counter_checkpoint = 0;
+
+        // 55 mm wheels
+        // 20 encoder slots per revolution
+        // Multiply by one million to convert micros to seconds
+        // meters-per-micro = PI *diameter / encoder_slots
+        const double count_to_meters_per_second = 1000.0 * 1000.0 * M_PI * 0.055 / 20.0;
 };
 

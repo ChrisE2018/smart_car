@@ -59,7 +59,7 @@ void Motor::setup ()
     pinMode(forward_led, OUTPUT);
     pinMode(reverse_led, OUTPUT);
     drive_stop();
-    void (*isr) () = (direction == RIGHT) ? isr_right : isr_left;
+    void (*isr) () = (location == RIGHT) ? isr_right : isr_left;
     attachInterrupt(digitalPinToInterrupt(speed_counter_pin), isr, RISING);
 }
 
@@ -149,5 +149,29 @@ float Motor::get_velocity () const
 
 unsigned long Motor::get_speed_counter () const
 {
-    return (direction == RIGHT) ? speed_counter_right : speed_counter_left;
+    return (location == RIGHT) ? speed_counter_right : speed_counter_left;
+}
+
+float Motor::get_speed_counter_velocity ()
+{
+    unsigned long count = 0;
+    if (location == RIGHT)
+    {
+        count = speed_counter_right;
+        speed_counter_right = 0;
+    }
+    else
+    {
+        count = speed_counter_left;
+        speed_counter_left = 0;
+    }
+    const unsigned long now = micros();
+    const unsigned long checkpoint = speed_counter_checkpoint;
+    const double duration = now - checkpoint; // microseconds
+    speed_counter_checkpoint = now;
+    if (duration > 0)
+    {
+        return count * count_to_meters_per_second / duration;
+    }
+    return 0;
 }
