@@ -8,6 +8,7 @@
 #include "KalmanPlugin.hpp"
 
 #include "../robot/Car.hpp"
+#include "../robot/Motor.hpp"
 
 // This is needed or the matrices won't print
 using namespace BLA;
