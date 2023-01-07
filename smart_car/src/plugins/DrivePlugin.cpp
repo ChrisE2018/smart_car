@@ -22,9 +22,10 @@ void DrivePlugin::set_enabled (const bool enable)
     Plugin::set_enabled(enable);
     if (enable)
     {
-        deadline = millis() + duration;
+        unsigned long now = millis();
+        deadline = now + duration;
         cout << "Starting DriveMode: " << get_id() << " speed " << right_motor_speed << ", "
-                << left_motor_speed << " for " << duration << " from " << millis() << " until "
+                << left_motor_speed << " for " << duration << " from " << now << " until "
                 << deadline << std::endl;
         switch (right_motor_direction)
         {

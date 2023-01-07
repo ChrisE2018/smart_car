@@ -67,8 +67,8 @@ class Car : public Executor
         WallPlugin* get_wall_plugin ();
 
     private:
-        long cycle_count = 0;
-        long total_cycle_us = 0;
+        unsigned long cycle_count = 0;
+        unsigned long total_cycle_us = 0;
 
         Parser serial_parser;
         Parser bluetooth_parser;
@@ -89,20 +89,23 @@ class Car : public Executor
         std::vector<Plugin*> available_plugins;
         std::vector<Plugin*> plugins;
 
-        // pins
-        // 3 yellow = in1
-        // 4 orange = in2
-        // 5 purple = in3
-        // 6 blue = in4
-        // 7 blue = enA
-        // 8 green = enB
+        const int right_speed_counter_pin = 2; // right
+        const int left_speed_counter_pin = 3; // left
 
-        // LED_0 = 22;  // red led right
-        // LED_1 = 24;  // green led right
-        // LED_2 = 26;  // red led left
-        // LED_3 = 28;  // green led left
+        const int in1 = 49; // yellow = in1 left
+        const int in2 = 48; // orange = in2 left
+        const int in3 = 47; // purple = in3 right
+        const int in4 = 46; // blue = in4 right
+        const int enA = 45; // blue = enA left
+        const int enB = 44; // green = enB right
+
+        const int LED_0 = 22; // red led right
+        const int LED_1 = 24; // green led right
+        const int LED_2 = 26; // red led left
+        const int LED_3 = 28; // green led left
         Motor motors[MOTOR_COUNT] =
-        { Motor(RIGHT, 8, 6, 5, 22, 24), Motor(LEFT, 7, 3, 4, 26, 28) };
+        { Motor(RIGHT, enB, in4, in3, right_speed_counter_pin, LED_0, LED_1), Motor(LEFT, enA, in1, in2,
+                left_speed_counter_pin, LED_2, LED_3) };
 
         Mode mode = COMMAND_MODE;
 

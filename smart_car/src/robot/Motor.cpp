@@ -8,6 +8,18 @@
 #include "Motor.hpp"
 #include "smart_car.hpp"
 
+unsigned long int speed_counter_right = 0;
+unsigned long int speed_counter_left = 0;
+
+void isr_right ()
+{
+    speed_counter_right++;
+}
+void isr_left ()
+{
+    speed_counter_left++;
+}
+
 std::ostream& operator<< (std::ostream &lhs, MotorDirection direction)
 {
     switch (direction)
@@ -47,6 +59,8 @@ void Motor::setup ()
     pinMode(forward_led, OUTPUT);
     pinMode(reverse_led, OUTPUT);
     drive_stop();
+    void (*isr) () = (direction == RIGHT) ? isr_right : isr_left;
+    attachInterrupt(digitalPinToInterrupt(speed_counter_pin), isr, RISING);
 }
 
 void Motor::led_demo (const int duration) const
@@ -106,6 +120,11 @@ void Motor::drive_stop ()
     }
 }
 
+MotorLocation Motor::get_location () const
+{
+    return location;
+}
+
 MotorDirection Motor::get_direction () const
 {
     return direction;
@@ -126,4 +145,9 @@ float Motor::get_velocity () const
     {
         return (speed / 256.0);
     }
+}
+
+unsigned long Motor::get_speed_counter () const
+{
+    return (direction == RIGHT) ? speed_counter_right : speed_counter_left;
 }

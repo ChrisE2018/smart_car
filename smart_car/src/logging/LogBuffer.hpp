@@ -28,7 +28,7 @@ class LogBuffer : private std::streambuf, public std::ostream
         virtual std::streambuf::int_type overflow (std::streambuf::int_type c) override;
 
     private:
-        static const int buffer_size = 127;
+        static const int buffer_size = 255;
         static char buffer[buffer_size + 1];
         static int pos;
         Logger *logger;

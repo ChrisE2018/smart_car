@@ -94,17 +94,17 @@ void Plugin::start_cycle ()
 
 void Plugin::end_cycle ()
 {
-    const long cycle_micros = micros() - cycle_start_micros;
+    const unsigned long cycle_micros = micros() - cycle_start_micros;
     total_micros += cycle_micros;
     cycle_count++;
 }
 
-long Plugin::get_cycle_count () const
+unsigned long Plugin::get_cycle_count () const
 {
     return cycle_count;
 }
 
-long Plugin::get_total_micros () const
+unsigned long Plugin::get_total_micros () const
 {
     return total_micros;
 }

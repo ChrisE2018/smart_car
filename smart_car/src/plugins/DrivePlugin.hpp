@@ -40,7 +40,7 @@ class DrivePlugin: public Plugin
     private:
         Car &car;
         int duration;
-        long deadline = 0;
+        unsigned long deadline = 0;
         MotorDirection right_motor_direction;
         MotorDirection left_motor_direction;
         int right_motor_speed = SPEED_FULL;

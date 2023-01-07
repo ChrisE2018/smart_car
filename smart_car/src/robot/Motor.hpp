@@ -38,9 +38,10 @@ std::ostream& operator<< (std::ostream &lhs, MotorLocation location);
 class Motor
 {
     public:
-        Motor (const MotorLocation location, int enable, int forward, int reverse, int f_led,
-                int r_led) : location(location), enable_pin(enable), forward_pin(forward), reverse_pin(
-                reverse), forward_led(f_led), reverse_led(r_led)
+        Motor (const MotorLocation location, int enable, int forward, int reverse,
+                int speed_counter_pin, int forward_led, int reverse_led) : location(location), enable_pin(
+                enable), forward_pin(forward), reverse_pin(reverse), speed_counter_pin(
+                speed_counter_pin), forward_led(forward_led), reverse_led(reverse_led)
         {
         }
 
@@ -49,15 +50,18 @@ class Motor
         void drive_forward (const int speed);
         void drive_reverse (const int speed);
         void drive_stop ();
+        MotorLocation get_location () const;
         MotorDirection get_direction () const;
         int get_speed () const;
         float get_velocity () const;
+        unsigned long get_speed_counter () const;
 
     private:
         const MotorLocation location;
         const int enable_pin;
         const int forward_pin;
         const int reverse_pin;
+        const int speed_counter_pin;
         const int forward_led;
         const int reverse_led;
         MotorDirection direction = STOP;

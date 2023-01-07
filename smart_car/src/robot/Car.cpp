@@ -10,7 +10,7 @@
 #include "smart_car.hpp"
 #include "../logging/Logger.hpp"
 
-// For some reason this does not resolve.
+// For some reason this does not always resolve.
 extern HardwareSerial Serial;
 
 Logger logger(__FILE__, Level::debug);
@@ -116,7 +116,7 @@ void Car::set_mode (const Mode _mode)
 
 void Car::cycle ()
 {
-    const long cycle_start_us = micros();
+    const unsigned long cycle_start_us = micros();
 
     handle_command();
     for (Plugin *plugin : plugins)
@@ -128,16 +128,23 @@ void Car::cycle ()
     long d = ultrasound_plugin->get_distance();
     if (d < 10)
     {
+        bool did_stop = false;
         for (int i = 0; i < MOTOR_COUNT; i++)
         {
             if (motors[i].get_velocity() > 0)
             {
+                did_stop = true;
                 motors[i].drive_stop();
             }
         }
+        if (did_stop)
+        {
+            LOG_INFO(logger, "Stopped due to object at %d cm", d);
+        }
     }
 
-    total_cycle_us += micros() - cycle_start_us;
+    const unsigned long duration = micros() - cycle_start_us;
+    total_cycle_us += duration;
     cycle_count++;
 }
 
@@ -265,6 +272,7 @@ void Car::execute_command (const std::vector<String> words)
     }
     else if (command == "plugins")
     {
+        LOG_INFO(logger, "Plugins %d", plugins.size());
         for (Plugin *plugin : plugins)
         {
             const long cycle_count = plugin->get_cycle_count();
@@ -276,6 +284,9 @@ void Car::execute_command (const std::vector<String> words)
                         << std::endl;
             }
         }
+        const float f_total_micros = total_cycle_us;
+        logger.info() << "Cycle count " << cycle_count << " total cycle micros " << total_cycle_us
+                << " average micros per cycle " << f_total_micros / cycle_count << std::endl;
     }
     else if (command == "r")
     {
@@ -337,14 +348,23 @@ void Car::help_command ()
     logger.info() << "Distance " << d << " cm" << std::endl;
 
     const BLA::Matrix<Nstate> &state = kalman_plugin->get_state();
-    logger.info() << "Position " << state(0) << ", " << state(1) << " angle " << state(2) << " Velocity "
-            << state(3) << ", " << state(4) << " angle " << state(5) << " Acceleration " << state(6)
-            << ", " << state(7) << " angle " << state(8) << std::endl;
+    logger.info() << "Position " << state(0) << ", " << state(1) << " angle " << state(2)
+            << " Velocity " << state(3) << ", " << state(4) << " angle " << state(5)
+            << " Acceleration " << state(6) << ", " << state(7) << " angle " << state(8)
+            << std::endl;
     logger.info() << "Angle: " << kalman_plugin->get_angle() << std::endl;
 
     LOG_INFO(logger, "Plugins %d", plugins.size());
-    LOG_INFO(logger, "Cycle Count %d total cycle micros %d average micros per cycle %.3f",
-            cycle_count, total_cycle_us, total_cycle_us / (double) cycle_count);
+    const float f_total_micros = total_cycle_us;
+    logger.info() << "Cycle count " << cycle_count << " total cycle micros " << total_cycle_us
+            << " average micros per cycle " << f_total_micros / cycle_count << std::endl;
+
+    for (int motor = 0; motor < MOTOR_COUNT; motor++)
+    {
+        const Motor &m = motors[motor];
+        logger.info() << m.get_location() << " speed counter " << m.get_speed_counter()
+                << std::endl;
+    }
 }
 
 void Car::demo_drive_leds ()
