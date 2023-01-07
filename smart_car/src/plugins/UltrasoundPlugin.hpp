@@ -14,14 +14,17 @@
 const int ULTRASOUND_TRIGGER = 12;  // blue
 const int ULTRASOUND_ECHO = 11;     // green
 
+class Car;
+
 class UltrasoundPlugin : public Plugin
 {
     public:
-        UltrasoundPlugin ();
+        UltrasoundPlugin (Car& car);
         long get_distance ();
         void cycle () override;
 
     private:
+        Car& car;
         SR04 sr04;
 };
 

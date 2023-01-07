@@ -28,7 +28,7 @@ Car::Car () : serial_parser(Serial), bluetooth_parser(Serial3)
     kalman_plugin = new KalmanPlugin(*this);
     odom_plugin = new OdomPlugin(*this);
     reverse_plugin = new DrivePlugin(REVERSE_PLUGIN, *this, 500, REVERSE, REVERSE);
-    ultrasound_plugin = new UltrasoundPlugin();
+    ultrasound_plugin = new UltrasoundPlugin(*this);
     wall_plugin = new WallPlugin(*this);
 
     available_plugins.push_back(clock_plugin);
@@ -124,23 +124,6 @@ void Car::cycle ()
         plugin->start_cycle();
         plugin->cycle();
         plugin->end_cycle();
-    }
-    long d = ultrasound_plugin->get_distance();
-    if (d < 10)
-    {
-        bool did_stop = false;
-        for (int i = 0; i < MOTOR_COUNT; i++)
-        {
-            if (motors[i].get_velocity() > 0)
-            {
-                did_stop = true;
-                motors[i].drive_stop();
-            }
-        }
-        if (did_stop)
-        {
-            LOG_INFO(logger, "Stopped due to object at %d cm", d);
-        }
     }
 
     const unsigned long duration = micros() - cycle_start_us;

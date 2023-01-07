@@ -7,9 +7,13 @@
 
 #include "UltrasoundPlugin.hpp"
 #include "smart_car.hpp"
+#include "Car.hpp"
+#include "Logger.hpp"
 
-UltrasoundPlugin::UltrasoundPlugin () : Plugin(ULTRASOUND_PLUGIN), sr04(ULTRASOUND_ECHO,
-        ULTRASOUND_TRIGGER)
+Logger logger(__FILE__, Level::info);
+
+UltrasoundPlugin::UltrasoundPlugin (Car &car) : car(car), Plugin(ULTRASOUND_PLUGIN), sr04(
+        ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)
 {
 
 }
@@ -21,9 +25,30 @@ long UltrasoundPlugin::get_distance ()
 
 void UltrasoundPlugin::cycle ()
 {
+    const long d = sr04.Distance();
     if (is_enabled())
     {
-        const long d = sr04.Distance();
-        cout << "Distance " << d << " cm" << std::endl;
+        logger.info() << "Distance " << d << " cm" << std::endl;
+    }
+    if (d < 10)
+    {
+        bool did_stop = false;
+        Motor &right_motor = car.get_motor(RIGHT);
+        Motor &left_motor = car.get_motor(LEFT);
+        // Only stop if moving forward toward the obstacle.
+        if (right_motor.get_velocity() > 0)
+        {
+            did_stop = true;
+            right_motor.drive_stop();
+        }
+        if (left_motor.get_velocity() > 0)
+        {
+            did_stop = true;
+            left_motor.drive_stop();
+        }
+        if (did_stop)
+        {
+            LOG_INFO(logger, "Stopped due to object at %d cm", d);
+        }
     }
 }
