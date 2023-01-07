@@ -107,9 +107,13 @@ class Car: public Executor
         { Motor(RIGHT, enB, in4, in3, right_speed_counter_pin, LED_0, LED_1), Motor(LEFT, enA, in1,
                 in2, left_speed_counter_pin, LED_2, LED_3) };
 
+        PluginId schedule[100] =
+        { };
+        int last_cycle = -1;
         Mode mode = COMMAND_MODE;
 
         void handle_command ();
         void help_command () const;
+        int get_actual_interval(int cycle, PluginId id) const;
 };
 

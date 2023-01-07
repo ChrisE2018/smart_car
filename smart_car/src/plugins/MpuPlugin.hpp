@@ -16,6 +16,8 @@ class MpuPlugin : public Plugin
     public:
         MpuPlugin ();
         bool setup () override;
+        virtual int get_preferred_interval () const;
+        virtual int get_expected_ms () const;
         void calibrate ();
         void print_imu ();
         void cycle () override;

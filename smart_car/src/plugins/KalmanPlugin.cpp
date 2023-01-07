@@ -68,6 +68,16 @@ bool KalmanPlugin::setup ()
     return true;
 }
 
+int KalmanPlugin::get_preferred_interval () const
+{
+    return 10;
+}
+
+int KalmanPlugin::get_expected_ms () const
+{
+    return 4;
+}
+
 void KalmanPlugin::cycle ()
 {
     const long now = millis();
@@ -133,8 +143,8 @@ void KalmanPlugin::update_transforms (const float angle)
     { cos_angle, -sin_angle, sin_angle, cos_angle };
 }
 
-void KalmanPlugin::hadamard (const BLA::Matrix<Nobs>& a, const BLA::Matrix<Nobs>& b,
-        BLA::Matrix<Nobs>& result) const
+void KalmanPlugin::hadamard (const BLA::Matrix<Nobs> &a, const BLA::Matrix<Nobs> &b,
+        BLA::Matrix<Nobs> &result) const
 {
     for (int i = 0; i < Nobs; i++)
     {

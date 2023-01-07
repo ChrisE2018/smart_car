@@ -37,6 +37,10 @@ const std::string stringify (const PluginId id)
             return "ULTRASOUND_PLUGIN";
         case WALL_PLUGIN:
             return "WALL_PLUGIN";
+        case COMMAND_CYCLE:
+            return "COMMAND_CYCLE";
+        case IDLE_CYCLE:
+            return "IDLE_CYCLE";
         default:
             return "???_PLUGIN";
     }
@@ -79,6 +83,16 @@ const bool Plugin::is_enabled () const
 void Plugin::set_enabled (const bool _enable)
 {
     enable = _enable;
+}
+
+int Plugin::get_preferred_interval () const
+{
+    return 1;
+}
+
+int Plugin::get_expected_ms () const
+{
+    return 0;
 }
 
 void Plugin::cycle ()

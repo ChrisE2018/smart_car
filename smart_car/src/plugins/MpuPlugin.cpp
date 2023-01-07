@@ -65,6 +65,16 @@ bool MpuPlugin::setup ()
     }
 }
 
+int MpuPlugin::get_preferred_interval () const
+{
+    return 10;
+}
+
+int MpuPlugin::get_expected_ms () const
+{
+    return 10;
+}
+
 void MpuPlugin::calibrate ()
 {
     Serial.println("imu calibration...please wait 15 seconds");

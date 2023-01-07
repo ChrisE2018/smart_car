@@ -16,15 +16,17 @@ const int ULTRASOUND_ECHO = 11;     // green
 
 class Car;
 
-class UltrasoundPlugin : public Plugin
+class UltrasoundPlugin: public Plugin
 {
     public:
-        UltrasoundPlugin (Car& car);
+        UltrasoundPlugin (Car &car);
+        virtual int get_preferred_interval () const;
+        virtual int get_expected_ms () const;
         long get_distance ();
         void cycle () override;
 
     private:
-        Car& car;
+        Car &car;
         SR04 sr04;
 };
 

@@ -17,11 +17,13 @@ class Car;
 #define Nstate 9 // length of the state vector
 #define Nobs 9   // length of the measurement vector
 
-class KalmanPlugin : public Plugin
+class KalmanPlugin: public Plugin
 {
     public:
         KalmanPlugin (Car &car);
         bool setup () override;
+        virtual int get_preferred_interval () const;
+        virtual int get_expected_ms () const;
         void cycle () override;
         void update_transforms (const float angle);
         float get_x () const;
@@ -54,7 +56,8 @@ class KalmanPlugin : public Plugin
 
         const int interval = 5;
         long deadline = 0;
-        void hadamard(const BLA::Matrix<Nobs>& a, const BLA::Matrix<Nobs>& b, BLA::Matrix<Nobs>& result) const;
+        void hadamard (const BLA::Matrix<Nobs> &a, const BLA::Matrix<Nobs> &b,
+                BLA::Matrix<Nobs> &result) const;
 
 };
 

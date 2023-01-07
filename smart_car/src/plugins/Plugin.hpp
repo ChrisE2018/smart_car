@@ -23,7 +23,9 @@ enum PluginId
     ODOM_PLUGIN,
     REVERSE_PLUGIN,
     ULTRASOUND_PLUGIN,
-    WALL_PLUGIN
+    WALL_PLUGIN,
+    COMMAND_CYCLE,
+    IDLE_CYCLE
 };
 
 const std::string stringify (const PluginId id);
@@ -44,6 +46,8 @@ class Plugin
         void end_cycle ();
         const bool is_enabled () const;
         virtual void set_enabled (const bool enable);
+        virtual int get_preferred_interval () const;
+        virtual int get_expected_ms () const;
         unsigned long get_cycle_count () const;
         unsigned long get_total_micros () const;
 

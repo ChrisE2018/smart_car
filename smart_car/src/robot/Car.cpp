@@ -79,10 +79,49 @@ void Car::setup ()
             logger.info() << "Disabled " << plugin->get_id() << std::endl;
         }
     }
+    int cycle = 0;
+    while (cycle < 100)
+    {
+        for (Plugin *plugin : available_plugins)
+        {
+            const int expected_ms = plugin->get_expected_ms();
+            if (cycle < 100 - expected_ms)
+            {
+                const PluginId id = plugin->get_id();
+                const int actual_interval = get_actual_interval(cycle, id);
+                const int preferred_interval = plugin->get_preferred_interval();
+                if (actual_interval >= preferred_interval)
+                {
+                    schedule[cycle++] = id;
+                    for (int i = 0; i < expected_ms; i++)
+                    {
+                        schedule[cycle++] = IDLE_CYCLE;
+                    }
+                }
+            }
+        }
+        if (cycle < 99)
+        {
+            schedule[cycle++] = COMMAND_CYCLE;
+            schedule[cycle++] = IDLE_CYCLE;
+        }
+    }
     LOG_INFO(logger, "Completed setup of %d enabled plugins", plugins.size());
 
     logger.info() << "Testing info logging" << std::endl;
     logger.debug() << "Testing debug logging" << std::endl;
+}
+
+int Car::get_actual_interval (int cycle, PluginId id) const
+{
+    for (int i = cycle; i >= 0; i--)
+    {
+        if (schedule[i] == id)
+        {
+            return cycle - i;
+        }
+    }
+    return 100;
 }
 
 void Car::set_mode (const Mode _mode)
@@ -119,13 +158,21 @@ void Car::cycle ()
     const unsigned long cycle_start_us = micros();
     const int ms = millis() % 1000;
     const int cycle = ms / 10;
-
-    handle_command();
-    for (Plugin *plugin : plugins)
+    if (cycle != last_cycle)
     {
-        plugin->start_cycle();
-        plugin->cycle();
-        plugin->end_cycle();
+        last_cycle = cycle;
+        const PluginId scheduled_plugin = schedule[cycle];
+        Plugin *plugin = get_plugin(scheduled_plugin);
+        if (plugin == nullptr)
+        {
+            handle_command();
+        }
+        else
+        {
+            plugin->start_cycle();
+            plugin->cycle();
+            plugin->end_cycle();
+        }
     }
 
     const unsigned long duration = micros() - cycle_start_us;
@@ -304,6 +351,16 @@ void Car::execute_command (const std::vector<String> words)
     {
         all_stop();
         set_mode(COMMAND_MODE);
+    }
+    else if (command == "schedule")
+    {
+        for (int i = 0; i < 100; i++)
+        {
+            const PluginId id = schedule[i];
+            const Plugin *plugin = get_plugin(id);
+            logger.info() << "[" << i << "] " << id << ": "
+                    << ((plugin == nullptr) ? "null" : "found") << std::endl;
+        }
     }
     else if (command == "wall")
     {

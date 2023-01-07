@@ -18,8 +18,19 @@ UltrasoundPlugin::UltrasoundPlugin (Car &car) : car(car), Plugin(ULTRASOUND_PLUG
 
 }
 
+int UltrasoundPlugin::get_preferred_interval () const
+{
+    return 25;
+}
+
+int UltrasoundPlugin::get_expected_ms () const
+{
+    return 4;
+}
+
 long UltrasoundPlugin::get_distance ()
 {
+    // This method is not const and includes a 25 ms delay.
     return sr04.Distance();
 }
 
