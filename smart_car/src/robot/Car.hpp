@@ -28,7 +28,7 @@ class DemoPlugin;
 
 const int MOTOR_COUNT = 2;
 
-class Car : public Executor
+class Car: public Executor
 {
     public:
         Car ();
@@ -36,35 +36,35 @@ class Car : public Executor
         friend std::ostream& operator<< (std::ostream &os, const Car &car);
 
         void setup ();
-        Mode get_mode ();
-        bool is_mode (const Mode mode);
         void set_mode (const Mode mode);
         void cycle ();
         void demo_drive_leds ();
         void execute_command (const std::vector<String> words);
 
+        const Motor& get_motor (const MotorLocation motor) const;
         Motor& get_motor (const MotorLocation motor);
         void all_stop ();
         void drive_stop (const MotorLocation motor);
         void drive (const MotorLocation motor, const int speed);
-        int get_drive_speed (const MotorLocation motor);
-        float get_drive_velocity (const MotorLocation motor);
-        MotorDirection get_drive_direction (const MotorLocation motor);
+        int get_drive_speed (const MotorLocation motor) const;
+        float get_drive_velocity (const MotorLocation motor) const;
+        MotorDirection get_drive_direction (const MotorLocation motor) const;
         void drive_forward (const MotorLocation motor, const int speed);
         void drive_reverse (const MotorLocation motor, const int speed);
 
-        ClockPlugin* get_clock_plugin ();
-        DemoPlugin* get_demo_plugin ();
-        DrivePlugin* get_forward_plugin ();
-        GoalPlugin* get_goal_plugin ();
-        DrivePlugin* get_reverse_plugin ();
-        DrivePlugin* get_clockwise_plugin ();
-        DrivePlugin* get_counterclockwise_plugin ();
-        MpuPlugin* get_mpu_plugin ();
-        KalmanPlugin* get_kalman_plugin ();
-        OdomPlugin* get_odom_plugin ();
-        UltrasoundPlugin* get_ultrasound_plugin ();
-        WallPlugin* get_wall_plugin ();
+        ClockPlugin* get_clock_plugin () const;
+        DemoPlugin* get_demo_plugin () const;
+        DrivePlugin* get_forward_plugin () const;
+        GoalPlugin* get_goal_plugin () const;
+        DrivePlugin* get_reverse_plugin () const;
+        DrivePlugin* get_clockwise_plugin () const;
+        DrivePlugin* get_counterclockwise_plugin () const;
+        MpuPlugin* get_mpu_plugin () const;
+        KalmanPlugin* get_kalman_plugin () const;
+        OdomPlugin* get_odom_plugin () const;
+        UltrasoundPlugin* get_ultrasound_plugin () const;
+        WallPlugin* get_wall_plugin () const;
+        Plugin* get_plugin (PluginId id) const;
 
     private:
         unsigned long cycle_count = 0;
@@ -104,12 +104,12 @@ class Car : public Executor
         const int LED_2 = 26; // red led left
         const int LED_3 = 28; // green led left
         Motor motors[MOTOR_COUNT] =
-        { Motor(RIGHT, enB, in4, in3, right_speed_counter_pin, LED_0, LED_1), Motor(LEFT, enA, in1, in2,
-                left_speed_counter_pin, LED_2, LED_3) };
+        { Motor(RIGHT, enB, in4, in3, right_speed_counter_pin, LED_0, LED_1), Motor(LEFT, enA, in1,
+                in2, left_speed_counter_pin, LED_2, LED_3) };
 
         Mode mode = COMMAND_MODE;
 
         void handle_command ();
-        void help_command ();
+        void help_command () const;
 };
 

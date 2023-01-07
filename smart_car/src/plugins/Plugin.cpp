@@ -17,8 +17,6 @@ const std::string stringify (const PluginId id)
             return "CLOCK_PLUGIN";
         case CLOCKWISE_PLUGIN:
             return "CLOCKWISE_PLUGIN";
-        case COMMAND_PLUGIN:
-            return "COMMAND_PLUGIN";
         case COUNTERCLOCKWISE_PLUGIN:
             return "COUNTERCLOCKWISE_PLUGIN";
         case DEMO_PLUGIN:

@@ -13,7 +13,7 @@
 // For some reason this does not always resolve.
 extern HardwareSerial Serial;
 
-Logger logger(__FILE__, Level::debug);
+static Logger logger(__FILE__, Level::debug);
 
 Car::Car () : serial_parser(Serial), bluetooth_parser(Serial3)
 {
@@ -117,6 +117,8 @@ void Car::set_mode (const Mode _mode)
 void Car::cycle ()
 {
     const unsigned long cycle_start_us = micros();
+    const int ms = millis() % 1000;
+    const int cycle = ms / 10;
 
     handle_command();
     for (Plugin *plugin : plugins)
@@ -324,7 +326,7 @@ void Car::execute_command (const std::vector<String> words)
     }
 }
 
-void Car::help_command ()
+void Car::help_command () const
 {
     logger.info() << "Robot " << *this << std::endl;
     long d = ultrasound_plugin->get_distance();
@@ -363,6 +365,11 @@ void Car::demo_drive_leds ()
     }
 }
 
+const Motor& Car::get_motor (const MotorLocation motor) const
+{
+    return motors[static_cast<int>(motor)];
+}
+
 Motor& Car::get_motor (const MotorLocation motor)
 {
     return motors[static_cast<int>(motor)];
@@ -379,7 +386,6 @@ void Car::all_stop ()
     clockwise_plugin->set_enabled(false);
     counterclockwise_plugin->set_enabled(false);
     goal_plugin->set_enabled(false);
-//    goal_plugin->reset();
 }
 
 void Car::drive_stop (const MotorLocation motor)
@@ -406,7 +412,7 @@ void Car::drive (const MotorLocation motor, const int speed)
     }
 }
 
-int Car::get_drive_speed (const MotorLocation motor)
+int Car::get_drive_speed (const MotorLocation motor) const
 {
     const int speed = motors[static_cast<int>(motor)].get_speed();
     if (motors[static_cast<int>(motor)].get_direction() == REVERSE)
@@ -416,12 +422,12 @@ int Car::get_drive_speed (const MotorLocation motor)
     return speed;
 }
 
-float Car::get_drive_velocity (const MotorLocation motor)
+float Car::get_drive_velocity (const MotorLocation motor) const
 {
     return motors[static_cast<int>(motor)].get_velocity();
 }
 
-MotorDirection Car::get_drive_direction (const MotorLocation motor)
+MotorDirection Car::get_drive_direction (const MotorLocation motor) const
 {
     return motors[static_cast<int>(motor)].get_direction();
 }
@@ -442,62 +448,95 @@ void Car::drive_reverse (const MotorLocation motor, const int speed)
     }
 }
 
-ClockPlugin* Car::get_clock_plugin ()
+ClockPlugin* Car::get_clock_plugin () const
 {
     return clock_plugin;
 }
 
-DemoPlugin* Car::get_demo_plugin ()
+DemoPlugin* Car::get_demo_plugin () const
 {
     return demo_plugin;
 }
 
-DrivePlugin* Car::get_forward_plugin ()
+DrivePlugin* Car::get_forward_plugin () const
 {
     return forward_plugin;
 }
 
-GoalPlugin* Car::get_goal_plugin ()
+GoalPlugin* Car::get_goal_plugin () const
 {
     return goal_plugin;
 }
 
-DrivePlugin* Car::get_reverse_plugin ()
+DrivePlugin* Car::get_reverse_plugin () const
 {
     return reverse_plugin;
 }
 
-DrivePlugin* Car::get_clockwise_plugin ()
+DrivePlugin* Car::get_clockwise_plugin () const
 {
     return clockwise_plugin;
 }
 
-DrivePlugin* Car::get_counterclockwise_plugin ()
+DrivePlugin* Car::get_counterclockwise_plugin () const
 {
     return counterclockwise_plugin;
 }
 
-MpuPlugin* Car::get_mpu_plugin ()
+MpuPlugin* Car::get_mpu_plugin () const
 {
     return mpu_plugin;
 }
 
-KalmanPlugin* Car::get_kalman_plugin ()
+KalmanPlugin* Car::get_kalman_plugin () const
 {
     return kalman_plugin;
 }
 
-OdomPlugin* Car::get_odom_plugin ()
+OdomPlugin* Car::get_odom_plugin () const
 {
     return odom_plugin;
 }
 
-UltrasoundPlugin* Car::get_ultrasound_plugin ()
+UltrasoundPlugin* Car::get_ultrasound_plugin () const
 {
     return ultrasound_plugin;
 }
 
-WallPlugin* Car::get_wall_plugin ()
+WallPlugin* Car::get_wall_plugin () const
 {
     return wall_plugin;
+}
+
+Plugin* Car::get_plugin (PluginId id) const
+{
+    switch (id)
+    {
+        case CLOCK_PLUGIN:
+            return clock_plugin;
+        case CLOCKWISE_PLUGIN:
+            return clockwise_plugin;
+        case COUNTERCLOCKWISE_PLUGIN:
+            return counterclockwise_plugin;
+        case DEMO_PLUGIN:
+            return demo_plugin;
+        case FORWARD_PLUGIN:
+            return forward_plugin;
+        case GOAL_PLUGIN:
+            return goal_plugin;
+        case MPU_PLUGIN:
+            return mpu_plugin;
+        case KALMAN_PLUGIN:
+            return kalman_plugin;
+        case ODOM_PLUGIN:
+            return odom_plugin;
+        case REVERSE_PLUGIN:
+            return reverse_plugin;
+        case ULTRASOUND_PLUGIN:
+            return ultrasound_plugin;
+        case WALL_PLUGIN:
+            return wall_plugin;
+        default:
+            return nullptr;
+    }
 }
