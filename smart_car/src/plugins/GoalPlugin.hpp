@@ -11,7 +11,7 @@
 
 class Car;
 
-class GoalPlugin : public Plugin
+class GoalPlugin: public Plugin
 {
     public:
         GoalPlugin (Car &Car);
@@ -19,6 +19,7 @@ class GoalPlugin : public Plugin
         void set_goal (const float angle);
         void set_goal (const float x, const float y);
         bool setup ();
+        virtual int get_preferred_interval () const;
         void cycle ();
 
     private:

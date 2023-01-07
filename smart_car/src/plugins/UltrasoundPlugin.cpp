@@ -20,7 +20,7 @@ UltrasoundPlugin::UltrasoundPlugin (Car &car) : car(car), Plugin(ULTRASOUND_PLUG
 
 int UltrasoundPlugin::get_preferred_interval () const
 {
-    return 25;
+    return 100;
 }
 
 int UltrasoundPlugin::get_expected_ms () const

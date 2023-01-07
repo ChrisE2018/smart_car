@@ -8,7 +8,10 @@
 #include "smart_car.hpp"
 #include "DrivePlugin.hpp"
 
+#include "../logging/Logger.hpp"
 #include "../robot/Car.hpp"
+
+static Logger logger(__FILE__, Level::info);
 
 DrivePlugin::DrivePlugin (PluginId id, Car &car, const int duration,
         const MotorDirection right_motor_direction, const MotorDirection left_motor_direction) : Plugin(
@@ -24,7 +27,7 @@ void DrivePlugin::set_enabled (const bool enable)
     {
         unsigned long now = millis();
         deadline = now + duration;
-        cout << "Starting DriveMode: " << get_id() << " speed " << right_motor_speed << ", "
+        logger.info() << "Starting DriveMode: " << get_id() << " speed " << right_motor_speed << ", "
                 << left_motor_speed << " for " << duration << " from " << now << " until "
                 << deadline << std::endl;
         switch (right_motor_direction)
@@ -60,7 +63,7 @@ void DrivePlugin::cycle ()
     {
         if (deadline < millis())
         {
-            cout << "Stopping DriveMode: " << get_id() << " at " << millis() << std::endl;
+            logger.info() << "Stopping DriveMode: " << get_id() << " at " << millis() << std::endl;
             set_enabled(false);
             car.all_stop();
         }

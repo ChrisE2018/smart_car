@@ -87,7 +87,7 @@ void Plugin::set_enabled (const bool _enable)
 
 int Plugin::get_preferred_interval () const
 {
-    return 1;
+    return 100;
 }
 
 int Plugin::get_expected_ms () const

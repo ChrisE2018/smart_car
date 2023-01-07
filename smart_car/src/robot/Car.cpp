@@ -84,16 +84,16 @@ void Car::setup ()
     {
         for (Plugin *plugin : available_plugins)
         {
-            const int expected_ms = plugin->get_expected_ms();
-            if (cycle < 100 - expected_ms)
+            const int expected_cycles = plugin->get_expected_ms() / ms_per_cycle;
+            if (cycle < 100 - expected_cycles)
             {
                 const PluginId id = plugin->get_id();
                 const int actual_interval = get_actual_interval(cycle, id);
-                const int preferred_interval = plugin->get_preferred_interval();
+                const int preferred_interval = plugin->get_preferred_interval() / ms_per_cycle;
                 if (actual_interval >= preferred_interval)
                 {
                     schedule[cycle++] = id;
-                    for (int i = 0; i < expected_ms; i++)
+                    for (int i = 0; i < expected_cycles; i++)
                     {
                         schedule[cycle++] = IDLE_CYCLE;
                     }
@@ -157,7 +157,7 @@ void Car::cycle ()
 {
     const unsigned long cycle_start_us = micros();
     const int ms = millis() % 1000;
-    const int cycle = ms / 10;
+    const int cycle = ms / ms_per_cycle;
     if (cycle != last_cycle)
     {
         last_cycle = cycle;

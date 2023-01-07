@@ -109,6 +109,7 @@ class Car: public Executor
 
         PluginId schedule[100] =
         { };
+        const int ms_per_cycle = 10;
         int last_cycle = -1;
         Mode mode = COMMAND_MODE;
 

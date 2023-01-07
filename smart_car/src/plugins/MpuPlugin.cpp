@@ -67,7 +67,7 @@ bool MpuPlugin::setup ()
 
 int MpuPlugin::get_preferred_interval () const
 {
-    return 10;
+    return 100;
 }
 
 int MpuPlugin::get_expected_ms () const
