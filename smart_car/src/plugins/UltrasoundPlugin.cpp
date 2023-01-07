@@ -25,12 +25,13 @@ int UltrasoundPlugin::get_preferred_interval () const
 
 int UltrasoundPlugin::get_expected_ms () const
 {
-    return 4;
+    return 10;
 }
 
 long UltrasoundPlugin::get_distance ()
 {
     // This method is not const and includes a 25 ms delay.
+    // That line has been commented out in the library routine.
     return sr04.Distance();
 }
 

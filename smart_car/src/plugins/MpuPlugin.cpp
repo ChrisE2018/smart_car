@@ -72,7 +72,7 @@ int MpuPlugin::get_preferred_interval () const
 
 int MpuPlugin::get_expected_ms () const
 {
-    return 10;
+    return 12;
 }
 
 void MpuPlugin::calibrate ()
