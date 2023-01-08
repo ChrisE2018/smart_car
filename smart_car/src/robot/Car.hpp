@@ -64,7 +64,6 @@ class Car: public Executor
         OdomPlugin* get_odom_plugin () const;
         UltrasoundPlugin* get_ultrasound_plugin () const;
         WallPlugin* get_wall_plugin () const;
-        Plugin* get_plugin (PluginId id) const;
 
     private:
         unsigned long cycle_count = 0;
@@ -114,8 +113,8 @@ class Car: public Executor
         int last_cycle = -1;
         Mode mode = Mode::COMMAND_MODE;
 
-        void handle_command ();
         void help_command () const;
-        int get_actual_interval (int cycle, PluginId id) const;
+        Plugin* get_plugin (const PluginId id) const;
+        int get_actual_interval (const int cycle, const PluginId id) const;
 };
 

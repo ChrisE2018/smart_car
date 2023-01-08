@@ -69,7 +69,7 @@ void Car::setup ()
         motors[motor].setup();
     }
     LOG_INFO(logger, "Attempting setup of %d available plugins", available_plugins.size());
-    for (Plugin *plugin : available_plugins)
+    for (Plugin *const plugin : available_plugins)
     {
         if (plugin->setup())
         {
@@ -114,7 +114,7 @@ void Car::setup ()
     logger.debug() << "Testing debug logging" << std::endl;
 }
 
-int Car::get_actual_interval (int cycle, PluginId id) const
+int Car::get_actual_interval (const int cycle, const PluginId id) const
 {
     for (int i = cycle; i >= 0; i--)
     {
@@ -167,7 +167,8 @@ void Car::cycle ()
         Plugin *plugin = get_plugin(scheduled_plugin);
         if (plugin == nullptr)
         {
-            handle_command();
+            serial_parser.handle_command(*this);
+            bluetooth_parser.handle_command(*this);
         }
         else
         {
@@ -182,19 +183,13 @@ void Car::cycle ()
     cycle_count++;
 }
 
-void Car::handle_command ()
-{
-    serial_parser.handle_command(*this);
-    bluetooth_parser.handle_command(*this);
-}
-
 /** Execute a command from the user.
  @param words Command string broken into words.
  */
 void Car::execute_command (const std::vector<String> words)
 {
     const int n = words.size();
-    String command = words[0];
+    const String command = words[0];
     logger.info() << "Command: " << command.c_str() << std::endl;
     if (command == "angle")
     {
