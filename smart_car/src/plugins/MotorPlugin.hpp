@@ -79,16 +79,16 @@ class MotorPlugin: public Plugin
         const int reverse_led;
         MotorDirection direction = MotorDirection::STOP;
         int speed = 0;
-        
+
         // Support for speed encoders
         const float k0 = 3;
         const float k1 = 2;
         const float k2 = 1;
-        unsigned long speed_counter = 0;
         float desired_velocity = 0;
         float measured_velocity = 0;
         unsigned long last_cycle_micros = 0;
-        float last_cycle_error = 0;
+        unsigned long speed_counter = 0;
+        float velocity_error = 0;
         float cumulative_velocity_error = 0;
         float cumulative_error_time = 0;
 };

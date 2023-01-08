@@ -178,16 +178,16 @@ int MotorPlugin::get_expected_ms () const
 
 void MotorPlugin::cycle ()
 {
-    unsigned long now = micros();
+    const unsigned long now = micros();
     const unsigned long previous_speed_counter = speed_counter;
     speed_counter = (location == MotorLocation::RIGHT) ? speed_counter_right : speed_counter_left;
-    float delta_time = now - last_cycle_micros;
+    const float delta_time = now - last_cycle_micros;
     measured_velocity = (speed_counter - previous_speed_counter) / delta_time;
-    const float velocity_error = desired_velocity - measured_velocity;
-    const float velocity_error_rate = (last_cycle_error - velocity_error) / delta_time;
+    const float previous_velocity_error = velocity_error;
+    velocity_error = desired_velocity - measured_velocity;
+    const float velocity_error_rate = (velocity_error - previous_velocity_error) / delta_time;
     cumulative_velocity_error += velocity_error;
     cumulative_error_time += delta_time;
-    last_cycle_error = velocity_error;
     last_cycle_micros = now;
     const float control = k0
             * (velocity_error + k1 * cumulative_velocity_error / cumulative_error_time
