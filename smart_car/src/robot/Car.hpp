@@ -104,15 +104,15 @@ class Car: public Executor
         const int LED_2 = 26; // red led left
         const int LED_3 = 28; // green led left
         MotorPlugin motors[MOTOR_COUNT] =
-        { MotorPlugin(MOTOR_RIGHT_PLUGIN, RIGHT, enB, in4, in3, right_speed_counter_pin, LED_0,
-                LED_1), MotorPlugin(MOTOR_LEFT_PLUGIN, LEFT, enA, in1, in2, left_speed_counter_pin,
+        { MotorPlugin(PluginId::MOTOR_RIGHT_PLUGIN, MotorLocation::RIGHT, enB, in4, in3, right_speed_counter_pin, LED_0,
+                LED_1), MotorPlugin(PluginId::MOTOR_LEFT_PLUGIN, MotorLocation::LEFT, enA, in1, in2, left_speed_counter_pin,
                 LED_2, LED_3) };
 
         PluginId schedule[100] =
         { };
         const int ms_per_cycle = 10;
         int last_cycle = -1;
-        Mode mode = COMMAND_MODE;
+        Mode mode = Mode::COMMAND_MODE;
 
         void handle_command ();
         void help_command () const;

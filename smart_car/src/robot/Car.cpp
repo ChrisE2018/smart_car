@@ -18,16 +18,16 @@ static Logger logger(__FILE__, Level::debug);
 Car::Car () : serial_parser(Serial), bluetooth_parser(Serial3)
 {
     clock_plugin = new ClockPlugin();
-    clockwise_plugin = new DrivePlugin(CLOCKWISE_PLUGIN, *this, 500, FORWARD, REVERSE);
-    counterclockwise_plugin = new DrivePlugin(COUNTERCLOCKWISE_PLUGIN, *this, 500, REVERSE,
-            FORWARD);
+    clockwise_plugin = new DrivePlugin(PluginId::CLOCKWISE_PLUGIN, *this, 500, MotorDirection::FORWARD, MotorDirection::REVERSE);
+    counterclockwise_plugin = new DrivePlugin(PluginId::COUNTERCLOCKWISE_PLUGIN, *this, 500, MotorDirection::REVERSE,
+            MotorDirection::FORWARD);
     demo_plugin = new DemoPlugin(*this);
-    forward_plugin = new DrivePlugin(FORWARD_PLUGIN, *this, 500, FORWARD, FORWARD);
+    forward_plugin = new DrivePlugin(PluginId::FORWARD_PLUGIN, *this, 500, MotorDirection::FORWARD, MotorDirection::FORWARD);
     goal_plugin = new GoalPlugin(*this);
     mpu_plugin = new MpuPlugin();
     kalman_plugin = new KalmanPlugin(*this);
     odom_plugin = new OdomPlugin(*this);
-    reverse_plugin = new DrivePlugin(REVERSE_PLUGIN, *this, 500, REVERSE, REVERSE);
+    reverse_plugin = new DrivePlugin(PluginId::REVERSE_PLUGIN, *this, 500, MotorDirection::REVERSE, MotorDirection::REVERSE);
     ultrasound_plugin = new UltrasoundPlugin(*this);
     wall_plugin = new WallPlugin(*this);
 
@@ -40,7 +40,6 @@ Car::Car () : serial_parser(Serial), bluetooth_parser(Serial3)
     available_plugins.push_back(counterclockwise_plugin);
     available_plugins.push_back(&motors[0]);
     available_plugins.push_back(&motors[1]);
-    available_plugins.push_back(mpu_plugin);
     available_plugins.push_back(mpu_plugin);
     available_plugins.push_back(kalman_plugin);
     available_plugins.push_back(odom_plugin);
@@ -98,15 +97,15 @@ void Car::setup ()
                     schedule[cycle++] = id;
                     for (int i = 0; i < expected_cycles; i++)
                     {
-                        schedule[cycle++] = IDLE_CYCLE;
+                        schedule[cycle++] = PluginId::IDLE_CYCLE;
                     }
                 }
             }
         }
         if (cycle < 99)
         {
-            schedule[cycle++] = COMMAND_CYCLE;
-            schedule[cycle++] = IDLE_CYCLE;
+            schedule[cycle++] = PluginId::COMMAND_CYCLE;
+            schedule[cycle++] = PluginId::IDLE_CYCLE;
         }
     }
     LOG_INFO(logger, "Completed setup of %d enabled plugins", plugins.size());
@@ -133,22 +132,22 @@ void Car::set_mode (const Mode _mode)
     logger.info() << "Set " << *this << " to " << _mode << std::endl;
     switch (mode)
     {
-        case COMMAND_MODE:
+        case Mode::COMMAND_MODE:
             all_stop();
             demo_plugin->set_enabled(false);
             wall_plugin->set_enabled(false);
             break;
-        case DEMO_MODE:
+        case Mode::DEMO_MODE:
             all_stop();
             demo_plugin->set_enabled(true);
             wall_plugin->set_enabled(false);
             break;
-        case GOAL_MODE:
+        case Mode::GOAL_MODE:
             all_stop();
             demo_plugin->set_enabled(false);
             wall_plugin->set_enabled(false);
             break;
-        case WALL_MODE:
+        case Mode::WALL_MODE:
             all_stop();
             demo_plugin->set_enabled(false);
             wall_plugin->set_enabled(true);
@@ -196,12 +195,12 @@ void Car::execute_command (const std::vector<String> words)
 {
     const int n = words.size();
     String command = words[0];
-    logger.info() << "Command: " << command << std::endl;
+    logger.info() << "Command: " << command.c_str() << std::endl;
     if (command == "angle")
     {
         if (n > 1)
         {
-            set_mode(GOAL_MODE);
+            set_mode(Mode::GOAL_MODE);
             goal_plugin->set_goal(words[1].toFloat());
         }
     }
@@ -217,7 +216,7 @@ void Car::execute_command (const std::vector<String> words)
         {
             duration = words[2].toInt();
         }
-        set_mode(COMMAND_MODE);
+        set_mode(Mode::COMMAND_MODE);
         reverse_plugin->set_duration(duration);
         reverse_plugin->set_right_speed(speed);
         reverse_plugin->set_left_speed(speed);
@@ -229,7 +228,7 @@ void Car::execute_command (const std::vector<String> words)
     }
     else if (command == "c")
     {
-        set_mode(COMMAND_MODE);
+        set_mode(Mode::COMMAND_MODE);
         logger.info() << "Current mode is " << mode << std::endl;
     }
     else if (command == "clock")
@@ -238,7 +237,7 @@ void Car::execute_command (const std::vector<String> words)
     }
     else if (command == "demo")
     {
-        set_mode(DEMO_MODE);
+        set_mode(Mode::DEMO_MODE);
         logger.info() << "Current mode is " << mode << std::endl;
     }
     else if (command == "distance")
@@ -257,7 +256,7 @@ void Car::execute_command (const std::vector<String> words)
         {
             duration = words[2].toInt();
         }
-        set_mode(COMMAND_MODE);
+        set_mode(Mode::COMMAND_MODE);
         forward_plugin->set_duration(duration);
         forward_plugin->set_right_speed(speed);
         forward_plugin->set_left_speed(speed);
@@ -267,7 +266,7 @@ void Car::execute_command (const std::vector<String> words)
     {
         if (n > 2)
         {
-            set_mode(GOAL_MODE);
+            set_mode(Mode::GOAL_MODE);
             goal_plugin->set_goal(words[1].toFloat(), words[2].toFloat());
         }
     }
@@ -291,7 +290,7 @@ void Car::execute_command (const std::vector<String> words)
         {
             duration = words[2].toInt();
         }
-        set_mode(COMMAND_MODE);
+        set_mode(Mode::COMMAND_MODE);
         clockwise_plugin->set_duration(duration);
         clockwise_plugin->set_right_speed(speed);
         clockwise_plugin->set_left_speed(speed);
@@ -335,7 +334,7 @@ void Car::execute_command (const std::vector<String> words)
         {
             duration = words[2].toInt();
         }
-        set_mode(COMMAND_MODE);
+        set_mode(Mode::COMMAND_MODE);
         counterclockwise_plugin->set_duration(duration);
         counterclockwise_plugin->set_right_speed(speed);
         counterclockwise_plugin->set_left_speed(speed);
@@ -348,12 +347,12 @@ void Car::execute_command (const std::vector<String> words)
         {
             plugin->reset();
         }
-        set_mode(COMMAND_MODE);
+        set_mode(Mode::COMMAND_MODE);
     }
     else if (command == "s")
     {
         all_stop();
-        set_mode(COMMAND_MODE);
+        set_mode(Mode::COMMAND_MODE);
     }
     else if (command == "schedule")
     {
@@ -367,12 +366,12 @@ void Car::execute_command (const std::vector<String> words)
     }
     else if (command == "wall")
     {
-        set_mode(WALL_MODE);
+        set_mode(Mode::WALL_MODE);
         logger.info() << "Current mode is " << mode << std::endl;
     }
     else if (command == "zero")
     {
-        set_mode(COMMAND_MODE);
+        set_mode(Mode::COMMAND_MODE);
         kalman_plugin->reset();
         odom_plugin->reset();
     }
@@ -450,7 +449,7 @@ MotorPlugin& Car::get_motor (const MotorLocation motor)
 
 void Car::drive_stop (const MotorLocation motor)
 {
-    if (motor == RIGHT || motor == LEFT)
+    if (motor == MotorLocation::RIGHT || motor == MotorLocation::LEFT)
     {
         motors[static_cast<int>(motor)].drive_stop();
     }
@@ -475,7 +474,7 @@ void Car::drive (const MotorLocation motor, const int speed)
 int Car::get_drive_speed (const MotorLocation motor) const
 {
     const int speed = motors[static_cast<int>(motor)].get_speed();
-    if (motors[static_cast<int>(motor)].get_direction() == REVERSE)
+    if (motors[static_cast<int>(motor)].get_direction() == MotorDirection::REVERSE)
     {
         return -speed;
     }
@@ -494,7 +493,7 @@ MotorDirection Car::get_drive_direction (const MotorLocation motor) const
 
 void Car::drive_forward (const MotorLocation motor, const int speed)
 {
-    if (motor == RIGHT || motor == LEFT)
+    if (motor == MotorLocation::RIGHT || motor == MotorLocation::LEFT)
     {
         motors[static_cast<int>(motor)].drive_forward(speed);
     }
@@ -502,7 +501,7 @@ void Car::drive_forward (const MotorLocation motor, const int speed)
 
 void Car::drive_reverse (const MotorLocation motor, const int speed)
 {
-    if (motor == RIGHT || motor == LEFT)
+    if (motor == MotorLocation::RIGHT || motor == MotorLocation::LEFT)
     {
         motors[static_cast<int>(motor)].drive_reverse(speed);
     }
@@ -572,29 +571,29 @@ Plugin* Car::get_plugin (PluginId id) const
 {
     switch (id)
     {
-        case CLOCK_PLUGIN:
+        case PluginId::CLOCK_PLUGIN:
             return clock_plugin;
-        case CLOCKWISE_PLUGIN:
+        case PluginId::CLOCKWISE_PLUGIN:
             return clockwise_plugin;
-        case COUNTERCLOCKWISE_PLUGIN:
+        case PluginId::COUNTERCLOCKWISE_PLUGIN:
             return counterclockwise_plugin;
-        case DEMO_PLUGIN:
+        case PluginId::DEMO_PLUGIN:
             return demo_plugin;
-        case FORWARD_PLUGIN:
+        case PluginId::FORWARD_PLUGIN:
             return forward_plugin;
-        case GOAL_PLUGIN:
+        case PluginId::GOAL_PLUGIN:
             return goal_plugin;
-        case MPU_PLUGIN:
+        case PluginId::MPU_PLUGIN:
             return mpu_plugin;
-        case KALMAN_PLUGIN:
+        case PluginId::KALMAN_PLUGIN:
             return kalman_plugin;
-        case ODOM_PLUGIN:
+        case PluginId::ODOM_PLUGIN:
             return odom_plugin;
-        case REVERSE_PLUGIN:
+        case PluginId::REVERSE_PLUGIN:
             return reverse_plugin;
-        case ULTRASOUND_PLUGIN:
+        case PluginId::ULTRASOUND_PLUGIN:
             return ultrasound_plugin;
-        case WALL_PLUGIN:
+        case PluginId::WALL_PLUGIN:
             return wall_plugin;
         default:
             return nullptr;
