@@ -36,7 +36,7 @@ void WallPlugin::cycle ()
         {
             set_enabled(false);
             car.all_stop();
-            car.set_mode(COMMAND_MODE);
+            car.set_mode(Mode::COMMAND_MODE);
         }
         else
         {
@@ -48,8 +48,8 @@ void WallPlugin::cycle ()
             {
                 speed = SPEED_HALF;
             }
-            car.drive_forward(RIGHT, speed);
-            car.drive_forward(LEFT, speed);
+            car.drive_forward(MotorLocation::RIGHT, speed);
+            car.drive_forward(MotorLocation::LEFT, speed);
         }
     }
 }
