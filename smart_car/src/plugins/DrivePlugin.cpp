@@ -13,7 +13,7 @@
 
 static Logger logger(__FILE__, Level::info);
 
-DrivePlugin::DrivePlugin (PluginId id, Car &car, const int duration,
+DrivePlugin::DrivePlugin (const PluginId id, Car &car, const int duration,
         const MotorDirection right_motor_direction, const MotorDirection left_motor_direction) : Plugin(
         id), car(car), duration(duration), right_motor_direction(right_motor_direction), left_motor_direction(
         left_motor_direction)
@@ -27,8 +27,8 @@ void DrivePlugin::set_enabled (const bool enable)
     {
         unsigned long now = millis();
         deadline = now + duration;
-        logger.info() << "Starting DriveMode: " << get_id() << " speed " << right_motor_speed << ", "
-                << left_motor_speed << " for " << duration << " from " << now << " until "
+        logger.info() << "Starting DriveMode: " << get_id() << " speed " << right_motor_speed
+                << ", " << left_motor_speed << " for " << duration << " from " << now << " until "
                 << deadline << std::endl;
         switch (right_motor_direction)
         {
