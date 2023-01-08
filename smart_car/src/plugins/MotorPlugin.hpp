@@ -55,7 +55,7 @@ class MotorPlugin: public Plugin
         MotorDirection get_direction () const;
         int get_speed () const;
         float get_velocity () const;
-        unsigned long get_speed_counter() const;
+        unsigned long get_speed_counter () const;
         void set_desired_velocity (float desired_velocity);
         float get_measured_velocity () const;
         virtual int get_preferred_interval () const;

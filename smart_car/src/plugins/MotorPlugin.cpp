@@ -151,7 +151,7 @@ float MotorPlugin::get_velocity () const
     }
 }
 
-unsigned long MotorPlugin::get_speed_counter() const
+unsigned long MotorPlugin::get_speed_counter () const
 {
     return speed_counter;
 }
