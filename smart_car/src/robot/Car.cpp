@@ -422,16 +422,6 @@ void Car::demo_drive_leds ()
     }
 }
 
-const Motor& Car::get_motor (const MotorLocation motor) const
-{
-    return motors[static_cast<int>(motor)];
-}
-
-Motor& Car::get_motor (const MotorLocation motor)
-{
-    return motors[static_cast<int>(motor)];
-}
-
 void Car::all_stop ()
 {
     for (int motor = 0; motor < MOTOR_COUNT; motor++)
@@ -443,6 +433,16 @@ void Car::all_stop ()
     clockwise_plugin->set_enabled(false);
     counterclockwise_plugin->set_enabled(false);
     goal_plugin->set_enabled(false);
+}
+
+const Motor& Car::get_motor (const MotorLocation motor) const
+{
+    return motors[static_cast<int>(motor)];
+}
+
+Motor& Car::get_motor (const MotorLocation motor)
+{
+    return motors[static_cast<int>(motor)];
 }
 
 void Car::drive_stop (const MotorLocation motor)

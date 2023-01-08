@@ -25,7 +25,7 @@ int UltrasoundPlugin::get_preferred_interval () const
 
 int UltrasoundPlugin::get_expected_ms () const
 {
-    return 10;
+    return 8;
 }
 
 long UltrasoundPlugin::get_distance ()

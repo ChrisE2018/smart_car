@@ -111,6 +111,7 @@ void Motor::drive_stop ()
     {
         direction = STOP;
         speed = 0;
+        desired_velocity = 0;
         digitalWrite(forward_led, LOW);
         digitalWrite(reverse_led, LOW);
         digitalWrite(forward_pin, LOW);
@@ -152,7 +153,7 @@ unsigned long Motor::get_speed_counter () const
     return (location == RIGHT) ? speed_counter_right : speed_counter_left;
 }
 
-float Motor::get_speed_counter_velocity ()
+float Motor::get_speed_counter_velocity (const unsigned long now)
 {
     unsigned long count = 0;
     if (location == RIGHT)
@@ -165,7 +166,6 @@ float Motor::get_speed_counter_velocity ()
         count = speed_counter_left;
         speed_counter_left = 0;
     }
-    const unsigned long now = micros();
     const unsigned long checkpoint = speed_counter_checkpoint;
     const double duration = now - checkpoint; // microseconds
     speed_counter_checkpoint = now;
@@ -174,4 +174,31 @@ float Motor::get_speed_counter_velocity ()
         return count * count_to_meters_per_second / duration;
     }
     return 0;
+}
+
+void Motor::set_desired_velocity (float _desired_velocity)
+{
+    desired_velocity = _desired_velocity;
+}
+
+void Motor::cycle ()
+{
+    unsigned long now = micros();
+    unsigned long delta_time = now - last_cycle_micros;
+    const float measured_velocity = get_speed_counter_velocity(now);
+    const float velocity_error = desired_velocity - measured_velocity;
+    const float velocity_error_rate = (last_cycle_error - velocity_error) / delta_time;
+    cumulative_velocity_error += velocity_error;
+    cumulative_error_time += delta_time;
+    last_cycle_error = velocity_error;
+    last_cycle_micros = now;
+    const float k0 = 3;
+    const float k1 = 2;
+    const float k2 = 1;
+    const float control = k0
+            * (velocity_error + k1 * cumulative_velocity_error / cumulative_error_time
+                    + k2 * velocity_error_rate);
+
+    cout << "Motor " << location << " control  " << control << std::endl;
+    // set_velocity(control);
 }

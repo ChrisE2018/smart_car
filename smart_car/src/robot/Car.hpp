@@ -41,9 +41,9 @@ class Car: public Executor
         void demo_drive_leds ();
         void execute_command (const std::vector<String> words);
 
+        void all_stop ();
         const Motor& get_motor (const MotorLocation motor) const;
         Motor& get_motor (const MotorLocation motor);
-        void all_stop ();
         void drive_stop (const MotorLocation motor);
         void drive (const MotorLocation motor, const int speed);
         int get_drive_speed (const MotorLocation motor) const;

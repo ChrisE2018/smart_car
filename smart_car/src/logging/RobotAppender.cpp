@@ -24,8 +24,8 @@ void RobotAppender::append (const Logger *logger, const Level level, const int l
     struct tm *lt = localtime(&t);
     const int ms = millis() % 1000;
     char buf[buffer_size];
-    snprintf(buf, buffer_size, "%s.%03d [%s %s] %s", isotime(lt), ms, logger->get_short_name().c_str(),
-            stringify(level), message);
+    snprintf(buf, buffer_size, "%s.%03d [%s %s:%d] %s", isotime(lt), ms, stringify(level),
+            logger->get_short_name().c_str(), line, message);
     Serial.println(buf);
     Serial3.println(buf);
     // [TODO] Also append to log file

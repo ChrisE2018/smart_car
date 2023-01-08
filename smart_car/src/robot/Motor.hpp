@@ -55,9 +55,18 @@ class Motor
         int get_speed () const;
         float get_velocity () const;
         unsigned long get_speed_counter () const;
-        float get_speed_counter_velocity ();
+        float get_speed_counter_velocity (const unsigned long now);
+        void set_desired_velocity(float desired_velocity);
+        void cycle();
 
     private:
+
+        // 55 mm wheels
+        // 20 encoder slots per revolution
+        // Multiply by one million to convert micros to seconds
+        // meters-per-micro = PI *diameter / encoder_slots
+        const double count_to_meters_per_second = 1000.0 * 1000.0 * M_PI * 0.055 / 20.0;
+
         const MotorLocation location;
         const int enable_pin;
         const int forward_pin;
@@ -69,10 +78,10 @@ class Motor
         int speed = 0;
         unsigned long speed_counter_checkpoint = 0;
 
-        // 55 mm wheels
-        // 20 encoder slots per revolution
-        // Multiply by one million to convert micros to seconds
-        // meters-per-micro = PI *diameter / encoder_slots
-        const double count_to_meters_per_second = 1000.0 * 1000.0 * M_PI * 0.055 / 20.0;
+        float desired_velocity = 0;
+        unsigned long last_cycle_micros = 0;
+        float last_cycle_error = 0;
+        float cumulative_velocity_error = 0;
+        float cumulative_error_time = 0;
 };
 

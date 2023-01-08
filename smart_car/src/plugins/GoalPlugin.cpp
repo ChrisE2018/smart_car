@@ -61,7 +61,7 @@ void GoalPlugin::cycle ()
             {
                 angle_cycle(measured_angle, goal_angle);
             }
-            if (adjust_position)
+            else if (adjust_position)
             {
                 const float measured_x = car.get_kalman_plugin()->get_x();
                 const float measured_y = car.get_kalman_plugin()->get_y();
