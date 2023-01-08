@@ -183,6 +183,11 @@ void MotorPlugin::set_desired_velocity (float _desired_velocity)
     desired_velocity = _desired_velocity;
 }
 
+unsigned long MotorPlugin::get_measured_velocity ()
+{
+    return measured_velocity;
+}
+
 int MotorPlugin::get_preferred_interval () const
 {
     return 1;

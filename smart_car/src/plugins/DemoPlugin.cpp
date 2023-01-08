@@ -10,7 +10,7 @@
 #include "../robot/Car.hpp"
 #include "DrivePlugin.hpp"
 
-DemoPlugin::DemoPlugin (Car &car) : Plugin(DEMO_PLUGIN), car(car)
+DemoPlugin::DemoPlugin (Car &car) : Plugin(PluginId::DEMO_PLUGIN), car(car)
 {
 }
 
@@ -20,11 +20,11 @@ void DemoPlugin::set_enabled (const bool enable)
     if (enable)
     {
         Serial.println("Starting DemoMode");
-        set_phase(init_phase);
+        set_phase(DemoPhase::init_phase);
     }
     else
     {
-        phase = inactive_phase;
+        phase = DemoPhase::inactive_phase;
     }
 }
 

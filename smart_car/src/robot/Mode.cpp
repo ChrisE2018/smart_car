@@ -11,16 +11,16 @@ std::ostream& operator<< (std::ostream &lhs, Mode mode)
 {
     switch (mode)
     {
-        case COMMAND_MODE:
+        case Mode::COMMAND_MODE:
             lhs << "COMMAND_MODE";
             break;
-        case DEMO_MODE:
+        case Mode::DEMO_MODE:
             lhs << "DEMO_MODE";
             break;
-        case GOAL_MODE:
+        case Mode::GOAL_MODE:
             lhs << "GOAL_MODE";
             break;
-        case WALL_MODE:
+        case Mode::WALL_MODE:
             lhs << "WALL_MODE";
             break;
     }

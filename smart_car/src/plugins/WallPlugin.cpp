@@ -9,7 +9,7 @@
 #include "WallPlugin.hpp"
 #include "UltrasoundPlugin.hpp"
 
-WallPlugin::WallPlugin (Car &car) : Plugin(WALL_PLUGIN), car(car)
+WallPlugin::WallPlugin (Car &car) : Plugin(PluginId::WALL_PLUGIN), car(car)
 {
 }
 
