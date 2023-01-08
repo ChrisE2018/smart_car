@@ -578,10 +578,14 @@ Plugin* Car::get_plugin (PluginId id) const
             return forward_plugin;
         case PluginId::GOAL_PLUGIN:
             return goal_plugin;
-        case PluginId::MPU_PLUGIN:
-            return mpu_plugin;
         case PluginId::KALMAN_PLUGIN:
             return kalman_plugin;
+        case PluginId::MOTOR_RIGHT_PLUGIN:
+            return &motors[static_cast<int>(MotorLocation::RIGHT)];
+        case PluginId::MOTOR_LEFT_PLUGIN:
+            return &motors[static_cast<int>(MotorLocation::LEFT)];
+        case PluginId::MPU_PLUGIN:
+            return mpu_plugin;
         case PluginId::ODOM_PLUGIN:
             return odom_plugin;
         case PluginId::REVERSE_PLUGIN:

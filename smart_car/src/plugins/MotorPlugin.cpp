@@ -150,32 +150,9 @@ float MotorPlugin::get_velocity () const
     }
 }
 
-unsigned long MotorPlugin::get_speed_counter () const
+unsigned long MotorPlugin::get_speed_counter() const
 {
-    return (location == MotorLocation::RIGHT) ? speed_counter_right : speed_counter_left;
-}
-
-float MotorPlugin::get_speed_counter_velocity (const unsigned long now)
-{
-    unsigned long count = 0;
-    if (location == MotorLocation::RIGHT)
-    {
-        count = speed_counter_right;
-        speed_counter_right = 0;
-    }
-    else
-    {
-        count = speed_counter_left;
-        speed_counter_left = 0;
-    }
-    const unsigned long checkpoint = speed_counter_checkpoint;
-    const double duration = now - checkpoint; // microseconds
-    speed_counter_checkpoint = now;
-    if (duration > 0)
-    {
-        return count * count_to_meters_per_second / duration;
-    }
-    return 0;
+    return speed_counter;
 }
 
 void MotorPlugin::set_desired_velocity (float _desired_velocity)
@@ -183,7 +160,7 @@ void MotorPlugin::set_desired_velocity (float _desired_velocity)
     desired_velocity = _desired_velocity;
 }
 
-unsigned long MotorPlugin::get_measured_velocity ()
+float MotorPlugin::get_measured_velocity () const
 {
     return measured_velocity;
 }
@@ -201,8 +178,10 @@ int MotorPlugin::get_expected_ms () const
 void MotorPlugin::cycle ()
 {
     unsigned long now = micros();
-    unsigned long delta_time = now - last_cycle_micros;
-    const float measured_velocity = get_speed_counter_velocity(now);
+    const unsigned long previous_speed_counter = speed_counter;
+    speed_counter = (location == MotorLocation::RIGHT) ? speed_counter_right : speed_counter_left;
+    float delta_time = now - last_cycle_micros;
+    measured_velocity = (speed_counter - previous_speed_counter) / delta_time;
     const float velocity_error = desired_velocity - measured_velocity;
     const float velocity_error_rate = (last_cycle_error - velocity_error) / delta_time;
     cumulative_velocity_error += velocity_error;
@@ -216,6 +195,6 @@ void MotorPlugin::cycle ()
             * (velocity_error + k1 * cumulative_velocity_error / cumulative_error_time
                     + k2 * velocity_error_rate);
 
-    cout << "Motor " << location << " control  " << control << std::endl;
+//    cout << "Motor " << location << " control  " << control << std::endl;
     // set_velocity(control);
 }

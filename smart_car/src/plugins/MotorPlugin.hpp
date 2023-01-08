@@ -55,10 +55,9 @@ class MotorPlugin: public Plugin
         MotorDirection get_direction () const;
         int get_speed () const;
         float get_velocity () const;
-        unsigned long get_speed_counter () const;
-        float get_speed_counter_velocity (const unsigned long now);
+        unsigned long get_speed_counter() const;
         void set_desired_velocity (float desired_velocity);
-        unsigned long get_measured_velocity ();
+        float get_measured_velocity () const;
         virtual int get_preferred_interval () const;
         virtual int get_expected_ms () const;
         void cycle ();
@@ -80,8 +79,8 @@ class MotorPlugin: public Plugin
         const int reverse_led;
         MotorDirection direction = STOP;
         int speed = 0;
-        unsigned long speed_counter_checkpoint = 0;
 
+        unsigned long speed_counter = 0;
         float desired_velocity = 0;
         float measured_velocity = 0;
         unsigned long last_cycle_micros = 0;
