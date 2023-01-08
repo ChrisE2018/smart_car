@@ -8,7 +8,7 @@
 #pragma once
 
 #include "Plugin.hpp"
-#include "../robot/Motor.hpp"
+#include "MotorPlugin.hpp"
 class Car;
 
 class DrivePlugin: public Plugin

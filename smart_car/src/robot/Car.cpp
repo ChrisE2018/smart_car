@@ -38,6 +38,9 @@ Car::Car () : serial_parser(Serial), bluetooth_parser(Serial3)
     available_plugins.push_back(reverse_plugin);
     available_plugins.push_back(clockwise_plugin);
     available_plugins.push_back(counterclockwise_plugin);
+    available_plugins.push_back(&motors[0]);
+    available_plugins.push_back(&motors[1]);
+    available_plugins.push_back(mpu_plugin);
     available_plugins.push_back(mpu_plugin);
     available_plugins.push_back(kalman_plugin);
     available_plugins.push_back(odom_plugin);
@@ -403,7 +406,7 @@ void Car::help_command () const
 
     for (int motor = 0; motor < MOTOR_COUNT; motor++)
     {
-        const Motor &m = motors[motor];
+        const MotorPlugin &m = motors[motor];
         logger.info() << m.get_location() << " speed counter " << m.get_speed_counter()
                 << std::endl;
     }
@@ -435,12 +438,12 @@ void Car::all_stop ()
     goal_plugin->set_enabled(false);
 }
 
-const Motor& Car::get_motor (const MotorLocation motor) const
+const MotorPlugin& Car::get_motor (const MotorLocation motor) const
 {
     return motors[static_cast<int>(motor)];
 }
 
-Motor& Car::get_motor (const MotorLocation motor)
+MotorPlugin& Car::get_motor (const MotorLocation motor)
 {
     return motors[static_cast<int>(motor)];
 }

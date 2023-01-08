@@ -31,6 +31,10 @@ const std::string stringify (const PluginId id)
             return "KALMAN_PLUGIN";
         case ODOM_PLUGIN:
             return "ODOM_PLUGIN";
+        case MOTOR_LEFT_PLUGIN:
+            return "MOTOR_LEFT_PLUGIN";
+        case MOTOR_RIGHT_PLUGIN:
+            return "MOTOR_RIGHT_PLUGIN";
         case REVERSE_PLUGIN:
             return "REVERSE_PLUGIN";
         case ULTRASOUND_PLUGIN:

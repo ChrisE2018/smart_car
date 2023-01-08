@@ -8,6 +8,7 @@
 #pragma once
 
 #include "Arduino.h"
+#include "Plugin.hpp"
 #include <ostream>
 
 const int SPEED_FULL = 255;
@@ -35,17 +36,17 @@ enum MotorLocation
 
 std::ostream& operator<< (std::ostream &lhs, MotorLocation location);
 
-class Motor
+class MotorPlugin: public Plugin
 {
     public:
-        Motor (const MotorLocation location, int enable, int forward, int reverse,
-                int speed_counter_pin, int forward_led, int reverse_led) : location(location), enable_pin(
-                enable), forward_pin(forward), reverse_pin(reverse), speed_counter_pin(
-                speed_counter_pin), forward_led(forward_led), reverse_led(reverse_led)
+        MotorPlugin (const PluginId id, const MotorLocation location, int enable, int forward,
+                int reverse, int speed_counter_pin, int forward_led, int reverse_led) : location(
+                location), enable_pin(enable), forward_pin(forward), reverse_pin(reverse), speed_counter_pin(
+                speed_counter_pin), forward_led(forward_led), reverse_led(reverse_led), Plugin(id)
         {
         }
 
-        void setup ();
+        bool setup ();
         void led_demo (const int duration) const;
         void drive_forward (const int speed);
         void drive_reverse (const int speed);
@@ -56,8 +57,10 @@ class Motor
         float get_velocity () const;
         unsigned long get_speed_counter () const;
         float get_speed_counter_velocity (const unsigned long now);
-        void set_desired_velocity(float desired_velocity);
-        void cycle();
+        void set_desired_velocity (float desired_velocity);
+        virtual int get_preferred_interval () const;
+        virtual int get_expected_ms () const;
+        void cycle ();
 
     private:
 

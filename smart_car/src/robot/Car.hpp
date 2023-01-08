@@ -9,8 +9,8 @@
 
 #include <arduino.h>
 #include <vector>
+#include "../plugins/MotorPlugin.hpp"
 #include "Mode.hpp"
-#include "Motor.hpp"
 #include "Parser.hpp"
 
 class ClockPlugin;
@@ -42,8 +42,8 @@ class Car: public Executor
         void execute_command (const std::vector<String> words);
 
         void all_stop ();
-        const Motor& get_motor (const MotorLocation motor) const;
-        Motor& get_motor (const MotorLocation motor);
+        const MotorPlugin& get_motor (const MotorLocation motor) const;
+        MotorPlugin& get_motor (const MotorLocation motor);
         void drive_stop (const MotorLocation motor);
         void drive (const MotorLocation motor, const int speed);
         int get_drive_speed (const MotorLocation motor) const;
@@ -103,9 +103,10 @@ class Car: public Executor
         const int LED_1 = 24; // green led right
         const int LED_2 = 26; // red led left
         const int LED_3 = 28; // green led left
-        Motor motors[MOTOR_COUNT] =
-        { Motor(RIGHT, enB, in4, in3, right_speed_counter_pin, LED_0, LED_1), Motor(LEFT, enA, in1,
-                in2, left_speed_counter_pin, LED_2, LED_3) };
+        MotorPlugin motors[MOTOR_COUNT] =
+        { MotorPlugin(MOTOR_RIGHT_PLUGIN, RIGHT, enB, in4, in3, right_speed_counter_pin, LED_0,
+                LED_1), MotorPlugin(MOTOR_LEFT_PLUGIN, LEFT, enA, in1, in2, left_speed_counter_pin,
+                LED_2, LED_3) };
 
         PluginId schedule[100] =
         { };
@@ -115,6 +116,6 @@ class Car: public Executor
 
         void handle_command ();
         void help_command () const;
-        int get_actual_interval(int cycle, PluginId id) const;
+        int get_actual_interval (int cycle, PluginId id) const;
 };
 

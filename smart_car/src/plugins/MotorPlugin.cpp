@@ -5,7 +5,8 @@
  *      Author: cre
  */
 
-#include "Motor.hpp"
+#include "MotorPlugin.hpp"
+
 #include "smart_car.hpp"
 
 unsigned long int speed_counter_right = 0;
@@ -51,7 +52,7 @@ std::ostream& operator<< (std::ostream &lhs, MotorLocation location)
     return lhs;
 }
 
-void Motor::setup ()
+bool MotorPlugin::setup ()
 {
     pinMode(enable_pin, OUTPUT);
     pinMode(forward_pin, OUTPUT);
@@ -61,9 +62,10 @@ void Motor::setup ()
     drive_stop();
     void (*isr) () = (location == RIGHT) ? isr_right : isr_left;
     attachInterrupt(digitalPinToInterrupt(speed_counter_pin), isr, RISING);
+    return true;
 }
 
-void Motor::led_demo (const int duration) const
+void MotorPlugin::led_demo (const int duration) const
 {
     digitalWrite(forward_led, HIGH);
     delay(duration);
@@ -75,7 +77,7 @@ void Motor::led_demo (const int duration) const
     delay(duration);
 }
 
-void Motor::drive_forward (const int _speed)
+void MotorPlugin::drive_forward (const int _speed)
 {
     if (direction != FORWARD || speed != _speed)
     {
@@ -90,7 +92,7 @@ void Motor::drive_forward (const int _speed)
     }
 }
 
-void Motor::drive_reverse (const int _speed)
+void MotorPlugin::drive_reverse (const int _speed)
 {
     if (direction != REVERSE || speed != _speed)
     {
@@ -105,7 +107,7 @@ void Motor::drive_reverse (const int _speed)
     }
 }
 
-void Motor::drive_stop ()
+void MotorPlugin::drive_stop ()
 {
     if (direction != STOP || speed != 0)
     {
@@ -121,22 +123,22 @@ void Motor::drive_stop ()
     }
 }
 
-MotorLocation Motor::get_location () const
+MotorLocation MotorPlugin::get_location () const
 {
     return location;
 }
 
-MotorDirection Motor::get_direction () const
+MotorDirection MotorPlugin::get_direction () const
 {
     return direction;
 }
 
-int Motor::get_speed () const
+int MotorPlugin::get_speed () const
 {
     return speed;
 }
 
-float Motor::get_velocity () const
+float MotorPlugin::get_velocity () const
 {
     if (direction == REVERSE)
     {
@@ -148,12 +150,12 @@ float Motor::get_velocity () const
     }
 }
 
-unsigned long Motor::get_speed_counter () const
+unsigned long MotorPlugin::get_speed_counter () const
 {
     return (location == RIGHT) ? speed_counter_right : speed_counter_left;
 }
 
-float Motor::get_speed_counter_velocity (const unsigned long now)
+float MotorPlugin::get_speed_counter_velocity (const unsigned long now)
 {
     unsigned long count = 0;
     if (location == RIGHT)
@@ -176,12 +178,22 @@ float Motor::get_speed_counter_velocity (const unsigned long now)
     return 0;
 }
 
-void Motor::set_desired_velocity (float _desired_velocity)
+void MotorPlugin::set_desired_velocity (float _desired_velocity)
 {
     desired_velocity = _desired_velocity;
 }
 
-void Motor::cycle ()
+int MotorPlugin::get_preferred_interval () const
+{
+    return 1;
+}
+
+int MotorPlugin::get_expected_ms () const
+{
+    return 1;
+}
+
+void MotorPlugin::cycle ()
 {
     unsigned long now = micros();
     unsigned long delta_time = now - last_cycle_micros;
