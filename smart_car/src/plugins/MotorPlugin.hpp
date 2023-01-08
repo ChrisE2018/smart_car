@@ -58,9 +58,9 @@ class MotorPlugin: public Plugin
         unsigned long get_speed_counter () const;
         void set_desired_velocity (float desired_velocity);
         float get_measured_velocity () const;
-        virtual int get_preferred_interval () const;
-        virtual int get_expected_ms () const;
-        void cycle ();
+        virtual int get_preferred_interval () const override;
+        virtual int get_expected_ms () const override;
+        void cycle () override;
 
     private:
 
@@ -77,9 +77,13 @@ class MotorPlugin: public Plugin
         const int speed_counter_pin;
         const int forward_led;
         const int reverse_led;
-        MotorDirection direction = STOP;
+        MotorDirection direction = MotorDirection::STOP;
         int speed = 0;
-
+        
+        // Support for speed encoders
+        const float k0 = 3;
+        const float k1 = 2;
+        const float k2 = 1;
         unsigned long speed_counter = 0;
         float desired_velocity = 0;
         float measured_velocity = 0;

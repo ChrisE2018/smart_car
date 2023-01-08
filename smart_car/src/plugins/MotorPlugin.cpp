@@ -189,9 +189,6 @@ void MotorPlugin::cycle ()
     cumulative_error_time += delta_time;
     last_cycle_error = velocity_error;
     last_cycle_micros = now;
-    const float k0 = 3;
-    const float k1 = 2;
-    const float k2 = 1;
     const float control = k0
             * (velocity_error + k1 * cumulative_velocity_error / cumulative_error_time
                     + k2 * velocity_error_rate);
