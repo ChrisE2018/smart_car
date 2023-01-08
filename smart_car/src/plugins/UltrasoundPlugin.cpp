@@ -12,7 +12,7 @@
 
 static Logger logger(__FILE__, Level::info);
 
-UltrasoundPlugin::UltrasoundPlugin (Car &car) : car(car), Plugin(ULTRASOUND_PLUGIN), sr04(
+UltrasoundPlugin::UltrasoundPlugin (Car &car) : car(car), Plugin(PluginId::ULTRASOUND_PLUGIN), sr04(
         ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)
 {
 
@@ -45,8 +45,8 @@ void UltrasoundPlugin::cycle ()
     if (d < 10)
     {
         bool did_stop = false;
-        MotorPlugin &right_motor = car.get_motor(RIGHT);
-        MotorPlugin &left_motor = car.get_motor(LEFT);
+        MotorPlugin &right_motor = car.get_motor(MotorLocation::RIGHT);
+        MotorPlugin &left_motor = car.get_motor(MotorLocation::LEFT);
         // Only stop if moving forward toward the obstacle.
         if (right_motor.get_velocity() > 0)
         {

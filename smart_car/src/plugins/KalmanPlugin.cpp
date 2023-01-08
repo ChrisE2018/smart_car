@@ -25,7 +25,7 @@ using namespace BLA;
 #define m2 0.01
 #define m3 0.01
 
-KalmanPlugin::KalmanPlugin (Car &car) : Plugin(KALMAN_PLUGIN), car(car)
+KalmanPlugin::KalmanPlugin (Car &car) : Plugin(PluginId::KALMAN_PLUGIN), car(car)
 {
 }
 
@@ -86,8 +86,8 @@ void KalmanPlugin::cycle ()
         const float dt = (now - t) * 0.001;
 
         const unsigned long now = micros();
-        const float right_velocity = car.get_motor(RIGHT).get_speed_counter_velocity(now);
-        const float left_velocity = car.get_motor(LEFT).get_speed_counter_velocity(now);
+        const float right_velocity = car.get_motor(MotorLocation::RIGHT).get_speed_counter_velocity(now);
+        const float left_velocity = car.get_motor(MotorLocation::LEFT).get_speed_counter_velocity(now);
 
         // Rotation from body to world for current angle
         update_transforms(state(2));

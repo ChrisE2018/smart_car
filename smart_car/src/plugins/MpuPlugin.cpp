@@ -9,7 +9,7 @@
 #include "MpuPlugin.hpp"
 #include "smart_car.hpp"
 
-MpuPlugin::MpuPlugin () : Plugin(MPU_PLUGIN), mpu(MPU_addr)
+MpuPlugin::MpuPlugin () : Plugin(PluginId::MPU_PLUGIN), mpu(MPU_addr)
 {
 }
 

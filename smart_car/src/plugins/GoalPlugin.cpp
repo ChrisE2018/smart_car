@@ -14,7 +14,7 @@
 
 static Logger logger(__FILE__, Level::info);
 
-GoalPlugin::GoalPlugin (Car &car) : Plugin(GOAL_PLUGIN), car(car)
+GoalPlugin::GoalPlugin (Car &car) : Plugin(PluginId::GOAL_PLUGIN), car(car)
 {
 }
 
@@ -86,8 +86,8 @@ void GoalPlugin::angle_cycle (const float measured_angle, const float desired_an
     {
         logger.info() << "Car " << car << " at " << measured_angle << " is goal angle " << desired_angle
                 << std::endl;
-        car.drive_stop(RIGHT);
-        car.drive_stop(LEFT);
+        car.drive_stop(MotorLocation::RIGHT);
+        car.drive_stop(MotorLocation::LEFT);
         adjust_angle = false;
     }
 }
@@ -100,15 +100,15 @@ void GoalPlugin::angle_step (const float measured_angle, const float desired_ang
     {
         logger.info() << "Clockwise by " << delta << " from " << measured_angle << " to goal angle "
                 << desired_angle << " at " << speed << std::endl;
-        car.drive_reverse(RIGHT, speed);
-        car.drive_forward(LEFT, speed);
+        car.drive_reverse(MotorLocation::RIGHT, speed);
+        car.drive_forward(MotorLocation::LEFT, speed);
     }
     else
     {
         logger.info() << "Counterclockwise by " << delta << " from " << measured_angle << " to goal angle "
                 << desired_angle << " at " << speed << std::endl;
-        car.drive_forward(RIGHT, speed);
-        car.drive_reverse(LEFT, speed);
+        car.drive_forward(MotorLocation::RIGHT, speed);
+        car.drive_reverse(MotorLocation::LEFT, speed);
     }
 }
 
@@ -120,8 +120,8 @@ void GoalPlugin::position_cycle (const float measured_angle, const float measure
     if (abs(dx) < position_tolerance && abs(dy) < position_tolerance)
     {
         logger.info() << "Robot " << car << " is at goal " << desired_x << ", " << desired_y << std::endl;
-        car.drive_stop(RIGHT);
-        car.drive_stop(LEFT);
+        car.drive_stop(MotorLocation::RIGHT);
+        car.drive_stop(MotorLocation::LEFT);
         adjust_position = false;
     }
     else
@@ -152,8 +152,8 @@ void GoalPlugin::position_step (const float measured_angle, const float measured
     else if (abs_delta_angle < angle_tolerance)
     {
         const int speed = get_position_speed(distance);
-        car.drive_forward(RIGHT, speed);
-        car.drive_forward(LEFT, speed);
+        car.drive_forward(MotorLocation::RIGHT, speed);
+        car.drive_forward(MotorLocation::LEFT, speed);
     }
     else if (delta_angle > 0)
     {
@@ -163,8 +163,8 @@ void GoalPlugin::position_step (const float measured_angle, const float measured
         logger.info() << "Drive Clockwise by " << delta_angle << " from " << measured_angle
                 << " to goal angle " << desired_angle << " at R" << speed_low << " L" << speed_high
                 << std::endl;
-        car.drive_forward(LEFT, speed_high);
-        car.drive_forward(RIGHT, speed_low);
+        car.drive_forward(MotorLocation::LEFT, speed_high);
+        car.drive_forward(MotorLocation::RIGHT, speed_low);
     }
     else
     {
@@ -173,8 +173,8 @@ void GoalPlugin::position_step (const float measured_angle, const float measured
         const int speed_low = speed_high * (1.0 - abs_delta_angle);
         logger.info() << "Drive Counterclockwise from " << measured_angle << " to goal angle "
                 << desired_angle << " at R" << speed_high << " L" << speed_low << std::endl;
-        car.drive_forward(RIGHT, speed_high);
-        car.drive_forward(LEFT, speed_low);
+        car.drive_forward(MotorLocation::RIGHT, speed_high);
+        car.drive_forward(MotorLocation::LEFT, speed_low);
     }
 }
 

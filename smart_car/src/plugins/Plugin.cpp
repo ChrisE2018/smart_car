@@ -13,37 +13,37 @@ const std::string stringify (const PluginId id)
 {
     switch (id)
     {
-        case CLOCK_PLUGIN:
+        case PluginId::CLOCK_PLUGIN:
             return "CLOCK_PLUGIN";
-        case CLOCKWISE_PLUGIN:
+        case PluginId::CLOCKWISE_PLUGIN:
             return "CLOCKWISE_PLUGIN";
-        case COUNTERCLOCKWISE_PLUGIN:
+        case PluginId::COUNTERCLOCKWISE_PLUGIN:
             return "COUNTERCLOCKWISE_PLUGIN";
-        case DEMO_PLUGIN:
+        case PluginId::DEMO_PLUGIN:
             return "DEMO_PLUGIN";
-        case FORWARD_PLUGIN:
+        case PluginId::FORWARD_PLUGIN:
             return "FORWARD_PLUGIN";
-        case GOAL_PLUGIN:
+        case PluginId::GOAL_PLUGIN:
             return "GOAL_PLUGIN";
-        case MPU_PLUGIN:
+        case PluginId::MPU_PLUGIN:
             return "MPU_PLUGIN";
-        case KALMAN_PLUGIN:
+        case PluginId::KALMAN_PLUGIN:
             return "KALMAN_PLUGIN";
-        case ODOM_PLUGIN:
+        case PluginId::ODOM_PLUGIN:
             return "ODOM_PLUGIN";
-        case MOTOR_LEFT_PLUGIN:
+        case PluginId::MOTOR_LEFT_PLUGIN:
             return "MOTOR_LEFT_PLUGIN";
-        case MOTOR_RIGHT_PLUGIN:
+        case PluginId::MOTOR_RIGHT_PLUGIN:
             return "MOTOR_RIGHT_PLUGIN";
-        case REVERSE_PLUGIN:
+        case PluginId::REVERSE_PLUGIN:
             return "REVERSE_PLUGIN";
-        case ULTRASOUND_PLUGIN:
+        case PluginId::ULTRASOUND_PLUGIN:
             return "ULTRASOUND_PLUGIN";
-        case WALL_PLUGIN:
+        case PluginId::WALL_PLUGIN:
             return "WALL_PLUGIN";
-        case COMMAND_CYCLE:
+        case PluginId::COMMAND_CYCLE:
             return "COMMAND_CYCLE";
-        case IDLE_CYCLE:
+        case PluginId::IDLE_CYCLE:
             return "IDLE_CYCLE";
         default:
             return "???_PLUGIN";

@@ -25,13 +25,13 @@ std::ostream& operator<< (std::ostream &lhs, MotorDirection direction)
 {
     switch (direction)
     {
-        case STOP:
+        case MotorDirection::STOP:
             lhs << "STOP";
             break;
-        case FORWARD:
+        case MotorDirection::FORWARD:
             lhs << "FORWARD";
             break;
-        case REVERSE:
+        case MotorDirection::REVERSE:
             lhs << "REVERSE";
             break;
     }
@@ -42,10 +42,10 @@ std::ostream& operator<< (std::ostream &lhs, MotorLocation location)
 {
     switch (location)
     {
-        case RIGHT:
+        case MotorLocation::RIGHT:
             lhs << "RIGHT";
             break;
-        case LEFT:
+        case MotorLocation::LEFT:
             lhs << "LEFT";
             break;
     }
@@ -60,7 +60,7 @@ bool MotorPlugin::setup ()
     pinMode(forward_led, OUTPUT);
     pinMode(reverse_led, OUTPUT);
     drive_stop();
-    void (*isr) () = (location == RIGHT) ? isr_right : isr_left;
+    void (*isr) () = (location == MotorLocation::RIGHT) ? isr_right : isr_left;
     attachInterrupt(digitalPinToInterrupt(speed_counter_pin), isr, RISING);
     return true;
 }
@@ -79,10 +79,10 @@ void MotorPlugin::led_demo (const int duration) const
 
 void MotorPlugin::drive_forward (const int _speed)
 {
-    if (direction != FORWARD || speed != _speed)
+    if (direction != MotorDirection::FORWARD || speed != _speed)
     {
         speed = _speed;
-        direction = FORWARD;
+        direction = MotorDirection::FORWARD;
         digitalWrite(forward_led, HIGH);
         digitalWrite(reverse_led, LOW);
         digitalWrite(reverse_pin, LOW);
@@ -94,10 +94,10 @@ void MotorPlugin::drive_forward (const int _speed)
 
 void MotorPlugin::drive_reverse (const int _speed)
 {
-    if (direction != REVERSE || speed != _speed)
+    if (direction != MotorDirection::REVERSE || speed != _speed)
     {
         speed = _speed;
-        direction = REVERSE;
+        direction = MotorDirection::REVERSE;
         digitalWrite(forward_led, LOW);
         digitalWrite(reverse_led, HIGH);
         digitalWrite(forward_pin, LOW);
@@ -109,9 +109,9 @@ void MotorPlugin::drive_reverse (const int _speed)
 
 void MotorPlugin::drive_stop ()
 {
-    if (direction != STOP || speed != 0)
+    if (direction != MotorDirection::STOP || speed != 0)
     {
-        direction = STOP;
+        direction = MotorDirection::STOP;
         speed = 0;
         desired_velocity = 0;
         digitalWrite(forward_led, LOW);
@@ -140,7 +140,7 @@ int MotorPlugin::get_speed () const
 
 float MotorPlugin::get_velocity () const
 {
-    if (direction == REVERSE)
+    if (direction == MotorDirection::REVERSE)
     {
         return -(speed / 256.0);
     }
@@ -152,13 +152,13 @@ float MotorPlugin::get_velocity () const
 
 unsigned long MotorPlugin::get_speed_counter () const
 {
-    return (location == RIGHT) ? speed_counter_right : speed_counter_left;
+    return (location == MotorLocation::RIGHT) ? speed_counter_right : speed_counter_left;
 }
 
 float MotorPlugin::get_speed_counter_velocity (const unsigned long now)
 {
     unsigned long count = 0;
-    if (location == RIGHT)
+    if (location == MotorLocation::RIGHT)
     {
         count = speed_counter_right;
         speed_counter_right = 0;

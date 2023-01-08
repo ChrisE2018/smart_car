@@ -32,26 +32,26 @@ void DrivePlugin::set_enabled (const bool enable)
                 << deadline << std::endl;
         switch (right_motor_direction)
         {
-            case STOP:
-                car.drive_stop(RIGHT);
+            case MotorDirection::STOP:
+                car.drive_stop(MotorLocation::RIGHT);
                 break;
-            case FORWARD:
-                car.drive_forward(RIGHT, right_motor_speed);
+            case MotorDirection::FORWARD:
+                car.drive_forward(MotorLocation::RIGHT, right_motor_speed);
                 break;
-            case REVERSE:
-                car.drive_reverse(RIGHT, right_motor_speed);
+            case MotorDirection::REVERSE:
+                car.drive_reverse(MotorLocation::RIGHT, right_motor_speed);
                 break;
         }
         switch (left_motor_direction)
         {
-            case STOP:
-                car.drive_stop(LEFT);
+            case MotorDirection::STOP:
+                car.drive_stop(MotorLocation::LEFT);
                 break;
-            case FORWARD:
-                car.drive_forward(LEFT, left_motor_speed);
+            case MotorDirection::FORWARD:
+                car.drive_forward(MotorLocation::LEFT, left_motor_speed);
                 break;
-            case REVERSE:
-                car.drive_reverse(LEFT, left_motor_speed);
+            case MotorDirection::REVERSE:
+                car.drive_reverse(MotorLocation::LEFT, left_motor_speed);
                 break;
         }
     }
