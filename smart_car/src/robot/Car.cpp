@@ -18,16 +18,19 @@ static Logger logger(__FILE__, Level::debug);
 Car::Car () : serial_parser(Serial), bluetooth_parser(Serial3)
 {
     clock_plugin = new ClockPlugin();
-    clockwise_plugin = new DrivePlugin(PluginId::CLOCKWISE_PLUGIN, *this, 500, MotorDirection::FORWARD, MotorDirection::REVERSE);
-    counterclockwise_plugin = new DrivePlugin(PluginId::COUNTERCLOCKWISE_PLUGIN, *this, 500, MotorDirection::REVERSE,
-            MotorDirection::FORWARD);
+    clockwise_plugin = new DrivePlugin(PluginId::CLOCKWISE_PLUGIN, *this, 500,
+            MotorDirection::FORWARD, MotorDirection::REVERSE);
+    counterclockwise_plugin = new DrivePlugin(PluginId::COUNTERCLOCKWISE_PLUGIN, *this, 500,
+            MotorDirection::REVERSE, MotorDirection::FORWARD);
     demo_plugin = new DemoPlugin(*this);
-    forward_plugin = new DrivePlugin(PluginId::FORWARD_PLUGIN, *this, 500, MotorDirection::FORWARD, MotorDirection::FORWARD);
+    forward_plugin = new DrivePlugin(PluginId::FORWARD_PLUGIN, *this, 500, MotorDirection::FORWARD,
+            MotorDirection::FORWARD);
     goal_plugin = new GoalPlugin(*this);
     mpu_plugin = new MpuPlugin();
     kalman_plugin = new KalmanPlugin(*this);
     odom_plugin = new OdomPlugin(*this);
-    reverse_plugin = new DrivePlugin(PluginId::REVERSE_PLUGIN, *this, 500, MotorDirection::REVERSE, MotorDirection::REVERSE);
+    reverse_plugin = new DrivePlugin(PluginId::REVERSE_PLUGIN, *this, 500, MotorDirection::REVERSE,
+            MotorDirection::REVERSE);
     ultrasound_plugin = new UltrasoundPlugin(*this);
     wall_plugin = new WallPlugin(*this);
 
@@ -64,10 +67,10 @@ std::ostream& operator<< (std::ostream &lhs, const Car &car)
 
 void Car::setup ()
 {
-    for (int motor = 0; motor < MOTOR_COUNT; motor++)
-    {
-        motors[motor].setup();
-    }
+//    for (int motor = 0; motor < MOTOR_COUNT; motor++)
+//    {
+//        motors[motor].setup();
+//    }
     LOG_INFO(logger, "Attempting setup of %d available plugins", available_plugins.size());
     for (Plugin *const plugin : available_plugins)
     {

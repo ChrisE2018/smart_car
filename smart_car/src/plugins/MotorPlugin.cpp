@@ -9,13 +9,14 @@
 
 #include "smart_car.hpp"
 
-unsigned long int speed_counter_right = 0;
-unsigned long int speed_counter_left = 0;
+static unsigned long speed_counter_right = 0;
+static unsigned long speed_counter_left = 0;
 
 void isr_right ()
 {
     speed_counter_right++;
 }
+
 void isr_left ()
 {
     speed_counter_left++;
