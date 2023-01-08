@@ -7,7 +7,7 @@
 
 #include "Parser.hpp"
 
-Parser::Parser (HardwareSerial& serial) : serial(serial)
+Parser::Parser (HardwareSerial &serial) : serial(serial)
 {
 }
 
@@ -54,7 +54,7 @@ void Parser::handle_command (Executor &executor)
     }
 }
 
-void Parser::get_words (const String command, std::vector<String>& result)
+void Parser::get_words (const String command, std::vector<String> &result)
 {
     int start = 0;
     bool in_word = false;

@@ -14,11 +14,11 @@
 class Parser
 {
     public:
-        Parser (HardwareSerial& serial);
+        Parser (HardwareSerial &serial);
         void handle_command (Executor &executor);
 
     private:
-        HardwareSerial& serial;
-        void get_words (const String command, std::vector<String>& words);
+        HardwareSerial &serial;
+        void get_words (const String command, std::vector<String> &words);
 };
 
