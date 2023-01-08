@@ -40,7 +40,7 @@ class KalmanPlugin: public Plugin
     private:
 
         Car &car;
-        long t = 0;
+        unsigned long t = 0;
         // Px, Py, Pa, Vx, Vy, Va, Ax, Ay, Aa
         BLA::Matrix<Nstate> state; // state vector
         BLA::Matrix<Nobs> odom_obs; // observation vector
@@ -55,7 +55,7 @@ class KalmanPlugin: public Plugin
         BLA::Matrix<2, 2> world_2_body;
 
         const int interval = 5;
-        long deadline = 0;
+        unsigned long deadline = 0;
         void hadamard (const BLA::Matrix<Nobs> &a, const BLA::Matrix<Nobs> &b,
                 BLA::Matrix<Nobs> &result) const;
 

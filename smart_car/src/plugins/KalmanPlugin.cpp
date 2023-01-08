@@ -80,12 +80,10 @@ int KalmanPlugin::get_expected_ms () const
 
 void KalmanPlugin::cycle ()
 {
-    const long now = millis();
-    if (deadline < now)
+    const unsigned long current_millis = millis();
+    if (deadline < current_millis)
     {
-        const float dt = (now - t) * 0.001;
-
-        const unsigned long now = micros();
+        const float dt = (current_millis - t) * 0.001;
         const float right_velocity = car.get_motor(MotorLocation::RIGHT).get_measured_velocity();
         const float left_velocity = car.get_motor(MotorLocation::LEFT).get_measured_velocity();
 
@@ -99,7 +97,7 @@ void KalmanPlugin::cycle ()
         const float odom_vy = world_velocity(1);
         const float angular_velocity = left_velocity - right_velocity;  // Clockwise
         // Get yaw and acceleration from MPU
-        MpuPlugin *mpu_plugin = car.get_mpu_plugin();
+        MpuPlugin *const mpu_plugin = car.get_mpu_plugin();
         const float mpu_yaw = mpu_plugin->get_yaw();  // clockwise
         // Verify that mpu_Ax and mpu_Ay are in the right frame of reference
         const float mpu_Ax = mpu_plugin->get_Ax();
@@ -118,7 +116,7 @@ void KalmanPlugin::cycle ()
 
         state = state_update + time_update * state_update * dt;
 
-        t = now;
+        t = current_millis;
 
         if (is_enabled())
         {
