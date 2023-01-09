@@ -7,7 +7,8 @@
 
 #include "Parser.hpp"
 
-Parser::Parser (HardwareSerial &serial) : serial(serial)
+Parser::Parser (HardwareSerial &serial) :
+                serial(serial)
 {
 }
 

@@ -25,7 +25,7 @@ class WallPlugin;
 
 const int MOTOR_COUNT = 2;
 
-class Car: public Executor
+class Car : public Executor
 {
     public:
         Car ();

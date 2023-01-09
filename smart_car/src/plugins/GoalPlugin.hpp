@@ -11,7 +11,7 @@
 
 class Car;
 
-class GoalPlugin: public Plugin
+class GoalPlugin : public Plugin
 {
     public:
         GoalPlugin (Car &Car);

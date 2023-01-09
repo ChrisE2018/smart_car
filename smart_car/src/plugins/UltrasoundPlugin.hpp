@@ -16,7 +16,7 @@ const int ULTRASOUND_ECHO = 11;     // green
 
 class Car;
 
-class UltrasoundPlugin: public Plugin
+class UltrasoundPlugin : public Plugin
 {
     public:
         UltrasoundPlugin (Car &car);

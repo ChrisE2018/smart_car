@@ -11,7 +11,8 @@
 // This is needed or the matrices won't print
 using namespace BLA;
 
-OdomPlugin::OdomPlugin (Car &car) : Plugin(PluginId::ODOM_PLUGIN), car(car), t(0)
+OdomPlugin::OdomPlugin (Car &car) :
+                Plugin(PluginId::ODOM_PLUGIN), car(car), t(0)
 {
 
 }
@@ -22,18 +23,18 @@ bool OdomPlugin::setup ()
 
     // x, y, a, dx, dy, da
     state =
-    { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+    {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     // x, y, a, dx, dy, da
     obs =
-    { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+    {0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
     time_update =
-    { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, //
+    {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, //
             0.0, 0.0, 0.0, 0.0, 1.0, 0.0, //
             0.0, 0.0, 0.0, 0.0, 0.0, 1.0, //
             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, //
             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, //
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+            0.0, 0.0, 0.0, 0.0, 0.0, 0.0};
 
     t = millis();
     return false;
@@ -53,13 +54,13 @@ void OdomPlugin::cycle ()
     const float angular_velocity = left_velocity - right_velocity;
 
     const BLA::Matrix<2> body_velocity =
-    { (right_velocity + left_velocity) * 0.5, 0.0 };
+    {(right_velocity + left_velocity) * 0.5, 0.0};
     update_transforms(state(2));
     const BLA::Matrix<2> world_velocity = body_2_world * body_velocity;
     const float dx = world_velocity(0);
     const float dy = world_velocity(1);
     obs =
-    { state(0), state(1), state(2), dx, dy, angular_velocity };
+    {state(0), state(1), state(2), dx, dy, angular_velocity};
 
     state = (state + obs) * 0.5;
 
@@ -81,8 +82,8 @@ void OdomPlugin::update_transforms (const float angle)
     const float cos_angle = cos(angle);
     // Counterclockwise
     body_2_world =
-    { cos_angle, -sin_angle, sin_angle, cos_angle };
+    {cos_angle, -sin_angle, sin_angle, cos_angle};
     // Clockwise
     world_2_body =
-    { cos_angle, sin_angle, -sin_angle, cos_angle };
+    {cos_angle, sin_angle, -sin_angle, cos_angle};
 }

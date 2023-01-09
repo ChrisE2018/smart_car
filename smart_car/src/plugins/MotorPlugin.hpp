@@ -24,25 +24,29 @@ const int SPEED_STOP = 0;
 
 enum MotorDirection
 {
-    STOP, FORWARD, REVERSE
+    STOP,
+    FORWARD,
+    REVERSE
 };
 
 std::ostream& operator<< (std::ostream &lhs, MotorDirection direction);
 
 enum MotorLocation
 {
-    RIGHT = 0, LEFT = 1
+    RIGHT = 0,
+    LEFT = 1
 };
 
 std::ostream& operator<< (std::ostream &lhs, MotorLocation location);
 
-class MotorPlugin: public Plugin
+class MotorPlugin : public Plugin
 {
     public:
         MotorPlugin (const PluginId id, const MotorLocation location, int enable, int forward,
-                int reverse, int speed_counter_pin, int forward_led, int reverse_led) : location(
-                location), enable_pin(enable), forward_pin(forward), reverse_pin(reverse), speed_counter_pin(
-                speed_counter_pin), forward_led(forward_led), reverse_led(reverse_led), Plugin(id)
+                int reverse, int speed_counter_pin, int forward_led, int reverse_led) :
+                        location(location), enable_pin(enable), forward_pin(forward),
+                        reverse_pin(reverse), speed_counter_pin(speed_counter_pin),
+                        forward_led(forward_led), reverse_led(reverse_led), Plugin(id)
         {
         }
 
@@ -56,7 +60,7 @@ class MotorPlugin: public Plugin
         MotorLocation get_location () const;
         MotorDirection get_direction () const;
         int get_speed () const;
-        void set_speed(const int speed);
+        void set_speed (const int speed);
         float get_velocity () const;
         unsigned long get_speed_counter () const;
         void set_desired_velocity (const float desired_velocity);

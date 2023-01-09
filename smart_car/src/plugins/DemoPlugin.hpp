@@ -26,11 +26,11 @@ enum DemoPhase
     idle_phase4,
 };
 
-class DemoPlugin: public Plugin
+class DemoPlugin : public Plugin
 {
     public:
         DemoPlugin (Car &car);
-        void set_enabled(const bool enable);
+        void set_enabled (const bool enable);
         void cycle () override;
         void set_phase (const DemoPhase phase);
 

@@ -14,9 +14,10 @@
 static Logger logger(__FILE__, Level::info);
 
 DrivePlugin::DrivePlugin (const PluginId id, Car &car, const int duration,
-        const MotorDirection right_motor_direction, const MotorDirection left_motor_direction) : Plugin(
-        id), car(car), duration(duration), right_motor_direction(right_motor_direction), left_motor_direction(
-        left_motor_direction)
+        const MotorDirection right_motor_direction, const MotorDirection left_motor_direction) :
+                Plugin(id), car(car), duration(duration),
+                right_motor_direction(right_motor_direction),
+                left_motor_direction(left_motor_direction)
 {
 }
 

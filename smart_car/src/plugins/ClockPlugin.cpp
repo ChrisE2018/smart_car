@@ -9,7 +9,8 @@
 #include "smart_car.hpp"
 #include <Wire.h>
 
-ClockPlugin::ClockPlugin () : Plugin(PluginId::CLOCK_PLUGIN)
+ClockPlugin::ClockPlugin () :
+                Plugin(PluginId::CLOCK_PLUGIN)
 {
     cout << "Created RTC Plugin " << get_id() << std::endl;
 }

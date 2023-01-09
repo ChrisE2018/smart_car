@@ -8,7 +8,8 @@
 #include "RobotAppender.hpp"
 #include "../plugins/ClockPlugin.hpp"
 
-RobotAppender::RobotAppender (Car &car) : car(car)
+RobotAppender::RobotAppender (Car &car) :
+                car(car)
 {
 }
 

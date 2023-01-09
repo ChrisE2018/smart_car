@@ -11,7 +11,7 @@
 #include "MotorPlugin.hpp"
 class Car;
 
-class DrivePlugin: public Plugin
+class DrivePlugin : public Plugin
 {
     public:
         DrivePlugin (const PluginId id, Car &car, const int duration,

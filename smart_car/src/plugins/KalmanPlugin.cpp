@@ -26,7 +26,8 @@ using namespace BLA;
 #define m2 0.01
 #define m3 0.01
 
-KalmanPlugin::KalmanPlugin (Car &car) : Plugin(PluginId::KALMAN_PLUGIN), car(car)
+KalmanPlugin::KalmanPlugin (Car &car) :
+                Plugin(PluginId::KALMAN_PLUGIN), car(car)
 {
 }
 
@@ -44,7 +45,7 @@ bool KalmanPlugin::setup ()
     // Model matrix to compute the update delta for each dt.
     // Size is <Nstate, Nstate>
     time_update =
-    { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0,       // Px += dt * Vx
+    {0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, 0.0,       // Px += dt * Vx
             0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 0.0, // Py += dt * Vy
             0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, // Pa += dt * Va
             0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, // Vx += dt * Ax
@@ -56,10 +57,10 @@ bool KalmanPlugin::setup ()
             };
 
     odom_gain =
-    { 0, 0, 0, 0.75, 0.75, 0.25, 0.0, 0.0, 0.0 };
+    {0, 0, 0, 0.75, 0.75, 0.25, 0.0, 0.0, 0.0};
 
     imu_gain =
-    { 0, 0, 0.75, 0, 0, 0, 0.05, 0.05, 0.25 };
+    {0, 0, 0.75, 0, 0, 0, 0.05, 0.05, 0.25};
 
     total_gain = odom_gain + imu_gain;
     BLA::Matrix<Nobs> unit_gain;
@@ -92,7 +93,7 @@ void KalmanPlugin::cycle ()
         update_transforms(state(2));
 
         const BLA::Matrix<2> body_velocity =
-        { (right_velocity + left_velocity) * 0.5, 0 };
+        {(right_velocity + left_velocity) * 0.5, 0};
         const BLA::Matrix<2> world_velocity = body_2_world * body_velocity;
         const float odom_vx = world_velocity(0);
         const float odom_vy = world_velocity(1);
@@ -106,9 +107,9 @@ void KalmanPlugin::cycle ()
 
         // Separate obs by sensor (odom, mpu) and define gain as a vector
         odom_obs =
-        { 0, 0, 0, odom_vx, odom_vy, angular_velocity, 0.0, 0.0, 0.0 };
+        {0, 0, 0, odom_vx, odom_vy, angular_velocity, 0.0, 0.0, 0.0};
         imu_obs =
-        { 0, 0, mpu_yaw, 0, 0, 0, mpu_Ax, mpu_Ay, atan2(mpu_Ay, mpu_Ax) };
+        {0, 0, mpu_yaw, 0, 0, 0, mpu_Ax, mpu_Ay, atan2(mpu_Ay, mpu_Ax)};
 
         state_update.Fill(0);
         hadamard(odom_obs, odom_gain, state_update);
@@ -137,10 +138,10 @@ void KalmanPlugin::update_transforms (const float angle)
     const float cos_angle = cos(angle);
     // Clockwise
     body_2_world =
-    { cos_angle, sin_angle, sin_angle, -cos_angle };
+    {cos_angle, sin_angle, sin_angle, -cos_angle};
     // Counterclockwise
     world_2_body =
-    { cos_angle, -sin_angle, sin_angle, cos_angle };
+    {cos_angle, -sin_angle, sin_angle, cos_angle};
 }
 
 void KalmanPlugin::hadamard (const BLA::Matrix<Nobs> &a, const BLA::Matrix<Nobs> &b,

@@ -7,7 +7,7 @@
 
 #pragma once
 
-bool is_overflow(const double x);
+bool is_overflow (const double x);
 
-float angle_delta(const float desired, const float actual);
+float angle_delta (const float desired, const float actual);
 

@@ -15,8 +15,8 @@ static char LogBuffer::buffer[LogBuffer::buffer_size + 1];
 
 static int LogBuffer::pos = 0;
 
-LogBuffer::LogBuffer (Logger *logger, const Level level) : logger(logger), level(level), std::ios(
-        0), std::ostream(this)
+LogBuffer::LogBuffer (Logger *logger, const Level level) :
+                logger(logger), level(level), std::ios(0), std::ostream(this)
 {
 }
 

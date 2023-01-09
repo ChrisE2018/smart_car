@@ -14,7 +14,8 @@
 
 static Logger logger(__FILE__, Level::info);
 
-GoalPlugin::GoalPlugin (Car &car) : Plugin(PluginId::GOAL_PLUGIN), car(car)
+GoalPlugin::GoalPlugin (Car &car) :
+                Plugin(PluginId::GOAL_PLUGIN), car(car)
 {
 }
 
@@ -84,8 +85,8 @@ void GoalPlugin::angle_cycle (const float measured_angle, const float desired_an
     }
     else
     {
-        logger.info() << "Car " << car << " at " << measured_angle << " is goal angle " << desired_angle
-                << std::endl;
+        logger.info() << "Car " << car << " at " << measured_angle << " is goal angle "
+                << desired_angle << std::endl;
         car.drive_stop(MotorLocation::RIGHT);
         car.drive_stop(MotorLocation::LEFT);
         adjust_angle = false;
@@ -105,8 +106,8 @@ void GoalPlugin::angle_step (const float measured_angle, const float desired_ang
     }
     else
     {
-        logger.info() << "Counterclockwise by " << delta << " from " << measured_angle << " to goal angle "
-                << desired_angle << " at " << speed << std::endl;
+        logger.info() << "Counterclockwise by " << delta << " from " << measured_angle
+                << " to goal angle " << desired_angle << " at " << speed << std::endl;
         car.drive_forward(MotorLocation::RIGHT, speed);
         car.drive_reverse(MotorLocation::LEFT, speed);
     }
@@ -119,7 +120,8 @@ void GoalPlugin::position_cycle (const float measured_angle, const float measure
     const float dy = desired_y - measured_y;
     if (abs(dx) < position_tolerance && abs(dy) < position_tolerance)
     {
-        logger.info() << "Robot " << car << " is at goal " << desired_x << ", " << desired_y << std::endl;
+        logger.info() << "Robot " << car << " is at goal " << desired_x << ", " << desired_y
+                << std::endl;
         car.drive_stop(MotorLocation::RIGHT);
         car.drive_stop(MotorLocation::LEFT);
         adjust_position = false;
@@ -140,8 +142,9 @@ void GoalPlugin::position_step (const float measured_angle, const float measured
     const float delta_angle = angle_delta(desired_angle, measured_angle);
     const float abs_delta_angle = abs(delta_angle);
 
-    logger.info() << "Required " << car << " dx " << dx << " dy " << dy << " angle " << desired_angle
-            << " for " << distance << " to " << desired_x << ", " << desired_y << std::endl;
+    logger.info() << "Required " << car << " dx " << dx << " dy " << dy << " angle "
+            << desired_angle << " for " << distance << " to " << desired_x << ", " << desired_y
+            << std::endl;
 
 // @see https://en.wikipedia.org/wiki/PID_controller
 

@@ -17,7 +17,7 @@ class Car;
 #define Nstate 9 // length of the state vector
 #define Nobs 9   // length of the measurement vector
 
-class KalmanPlugin: public Plugin
+class KalmanPlugin : public Plugin
 {
     public:
         KalmanPlugin (Car &car);

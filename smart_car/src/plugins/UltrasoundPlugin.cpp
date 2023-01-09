@@ -13,8 +13,9 @@
 
 static Logger logger(__FILE__, Level::info);
 
-UltrasoundPlugin::UltrasoundPlugin (Car &car) : car(car), Plugin(PluginId::ULTRASOUND_PLUGIN), sr04(
-        ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)
+UltrasoundPlugin::UltrasoundPlugin (Car &car) :
+                car(car), Plugin(PluginId::ULTRASOUND_PLUGIN),
+                sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)
 {
 
 }

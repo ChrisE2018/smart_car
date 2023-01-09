@@ -31,17 +31,19 @@ static Logger *Logger::ROOT = new Logger(nullptr, "root", Level::debug);
 
 static char Logger::buffer[Logger::buffer_size];
 
-Logger::Logger (const String name) : Logger(Logger::ROOT, name, Level::info)
+Logger::Logger (const String name) :
+                Logger(Logger::ROOT, name, Level::info)
 {
 }
 
-Logger::Logger (const String name, const Level level) : Logger(Logger::ROOT, name, level)
+Logger::Logger (const String name, const Level level) :
+                Logger(Logger::ROOT, name, level)
 {
 }
 
-Logger::Logger (Logger *parent, const String name, const Level level) : parent(parent), name(name), short_name(
-        shorten(name)), level(level), info_stream(this, Level::info), debug_stream(this,
-        Level::debug)
+Logger::Logger (Logger *parent, const String name, const Level level) :
+                parent(parent), name(name), short_name(shorten(name)), level(level),
+                info_stream(this, Level::info), debug_stream(this, Level::debug)
 {
 }
 

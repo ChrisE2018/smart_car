@@ -56,7 +56,8 @@ std::ostream& operator<< (std::ostream &lhs, const PluginId id)
     return lhs;
 }
 
-Plugin::Plugin (const PluginId id) : id(id)
+Plugin::Plugin (const PluginId id) :
+                id(id)
 {
 }
 

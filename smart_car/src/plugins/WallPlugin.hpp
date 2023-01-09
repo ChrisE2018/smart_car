@@ -11,7 +11,7 @@
 
 class Car;
 
-class WallPlugin: public Plugin
+class WallPlugin : public Plugin
 {
     public:
         WallPlugin (Car &car);

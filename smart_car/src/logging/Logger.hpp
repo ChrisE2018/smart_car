@@ -15,7 +15,10 @@ class Appender;
 
 enum class Level
 {
-    error, warning, info, debug
+    error,
+    warning,
+    info,
+    debug
 };
 
 const char* stringify (const Level level);

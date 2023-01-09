@@ -13,9 +13,9 @@ class SDLogfile
 {
     public:
         SDLogfile ();
-        void open();
-        void close();
-        void print(String text);
-        void print(char* text);
+        void open ();
+        void close ();
+        void print (String text);
+        void print (char *text);
 };
 
