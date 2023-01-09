@@ -9,6 +9,7 @@
 
 #include "../robot/Car.hpp"
 #include "MotorPlugin.hpp"
+#include "MpuPlugin.hpp"
 
 // This is needed or the matrices won't print
 using namespace BLA;

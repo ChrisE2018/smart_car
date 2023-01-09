@@ -13,18 +13,15 @@
 #include "Mode.hpp"
 #include "Parser.hpp"
 
+class KalmanPlugin;
 class ClockPlugin;
 class DemoPlugin;
-
-#include "../plugins/KalmanPlugin.hpp"
-#include "../plugins/ClockPlugin.hpp"
-#include "../plugins/DemoPlugin.hpp"
-#include "../plugins/DrivePlugin.hpp"
-#include "../plugins/GoalPlugin.hpp"
-#include "../plugins/MpuPlugin.hpp"
-#include "../plugins/OdomPlugin.hpp"
-#include "../plugins/UltrasoundPlugin.hpp"
-#include "../plugins/WallPlugin.hpp"
+class DrivePlugin;
+class GoalPlugin;
+class MpuPlugin;
+class OdomPlugin;
+class UltrasoundPlugin;
+class WallPlugin;
 
 const int MOTOR_COUNT = 2;
 

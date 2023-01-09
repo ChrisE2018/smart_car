@@ -10,6 +10,16 @@
 #include "smart_car.hpp"
 #include "../logging/Logger.hpp"
 
+#include "../plugins/KalmanPlugin.hpp"
+#include "../plugins/ClockPlugin.hpp"
+#include "../plugins/DemoPlugin.hpp"
+#include "../plugins/DrivePlugin.hpp"
+#include "../plugins/GoalPlugin.hpp"
+#include "../plugins/MpuPlugin.hpp"
+#include "../plugins/OdomPlugin.hpp"
+#include "../plugins/UltrasoundPlugin.hpp"
+#include "../plugins/WallPlugin.hpp"
+
 // For some reason this does not always resolve.
 extern HardwareSerial Serial;
 
