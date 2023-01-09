@@ -7,7 +7,7 @@
 
 #include "Mode.hpp"
 
-std::ostream& operator<< (std::ostream &lhs, Mode mode)
+std::ostream& operator<< (std::ostream &lhs, const Mode mode)
 {
     switch (mode)
     {

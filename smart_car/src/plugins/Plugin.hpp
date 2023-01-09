@@ -32,7 +32,7 @@ enum PluginId
 
 const std::string stringify (const PluginId id);
 
-std::ostream& operator<< (std::ostream &lhs, PluginId id);
+std::ostream& operator<< (std::ostream &lhs, const PluginId id);
 
 class Plugin
 {

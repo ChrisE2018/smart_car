@@ -50,7 +50,7 @@ const std::string stringify (const PluginId id)
     }
 }
 
-std::ostream& operator<< (std::ostream &lhs, PluginId id)
+std::ostream& operator<< (std::ostream &lhs, const PluginId id)
 {
     lhs << stringify(id).c_str();
     return lhs;

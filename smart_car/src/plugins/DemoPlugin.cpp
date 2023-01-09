@@ -28,7 +28,7 @@ void DemoPlugin::set_enabled (const bool enable)
     }
 }
 
-void DemoPlugin::set_phase (DemoPhase phase)
+void DemoPlugin::set_phase (const DemoPhase phase)
 {
     this->phase = phase;
     phase_start = millis();

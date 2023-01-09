@@ -27,9 +27,9 @@ class MpuPlugin : public Plugin
         float get_Ay ();
         float get_Az ();
 
-        float get_yaw ();
-        float get_pitch ();
-        float get_roll ();
+        float get_yaw () const;
+        float get_pitch () const;
+        float get_roll () const;
 
         float get_temp ();
 

@@ -135,18 +135,18 @@ float MpuPlugin::get_Az ()
     return (mpu.getAccelerationZ() - 16384) / 16384.0;
 }
 
-float MpuPlugin::get_yaw ()
+float MpuPlugin::get_yaw () const
 {
     // This is counterclockwise around the z axis
     return euler[0];
 }
 
-float MpuPlugin::get_pitch ()
+float MpuPlugin::get_pitch () const
 {
     return euler[1];
 }
 
-float MpuPlugin::get_roll ()
+float MpuPlugin::get_roll () const
 {
     return euler[2];
 }

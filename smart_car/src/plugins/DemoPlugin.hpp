@@ -32,7 +32,7 @@ class DemoPlugin: public Plugin
         DemoPlugin (Car &car);
         void set_enabled(const bool enable);
         void cycle () override;
-        void set_phase (DemoPhase phase);
+        void set_phase (const DemoPhase phase);
 
     private:
         Car &car;
