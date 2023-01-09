@@ -51,8 +51,8 @@ Car::Car () :
     available_plugins.push_back(reverse_plugin);
     available_plugins.push_back(clockwise_plugin);
     available_plugins.push_back(counterclockwise_plugin);
-    available_plugins.push_back(&motors[0]);
-    available_plugins.push_back(&motors[1]);
+    available_plugins.push_back(&motors[static_cast<int>(MotorLocation::RIGHT)]);
+    available_plugins.push_back(&motors[static_cast<int>(MotorLocation::LEFT)]);
     available_plugins.push_back(mpu_plugin);
     available_plugins.push_back(kalman_plugin);
     available_plugins.push_back(odom_plugin);
@@ -198,7 +198,7 @@ void Car::cycle ()
 /** Execute a command from the user.
  @param words Command string broken into words.
  */
-void Car::execute_command (const std::vector<String> words)
+void Car::execute_command (const std::vector<String>& words)
 {
     const int n = words.size();
     const String command = words[0];

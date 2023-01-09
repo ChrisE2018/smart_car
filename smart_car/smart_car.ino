@@ -25,12 +25,12 @@ void setup ()
     Serial.begin(9600);
     Serial.println("Smart car");
     Serial3.begin(9600);
-
     car = new Car();
     Logger::ROOT->add_appender(new RobotAppender(*car));
     car->setup();
     car->demo_drive_leds();
     Serial.println("Ready");
+    Serial.println("");
 }
 
 void loop ()

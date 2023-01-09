@@ -19,6 +19,6 @@ class Parser
 
     private:
         HardwareSerial &serial;
-        void get_words (const String command, std::vector<String> &words);
+        void get_words (const String& command, std::vector<String>& words);
 };
 

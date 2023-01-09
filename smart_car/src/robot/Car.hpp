@@ -36,7 +36,7 @@ class Car : public Executor
         void set_mode (const Mode mode);
         void cycle ();
         void demo_drive_leds ();
-        void execute_command (const std::vector<String> words);
+        virtual void execute_command (const std::vector<String>& words) override;
 
         void all_stop ();
         const MotorPlugin& get_motor (const MotorLocation motor) const;

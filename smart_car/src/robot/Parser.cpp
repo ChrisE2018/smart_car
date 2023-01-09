@@ -30,13 +30,15 @@ void Parser::handle_command (Executor &executor)
                     {
                         buffer[i] = '\0';
                         const String command(buffer);
+                        std::vector<String> words;
                         //serial.print("execute: ");
                         //serial.println(command);
-                        std::vector<String> words;
                         get_words(command, words);
                         if (!words.empty())
                         {
                             executor.execute_command(words);
+                            Serial.println("[executed]");
+                            Serial.println("");
                         }
                     }
                     return;
@@ -49,13 +51,14 @@ void Parser::handle_command (Executor &executor)
             }
             else
             {
-                delayMicroseconds(10); // allow time to receive
+                delayMicroseconds(100); // allow time to receive
             }
         }
+        Serial.println("[buffer overflow]");
     }
 }
 
-void Parser::get_words (const String command, std::vector<String> &result)
+void Parser::get_words (const String& command, std::vector<String>& words)
 {
     int start = 0;
     bool in_word = false;
@@ -66,7 +69,7 @@ void Parser::get_words (const String command, std::vector<String> &result)
         {
             if (in_word)
             {
-                result.push_back(command.substring(start, i));
+                words.push_back(command.substring(start, i));
                 in_word = false;
             }
         }
@@ -79,7 +82,7 @@ void Parser::get_words (const String command, std::vector<String> &result)
     }
     if (in_word)
     {
-        result.push_back(command.substring(start));
+        words.push_back(command.substring(start));
     }
 }
 
