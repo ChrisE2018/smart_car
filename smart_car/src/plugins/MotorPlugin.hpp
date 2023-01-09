@@ -51,7 +51,6 @@ class MotorPlugin : public Plugin
         }
 
         friend std::ostream& operator<< (std::ostream &lhs, const MotorPlugin &motor);
-
         bool setup ();
         void led_demo (const int duration) const;
         void drive_forward (const int speed);
@@ -65,6 +64,7 @@ class MotorPlugin : public Plugin
         unsigned long get_speed_counter () const;
         void set_desired_velocity (const float desired_velocity);
         float get_measured_velocity () const;
+        float get_velocity_error () const;
         virtual int get_preferred_interval () const override;
         virtual int get_expected_ms () const override;
         void cycle () override;
@@ -73,9 +73,8 @@ class MotorPlugin : public Plugin
 
         // 55 mm wheels
         // 20 encoder slots per revolution
-        // Multiply by one million to convert micros to seconds
         // meters-per-micro = PI *diameter / encoder_slots
-        const double count_to_meters_per_second = 1000.0 * 1000.0 * M_PI * 0.055 / 20.0;
+        const double count_to_meters_per_second = M_PI * 0.055 / 20.0;
 
         const MotorLocation location;
         const int enable_pin;
@@ -88,15 +87,15 @@ class MotorPlugin : public Plugin
         int speed = 0;
 
         // Support for speed encoders
-        const float k0 = 3;
-        const float k1 = 2;
-        const float k2 = 1;
+        const float k0 = 0.2 * SPEED_FULL;
+        const float k1 = 0.3;
+        const float k2 = -0.1;
         float desired_velocity = 0;
         float measured_velocity = 0;
-        unsigned long last_cycle_micros = 0;
+        unsigned long last_cycle_ms = 0;
         unsigned long speed_counter = 0;
         float velocity_error = 0;
         float cumulative_velocity_error = 0;
-        float cumulative_error_time = 0;
+        float cumulative_error_seconds = 0;
 };
 

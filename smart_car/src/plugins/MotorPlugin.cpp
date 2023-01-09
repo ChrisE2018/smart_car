@@ -7,20 +7,8 @@
 
 #include "MotorPlugin.hpp"
 
+#include "../robot/speed_counter.hpp"
 #include "smart_car.hpp"
-
-static unsigned long speed_counter_right = 0;
-static unsigned long speed_counter_left = 0;
-
-static void isr_right ()
-{
-    speed_counter_right++;
-}
-
-static void isr_left ()
-{
-    speed_counter_left++;
-}
 
 std::ostream& operator<< (std::ostream &lhs, const MotorDirection direction)
 {
@@ -67,8 +55,6 @@ bool MotorPlugin::setup ()
     pinMode(forward_led, OUTPUT);
     pinMode(reverse_led, OUTPUT);
     drive_stop();
-    void (*isr) () = (location == MotorLocation::RIGHT) ? isr_right : isr_left;
-    attachInterrupt(digitalPinToInterrupt(speed_counter_pin), isr, RISING);
     return true;
 }
 
@@ -95,7 +81,8 @@ void MotorPlugin::drive_forward (const int _speed)
         digitalWrite(reverse_pin, LOW);
         digitalWrite(forward_pin, HIGH);
         analogWrite(enable_pin, _speed);
-        cout << "drive " << location << " " << direction << " at " << speed << std::endl;
+        cout << "drive " << location << " " << direction << " at " << speed << " mps "
+                << measured_velocity << std::endl;
     }
 }
 
@@ -110,7 +97,8 @@ void MotorPlugin::drive_reverse (const int _speed)
         digitalWrite(forward_pin, LOW);
         digitalWrite(reverse_pin, HIGH);
         analogWrite(enable_pin, _speed);
-        cout << "drive " << location << " " << direction << " at " << speed << std::endl;
+        cout << "drive " << location << " " << direction << " at " << speed << " mps "
+                << measured_velocity << std::endl;
     }
 }
 
@@ -121,12 +109,15 @@ void MotorPlugin::drive_stop ()
         direction = MotorDirection::STOP;
         speed = 0;
         desired_velocity = 0;
+        cumulative_velocity_error = 0;
+        cumulative_error_seconds = 0;
         digitalWrite(forward_led, LOW);
         digitalWrite(reverse_led, LOW);
         digitalWrite(forward_pin, LOW);
         digitalWrite(reverse_pin, LOW);
         analogWrite(enable_pin, LOW);
-        cout << "drive " << location << " " << direction << " at " << speed << std::endl;
+        cout << "drive " << location << " " << direction << " at " << speed << " mps "
+                << measured_velocity << std::endl;
     }
 }
 
@@ -181,11 +172,18 @@ unsigned long MotorPlugin::get_speed_counter () const
 void MotorPlugin::set_desired_velocity (const float _desired_velocity)
 {
     desired_velocity = _desired_velocity;
+    cumulative_velocity_error = 0;
+    cumulative_error_seconds = 0;
 }
 
 float MotorPlugin::get_measured_velocity () const
 {
     return measured_velocity;
+}
+
+float MotorPlugin::get_velocity_error () const
+{
+    return velocity_error;
 }
 
 int MotorPlugin::get_preferred_interval () const
@@ -200,21 +198,31 @@ int MotorPlugin::get_expected_ms () const
 
 void MotorPlugin::cycle ()
 {
-    const unsigned long now = micros();
-    const unsigned long previous_speed_counter = speed_counter;
-    speed_counter = (location == MotorLocation::RIGHT) ? speed_counter_right : speed_counter_left;
-    const float delta_time = now - last_cycle_micros;
-    measured_velocity = (speed_counter - previous_speed_counter) / delta_time;
-    const float previous_velocity_error = velocity_error;
-    velocity_error = desired_velocity - measured_velocity;
-    const float velocity_error_rate = (velocity_error - previous_velocity_error) / delta_time;
-    cumulative_velocity_error += velocity_error;
-    cumulative_error_time += delta_time;
-    last_cycle_micros = now;
-    const float control = k0
-            * (velocity_error + k1 * cumulative_velocity_error / cumulative_error_time
-                    + k2 * velocity_error_rate);
+    const unsigned long now = millis();
+    if (now - last_cycle_ms > 100)
+    {
+        const float delta_seconds = (now - last_cycle_ms) * 0.001;
+        const unsigned long previous_speed_counter = speed_counter;
+        const float previous_velocity_error = velocity_error;
+        speed_counter =
+                (location == MotorLocation::RIGHT) ? get_right_speed_counter() :
+                                                     get_left_speed_counter();
+        measured_velocity = (speed_counter - previous_speed_counter) * count_to_meters_per_second
+                / delta_seconds;
+        velocity_error = desired_velocity - measured_velocity;
+        const float velocity_error_rate = (velocity_error - previous_velocity_error)
+                / delta_seconds;
+        cumulative_velocity_error += velocity_error * delta_seconds;
+        cumulative_error_seconds += delta_seconds;
+        last_cycle_ms = now;
+        const float control = k0
+                * (velocity_error + k1 * cumulative_velocity_error + k2 * velocity_error_rate);
 
-//    cout << "Motor " << location << " control  " << control << std::endl;
-    // set_velocity(control);
+        set_speed(control);
+//        if (velocity_error != 0)
+//        {
+//            cout << "ds: " << delta_seconds << " ve: " << velocity_error << " cve: "
+//                    << cumulative_velocity_error << std::endl;
+//        }
+    }
 }

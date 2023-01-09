@@ -1,6 +1,7 @@
 #include "Arduino.h"
 #include "src/robot/Car.hpp"
 #include "smart_car.hpp"
+#include "src/robot/speed_counter.hpp"
 #include "src/logging/Logger.hpp"
 #include "src/logging/RobotAppender.hpp"
 
@@ -29,6 +30,7 @@ void setup ()
     Logger::ROOT->add_appender(new RobotAppender(*car));
     car->setup();
     car->demo_drive_leds();
+    setup_speed_counter();
     Serial.println("Ready");
     Serial.println("");
 }
