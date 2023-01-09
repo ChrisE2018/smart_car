@@ -31,7 +31,7 @@ class LogBuffer : private std::streambuf, public std::ostream
         static const int buffer_size = 255;
         static char buffer[buffer_size + 1];
         static int pos;
-        Logger *logger;
+        Logger *const logger;
         const Level level;
 
         void flush ();

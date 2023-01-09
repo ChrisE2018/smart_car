@@ -9,6 +9,7 @@
 
 #include "Appender.hpp"
 #include "../robot/car.hpp"
+class Car;
 
 class RobotAppender : public Appender
 {

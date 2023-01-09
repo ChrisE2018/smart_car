@@ -16,7 +16,7 @@ void RobotAppender::append (const Logger *logger, const Level level, const int l
         const char *message)
 {
     time_t t = 0;
-    ClockPlugin *clock_plugin = car.get_clock_plugin();
+    ClockPlugin *const clock_plugin = car.get_clock_plugin();
     if (clock_plugin != nullptr)
     {
         t = clock_plugin->get_unixtime();

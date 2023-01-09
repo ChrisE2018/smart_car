@@ -71,17 +71,12 @@ const String Logger::shorten (const String name)
     return filename;
 }
 
-void Logger::set_level (const Level _level)
-{
-    level = _level;
-}
-
 const Level Logger::get_level () const
 {
     return level;
 }
 
-void Logger::add_appender (Appender *appender)
+void Logger::add_appender (Appender *const appender)
 {
     appenders.push_back(appender);
 }

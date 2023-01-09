@@ -34,9 +34,8 @@ class Logger
         Logger (Logger *parent, const String name, const Level level);
         const String get_name () const;
         const String get_short_name () const;
-        void set_level (const Level level);
         const Level get_level () const;
-        void add_appender (Appender *appender);
+        void add_appender (Appender *const appender);
         LogBuffer& info ();
         LogBuffer& debug ();
         void logging (const Level level, const int line, const char *format, ...);
@@ -45,10 +44,10 @@ class Logger
     private:
         static const int buffer_size = 256;
         static char buffer[buffer_size];
-        Logger *parent;
+        Logger *const parent;
         const String name;
         const String short_name;
-        Level level;
+        const Level level;
         LogBuffer info_stream;
         LogBuffer debug_stream;
 
