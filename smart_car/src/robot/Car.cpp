@@ -229,6 +229,17 @@ void Car::execute_command (const std::vector<String>& words)
         reverse_plugin->set_left_speed(speed);
         reverse_plugin->set_enabled(true);
     }
+    else if (command == "bb")
+    {
+        float velocity = -1.0;
+        if (n > 1)
+        {
+            velocity = -words[1].toFloat();
+        }
+        set_mode(Mode::COMMAND_MODE);
+        motors[static_cast<int>(MotorLocation::RIGHT)].set_desired_velocity(velocity);
+        motors[static_cast<int>(MotorLocation::LEFT)].set_desired_velocity(velocity);
+    }
     else if (command == "calibrate")
     {
         mpu_plugin->calibrate();
@@ -269,6 +280,17 @@ void Car::execute_command (const std::vector<String>& words)
         forward_plugin->set_left_speed(speed);
         forward_plugin->set_enabled(true);
     }
+    else if (command == "ff")
+    {
+        float velocity = 1.0;
+        if (n > 1)
+        {
+            velocity = words[1].toFloat();
+        }
+        set_mode(Mode::COMMAND_MODE);
+        motors[static_cast<int>(MotorLocation::RIGHT)].set_desired_velocity(velocity);
+        motors[static_cast<int>(MotorLocation::LEFT)].set_desired_velocity(velocity);
+    }
     else if (command == "goal")
     {
         if (n > 2)
@@ -286,6 +308,16 @@ void Car::execute_command (const std::vector<String>& words)
         demo_drive_leds();
     }
     else if (command == "l")
+    {
+        float desired_velocity = 0.5;
+        if (n > 1)
+        {
+            desired_velocity = words[1].toFloat();
+        }
+//        set_mode(Mode::COMMAND_MODE);
+        motors[static_cast<int>(MotorLocation::LEFT)].set_desired_velocity(desired_velocity);
+    }
+    else if (command == "left")
     {
         int speed = SPEED_FULL;
         int duration = 500;
@@ -314,10 +346,10 @@ void Car::execute_command (const std::vector<String>& words)
     else if (command == "plugins")
     {
         LOG_INFO(logger, "Plugins %d", plugins.size());
-        for (Plugin *plugin : plugins)
+        for (Plugin *const plugin : plugins)
         {
             const long cycle_count = plugin->get_cycle_count();
-            const long total_micros = plugin->get_total_micros();
+            const float total_micros = plugin->get_total_micros();
             if (cycle_count > 0)
             {
                 logger.info() << "Plugin " << plugin->get_id() << " average "
@@ -330,6 +362,16 @@ void Car::execute_command (const std::vector<String>& words)
                 << " average micros per cycle " << f_total_micros / cycle_count << std::endl;
     }
     else if (command == "r")
+    {
+        float desired_velocity = 0.5;
+        if (n > 1)
+        {
+            desired_velocity = words[1].toFloat();
+        }
+//        set_mode(Mode::COMMAND_MODE);
+        motors[static_cast<int>(MotorLocation::RIGHT)].set_desired_velocity(desired_velocity);
+    }
+    else if (command == "right")
     {
         int speed = SPEED_FULL;
         int duration = 500;
@@ -406,9 +448,12 @@ void Car::help_command () const
     logger.info() << "Angle: " << kalman_plugin->get_angle() << std::endl;
 
     LOG_INFO(logger, "Plugins %d", plugins.size());
-    const float f_total_micros = total_cycle_us;
-    logger.info() << "Cycle count " << cycle_count << " total cycle micros " << total_cycle_us
-            << " average micros per cycle " << f_total_micros / cycle_count << std::endl;
+    if (cycle_count > 0)
+    {
+        const float f_total_micros = total_cycle_us;
+        logger.info() << "Cycle count " << cycle_count << " total cycle micros " << total_cycle_us
+                << " average micros per cycle " << f_total_micros / cycle_count << std::endl;
+    }
 
     for (int motor = 0; motor < MOTOR_COUNT; motor++)
     {
