@@ -35,6 +35,7 @@ void setup ()
     Serial.println("");
 }
 
+// @see https://forum.arduino.cc/t/constant-run-time-of-a-loop/568829/2
 void loop ()
 {
     car->cycle();
