@@ -46,6 +46,8 @@ class MotorPlugin: public Plugin
         {
         }
 
+        friend std::ostream& operator<< (std::ostream &lhs, const MotorPlugin &motor);
+
         bool setup ();
         void led_demo (const int duration) const;
         void drive_forward (const int speed);
@@ -54,9 +56,10 @@ class MotorPlugin: public Plugin
         MotorLocation get_location () const;
         MotorDirection get_direction () const;
         int get_speed () const;
+        void set_speed(const int speed);
         float get_velocity () const;
         unsigned long get_speed_counter () const;
-        void set_desired_velocity (float desired_velocity);
+        void set_desired_velocity (const float desired_velocity);
         float get_measured_velocity () const;
         virtual int get_preferred_interval () const override;
         virtual int get_expected_ms () const override;

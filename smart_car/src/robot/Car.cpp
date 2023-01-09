@@ -25,25 +25,25 @@ extern HardwareSerial Serial;
 
 static Logger logger(__FILE__, Level::debug);
 
-Car::Car () : serial_parser(Serial), bluetooth_parser(Serial3)
+Car::Car () :
+                serial_parser(Serial), bluetooth_parser(Serial3), clock_plugin(new ClockPlugin()),
+                clockwise_plugin(
+                        new DrivePlugin(PluginId::CLOCKWISE_PLUGIN, *this, 500,
+                                MotorDirection::FORWARD, MotorDirection::REVERSE)),
+                counterclockwise_plugin(
+                        new DrivePlugin(PluginId::COUNTERCLOCKWISE_PLUGIN, *this, 500,
+                                MotorDirection::REVERSE, MotorDirection::FORWARD)),
+                demo_plugin(new DemoPlugin(*this)),
+                forward_plugin(
+                        new DrivePlugin(PluginId::FORWARD_PLUGIN, *this, 500,
+                                MotorDirection::FORWARD, MotorDirection::FORWARD)),
+                goal_plugin(new GoalPlugin(*this)), mpu_plugin(new MpuPlugin()),
+                kalman_plugin(new KalmanPlugin(*this)), odom_plugin(new OdomPlugin(*this)),
+                reverse_plugin(
+                        new DrivePlugin(PluginId::REVERSE_PLUGIN, *this, 500,
+                                MotorDirection::REVERSE, MotorDirection::REVERSE)),
+                ultrasound_plugin(new UltrasoundPlugin(*this)), wall_plugin(new WallPlugin(*this))
 {
-    clock_plugin = new ClockPlugin();
-    clockwise_plugin = new DrivePlugin(PluginId::CLOCKWISE_PLUGIN, *this, 500,
-            MotorDirection::FORWARD, MotorDirection::REVERSE);
-    counterclockwise_plugin = new DrivePlugin(PluginId::COUNTERCLOCKWISE_PLUGIN, *this, 500,
-            MotorDirection::REVERSE, MotorDirection::FORWARD);
-    demo_plugin = new DemoPlugin(*this);
-    forward_plugin = new DrivePlugin(PluginId::FORWARD_PLUGIN, *this, 500, MotorDirection::FORWARD,
-            MotorDirection::FORWARD);
-    goal_plugin = new GoalPlugin(*this);
-    mpu_plugin = new MpuPlugin();
-    kalman_plugin = new KalmanPlugin(*this);
-    odom_plugin = new OdomPlugin(*this);
-    reverse_plugin = new DrivePlugin(PluginId::REVERSE_PLUGIN, *this, 500, MotorDirection::REVERSE,
-            MotorDirection::REVERSE);
-    ultrasound_plugin = new UltrasoundPlugin(*this);
-    wall_plugin = new WallPlugin(*this);
-
     available_plugins.push_back(clock_plugin);
     available_plugins.push_back(demo_plugin);
     available_plugins.push_back(forward_plugin);
@@ -77,10 +77,6 @@ std::ostream& operator<< (std::ostream &lhs, const Car &car)
 
 void Car::setup ()
 {
-//    for (int motor = 0; motor < MOTOR_COUNT; motor++)
-//    {
-//        motors[motor].setup();
-//    }
     LOG_INFO(logger, "Attempting setup of %d available plugins", available_plugins.size());
     for (Plugin *const plugin : available_plugins)
     {
@@ -177,17 +173,20 @@ void Car::cycle ()
     {
         last_cycle = cycle;
         const PluginId scheduled_plugin = schedule[cycle];
-        Plugin *plugin = get_plugin(scheduled_plugin);
-        if (plugin == nullptr)
+        if (scheduled_plugin == PluginId::COMMAND_CYCLE)
         {
             serial_parser.handle_command(*this);
             bluetooth_parser.handle_command(*this);
         }
         else
         {
-            plugin->start_cycle();
-            plugin->cycle();
-            plugin->end_cycle();
+            Plugin *const plugin = get_plugin(scheduled_plugin);
+            if (plugin != nullptr)
+            {
+                plugin->start_cycle();
+                plugin->cycle();
+                plugin->end_cycle();
+            }
         }
     }
 
@@ -575,7 +574,7 @@ WallPlugin* Car::get_wall_plugin () const
     return wall_plugin;
 }
 
-Plugin* Car::get_plugin (PluginId id) const
+Plugin* Car::get_plugin (const PluginId id) const
 {
     switch (id)
     {

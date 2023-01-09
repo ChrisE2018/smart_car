@@ -12,17 +12,17 @@
 static unsigned long speed_counter_right = 0;
 static unsigned long speed_counter_left = 0;
 
-void isr_right ()
+static void isr_right ()
 {
     speed_counter_right++;
 }
 
-void isr_left ()
+static void isr_left ()
 {
     speed_counter_left++;
 }
 
-std::ostream& operator<< (std::ostream &lhs, MotorDirection direction)
+std::ostream& operator<< (std::ostream &lhs, const MotorDirection direction)
 {
     switch (direction)
     {
@@ -39,7 +39,7 @@ std::ostream& operator<< (std::ostream &lhs, MotorDirection direction)
     return lhs;
 }
 
-std::ostream& operator<< (std::ostream &lhs, MotorLocation location)
+std::ostream& operator<< (std::ostream &lhs, const MotorLocation location)
 {
     switch (location)
     {
@@ -51,6 +51,12 @@ std::ostream& operator<< (std::ostream &lhs, MotorLocation location)
             break;
     }
     return lhs;
+}
+
+std::ostream& operator<< (std::ostream &lhs, const MotorPlugin &motor)
+{
+    return lhs << "#[motor " << motor.location << " " << motor.measured_velocity << " m/s err="
+            << motor.velocity_error << "]";
 }
 
 bool MotorPlugin::setup ()
@@ -139,6 +145,22 @@ int MotorPlugin::get_speed () const
     return speed;
 }
 
+void MotorPlugin::set_speed (const int speed)
+{
+    if (speed > 0)
+    {
+        drive_forward(std::min(SPEED_FULL, speed));
+    }
+    else if (speed < 0)
+    {
+        drive_reverse(std::min(SPEED_FULL, -speed));
+    }
+    else
+    {
+        drive_stop();
+    }
+}
+
 float MotorPlugin::get_velocity () const
 {
     if (direction == MotorDirection::REVERSE)
@@ -156,7 +178,7 @@ unsigned long MotorPlugin::get_speed_counter () const
     return speed_counter;
 }
 
-void MotorPlugin::set_desired_velocity (float _desired_velocity)
+void MotorPlugin::set_desired_velocity (const float _desired_velocity)
 {
     desired_velocity = _desired_velocity;
 }

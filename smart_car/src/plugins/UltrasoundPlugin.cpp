@@ -8,6 +8,7 @@
 #include "UltrasoundPlugin.hpp"
 #include "smart_car.hpp"
 #include "../robot/Car.hpp"
+#include "MotorPlugin.hpp"
 #include "../logging/Logger.hpp"
 
 static Logger logger(__FILE__, Level::info);

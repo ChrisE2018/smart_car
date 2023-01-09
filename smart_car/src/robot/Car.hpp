@@ -69,18 +69,18 @@ class Car: public Executor
         Parser serial_parser;
         Parser bluetooth_parser;
 
-        ClockPlugin *clock_plugin;
-        DrivePlugin *clockwise_plugin;
-        DrivePlugin *counterclockwise_plugin;
-        DemoPlugin *demo_plugin;
-        DrivePlugin *forward_plugin;
-        GoalPlugin *goal_plugin;
-        MpuPlugin *mpu_plugin;
-        KalmanPlugin *kalman_plugin;
-        OdomPlugin *odom_plugin;
-        DrivePlugin *reverse_plugin;
-        UltrasoundPlugin *ultrasound_plugin;
-        WallPlugin *wall_plugin;
+        ClockPlugin *const clock_plugin;
+        DrivePlugin *const clockwise_plugin;
+        DrivePlugin *const counterclockwise_plugin;
+        DemoPlugin *const demo_plugin;
+        DrivePlugin *const forward_plugin;
+        GoalPlugin *const goal_plugin;
+        MpuPlugin *const mpu_plugin;
+        KalmanPlugin *const kalman_plugin;
+        OdomPlugin *const odom_plugin;
+        DrivePlugin *const reverse_plugin;
+        UltrasoundPlugin *const ultrasound_plugin;
+        WallPlugin *const wall_plugin;
 
         std::vector<Plugin*> available_plugins;
         std::vector<Plugin*> plugins;
@@ -100,12 +100,12 @@ class Car: public Executor
         const int LED_2 = 26; // red led left
         const int LED_3 = 28; // green led left
         MotorPlugin motors[MOTOR_COUNT] =
-        { MotorPlugin(PluginId::MOTOR_RIGHT_PLUGIN, MotorLocation::RIGHT, enB, in4, in3,
+        {MotorPlugin(PluginId::MOTOR_RIGHT_PLUGIN, MotorLocation::RIGHT, enB, in4, in3,
                 right_speed_counter_pin, LED_0, LED_1), MotorPlugin(PluginId::MOTOR_LEFT_PLUGIN,
-                MotorLocation::LEFT, enA, in1, in2, left_speed_counter_pin, LED_2, LED_3) };
+                MotorLocation::LEFT, enA, in1, in2, left_speed_counter_pin, LED_2, LED_3)};
 
         PluginId schedule[100] =
-        { };
+        {};
         const int ms_per_cycle = 10;
         int last_cycle = -1;
         Mode mode = Mode::COMMAND_MODE;
