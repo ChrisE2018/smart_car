@@ -47,8 +47,8 @@ void OdomPlugin::cycle ()
 
     const MotorPlugin &right_motor = car.get_motor(MotorLocation::RIGHT);
     const MotorPlugin &left_motor = car.get_motor(MotorLocation::LEFT);
-    const float right_velocity = right_motor.get_velocity();
-    const float left_velocity = left_motor.get_velocity();
+    const float right_velocity = right_motor.get_measured_velocity();
+    const float left_velocity = left_motor.get_measured_velocity();
 
     // clockwise
     const float angular_velocity = left_velocity - right_velocity;

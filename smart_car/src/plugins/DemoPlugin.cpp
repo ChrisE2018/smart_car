@@ -20,7 +20,7 @@ void DemoPlugin::set_enabled (const bool enable)
     Plugin::set_enabled(enable);
     if (enable)
     {
-        Serial.println("Starting DemoMode");
+        Serial.println(F("Starting DemoMode"));
         set_phase(DemoPhase::init_phase);
     }
     else

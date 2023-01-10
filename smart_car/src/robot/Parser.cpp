@@ -31,14 +31,14 @@ void Parser::handle_command (Executor &executor)
                         buffer[i] = '\0';
                         const String command(buffer);
                         std::vector<String> words;
-                        //serial.print("execute: ");
+                        //serial.print(F("execute: "));
                         //serial.println(command);
                         get_words(command, words);
                         if (!words.empty())
                         {
                             executor.execute_command(words);
-                            Serial.println("[executed]");
-                            Serial.println("");
+                            Serial.println(F("[executed]"));
+                            Serial.println();
                         }
                     }
                     return;
@@ -54,7 +54,7 @@ void Parser::handle_command (Executor &executor)
                 delayMicroseconds(100); // allow time to receive
             }
         }
-        Serial.println("[buffer overflow]");
+        Serial.println(F("[buffer overflow]"));
     }
 }
 

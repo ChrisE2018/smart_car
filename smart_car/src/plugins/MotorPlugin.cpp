@@ -104,13 +104,13 @@ void MotorPlugin::drive_reverse (const int _speed)
 
 void MotorPlugin::drive_stop ()
 {
-    if (direction != MotorDirection::STOP || speed != 0)
+    if (direction != MotorDirection::STOP || speed != 0 || desired_velocity != 0
+            || cumulative_velocity_error != 0)
     {
         direction = MotorDirection::STOP;
         speed = 0;
         desired_velocity = 0;
         cumulative_velocity_error = 0;
-        cumulative_error_seconds = 0;
         digitalWrite(forward_led, LOW);
         digitalWrite(reverse_led, LOW);
         digitalWrite(forward_pin, LOW);
@@ -152,33 +152,28 @@ void MotorPlugin::set_speed (const int speed)
     }
 }
 
-float MotorPlugin::get_velocity () const
-{
-    if (direction == MotorDirection::REVERSE)
-    {
-        return -(speed / 256.0);
-    }
-    else
-    {
-        return (speed / 256.0);
-    }
-}
-
 unsigned long MotorPlugin::get_speed_counter () const
 {
     return speed_counter;
 }
 
-void MotorPlugin::set_desired_velocity (const float _desired_velocity)
-{
-    desired_velocity = _desired_velocity;
-    cumulative_velocity_error = 0;
-    cumulative_error_seconds = 0;
-}
-
 float MotorPlugin::get_measured_velocity () const
 {
     return measured_velocity;
+}
+
+float MotorPlugin::get_desired_velocity () const
+{
+    return desired_velocity;
+}
+
+void MotorPlugin::set_desired_velocity (const float _desired_velocity)
+{
+    if (desired_velocity != _desired_velocity)
+    {
+        desired_velocity = _desired_velocity;
+        cumulative_velocity_error = 0;
+    }
 }
 
 float MotorPlugin::get_velocity_error () const
@@ -213,7 +208,6 @@ void MotorPlugin::cycle ()
         const float velocity_error_rate = (velocity_error - previous_velocity_error)
                 / delta_seconds;
         cumulative_velocity_error += velocity_error * delta_seconds;
-        cumulative_error_seconds += delta_seconds;
         last_cycle_ms = now;
         const float control = k0
                 * (velocity_error + k1 * cumulative_velocity_error + k2 * velocity_error_rate);

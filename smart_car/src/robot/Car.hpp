@@ -44,7 +44,9 @@ class Car : public Executor
         void drive_stop (const MotorLocation motor);
         void drive (const MotorLocation motor, const int speed);
         int get_drive_speed (const MotorLocation motor) const;
-        float get_drive_velocity (const MotorLocation motor) const;
+        float get_measured_velocity (const MotorLocation motor) const;
+        float get_desired_velocity (const MotorLocation motor) const;
+        void set_desired_velocity (const MotorLocation motor, const float velocity);
         MotorDirection get_drive_direction (const MotorLocation motor) const;
         void drive_forward (const MotorLocation motor, const int speed);
         void drive_reverse (const MotorLocation motor, const int speed);
@@ -108,7 +110,6 @@ class Car : public Executor
         PluginId schedule[100] =
         {};
         const int ms_per_cycle = 10;
-        int last_cycle = -1;
         Mode mode = Mode::COMMAND_MODE;
 
         void help_command () const;

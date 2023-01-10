@@ -9,6 +9,7 @@
 
 #include "smart_car.hpp"
 #include "../logging/Logger.hpp"
+#include "../robot/heap.hpp"
 
 #include "../plugins/KalmanPlugin.hpp"
 #include "../plugins/ClockPlugin.hpp"
@@ -167,26 +168,24 @@ void Car::set_mode (const Mode _mode)
 void Car::cycle ()
 {
     const unsigned long cycle_start_us = micros();
-    const int ms = millis() % 1000;
+    const unsigned long now = millis();
+    const int ms = now % 1000;
     const int cycle = ms / ms_per_cycle;
-    if (cycle != last_cycle)
+
+    const PluginId scheduled_plugin = schedule[cycle];
+    if (scheduled_plugin == PluginId::COMMAND_CYCLE)
     {
-        last_cycle = cycle;
-        const PluginId scheduled_plugin = schedule[cycle];
-        if (scheduled_plugin == PluginId::COMMAND_CYCLE)
+        serial_parser.handle_command(*this);
+        bluetooth_parser.handle_command(*this);
+    }
+    else
+    {
+        Plugin *const plugin = get_plugin(scheduled_plugin);
+        if (plugin != nullptr)
         {
-            serial_parser.handle_command(*this);
-            bluetooth_parser.handle_command(*this);
-        }
-        else
-        {
-            Plugin *const plugin = get_plugin(scheduled_plugin);
-            if (plugin != nullptr)
-            {
-                plugin->start_cycle();
-                plugin->cycle();
-                plugin->end_cycle();
-            }
+            plugin->start_cycle();
+            plugin->cycle();
+            plugin->end_cycle();
         }
     }
 
@@ -198,7 +197,7 @@ void Car::cycle ()
 /** Execute a command from the user.
  @param words Command string broken into words.
  */
-void Car::execute_command (const std::vector<String>& words)
+void Car::execute_command (const std::vector<String> &words)
 {
     const int n = words.size();
     const String command = words[0];
@@ -291,13 +290,17 @@ void Car::execute_command (const std::vector<String>& words)
         motors[static_cast<int>(MotorLocation::RIGHT)].set_desired_velocity(velocity);
         motors[static_cast<int>(MotorLocation::LEFT)].set_desired_velocity(velocity);
     }
-    else if (command == "goal")
+    else if (command == F("goal"))
     {
         if (n > 2)
         {
             set_mode(Mode::GOAL_MODE);
             goal_plugin->set_goal(words[1].toFloat(), words[2].toFloat());
         }
+    }
+    else if (command == F("heap"))
+    {
+        print_heap_state();
     }
     else if (command == "kalman")
     {
@@ -533,9 +536,19 @@ int Car::get_drive_speed (const MotorLocation motor) const
     return speed;
 }
 
-float Car::get_drive_velocity (const MotorLocation motor) const
+float Car::get_measured_velocity (const MotorLocation motor) const
 {
-    return motors[static_cast<int>(motor)].get_velocity();
+    return motors[static_cast<int>(motor)].get_measured_velocity();
+}
+
+float Car::get_desired_velocity (const MotorLocation motor) const
+{
+    return motors[static_cast<int>(motor)].get_desired_velocity();
+}
+
+void Car::set_desired_velocity (const MotorLocation motor, const float velocity)
+{
+    motors[static_cast<int>(motor)].set_desired_velocity(velocity);
 }
 
 MotorDirection Car::get_drive_direction (const MotorLocation motor) const

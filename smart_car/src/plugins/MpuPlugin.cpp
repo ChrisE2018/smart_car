@@ -22,7 +22,7 @@ bool MpuPlugin::setup ()
     Serial.println(F("Testing MPU connections..."));
     if (mpu.testConnection())
     {
-        Serial.println("MPU6050 connection successful");
+        Serial.println(F("MPU6050 connection successful"));
 
         // load and configure the DMP
         Serial.println(F("Initializing DMP..."));
@@ -61,7 +61,7 @@ bool MpuPlugin::setup ()
     }
     else
     {
-        Serial.println("MPU6050 connection failed");
+        Serial.println(F("MPU6050 connection failed"));
         return false;
     }
 }
@@ -78,7 +78,7 @@ int MpuPlugin::get_expected_ms () const
 
 void MpuPlugin::calibrate ()
 {
-    Serial.println("imu calibration...please wait 15 seconds");
+    Serial.println(F("imu calibration...please wait 15 seconds"));
     // 17:08:16: >...............>...............-1152.00000,   -3917.00000,    1930.00000, 9.00000,    -78.00000,  -17.00000
     mpu.CalibrateGyro(7);     // Fine tune after setting offsets with less Loops.
     mpu.CalibrateAccel(7);     // Fine tune after setting offsets with less Loops.

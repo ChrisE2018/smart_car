@@ -19,7 +19,7 @@ void WallPlugin::set_enabled (const bool enable)
     Plugin::set_enabled(enable);
     if (enable)
     {
-        Serial.println("Starting WallMode");
+        Serial.println(F("Starting WallMode"));
         speed = SPEED_FULL;
     }
 }
@@ -30,9 +30,9 @@ void WallPlugin::cycle ()
     {
         UltrasoundPlugin *ultrasound_plugin = car.get_ultrasound_plugin();
         const long d = ultrasound_plugin->get_distance();
-        Serial.print("Distance ");
+        Serial.print(F("Distance "));
         Serial.print(d);
-        Serial.println(" cm");
+        Serial.println(F(" cm"));
         if (d < 10)
         {
             set_enabled(false);

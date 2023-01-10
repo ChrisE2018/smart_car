@@ -60,10 +60,10 @@ class MotorPlugin : public Plugin
         MotorDirection get_direction () const;
         int get_speed () const;
         void set_speed (const int speed);
-        float get_velocity () const;
         unsigned long get_speed_counter () const;
-        void set_desired_velocity (const float desired_velocity);
         float get_measured_velocity () const;
+        float get_desired_velocity () const;
+        void set_desired_velocity (const float desired_velocity);
         float get_velocity_error () const;
         virtual int get_preferred_interval () const override;
         virtual int get_expected_ms () const override;
@@ -96,6 +96,5 @@ class MotorPlugin : public Plugin
         unsigned long speed_counter = 0;
         float velocity_error = 0;
         float cumulative_velocity_error = 0;
-        float cumulative_error_seconds = 0;
 };
 

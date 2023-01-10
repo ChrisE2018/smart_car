@@ -60,13 +60,14 @@ void GoalPlugin::cycle ()
         {
             if (adjust_angle)
             {
-                angle_cycle(measured_angle, goal_angle);
+                angle_cycle(normalize_angle(measured_angle), goal_angle);
             }
             else if (adjust_position)
             {
                 const float measured_x = car.get_kalman_plugin()->get_x();
                 const float measured_y = car.get_kalman_plugin()->get_y();
-                position_cycle(measured_angle, measured_x, measured_y, goal_x, goal_y);
+                position_cycle(normalize_angle(measured_angle), measured_x, measured_y, goal_x,
+                        goal_y);
             }
         }
         else
@@ -96,20 +97,19 @@ void GoalPlugin::angle_cycle (const float measured_angle, const float desired_an
 void GoalPlugin::angle_step (const float measured_angle, const float desired_angle,
         const float delta)
 {
-    const int speed = get_angle_speed(abs(delta));
     if (delta > 0)
     {
         logger.info() << "Clockwise by " << delta << " from " << measured_angle << " to goal angle "
-                << desired_angle << " at " << speed << std::endl;
-        car.drive_reverse(MotorLocation::RIGHT, speed);
-        car.drive_forward(MotorLocation::LEFT, speed);
+                << desired_angle << std::endl;
+        car.set_desired_velocity(MotorLocation::RIGHT, -2.0);
+        car.set_desired_velocity(MotorLocation::LEFT, 2.0);
     }
-    else
+    else if (delta < 0)
     {
         logger.info() << "Counterclockwise by " << delta << " from " << measured_angle
-                << " to goal angle " << desired_angle << " at " << speed << std::endl;
-        car.drive_forward(MotorLocation::RIGHT, speed);
-        car.drive_reverse(MotorLocation::LEFT, speed);
+                << " to goal angle " << desired_angle << std::endl;
+        car.set_desired_velocity(MotorLocation::RIGHT, 2.0);
+        car.set_desired_velocity(MotorLocation::LEFT, -2.0);
     }
 }
 

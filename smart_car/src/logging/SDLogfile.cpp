@@ -20,14 +20,14 @@ SDLogfile::SDLogfile ()
 
 void SDLogfile::open ()
 {
-    Serial.print("Initializing SD card...");
+    Serial.print(F("Initializing SD card..."));
 
     if (!SD.begin(chipSelect))
     {
-        Serial.println("Could not initialize SD car...!");
+        Serial.println(F("Could not initialize SD car...!"));
     }
-    Serial.println("SD card initialization done.");
-    Serial.println("Creating logfile.txt...");
+    Serial.println(F("SD card initialization done."));
+    Serial.println(F("Creating logfile.txt..."));
     myFile = SD.open("logfile.txt", FILE_WRITE);
 }
 

@@ -10,4 +10,5 @@
 bool is_overflow (const double x);
 
 float angle_delta (const float desired, const float actual);
+float normalize_angle (const float angle);
 
