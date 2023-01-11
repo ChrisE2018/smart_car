@@ -6,6 +6,7 @@
  */
 
 #include "RobotAppender.hpp"
+#include <stdio.h>
 #include <SPI.h>
 #include "../plugins/ClockPlugin.hpp"
 
@@ -27,6 +28,7 @@ void RobotAppender::append (const Logger *const logger, const Level level, const
     const int ms = millis() % 1000;
     snprintf(buffer, buffer_size, "%s.%03d [%s %s:%d] %s", isotime(lt), ms, stringify(level),
             logger->get_short_name().c_str(), line, message);
+    buffer[buffer_size - 1] = '\0';
     append(buffer);
 }
 

@@ -13,7 +13,8 @@
 #include <WString.h>
 
 class Logger;
-enum class Level;
+enum class Level
+;
 
 std::ostream& operator<< (std::ostream &lhs, const __FlashStringHelper *pstr);
 
@@ -30,8 +31,8 @@ class LogBuffer : private std::streambuf, public std::ostream
         virtual std::streambuf::int_type overflow (std::streambuf::int_type c) override;
 
     private:
-        static const int buffer_size = 255;
-        static char buffer[buffer_size + 1];
+        static const int buffer_size = 128;
+        static char buffer[buffer_size];
         static int pos;
         Logger *const logger;
         const Level level;

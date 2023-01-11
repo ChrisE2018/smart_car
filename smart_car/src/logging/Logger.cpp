@@ -105,6 +105,18 @@ void Logger::logging (const Level _level, const int line, const char *format, ..
     }
 }
 
+void Logger::logging_p (const Level _level, const int line, const char *format, ...)
+{
+    if (static_cast<int>(_level) <= static_cast<int>(level))
+    {
+        va_list args;
+        va_start(args, format);
+        vsnprintf_P(buffer, buffer_size, format, args);
+        append(this, _level, line, buffer);
+        va_end(args);
+    }
+}
+
 void Logger::append (const Logger *logger, const Level level, const int line, const char *message)
 {
     for (Appender *appender : appenders)

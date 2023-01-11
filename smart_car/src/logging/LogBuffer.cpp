@@ -11,7 +11,7 @@
 #include <streambuf>
 #include "Logger.hpp"
 
-static char LogBuffer::buffer[LogBuffer::buffer_size + 1];
+static char LogBuffer::buffer[LogBuffer::buffer_size];
 
 static int LogBuffer::pos = 0;
 
@@ -36,11 +36,11 @@ LogBuffer::LogBuffer (Logger *logger, const Level level) :
 
 std::streambuf::int_type LogBuffer::overflow (std::streambuf::int_type c)
 {
-    if (c == '\n' || c == EOF || pos >= buffer_size)
+    if (c == '\n' || c == EOF || pos + 1 >= buffer_size)
     {
         flush();
     }
-    else
+    else if (c != '\r')
     {
         buffer[pos++] = c;
     }

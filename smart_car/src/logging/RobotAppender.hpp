@@ -31,7 +31,7 @@ class RobotAppender : public Appender
         static const int filename_size = 16;
         char log_filename[filename_size];
         File log_file;
-        static const int buffer_size = 256;
+        static const int buffer_size = 128;
         char buffer[buffer_size];
 
         void get_logfile ();
