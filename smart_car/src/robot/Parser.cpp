@@ -16,10 +16,9 @@ void Parser::handle_command (Executor &executor)
 {
     if (serial.available())
     {
-        const int size = 256;
-        char buffer[size];
+        char buffer[buffer_size];
         int i = 0;
-        while (i < size)
+        while (i < buffer_size)
         {
             if (serial.available())
             {
