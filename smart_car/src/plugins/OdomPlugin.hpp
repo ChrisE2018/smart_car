@@ -18,6 +18,7 @@ class OdomPlugin : public Plugin
     public:
         OdomPlugin (Car &car);
         bool setup () override;
+        virtual int get_preferred_interval () const override;
         void cycle () override;
         void update_transforms (const float angle);
 

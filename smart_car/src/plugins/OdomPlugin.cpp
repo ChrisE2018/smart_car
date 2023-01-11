@@ -40,6 +40,11 @@ bool OdomPlugin::setup ()
     return false;
 }
 
+int OdomPlugin::get_preferred_interval () const
+{
+    return 50;
+}
+
 void OdomPlugin::cycle ()
 {
     const long now = millis();
@@ -72,7 +77,8 @@ void OdomPlugin::cycle ()
     {
         // PRINT RESULTS: measures and estimated state
         Serial << "Odom State: " << state << " dt: " << dt << " Obs: " << obs << " rm: "
-                << right_velocity << " lm: " << left_velocity << " b2w" << body_2_world << "\n";
+                << right_velocity << " lm: " << left_velocity << " b2w" << body_2_world
+                << "\n";
     }
 }
 

@@ -90,6 +90,7 @@ class MotorPlugin : public Plugin
         const float k0 = 0.2 * SPEED_FULL;
         const float k1 = 0.3;
         const float k2 = -0.1;
+        bool auto_velocity = false;
         float desired_velocity = 0;
         float measured_velocity = 0;
         unsigned long last_cycle_ms = 0;

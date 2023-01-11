@@ -119,6 +119,7 @@ void MotorPlugin::drive_stop ()
         cout << "drive " << location << " " << direction << " at " << speed << " mps "
                 << measured_velocity << std::endl;
     }
+    auto_velocity = false;
 }
 
 MotorLocation MotorPlugin::get_location () const
@@ -169,6 +170,7 @@ float MotorPlugin::get_desired_velocity () const
 
 void MotorPlugin::set_desired_velocity (const float _desired_velocity)
 {
+    auto_velocity = true;
     if (desired_velocity != _desired_velocity)
     {
         desired_velocity = _desired_velocity;
@@ -183,7 +185,7 @@ float MotorPlugin::get_velocity_error () const
 
 int MotorPlugin::get_preferred_interval () const
 {
-    return 1;
+    return 100;
 }
 
 int MotorPlugin::get_expected_ms () const
@@ -193,30 +195,40 @@ int MotorPlugin::get_expected_ms () const
 
 void MotorPlugin::cycle ()
 {
-    const unsigned long now = millis();
-    if (now - last_cycle_ms > 100)
+    if (auto_velocity)
     {
-        const float delta_seconds = (now - last_cycle_ms) * 0.001;
-        const unsigned long previous_speed_counter = speed_counter;
-        const float previous_velocity_error = velocity_error;
-        speed_counter =
-                (location == MotorLocation::RIGHT) ? get_right_speed_counter() :
-                                                     get_left_speed_counter();
-        measured_velocity = (speed_counter - previous_speed_counter) * count_to_meters_per_second
-                / delta_seconds;
-        velocity_error = desired_velocity - measured_velocity;
-        const float velocity_error_rate = (velocity_error - previous_velocity_error)
-                / delta_seconds;
-        cumulative_velocity_error += velocity_error * delta_seconds;
-        last_cycle_ms = now;
-        const float control = k0
-                * (velocity_error + k1 * cumulative_velocity_error + k2 * velocity_error_rate);
-
-        set_speed(control);
+        const unsigned long now = millis();
+        if (now - last_cycle_ms > 100)
+        {
+            const float delta_seconds = (now - last_cycle_ms) * 0.001;
+            const unsigned long previous_speed_counter = speed_counter;
+            const float previous_velocity_error = velocity_error;
+            speed_counter =
+                    (location == MotorLocation::RIGHT) ? get_right_speed_counter() :
+                                                         get_left_speed_counter();
+            measured_velocity = (speed_counter - previous_speed_counter)
+                    * count_to_meters_per_second / delta_seconds;
+            velocity_error = desired_velocity - measured_velocity;
+            const float velocity_error_rate = (velocity_error - previous_velocity_error)
+                    / delta_seconds;
+            cumulative_velocity_error += velocity_error * delta_seconds;
+            last_cycle_ms = now;
+            const float control = k0
+                    * (velocity_error + k1 * cumulative_velocity_error + k2 * velocity_error_rate);
+            const float previous_desired_velocity = desired_velocity;
+            set_speed(control);
+            if (previous_desired_velocity != 0)
+            {
+                // could turn off if control == 0
+                // [TODO] drive_stop sets desired_velocity to 0 which make auto_velocity stop
+                auto_velocity = true;
+                desired_velocity = previous_desired_velocity;
+            }
 //        if (velocity_error != 0)
 //        {
 //            cout << "ds: " << delta_seconds << " ve: " << velocity_error << " cve: "
 //                    << cumulative_velocity_error << std::endl;
 //        }
+        }
     }
 }

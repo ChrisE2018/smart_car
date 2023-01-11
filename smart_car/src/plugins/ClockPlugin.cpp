@@ -12,7 +12,6 @@
 ClockPlugin::ClockPlugin () :
                 Plugin(PluginId::CLOCK_PLUGIN)
 {
-    cout << "Created RTC Plugin " << get_id() << std::endl;
 }
 
 bool ClockPlugin::setup ()
