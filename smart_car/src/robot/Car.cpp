@@ -83,12 +83,12 @@ void Car::setup ()
     {
         if (plugin->setup())
         {
-            logger.info() << "Setup " << plugin->get_id() << std::endl;
+            logger.info() << F("Setup ") << plugin->get_id() << std::endl;
             plugins.push_back(plugin);
         }
         else
         {
-            logger.info() << "Disabled " << plugin->get_id() << std::endl;
+            logger.info() << F("Disabled ") << plugin->get_id() << std::endl;
         }
     }
     int cycle = 0;
@@ -120,8 +120,8 @@ void Car::setup ()
     }
     LOG_INFO(logger, "Completed setup of %d enabled plugins", plugins.size());
 
-    logger.info() << "Testing info logging" << std::endl;
-    logger.debug() << "Testing debug logging" << std::endl;
+    logger.info() << F("Testing info logging") << std::endl;
+    logger.debug() << F("Testing debug logging") << std::endl;
 }
 
 int Car::get_actual_interval (const int cycle, const PluginId id) const
@@ -139,7 +139,7 @@ int Car::get_actual_interval (const int cycle, const PluginId id) const
 void Car::set_mode (const Mode _mode)
 {
     mode = _mode;
-    logger.info() << "Set " << *this << " to " << _mode << std::endl;
+    logger.info() << F("Set ") << *this << F(" to ") << _mode << std::endl;
     switch (mode)
     {
         case Mode::COMMAND_MODE:
@@ -168,8 +168,7 @@ void Car::set_mode (const Mode _mode)
 void Car::cycle ()
 {
     const unsigned long cycle_start_us = micros();
-    const unsigned long now = millis();
-    const int ms = now % 1000;
+    const int ms = (millis()) % 1000;
     const int cycle = ms / ms_per_cycle;
 
     const PluginId scheduled_plugin = schedule[cycle];
@@ -189,8 +188,7 @@ void Car::cycle ()
         }
     }
 
-    const unsigned long duration = micros() - cycle_start_us;
-    total_cycle_us += duration;
+    total_cycle_us += (micros() - cycle_start_us);
     cycle_count++;
 }
 
@@ -201,8 +199,8 @@ void Car::execute_command (const std::vector<String> &words)
 {
     const int n = words.size();
     const String command = words[0];
-    logger.info() << "Command: " << command.c_str() << std::endl;
-    if (command == "angle")
+    logger.info() << F("Command: ") << command.c_str() << std::endl;
+    if (command == F("angle"))
     {
         if (n > 1)
         {
@@ -210,7 +208,7 @@ void Car::execute_command (const std::vector<String> &words)
             goal_plugin->set_goal(words[1].toFloat());
         }
     }
-    else if (command == "b")
+    else if (command == F("b"))
     {
         int speed = SPEED_FULL;
         int duration = 500;
@@ -228,7 +226,7 @@ void Car::execute_command (const std::vector<String> &words)
         reverse_plugin->set_left_speed(speed);
         reverse_plugin->set_enabled(true);
     }
-    else if (command == "bb")
+    else if (command == F("bb"))
     {
         float velocity = -1.0;
         if (n > 1)
@@ -239,29 +237,29 @@ void Car::execute_command (const std::vector<String> &words)
         motors[static_cast<int>(MotorLocation::RIGHT)].set_desired_velocity(velocity);
         motors[static_cast<int>(MotorLocation::LEFT)].set_desired_velocity(velocity);
     }
-    else if (command == "calibrate")
+    else if (command == F("calibrate"))
     {
         mpu_plugin->calibrate();
     }
-    else if (command == "c")
+    else if (command == F("c"))
     {
         set_mode(Mode::COMMAND_MODE);
-        logger.info() << "Current mode is " << mode << std::endl;
+        logger.info() << F("Current mode is ") << mode << std::endl;
     }
-    else if (command == "clock")
+    else if (command == F("clock"))
     {
         clock_plugin->set_enabled(!clock_plugin->is_enabled());
     }
-    else if (command == "demo")
+    else if (command == F("demo"))
     {
         set_mode(Mode::DEMO_MODE);
-        logger.info() << "Current mode is " << mode << std::endl;
+        logger.info() << F("Current mode is ") << mode << std::endl;
     }
-    else if (command == "distance")
+    else if (command == F("distance"))
     {
         ultrasound_plugin->set_enabled(!ultrasound_plugin->is_enabled());
     }
-    else if (command == "f")
+    else if (command == F("f"))
     {
         int speed = SPEED_FULL;
         int duration = 500;
@@ -279,7 +277,7 @@ void Car::execute_command (const std::vector<String> &words)
         forward_plugin->set_left_speed(speed);
         forward_plugin->set_enabled(true);
     }
-    else if (command == "ff")
+    else if (command == F("ff"))
     {
         float velocity = 1.0;
         if (n > 1)
@@ -302,15 +300,15 @@ void Car::execute_command (const std::vector<String> &words)
     {
         print_heap_state();
     }
-    else if (command == "kalman")
+    else if (command == F("kalman"))
     {
         kalman_plugin->set_enabled(!kalman_plugin->is_enabled());
     }
-    else if (command == "led")
+    else if (command == F("led"))
     {
         demo_drive_leds();
     }
-    else if (command == "l")
+    else if (command == F("l"))
     {
         float desired_velocity = 0.5;
         if (n > 1)
@@ -320,7 +318,7 @@ void Car::execute_command (const std::vector<String> &words)
 //        set_mode(Mode::COMMAND_MODE);
         motors[static_cast<int>(MotorLocation::LEFT)].set_desired_velocity(desired_velocity);
     }
-    else if (command == "left")
+    else if (command == F("left"))
     {
         int speed = SPEED_FULL;
         int duration = 500;
@@ -338,7 +336,7 @@ void Car::execute_command (const std::vector<String> &words)
         clockwise_plugin->set_left_speed(speed);
         clockwise_plugin->set_enabled(true);
     }
-    else if (command == "mpu")
+    else if (command == F("mpu"))
     {
         mpu_plugin->set_enabled(!mpu_plugin->is_enabled());
     }
@@ -355,16 +353,16 @@ void Car::execute_command (const std::vector<String> &words)
             const float total_micros = plugin->get_total_micros();
             if (cycle_count > 0)
             {
-                logger.info() << "Plugin " << plugin->get_id() << " average "
-                        << total_micros / cycle_count << " us over " << cycle_count << " cycles"
+                logger.info() << F("Plugin ") << plugin->get_id() << F(" average ")
+                        << total_micros / cycle_count << F(" us over ") << cycle_count << F(" cycles")
                         << std::endl;
             }
         }
         const float f_total_micros = total_cycle_us;
-        logger.info() << "Cycle count " << cycle_count << " total cycle micros " << total_cycle_us
-                << " average micros per cycle " << f_total_micros / cycle_count << std::endl;
+        logger.info() << F("Cycle count ") << cycle_count << F(" total cycle micros ") << total_cycle_us
+                << F(" average micros per cycle ") << f_total_micros / cycle_count << std::endl;
     }
-    else if (command == "r")
+    else if (command == F("r"))
     {
         float desired_velocity = 0.5;
         if (n > 1)
@@ -374,7 +372,7 @@ void Car::execute_command (const std::vector<String> &words)
 //        set_mode(Mode::COMMAND_MODE);
         motors[static_cast<int>(MotorLocation::RIGHT)].set_desired_velocity(desired_velocity);
     }
-    else if (command == "right")
+    else if (command == F("right"))
     {
         int speed = SPEED_FULL;
         int duration = 500;
@@ -392,7 +390,7 @@ void Car::execute_command (const std::vector<String> &words)
         counterclockwise_plugin->set_left_speed(speed);
         counterclockwise_plugin->set_enabled(true);
     }
-    else if (command == "reset")
+    else if (command == F("reset"))
     {
         all_stop();
         for (Plugin *plugin : plugins)
@@ -401,67 +399,67 @@ void Car::execute_command (const std::vector<String> &words)
         }
         set_mode(Mode::COMMAND_MODE);
     }
-    else if (command == "s")
+    else if (command == F("s"))
     {
         all_stop();
         set_mode(Mode::COMMAND_MODE);
     }
-    else if (command == "schedule")
+    else if (command == F("schedule"))
     {
         for (int i = 0; i < 100; i++)
         {
             const PluginId id = schedule[i];
             const Plugin *plugin = get_plugin(id);
-            logger.info() << "[" << i << "] " << id << ": "
-                    << ((plugin == nullptr) ? "null" : "found") << std::endl;
+            logger.info() << F("[") << i << F("] ") << id << F(": ")
+                    << ((plugin == nullptr) ? F("null") : F("found")) << std::endl;
         }
     }
-    else if (command == "wall")
+    else if (command == F("wall"))
     {
         set_mode(Mode::WALL_MODE);
-        logger.info() << "Current mode is " << mode << std::endl;
+        logger.info() << F("Current mode is ") << mode << std::endl;
     }
-    else if (command == "zero")
+    else if (command == F("zero"))
     {
         set_mode(Mode::COMMAND_MODE);
         kalman_plugin->reset();
         odom_plugin->reset();
     }
-    else if (command == "?")
+    else if (command == F("?"))
     {
         help_command();
     }
     else
     {
-        logger.info() << "Invalid command: " << command << std::endl;
+        logger.info() << F("Invalid command: ") << command << std::endl;
     }
 }
 
 void Car::help_command () const
 {
-    logger.info() << "Robot " << *this << std::endl;
+    logger.info() << F("Robot ") << *this << std::endl;
     long d = ultrasound_plugin->get_distance();
-    logger.info() << "Distance " << d << " cm" << std::endl;
+    logger.info() << F("Distance ") << d << F(" cm") << std::endl;
 
     const BLA::Matrix<Nstate> &state = kalman_plugin->get_state();
-    logger.info() << "Position " << state(0) << ", " << state(1) << " angle " << state(2)
-            << " Velocity " << state(3) << ", " << state(4) << " angle " << state(5)
-            << " Acceleration " << state(6) << ", " << state(7) << " angle " << state(8)
+    logger.info() << F("Position ") << state(0) << F(", ") << state(1) << F(" angle ") << state(2)
+            << F(" Velocity ") << state(3) << F(", ") << state(4) << F(" angle ") << state(5)
+            << F(" Acceleration ") << state(6) << F(", ") << state(7) << F(" angle ") << state(8)
             << std::endl;
-    logger.info() << "Angle: " << kalman_plugin->get_angle() << std::endl;
+    logger.info() << F("Angle: ") << kalman_plugin->get_angle() << std::endl;
 
     LOG_INFO(logger, "Plugins %d", plugins.size());
     if (cycle_count > 0)
     {
         const float f_total_micros = total_cycle_us;
-        logger.info() << "Cycle count " << cycle_count << " total cycle micros " << total_cycle_us
-                << " average micros per cycle " << f_total_micros / cycle_count << std::endl;
+        logger.info() << F("Cycle count ") << cycle_count << F(" total cycle micros ") << total_cycle_us
+                << F(" average micros per cycle ") << f_total_micros / cycle_count << std::endl;
     }
 
     for (int motor = 0; motor < MOTOR_COUNT; motor++)
     {
         const MotorPlugin &m = motors[motor];
-        logger.info() << m.get_location() << " speed counter " << m.get_speed_counter()
+        logger.info() << m.get_location() << F(" speed counter ") << m.get_speed_counter()
                 << std::endl;
     }
 }

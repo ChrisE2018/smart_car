@@ -10,10 +10,12 @@
 #include <streambuf>
 #include <iostream>
 #include <string>
+#include <WString.h>
 
 class Logger;
-enum class Level
-;
+enum class Level;
+
+std::ostream& operator<< (std::ostream &lhs, const __FlashStringHelper *pstr);
 
 // http://www.angelikalanger.com/Articles/C++Report/IOStreamsDerivation/IOStreamsDerivation.html
 // https://gcc.gnu.org/onlinedocs/libstdc++/manual/streambufs.html
@@ -36,4 +38,3 @@ class LogBuffer : private std::streambuf, public std::ostream
 
         void flush ();
 };
-

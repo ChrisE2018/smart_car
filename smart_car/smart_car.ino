@@ -20,7 +20,8 @@ std::ohserialstream cout1(Serial3);
 
 static Car *car;
 static RobotAppender *robot_appender = nullptr;
-static unsigned long cycle_time = 0;
+static unsigned long cycle_count = 0;
+const int ms_per_cycle = 10;
 
 /* Control program. */
 
@@ -33,10 +34,10 @@ void setup ()
     robot_appender = new RobotAppender(*car);
     Logger::ROOT->add_appender(robot_appender);
     car->setup();
-//    robot_appender->open_logfile();
+    robot_appender->open_logfile();
     car->demo_drive_leds();
     setup_speed_counter();
-    print_heap_state ();
+    print_heap_state();
     Serial.println(F("Ready"));
     Serial.println();
 }
@@ -44,11 +45,10 @@ void setup ()
 // @see https://forum.arduino.cc/t/constant-run-time-of-a-loop/568829/2
 void loop ()
 {
-    const unsigned long now = millis();
-    const unsigned long cycle = now / 10;
-    if (now != cycle_time)
+    const unsigned long cycle = (millis()) / ms_per_cycle;
+    if (cycle != cycle_count)
     {
-        cycle_time = now;
+        cycle_count = cycle;
         car->cycle();
     }
     else

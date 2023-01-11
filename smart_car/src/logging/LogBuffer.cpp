@@ -15,6 +15,20 @@ static char LogBuffer::buffer[LogBuffer::buffer_size + 1];
 
 static int LogBuffer::pos = 0;
 
+std::ostream& operator<< (std::ostream &lhs, const __FlashStringHelper *pstr)
+{
+    PGM_P p = reinterpret_cast<PGM_P>(pstr);
+    while (true)
+    {
+        unsigned char c = pgm_read_byte(p++);
+        if (c == 0)
+        {
+            return lhs;
+        }
+        lhs.put(c);
+    }
+}
+
 LogBuffer::LogBuffer (Logger *logger, const Level level) :
                 logger(logger), level(level), std::ios(0), std::ostream(this)
 {
