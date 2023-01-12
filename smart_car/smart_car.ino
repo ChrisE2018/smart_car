@@ -21,7 +21,6 @@ std::ohserialstream cout1(Serial3);
 static Car *car;
 static RobotAppender *robot_appender = nullptr;
 static unsigned long cycle_count = 0;
-const int ms_per_cycle = 10;
 
 /* Control program. */
 
@@ -45,7 +44,7 @@ void setup ()
 // @see https://forum.arduino.cc/t/constant-run-time-of-a-loop/568829/2
 void loop ()
 {
-    const unsigned long cycle = (millis()) / ms_per_cycle;
+    const unsigned long cycle = millis();
     if (cycle != cycle_count)
     {
         cycle_count = cycle;
@@ -54,7 +53,7 @@ void loop ()
     else
     {
         // We have part of a cycle idle time
-        robot_appender->flush();
+        //robot_appender->flush();
     }
 }
 

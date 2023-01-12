@@ -36,7 +36,7 @@ class Car : public Executor
         void set_mode (const Mode mode);
         void cycle ();
         void demo_drive_leds ();
-        virtual void execute_command (const std::vector<String>& words) override;
+        virtual void execute_command (const std::vector<String> &words) override;
 
         void all_stop ();
         const MotorPlugin& get_motor (const MotorLocation motor) const;
@@ -87,29 +87,28 @@ class Car : public Executor
         std::vector<Plugin*> available_plugins;
         std::vector<Plugin*> plugins;
 
-        const int right_speed_counter_pin = 2; // right
-        const int left_speed_counter_pin = 3; // left
+        static constexpr int right_speed_counter_pin = 2; // right
+        static constexpr int left_speed_counter_pin = 3; // left
 
-        const int in1 = 49; // yellow = in1 left
-        const int in2 = 48; // orange = in2 left
-        const int in3 = 47; // purple = in3 right
-        const int in4 = 46; // blue = in4 right
-        const int enA = 45; // blue = enA left
-        const int enB = 44; // green = enB right
+        static constexpr int in1 = 49; // yellow = in1 left
+        static constexpr int in2 = 48; // orange = in2 left
+        static constexpr int in3 = 47; // purple = in3 right
+        static constexpr int in4 = 46; // blue = in4 right
+        static constexpr int enA = 45; // blue = enA left
+        static constexpr int enB = 44; // green = enB right
 
-        const int RIGHT_LED_FORWARD = 22; // red led right
-        const int RIGHT_LED_REVERSE = 24; // green led right
-        const int LEFT_LED_FORWARD = 26; // red led left
-        const int LEFT_LED_REVERSE = 28; // green led left
+        static constexpr int RIGHT_LED_FORWARD = 22; // red led right
+        static constexpr int RIGHT_LED_REVERSE = 24; // green led right
+        static constexpr int LEFT_LED_FORWARD = 26; // red led left
+        static constexpr int LEFT_LED_REVERSE = 28; // green led left
         MotorPlugin motors[MOTOR_COUNT] =
         {MotorPlugin(PluginId::MOTOR_RIGHT_PLUGIN, MotorLocation::RIGHT, enB, in4, in3,
                 right_speed_counter_pin, RIGHT_LED_FORWARD, RIGHT_LED_REVERSE), MotorPlugin(
                 PluginId::MOTOR_LEFT_PLUGIN, MotorLocation::LEFT, enA, in1, in2,
                 left_speed_counter_pin, LEFT_LED_FORWARD, LEFT_LED_REVERSE)};
 
-        PluginId schedule[100] =
-        {};
-        const int ms_per_cycle = 10;
+        static constexpr int schedule_size = 50;
+        PluginId schedule[schedule_size];
         Mode mode = Mode::COMMAND_MODE;
 
         void help_command () const;

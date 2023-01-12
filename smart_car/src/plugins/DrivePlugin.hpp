@@ -20,22 +20,15 @@ class DrivePlugin : public Plugin
 
         void set_enabled (const bool enable);
 
+        virtual int get_expected_us () const;
+
         void cycle () override;
 
-        void set_duration (const int _duration)
-        {
-            duration = _duration;
-        }
+        void set_duration (const int _duration);
 
-        void set_right_speed (const int speed)
-        {
-            right_motor_speed = speed;
-        }
+        void set_right_speed (const int speed);
 
-        void set_left_speed (const int speed)
-        {
-            left_motor_speed = speed;
-        }
+        void set_left_speed (const int speed);
 
     private:
         Car &car;

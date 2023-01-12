@@ -20,6 +20,7 @@ class GoalPlugin : public Plugin
         void set_goal (const float x, const float y);
         bool setup ();
         virtual int get_preferred_interval () const;
+        virtual int get_expected_us () const;
         void cycle ();
 
     private:

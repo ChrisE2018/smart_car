@@ -85,11 +85,25 @@ void Logger::add_appender (Appender *const appender)
 
 LogBuffer& Logger::info ()
 {
+    info_stream.set_line(0);
     return info_stream;
 }
 
 LogBuffer& Logger::debug ()
 {
+    debug_stream.set_line(0);
+    return debug_stream;
+}
+
+LogBuffer& Logger::info (const int line)
+{
+    info_stream.set_line(line);
+    return info_stream;
+}
+
+LogBuffer& Logger::debug (const int line)
+{
+    debug_stream.set_line(line);
     return debug_stream;
 }
 

@@ -8,6 +8,9 @@
 #include "Arduino.h"
 #include "speed_counter.hpp"
 
+static constexpr int right_speed_counter_pin = 2;
+static constexpr int left_speed_counter_pin = 3;
+
 static unsigned long speed_counter_right = 0;
 static unsigned long speed_counter_left = 0;
 

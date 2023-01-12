@@ -19,7 +19,7 @@ class RobotAppender : public Appender
         virtual ~RobotAppender () = default;
         virtual void append (const Logger *const logger, const Level level, const int line,
                 const char *const message);
-        void append (const char *const message);
+        void append (const Level level, const char *const message);
         void open_logfile ();
         void flush ();
         void close ();
@@ -28,7 +28,7 @@ class RobotAppender : public Appender
 
         // For file access on micro SD card
         const int chipSelect = 53;
-        static const int filename_size = 16;
+        static const int filename_size = 32;
         char log_filename[filename_size];
         File log_file;
         static const int buffer_size = 128;

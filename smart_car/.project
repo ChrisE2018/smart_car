@@ -82,6 +82,11 @@
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/arduino/hardware/avr/1.8.6/libraries/SPI</locationURI>
 		</link>
 		<link>
+			<name>libraries/UnixTime</name>
+			<type>2</type>
+			<locationURI>ECLIPSE_HOME/arduinoPlugin/libraries/UnixTime/1.1.0</locationURI>
+		</link>
+		<link>
 			<name>libraries/Wire</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/arduino/hardware/avr/1.8.6/libraries/Wire</locationURI>

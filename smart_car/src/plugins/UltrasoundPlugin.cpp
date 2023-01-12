@@ -17,7 +17,6 @@ UltrasoundPlugin::UltrasoundPlugin (Car &car) :
                 car(car), Plugin(PluginId::ULTRASOUND_PLUGIN),
                 sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)
 {
-
 }
 
 int UltrasoundPlugin::get_preferred_interval () const
@@ -25,9 +24,9 @@ int UltrasoundPlugin::get_preferred_interval () const
     return 100;
 }
 
-int UltrasoundPlugin::get_expected_ms () const
+int UltrasoundPlugin::get_expected_us () const
 {
-    return 8;
+    return 3000;
 }
 
 long UltrasoundPlugin::get_distance ()

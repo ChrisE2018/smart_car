@@ -18,7 +18,7 @@ class Parser
         void handle_command (Executor &executor);
 
     private:
-        const int buffer_size = 80;
+        static constexpr int buffer_size = 80;
 
         HardwareSerial &serial;
         void get_words (const String& command, std::vector<String>& words);

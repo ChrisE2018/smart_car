@@ -1,0 +1,32 @@
+* Issue tracker
+* Make MotorPlugin set_speed not turn off auto_velocity
+* Separate command handler from Car class
+* Nudge MotorPlugin when current velocity is zero
+* Separate data logger for real time variables w/plotter tools
+* Startup status logger
+* Future events on schedule or condition
+	- time based
+	- event based, like distance motor moves or angle or goal position
+	- what are the actions?
+	- behavior trees?
+* Motor control to run for a specified distance or distance/time curve
+	- Control input to kalman filter?
+* Fix breadboard in position
+	- Try to cut clear disk
+	- drill holes
+* Work on GPS
+* Consider removing cycle schedule
+* Detect skipped cycles
+* Second motor control/speed sensors
+* Extra holes to properly mount motor controller
+* Mount for computer battery
+* Battery level sensor(s)
+
+DONE DONE DONE
+
+1/12/2023
+* Make clock not a plugin (module?)
+	- Separate modules from plugins?
+	- Make plugins with no cycle method?
+	- Make cyclic plugin a subclass?
+* Detect overruns

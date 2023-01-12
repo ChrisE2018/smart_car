@@ -75,9 +75,9 @@ int KalmanPlugin::get_preferred_interval () const
     return 10;
 }
 
-int KalmanPlugin::get_expected_ms () const
+int KalmanPlugin::get_expected_us () const
 {
-    return 4;
+    return 3500;
 }
 
 void KalmanPlugin::cycle ()

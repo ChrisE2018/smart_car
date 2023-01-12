@@ -5,10 +5,10 @@
  *      Author: cre
  */
 
-#include "RobotAppender.hpp"
 #include <stdio.h>
 #include <SPI.h>
-#include "../plugins/ClockPlugin.hpp"
+#include "RobotAppender.hpp"
+#include "UnixTime.hpp"
 
 RobotAppender::RobotAppender (Car &car) :
                 car(car)
@@ -18,24 +18,22 @@ RobotAppender::RobotAppender (Car &car) :
 void RobotAppender::append (const Logger *const logger, const Level level, const int line,
         const char *const message)
 {
-    time_t t = 0;
-    ClockPlugin *const clock_plugin = car.get_clock_plugin();
-    if (clock_plugin != nullptr)
-    {
-        t = clock_plugin->get_unixtime();
-    }
+    const time_t t = get_unixtime(car);
     struct tm *const lt = localtime(&t);
     const int ms = millis() % 1000;
     snprintf(buffer, buffer_size, "%s.%03d [%s %s:%d] %s", isotime(lt), ms, stringify(level),
             logger->get_short_name().c_str(), line, message);
     buffer[buffer_size - 1] = '\0';
-    append(buffer);
+    append(level, buffer);
 }
 
-void RobotAppender::append(const char *const message)
+void RobotAppender::append (const Level level, const char *const message)
 {
-    Serial.println(message);
-    Serial3.println(message);
+    if (static_cast<int>(level) <= static_cast<int>(Level::info))
+    {
+        Serial.println(message);
+        Serial3.println(message);
+    }
     if (log_file)
     {
         log_file.println(message);
@@ -45,14 +43,12 @@ void RobotAppender::append(const char *const message)
 
 void RobotAppender::get_logfile ()
 {
-    time_t t = 0;
-    ClockPlugin *const clock_plugin = car.get_clock_plugin();
-    if (clock_plugin != nullptr)
-    {
-        t = clock_plugin->get_unixtime();
-    }
+    const time_t t = get_unixtime(car);
     struct tm *const lt = localtime(&t);
-    snprintf(log_filename, filename_size, "L%02d%03d.TXT", lt->tm_year, lt->tm_yday);
+    const int size = snprintf(log_filename, filename_size, "LOGS/Y%4d/M%02d/D%02d/",
+            2000 + lt->tm_year, lt->tm_mon + 1, lt->tm_mday);
+    SD.mkdir(log_filename);
+    snprintf(log_filename + size, filename_size - size, "L%02d-%02d.TXT", lt->tm_hour, lt->tm_min);
 }
 
 void RobotAppender::open_logfile ()

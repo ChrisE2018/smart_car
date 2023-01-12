@@ -45,6 +45,11 @@ int OdomPlugin::get_preferred_interval () const
     return 50;
 }
 
+int OdomPlugin::get_expected_us () const
+{
+    return 1100;
+}
+
 void OdomPlugin::cycle ()
 {
     const long now = millis();

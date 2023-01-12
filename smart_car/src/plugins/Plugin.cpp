@@ -1,13 +1,12 @@
 /*
- * Cyclic.cpp
+ * Plugin.cpp
  *
  *  Created on: Dec 23, 2022
  *      Author: cre
  */
 
+#include <Arduino.h>
 #include "Plugin.hpp"
-
-#include "Arduino.h"
 
 const std::string stringify (const PluginId id)
 {
@@ -80,6 +79,11 @@ bool Plugin::reset ()
     return setup();
 }
 
+const bool Plugin::is_cyclic () const
+{
+    return true;
+}
+
 const bool Plugin::is_enabled () const
 {
     return enable;
@@ -95,9 +99,9 @@ int Plugin::get_preferred_interval () const
     return 100;
 }
 
-int Plugin::get_expected_ms () const
+int Plugin::get_expected_us () const
 {
-    return 0;
+    return 10;
 }
 
 void Plugin::cycle ()
@@ -114,6 +118,16 @@ void Plugin::end_cycle ()
     const unsigned long cycle_micros = micros() - cycle_start_micros;
     total_micros += cycle_micros;
     cycle_count++;
+    const unsigned long expected_us = get_expected_us();
+    if (cycle_micros > expected_us)
+    {
+        overrun_count++;
+        Serial.print(stringify(id).c_str());
+        Serial.print(F(" overrun "));
+        Serial.print(cycle_micros);
+        Serial.print(F(" > "));
+        Serial.println(expected_us);
+    }
 }
 
 unsigned long Plugin::get_cycle_count () const
@@ -124,4 +138,9 @@ unsigned long Plugin::get_cycle_count () const
 unsigned long Plugin::get_total_micros () const
 {
     return total_micros;
+}
+
+unsigned long Plugin::get_overrun_count () const
+{
+    return overrun_count;
 }

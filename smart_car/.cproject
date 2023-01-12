@@ -32,6 +32,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/BasicLinearAlgebra}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/SD/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/SPI/src}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/UnixTime/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.cpp.sketch.input.2057250309" name="CPP source files" superClass="io.sloeber.compiler.cpp.sketch.input"/>
 							</tool>
@@ -54,6 +55,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/SD/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/SPI/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/src/logging}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/UnixTime/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.c.sketch.input.232163605" name="C Source Files" superClass="io.sloeber.compiler.c.sketch.input"/>
 							</tool>
@@ -76,6 +78,7 @@
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/SD/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/SPI/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/src/logging}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/libraries/UnixTime/src}&quot;"/>
 								</option>
 								<inputType id="io.sloeber.compiler.S.sketch.input.885800370" name="Assembly source files" superClass="io.sloeber.compiler.S.sketch.input"/>
 							</tool>

@@ -32,6 +32,11 @@ bool ClockPlugin::setup ()
     }
 }
 
+const bool ClockPlugin::is_cyclic () const
+{
+    return false;
+}
+
 time_t ClockPlugin::get_unixtime ()
 {
     if (is_setup)
@@ -43,15 +48,5 @@ time_t ClockPlugin::get_unixtime ()
     else
     {
         return 0;
-    }
-}
-
-void ClockPlugin::cycle ()
-{
-    if (is_enabled())
-    {
-        time_t t = get_unixtime();
-        struct tm *lt = localtime(&t);
-        cout << "ISO time: " << isotime(lt) << std::endl;
     }
 }

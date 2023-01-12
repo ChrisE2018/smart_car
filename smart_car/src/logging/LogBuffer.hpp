@@ -26,9 +26,10 @@ class LogBuffer : private std::streambuf, public std::ostream
     public:
         LogBuffer (Logger *logger, const Level level);
         void reset ();
+        void set_line(const int line);
 
     protected:
-        virtual std::streambuf::int_type overflow (std::streambuf::int_type c) override;
+        virtual std::streambuf::int_type overflow (const std::streambuf::int_type c) override;
 
     private:
         static const int buffer_size = 128;
@@ -36,6 +37,7 @@ class LogBuffer : private std::streambuf, public std::ostream
         static int pos;
         Logger *const logger;
         const Level level;
+        int line = 0;
 
         void flush ();
 };

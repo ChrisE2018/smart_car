@@ -70,3 +70,23 @@ void DrivePlugin::cycle ()
         }
     }
 }
+
+int DrivePlugin::get_expected_us () const
+{
+    return 25;
+}
+
+void DrivePlugin::set_duration (const int _duration)
+{
+    duration = _duration;
+}
+
+void DrivePlugin::set_right_speed (const int speed)
+{
+    right_motor_speed = speed;
+}
+
+void DrivePlugin::set_left_speed (const int speed)
+{
+    left_motor_speed = speed;
+}

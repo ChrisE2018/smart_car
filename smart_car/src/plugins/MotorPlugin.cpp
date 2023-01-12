@@ -188,9 +188,9 @@ int MotorPlugin::get_preferred_interval () const
     return 100;
 }
 
-int MotorPlugin::get_expected_ms () const
+int MotorPlugin::get_expected_us () const
 {
-    return 1;
+    return 15;
 }
 
 void MotorPlugin::cycle ()
@@ -206,8 +206,9 @@ void MotorPlugin::cycle ()
             speed_counter =
                     (location == MotorLocation::RIGHT) ? get_right_speed_counter() :
                                                          get_left_speed_counter();
-            measured_velocity = (speed_counter - previous_speed_counter)
-                    * count_to_meters_per_second / delta_seconds;
+            const unsigned long measured_distance = (speed_counter - previous_speed_counter)
+                    * count_to_meters_per_second;
+            measured_velocity = measured_distance / delta_seconds;
             velocity_error = desired_velocity - measured_velocity;
             const float velocity_error_rate = (velocity_error - previous_velocity_error)
                     / delta_seconds;
@@ -220,7 +221,7 @@ void MotorPlugin::cycle ()
             if (previous_desired_velocity != 0)
             {
                 // could turn off if control == 0
-                // [TODO] drive_stop sets desired_velocity to 0 which make auto_velocity stop
+                // [TODO] drive_stop sets desired_velocity to 0 which makes auto_velocity stop
                 auto_velocity = true;
                 desired_velocity = previous_desired_velocity;
             }

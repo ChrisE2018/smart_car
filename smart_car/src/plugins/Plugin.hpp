@@ -1,5 +1,5 @@
 /*
- * Cyclic.hpp
+ * Plugin.hpp
  *
  *  Created on: Dec 23, 2022
  *      Author: cre
@@ -43,20 +43,23 @@ class Plugin
         const PluginId get_id () const;
         virtual bool setup ();
         virtual bool reset ();
+        virtual const bool is_cyclic () const;
+        virtual int get_preferred_interval () const;
+        virtual int get_expected_us () const;
+        const bool is_enabled () const;
+        virtual void set_enabled (const bool enable);
         virtual void cycle ();
         void start_cycle ();
         void end_cycle ();
-        const bool is_enabled () const;
-        virtual void set_enabled (const bool enable);
-        virtual int get_preferred_interval () const;
-        virtual int get_expected_ms () const;
         unsigned long get_cycle_count () const;
         unsigned long get_total_micros () const;
+        unsigned long get_overrun_count () const;
 
     private:
         const PluginId id;
         bool enable = false;
         unsigned long cycle_count = 0;
+        unsigned long overrun_count = 0;
         unsigned long cycle_start_micros = 0;
         unsigned long total_micros = 0;
 };

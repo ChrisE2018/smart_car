@@ -7,35 +7,24 @@
 
 #include <Arduino.h>
 #include "Heap.hpp"
+#include "../logging/Logger.hpp"
 
-// For some reason Serial does not always resolve.
-extern HardwareSerial Serial;
+static Logger logger(__FILE__, Level::info);
 
 static const unsigned long initial_stack_address = SP;
 
 void print_heap_state ()
 {
-    unsigned long heap_address = get_heap_address();
-    unsigned long heap_size = RAMEND - heap_address;
-    long stack_size = initial_stack_address - SP;
-    unsigned long free_ram = get_free_ram();
-    Serial.print(F("Heap Usage: "));
-    Serial.print(heap_size);
-    Serial.print(F(" / "));
-    Serial.print(heap_size + free_ram);
-    Serial.print(F(" Stack Size: "));
-    Serial.print(stack_size);
-    Serial.print(F(" Free RAM: "));
-    Serial.print(free_ram);
-    Serial.print(F(" [Stack: "));
-    Serial.print(initial_stack_address);
-    Serial.print(F(":"));
-    Serial.print(SP);
-    Serial.print(F(" Heap: "));
-    Serial.print(RAMEND);
-    Serial.print(F(":"));
-    Serial.print(heap_address);
-    Serial.println(F("]"));
+    const unsigned long heap_address = get_heap_address();
+    const unsigned long heap_size = RAMEND - heap_address;
+    const long stack_size = initial_stack_address - SP;
+    const unsigned long free_ram = get_free_ram();
+    const unsigned long sp = SP;
+    const unsigned long ramend = RAMEND;
+    LOG_INFO(logger,
+            "Heap Usage: %lu / %lu Stack Size: %lu Free RAM: %lu [Stack %lu:%lu Heap %lu:%lu]",
+            heap_size, heap_size + free_ram, stack_size, free_ram, initial_stack_address, sp,
+            ramend, heap_address);
 }
 
 unsigned long get_free_ram ()

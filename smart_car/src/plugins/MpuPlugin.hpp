@@ -17,11 +17,10 @@ class MpuPlugin : public Plugin
         MpuPlugin ();
         bool setup () override;
         virtual int get_preferred_interval () const;
-        virtual int get_expected_ms () const;
+        virtual int get_expected_us () const;
         void calibrate ();
         void print_imu ();
         void cycle () override;
-        void readFifoBuffer ();
 
         float get_Ax ();
         float get_Ay ();
@@ -47,5 +46,7 @@ class MpuPlugin : public Plugin
 
         const int interval = 10;
         long deadline = 0;
+
+        void readFifoBuffer ();
 };
 

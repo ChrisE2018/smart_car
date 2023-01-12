@@ -41,6 +41,8 @@ class Logger
         void add_appender (Appender *const appender);
         LogBuffer& info ();
         LogBuffer& debug ();
+        LogBuffer& info (const int line);
+        LogBuffer& debug (const int line);
         void logging (const Level level, const int line, const char *format, ...);
         void logging_p (const Level level, const int line, const char *format, ...);
         void append (const Logger *logger, const Level level, const int line, const char *message);

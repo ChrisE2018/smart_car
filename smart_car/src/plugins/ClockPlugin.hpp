@@ -16,7 +16,7 @@ class ClockPlugin : public Plugin
     public:
         ClockPlugin ();
         bool setup () override;
-        void cycle () override;
+        virtual const bool is_cyclic () const override;
         time_t get_unixtime ();
 
     private:

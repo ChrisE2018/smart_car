@@ -66,16 +66,10 @@ class MotorPlugin : public Plugin
         void set_desired_velocity (const float desired_velocity);
         float get_velocity_error () const;
         virtual int get_preferred_interval () const override;
-        virtual int get_expected_ms () const override;
+        virtual int get_expected_us () const override;
         void cycle () override;
 
     private:
-
-        // 55 mm wheels
-        // 20 encoder slots per revolution
-        // meters-per-micro = PI *diameter / encoder_slots
-        const double count_to_meters_per_second = M_PI * 0.055 / 20.0;
-
         const MotorLocation location;
         const int enable_pin;
         const int forward_pin;
@@ -87,9 +81,15 @@ class MotorPlugin : public Plugin
         int speed = 0;
 
         // Support for speed encoders
-        const float k0 = 0.2 * SPEED_FULL;
-        const float k1 = 0.3;
-        const float k2 = -0.1;
+
+        // 55 mm wheels
+        // 20 encoder slots per revolution
+        // meters-per-micro = PI *diameter / encoder_slots
+        static constexpr double count_to_meters_per_second = M_PI * 0.055 / 20.0;
+
+        static constexpr float k0 = 0.2 * SPEED_FULL;
+        static constexpr float k1 = 0.3;
+        static constexpr float k2 = -0.1;
         bool auto_velocity = false;
         float desired_velocity = 0;
         float measured_velocity = 0;

@@ -50,7 +50,7 @@ void Parser::handle_command (Executor &executor)
             }
             else
             {
-                delayMicroseconds(100); // allow time to receive
+                delayMicroseconds(10); // allow time to receive
             }
         }
         Serial.println(F("[buffer overflow]"));

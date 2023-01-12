@@ -23,7 +23,7 @@ class KalmanPlugin : public Plugin
         KalmanPlugin (Car &car);
         bool setup () override;
         virtual int get_preferred_interval () const;
-        virtual int get_expected_ms () const;
+        virtual int get_expected_us () const;
         void cycle () override;
         void update_transforms (const float angle);
         float get_x () const;

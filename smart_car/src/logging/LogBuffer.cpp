@@ -34,7 +34,7 @@ LogBuffer::LogBuffer (Logger *logger, const Level level) :
 {
 }
 
-std::streambuf::int_type LogBuffer::overflow (std::streambuf::int_type c)
+std::streambuf::int_type LogBuffer::overflow (const std::streambuf::int_type c)
 {
     if (c == '\n' || c == EOF || pos + 1 >= buffer_size)
     {
@@ -50,7 +50,7 @@ std::streambuf::int_type LogBuffer::overflow (std::streambuf::int_type c)
 
 void LogBuffer::flush ()
 {
-    logger->append(logger, level, 0, buffer);
+    logger->append(logger, level, line, buffer);
     reset();
 }
 
@@ -60,3 +60,7 @@ void LogBuffer::reset ()
     buffer[pos] = '\0';
 }
 
+void LogBuffer::set_line (const int _line)
+{
+    line = _line;
+}
