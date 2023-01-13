@@ -29,7 +29,7 @@ void setup ()
     Serial.println(F("Smart car"));
     Serial3.begin(9600);
     car = new Car();
-    robot_appender = new RobotAppender(*car);
+    robot_appender = new RobotAppender(*car, Level::debug);
     Logger::ROOT->add_appender(robot_appender);
     car->setup();
     robot_appender->open_logfile();

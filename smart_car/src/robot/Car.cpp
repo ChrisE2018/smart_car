@@ -118,6 +118,10 @@ void Car::setup ()
                     }
                 }
             }
+            else
+            {
+                scheduled_count++;
+            }
         }
         if (cycle < schedule_size - 3)
         {

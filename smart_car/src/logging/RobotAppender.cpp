@@ -12,8 +12,8 @@
 
 RobotAppender *robot_appender = nullptr;
 
-RobotAppender::RobotAppender (Car &car) :
-                car(car)
+RobotAppender::RobotAppender (Car &car, const Level level) :
+                car(car), level(level)
 {
 }
 
@@ -29,9 +29,9 @@ void RobotAppender::append (const Logger *const logger, const Level level, const
     append(level, buffer);
 }
 
-void RobotAppender::append (const Level level, const char *const message)
+void RobotAppender::append (const Level _level, const char *const message)
 {
-    if (static_cast<int>(level) <= static_cast<int>(Level::info))
+    if (static_cast<int>(_level) <= static_cast<int>(level))
     {
         if (usb_logger)
         {
@@ -42,10 +42,13 @@ void RobotAppender::append (const Level level, const char *const message)
             Serial3.println(message);
         }
     }
-    if (file_logger && log_file)
+    if (log_file)
     {
-        log_file.println(message);
-        log_file.flush();
+        if (file_logger)
+        {
+            log_file.println(message);
+            log_file.flush();
+        }
     }
 }
 
@@ -69,6 +72,16 @@ void RobotAppender::append_file (const char *const message, const bool flush = t
             log_file.flush();
         }
     }
+}
+
+void RobotAppender::log_data_p (const char *format, ...)
+{
+    va_list args;
+    va_start(args, format);
+    vsnprintf_P(buffer, buffer_size, format, args);
+    append_file(buffer);
+    va_end(args);
+
 }
 
 void RobotAppender::get_logfile ()

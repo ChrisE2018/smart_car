@@ -12,10 +12,12 @@
 #include <SD.h>
 class Car;
 
+#define LOG_DATA(fmt, args...) robot_appender.log_data_p((const char *)F(fmt), args);
+
 class RobotAppender : public Appender
 {
     public:
-        RobotAppender (Car &car);
+        RobotAppender (Car &car, const Level level);
         virtual ~RobotAppender () = default;
         virtual void append (const Logger *const logger, const Level level, const int line,
                 const char *const message);
@@ -23,6 +25,7 @@ class RobotAppender : public Appender
         void append_usb (const char *const message);
         void append_bluetooth (const char *const message);
         void append_file (const char *const message, const bool flush=true);
+        void log_data_p(const char *format, ...);
         void open_logfile ();
         void flush ();
         void close ();
@@ -37,6 +40,7 @@ class RobotAppender : public Appender
 
     private:
         Car &car;
+        const Level level;
 
         // For file access on micro SD card
         const int chipSelect = 53;
