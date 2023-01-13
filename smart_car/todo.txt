@@ -14,16 +14,19 @@
 * Motor control to run for a specified distance or distance/time curve
 	- Control input to kalman filter?
 * Minimum speed sensor count for PID control instead of minimum time
-* Fix breadboard in position
-	- Try to cut clear disk (done)
-	- drill holes
-* Work on GPS
 * Consider removing cycle schedule
+* Schedule multiple plugins in one cycle - define PluginId for each combination
 * Detect skipped cycles
+
+PHYSICAL
+* Work on GPS
+* Battery level sensor(s)
 * Second motor control/speed sensors
 * Extra holes to properly mount motor controller
 * Mount for computer battery
-* Battery level sensor(s)
+* Fix breadboard in position
+	- Try to cut clear disk (done)
+	- drill holes
 
 DONE DONE DONE
 
