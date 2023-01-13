@@ -10,6 +10,8 @@
 #include "RobotAppender.hpp"
 #include "UnixTime.hpp"
 
+RobotAppender *robot_appender = nullptr;
+
 RobotAppender::RobotAppender (Car &car) :
                 car(car)
 {
@@ -112,6 +114,44 @@ void RobotAppender::enable_bluetooth_logger (const bool enable)
 void RobotAppender::enable_file_logger (const bool enable)
 {
     file_logger = enable;
+}
+
+bool RobotAppender::get_logger_state (const String &mode) const
+{
+    if (mode == F("usb"))
+    {
+        return usb_logger;
+    }
+    else if (mode == F("bluetooth"))
+    {
+        return bluetooth_logger;
+    }
+    else if (mode == F("file"))
+    {
+        return file_logger;
+    }
+    return false;
+}
+
+void RobotAppender::set_logger_state (const String &mode, const String &state)
+{
+    bool enable = false;
+    if (state == F("on") || state == F("true"))
+    {
+        enable = true;
+    }
+    if (mode == F("usb"))
+    {
+        usb_logger = enable;
+    }
+    else if (mode == F("bluetooth"))
+    {
+        bluetooth_logger = enable;
+    }
+    else if (mode == F("file"))
+    {
+        file_logger = enable;
+    }
 }
 
 bool RobotAppender::is_usb_logger ()

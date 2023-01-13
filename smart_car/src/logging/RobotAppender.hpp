@@ -23,12 +23,14 @@ class RobotAppender : public Appender
         void open_logfile ();
         void flush ();
         void close ();
-        void enable_usb_logger(const bool enable);
-        void enable_bluetooth_logger(const bool enable);
-        void enable_file_logger(const bool enable);
-        bool is_usb_logger();
-        bool is_bluetooth_logger();
-        bool is_file_logger();
+        void enable_usb_logger (const bool enable);
+        void enable_bluetooth_logger (const bool enable);
+        void enable_file_logger (const bool enable);
+        bool is_usb_logger ();
+        bool is_bluetooth_logger ();
+        bool is_file_logger ();
+        bool get_logger_state (const String &mode) const;
+        void set_logger_state (const String &mode, const String &state);
 
     private:
         Car &car;
@@ -48,3 +50,4 @@ class RobotAppender : public Appender
         void get_logfile ();
 };
 
+extern RobotAppender *robot_appender;

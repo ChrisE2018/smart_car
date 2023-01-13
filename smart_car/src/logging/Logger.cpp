@@ -31,6 +31,8 @@ static Logger *Logger::ROOT = new Logger(nullptr, "root", Level::debug);
 
 static char Logger::buffer[Logger::buffer_size];
 
+static LogBuffer Logger::stream;
+
 Logger::Logger (const String name) :
                 Logger(Logger::ROOT, name, Level::info)
 {
@@ -42,8 +44,7 @@ Logger::Logger (const String name, const Level level) :
 }
 
 Logger::Logger (Logger *parent, const String name, const Level level) :
-                parent(parent), name(name), short_name(shorten(name)), level(level),
-                info_stream(this, Level::info), debug_stream(this, Level::debug)
+                parent(parent), name(name), short_name(shorten(name)), level(level)
 {
 }
 
@@ -85,26 +86,34 @@ void Logger::add_appender (Appender *const appender)
 
 LogBuffer& Logger::info ()
 {
-    info_stream.set_line(0);
-    return info_stream;
+    stream.set_logger(this);
+    stream.set_level(Level::info);
+    stream.set_line(0);
+    return stream;
 }
 
 LogBuffer& Logger::debug ()
 {
-    debug_stream.set_line(0);
-    return debug_stream;
+    stream.set_logger(this);
+    stream.set_level(Level::debug);
+    stream.set_line(0);
+    return stream;
 }
 
 LogBuffer& Logger::info (const int line)
 {
-    info_stream.set_line(line);
-    return info_stream;
+    stream.set_logger(this);
+    stream.set_level(Level::info);
+    stream.set_line(line);
+    return stream;
 }
 
 LogBuffer& Logger::debug (const int line)
 {
-    debug_stream.set_line(line);
-    return debug_stream;
+    stream.set_logger(this);
+    stream.set_level(Level::debug);
+    stream.set_line(line);
+    return stream;
 }
 
 void Logger::logging (const Level _level, const int line, const char *format, ...)

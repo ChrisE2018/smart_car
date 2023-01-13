@@ -48,14 +48,14 @@ class Logger
         void append (const Logger *logger, const Level level, const int line, const char *message);
 
     private:
-        static const int buffer_size = 256;
+        static const int buffer_size = 128;
         static char buffer[buffer_size];
+        // LogBuffer uses a lot of sram so we only want one instance
+        static LogBuffer stream;
         Logger *const parent;
         const String name;
         const String short_name;
         const Level level;
-        LogBuffer info_stream;
-        LogBuffer debug_stream;
 
         std::vector<Appender*> appenders;
         const String shorten (const String name);

@@ -29,8 +29,8 @@ std::ostream& operator<< (std::ostream &lhs, const __FlashStringHelper *pstr)
     }
 }
 
-LogBuffer::LogBuffer (Logger *logger, const Level level) :
-                logger(logger), level(level), std::ios(0), std::ostream(this)
+LogBuffer::LogBuffer () :
+                logger(nullptr), level(Level::info), std::ios(0), std::ostream(this)
 {
 }
 
@@ -58,6 +58,16 @@ void LogBuffer::reset ()
 {
     pos = 0;
     buffer[pos] = '\0';
+}
+
+void LogBuffer::set_logger(Logger *const _logger)
+{
+    logger = _logger;
+}
+
+void LogBuffer::set_level(const Level _level)
+{
+    level = _level;
 }
 
 void LogBuffer::set_line (const int _line)

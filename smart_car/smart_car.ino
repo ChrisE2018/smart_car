@@ -19,7 +19,6 @@ std::ohserialstream cout(Serial);
 std::ohserialstream cout1(Serial3);
 
 static Car *car;
-static RobotAppender *robot_appender = nullptr;
 static unsigned long cycle_count = 0;
 
 /* Control program. */
