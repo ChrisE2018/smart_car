@@ -49,6 +49,28 @@ void RobotAppender::append (const Level level, const char *const message)
     }
 }
 
+void RobotAppender::append_usb (const char *const message)
+{
+    Serial.println(message);
+}
+
+void RobotAppender::append_bluetooth (const char *const message)
+{
+    Serial3.println(message);
+}
+
+void RobotAppender::append_file (const char *const message, const bool flush = true)
+{
+    if (log_file)
+    {
+        log_file.println(message);
+        if (flush)
+        {
+            log_file.flush();
+        }
+    }
+}
+
 void RobotAppender::get_logfile ()
 {
     const time_t t = get_unixtime(car);

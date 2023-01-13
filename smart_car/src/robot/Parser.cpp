@@ -12,7 +12,12 @@ Parser::Parser (HardwareSerial &serial) :
 {
 }
 
-void Parser::handle_command (Executor &executor)
+bool Parser::has_input ()
+{
+    return serial.available();
+}
+
+bool Parser::handle_command (Executor &executor)
 {
     if (serial.available())
     {
@@ -40,7 +45,7 @@ void Parser::handle_command (Executor &executor)
                             Serial.println();
                         }
                     }
-                    return;
+                    return true;
                 }
                 else
                 {
@@ -55,9 +60,10 @@ void Parser::handle_command (Executor &executor)
         }
         Serial.println(F("[buffer overflow]"));
     }
+    return false;
 }
 
-void Parser::get_words (const String& command, std::vector<String>& words)
+void Parser::get_words (const String &command, std::vector<String> &words)
 {
     int start = 0;
     bool in_word = false;

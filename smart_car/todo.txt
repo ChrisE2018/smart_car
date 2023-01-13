@@ -1,10 +1,8 @@
 * Issue tracker
-* Separate command handler from Car class
 * Separate data logger for real time variables w/plotter tools
 	- logstream : message
 * Startup status logger
 * State in plugin (start_start, end_state methods)
-* Disable robot_appender output from inactive serial port. Add commands.
 * Use c20?
 * Future events on schedule or condition
 	- time based
@@ -41,3 +39,5 @@ DONE DONE DONE
 
 1/13/2023
 * enum <uint_8> types
+* Separate command handler from Car class
+* Disable robot_appender output from inactive serial port. Add commands.

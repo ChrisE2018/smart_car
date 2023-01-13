@@ -6,7 +6,7 @@
  */
 
 #include "Car.hpp"
-
+#include "../logging/RobotAppender.hpp"
 #include "smart_car.hpp"
 
 #include "../plugins/ClockPlugin.hpp"
@@ -195,6 +195,17 @@ void Car::cycle ()
     const PluginId scheduled_plugin = schedule[cycle];
     if (scheduled_plugin == PluginId::COMMAND_CYCLE)
     {
+        if (robot_appender != nullptr)
+        {
+            if (serial_parser.has_input())
+            {
+                robot_appender->enable_usb_logger(true);
+            }
+            if (bluetooth_parser.has_input())
+            {
+                robot_appender->enable_bluetooth_logger(true);
+            }
+        }
         serial_parser.handle_command(*this);
         bluetooth_parser.handle_command(*this);
     }

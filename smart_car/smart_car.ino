@@ -38,6 +38,8 @@ void setup ()
     print_heap_state();
     Serial.println(F("Ready"));
     Serial.println();
+    robot_appender->enable_usb_logger(false);
+    robot_appender->enable_bluetooth_logger(false);
 }
 
 // @see https://forum.arduino.cc/t/constant-run-time-of-a-loop/568829/2

@@ -15,7 +15,8 @@ class Parser
 {
     public:
         Parser (HardwareSerial &serial);
-        void handle_command (Executor &executor);
+        bool has_input();
+        bool handle_command (Executor &executor);
 
     private:
         static constexpr int buffer_size = 80;
