@@ -1,18 +1,21 @@
 * Issue tracker
-* Make MotorPlugin set_speed not turn off auto_velocity
 * Separate command handler from Car class
-* Nudge MotorPlugin when current velocity is zero
 * Separate data logger for real time variables w/plotter tools
+	- logstream : message
 * Startup status logger
+* State in plugin (start_start, end_state methods)
+* Disable robot_appender output from inactive serial port. Add commands.
+* Use c20?
 * Future events on schedule or condition
 	- time based
 	- event based, like distance motor moves or angle or goal position
-	- what are the actions?
+	- what are the actions? (state changes)
 	- behavior trees?
 * Motor control to run for a specified distance or distance/time curve
 	- Control input to kalman filter?
+* Minimum speed sensor count for PID control instead of minimum time
 * Fix breadboard in position
-	- Try to cut clear disk
+	- Try to cut clear disk (done)
 	- drill holes
 * Work on GPS
 * Consider removing cycle schedule
@@ -30,3 +33,8 @@ DONE DONE DONE
 	- Make plugins with no cycle method?
 	- Make cyclic plugin a subclass?
 * Detect overruns
+* Make MotorPlugin set_speed not turn off auto_velocity
+* Nudge MotorPlugin when current velocity is zero
+
+1/13/2023
+* enum <uint_8> types
