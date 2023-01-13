@@ -30,7 +30,8 @@ class DemoPlugin : public Plugin
 {
     public:
         DemoPlugin (Car &car);
-        void set_enabled (const bool enable);
+        virtual void set_enabled (const bool enable) override;
+        virtual int DemoPlugin::get_expected_us () const override;
         void cycle () override;
         void set_phase (const DemoPhase phase);
 

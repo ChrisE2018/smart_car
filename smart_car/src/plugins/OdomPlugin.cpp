@@ -47,7 +47,7 @@ int OdomPlugin::get_preferred_interval () const
 
 int OdomPlugin::get_expected_us () const
 {
-    return 1100;
+    return 1200;
 }
 
 void OdomPlugin::cycle ()

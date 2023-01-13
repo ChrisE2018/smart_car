@@ -26,7 +26,12 @@ int UltrasoundPlugin::get_preferred_interval () const
 
 int UltrasoundPlugin::get_expected_us () const
 {
-    return 3000;
+    return 100;
+}
+
+const bool UltrasoundPlugin::is_cyclic () const
+{
+    return false;
 }
 
 long UltrasoundPlugin::get_distance ()

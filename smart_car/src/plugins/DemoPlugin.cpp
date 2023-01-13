@@ -29,6 +29,11 @@ void DemoPlugin::set_enabled (const bool enable)
     }
 }
 
+int DemoPlugin::get_expected_us () const
+{
+    return 100;
+}
+
 void DemoPlugin::set_phase (const DemoPhase phase)
 {
     this->phase = phase;
