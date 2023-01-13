@@ -23,6 +23,13 @@ class RobotAppender : public Appender
         void open_logfile ();
         void flush ();
         void close ();
+        void enable_usb_logger(const bool enable);
+        void enable_bluetooth_logger(const bool enable);
+        void enable_file_logger(const bool enable);
+        bool is_usb_logger();
+        bool is_bluetooth_logger();
+        bool is_file_logger();
+
     private:
         Car &car;
 
@@ -33,6 +40,10 @@ class RobotAppender : public Appender
         File log_file;
         static const int buffer_size = 128;
         char buffer[buffer_size];
+
+        bool usb_logger = true;
+        bool bluetooth_logger = true;
+        bool file_logger = true;
 
         void get_logfile ();
 };

@@ -31,10 +31,16 @@ void RobotAppender::append (const Level level, const char *const message)
 {
     if (static_cast<int>(level) <= static_cast<int>(Level::info))
     {
-        Serial.println(message);
-        Serial3.println(message);
+        if (usb_logger)
+        {
+            Serial.println(message);
+        }
+        if (bluetooth_logger)
+        {
+            Serial3.println(message);
+        }
     }
-    if (log_file)
+    if (file_logger && log_file)
     {
         log_file.println(message);
         log_file.flush();
@@ -91,4 +97,34 @@ void RobotAppender::close ()
     {
         log_file.close();
     }
+}
+
+void RobotAppender::enable_usb_logger (const bool enable)
+{
+    usb_logger = enable;
+}
+
+void RobotAppender::enable_bluetooth_logger (const bool enable)
+{
+    bluetooth_logger = enable;
+}
+
+void RobotAppender::enable_file_logger (const bool enable)
+{
+    file_logger = enable;
+}
+
+bool RobotAppender::is_usb_logger ()
+{
+    return usb_logger;
+}
+
+bool RobotAppender::is_bluetooth_logger ()
+{
+    return bluetooth_logger;
+}
+
+bool RobotAppender::is_file_logger ()
+{
+    return file_logger;
 }

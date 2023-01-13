@@ -1,116 +1,13 @@
-from -1.76 to goal angle 3.12 at 255
-18:06:01.972 Required #[car GOAL_MODE 1.56, -0.04 ang -1.52] dx -1.56 dy 0.04 angle 3.12 for 1.56 to 0.00, 0.00
-18:06:02.085 Clockwise by 4.00 from -1.52 to goal angle 3.12 at 255
-18:06:02.122 Required #[car GOAL_MODE 1.56, -0.04 ang -1.21] dx -1.56 dy 0.04 angle 3.12 for 1.56 to 0.00, 0.00
-18:06:02.234 Clockwise by 3.69 from -1.21 to goal angle 3.12 at 255
-18:06:02.272 Required #[car GOAL_MODE 1.55, -0.04 ang -0.84] dx -1.55 dy 0.04 angle 3.12 for 1.56 to 0.00, 0.00
-18:06:02.384 Clockwise by 3.33 from -0.84 to goal angle 3.12 at 255
-18:06:02.460 Required #[car GOAL_MODE 1.55, -0.04 ang -0.51] dx -1.55 dy 0.04 angle 3.12 for 1.55 to 0.00, 0.00
-18:06:02.535 Clockwise by 2.99 from -0.51 to goal angle 3.12 at 255
-18:06:02.610 Required #[car GOAL_MODE 1.55, -0.04 ang -0.17] dx -1.55 dy 0.04 angle 3.12 for 1.55 to 0.00, 0.00
-18:06:02.722 Clockwise by 2.65 from -0.17 to goal angle 3.12 at 255
-18:06:02.760 Required #[car GOAL_MODE 1.55, -0.04 ang 0.17] dx -1.55 dy 0.04 angle 3.12 for 1.55 to 0.00, 0.00
-18:06:02.873 Clockwise by 2.95 from 0.17 to goal angle 3.12 at 255
-18:06:02.910 Required #[car GOAL_MODE 1.55, -0.04 ang 0.55] dx -1.55 dy 0.04 angle 3.12 for 1.55 to 0.00, 0.00
-18:06:03.025 Clockwise by 2.57 from 0.55 to goal angle 3.12 at 255
-18:06:03.097 Required #[car GOAL_MODE 1.55, -0.04 ang 0.90] dx -1.55 dy 0.04 angle 3.12 for 1.55 to 0.00, 0.00
-18:06:03.209 Clockwise by 2.22 from 0.90 to goal angle 3.12 at 255
-18:06:03.247 Required #[car GOAL_MODE 1.55, -0.04 ang 1.25] dx -1.55 dy 0.04 angle 3.12 for 1.55 to 0.00, 0.00
-18:06:03.360 Clockwise by 1.87 from 1.25 to goal angle 3.12 at 255
-18:06:03.434 Required #[car GOAL_MODE 1.55, -0.04 ang 1.60] dx -1.55 dy 0.04 angle 3.12 for 1.55 to 0.00, 0.00
-18:06:03.509 Clockwise by 1.52 from 1.60 to goal angle 3.12 at 255
-18:06:03.584 Required #[car GOAL_MODE 1.55, -0.04 ang 1.96] dx -1.55 dy 0.04 angle 3.12 for 1.55 to 0.00, 0.00
-18:06:03.660 Clockwise by 1.16 from 1.96 to goal angle 3.12 at 255
-18:06:03.735 Required #[car GOAL_MODE 1.55, -0.04 ang 2.31] dx -1.55 dy 0.04 angle 3.12 for 1.55 to 0.00, 0.00
-18:06:03.847 Clockwise by 0.81 from 2.31 to goal angle 3.12 at 255
-18:06:03.885 Required #[car GOAL_MODE 1.55, -0.04 ang 2.66] dx -1.55 dy 0.04 angle 3.12 for 1.55 to 0.00, 0.00
-18:06:03.997 Drive Clockwise by 0.46 from 2.66 to goal angle 3.12 at 255
-18:06:04.110 Required #[car GOAL_MODE 1.49, -0.00 ang 2.91] dx -1.49 dy 0.00 angle 3.14 for 1.49 to 0.00, 0.00
-18:06:04.184 Drive Clockwise by 0.23 from 2.91 to goal angle 3.14 at 196
-18:06:04.335 Required #[car GOAL_MODE 1.38, 0.04 ang 3.05] dx -1.38 dy -0.04 angle -3.12 for 1.38 to 0.00, 0.00
-18:06:04.410 Counterclockwise by -5.53 from 3.05 to goal angle -3.12 at 255
-18:06:04.559 Required #[car GOAL_MODE 1.32, 0.06 ang 2.83] dx -1.32 dy -0.06 angle -3.10 for 1.32 to 0.00, 0.00
-18:06:04.672 Counterclockwise by -5.29 from 2.83 to goal angle -3.10 at 255
-18:06:04.710 Required #[car GOAL_MODE 1.29, 0.07 ang 2.45] dx -1.29 dy -0.07 angle -3.09 for 1.29 to 0.00, 0.00
-18:06:04.822 Counterclockwise by -4.91 from 2.45 to goal angle -3.09 at 255
-18:06:04.897 Required #[car GOAL_MODE 1.28, 0.07 ang 2.09] dx -1.28 dy -0.07 angle -3.09 for 1.28 to 0.00, 0.00
-18:06:04.972 Counterclockwise by -4.55 from 2.09 to goal angle -3.09 at 255
-18:06:05.047 Required #[car GOAL_MODE 1.28, 0.07 ang 1.70] dx -1.28 dy -0.07 angle -3.09 for 1.28 to 0.00, 0.00
-18:06:05.160 Counterclockwise by -4.15 from 1.70 to goal angle -3.09 at 255
-18:06:05.234 Required #[car GOAL_MODE 1.27, 0.07 ang 1.30] dx -1.27 dy -0.07 angle -3.09 for 1.28 to 0.00, 0.00
-18:06:05.313 Counterclockwise by -3.75 from 1.30 to goal angle -3.09 at 255
-18:06:05.422 Required #[car GOAL_MODE 1.27, 0.07 ang 0.92] dx -1.27 dy -0.07 angle -3.08 for 1.27 to 0.00, 0.00
-18:06:05.497 Counterclockwise by -3.37 from 0.92 to goal angle -3.08 at 255
-18:06:05.572 Required #[car GOAL_MODE 1.27, 0.07 ang 0.56] dx -1.27 dy -0.07 angle -3.08 for 1.27 to 0.00, 0.00
-18:06:05.685 Counterclockwise by -3.00 from 0.56 to goal angle -3.08 at 255
-18:06:05.722 Required #[car GOAL_MODE 1.27, 0.07 ang 0.19] dx -1.27 dy -0.07 angle -3.08 for 1.27 to 0.00, 0.00
-18:06:05.835 Counterclockwise by -2.64 from 0.19 to goal angle -3.08 at 255
-18:06:05.910 Required #[car GOAL_MODE 1.27, 0.07 ang -0.19] dx -1.27 dy -0.07 angle -3.08 for 1.27 to 0.00, 0.00
-18:06:06.022 Counterclockwise by -2.89 from -0.19 to goal angle -3.08 at 255
-18:06:06.060 Required #[car GOAL_MODE 1.27, 0.07 ang -0.55] dx -1.27 dy -0.07 angle -3.08 for 1.27 to 0.00, 0.00
-18:06:06.172 Counterclockwise by -2.53 from -0.55 to goal angle -3.08 at 255
-18:06:06.247 Required #[car GOAL_MODE 1.27, 0.07 ang -0.91] dx -1.27 dy -0.07 angle -3.08 for 1.27 to 0.00, 0.00
-18:06:06.360 Counterclockwise by -2.17 from -0.91 to goal angle -3.08 at 255
-18:06:06.435 Required #[car GOAL_MODE 1.27, 0.07 ang -1.30] dx -1.27 dy -0.07 angle -3.08 for 1.27 to 0.00, 0.00
-18:06:06.547 Counterclockwise by -1.79 from -1.30 to goal angle -3.08 at 255
-18:06:06.585 Required #[car GOAL_MODE 1.27, 0.07 ang -1.64] dx -1.27 dy -0.07 angle -3.08 for 1.27 to 0.00, 0.00
-18:06:06.696 Counterclockwise by -1.44 from -1.64 to goal angle -3.08 at 255
-18:06:06.772 Required #[car GOAL_MODE 1.27, 0.07 ang -1.98] dx -1.27 dy -0.07 angle -3.08 for 1.27 to 0.00, 0.00
-18:06:06.884 Counterclockwise by -1.11 from -1.98 to goal angle -3.08 at 255
-18:06:06.959 Required #[car GOAL_MODE 1.27, 0.07 ang -2.32] dx -1.27 dy -0.07 angle -3.08 for 1.27 to 0.00, 0.00
-18:06:07.035 Counterclockwise by -0.77 from -2.32 to goal angle -3.08 at 255
-18:06:07.110 Required #[car GOAL_MODE 1.27, 0.07 ang -2.69] dx -1.27 dy -0.07 angle -3.08 for 1.27 to 0.00, 0.00
-18:06:07.222 Drive Counterclockwise from -2.69 to goal angle -3.08 at 255
-18:06:07.335 Required #[car GOAL_MODE 1.20, 0.04 ang -2.89] dx -1.20 dy -0.04 angle -3.11 for 1.21 to 0.00, 0.00
-18:06:07.448 Drive Counterclockwise from -2.89 to goal angle -3.11 at 196
-18:06:07.560 Required #[car GOAL_MODE 1.09, 0.00 ang -3.01] dx -1.09 dy -0.00 angle -3.14 for 1.09 to 0.00, 0.00
-18:06:07.672 Drive Counterclockwise from -3.01 to goal angle -3.14 at 160
-18:06:07.785 Required #[car GOAL_MODE 0.97, -0.03 ang -3.01] dx -0.97 dy 0.03 angle 3.11 for 0.97 to 0.00, 0.00
-18:06:07.897 Clockwise by 5.49 from -3.01 to goal angle 3.11 at 255
-18:06:08.010 Required #[car GOAL_MODE 0.92, -0.04 ang -2.76] dx -0.92 dy 0.04 angle 3.10 for 0.92 to 0.00, 0.00
-18:06:08.122 Clockwise by 5.22 from -2.76 to goal angle 3.10 at 255
-18:06:08.159 Required #[car GOAL_MODE 0.89, -0.05 ang -2.40] dx -0.89 dy 0.05 angle 3.09 for 0.89 to 0.00, 0.00
-18:06:08.234 Clockwise by 4.85 from -2.40 to goal angle 3.09 at 255
-18:06:08.309 Required #[car GOAL_MODE 0.88, -0.05 ang -2.09] dx -0.88 dy 0.05 angle 3.09 for 0.88 to 0.00, 0.00
-18:06:08.422 Clockwise by 4.54 from -2.09 to goal angle 3.09 at 255
-18:06:08.497 Required #[car GOAL_MODE 0.87, -0.05 ang -1.74] dx -0.87 dy 0.05 angle 3.08 for 0.88 to 0.00, 0.00
-18:06:08.573 Clockwise by 4.19 from -1.74 to goal angle 3.08 at 255
-18:06:08.647 Required #[car GOAL_MODE 0.87, -0.05 ang -1.42] dx -0.87 dy 0.05 angle 3.08 for 0.87 to 0.00, 0.00
-18:06:08.759 Clockwise by 3.87 from -1.42 to goal angle 3.08 at 255
-18:06:08.797 Required #[car GOAL_MODE 0.87, -0.05 ang -1.09] dx -0.87 dy 0.05 angle 3.08 for 0.87 to 0.00, 0.00
-18:06:08.909 Clockwise by 3.54 from -1.09 to goal angle 3.08 at 255
-18:06:08.947 Required #[car GOAL_MODE 0.87, -0.05 ang -0.74] dx -0.87 dy 0.05 angle 3.08 for 0.87 to 0.00, 0.00
-18:06:09.060 Clockwise by 3.18 from -0.74 to goal angle 3.08 at 255
-18:06:09.134 Required #[car GOAL_MODE 0.87, -0.05 ang -0.42] dx -0.87 dy 0.05 angle 3.08 for 0.87 to 0.00, 0.00
-18:06:09.247 Clockwise by 2.86 from -0.42 to goal angle 3.08 at 255
-18:06:09.323 Required #[car GOAL_MODE 0.87, -0.05 ang -0.10] dx -0.87 dy 0.05 angle 3.08 for 0.87 to 0.00, 0.00
-18:06:09.397 Clockwise by 2.55 from -0.10 to goal angle 3.08 at 255
-18:06:09.472 Required #[car GOAL_MODE 0.87, -0.05 ang 0.23] dx -0.87 dy 0.05 angle 3.08 for 0.87 to 0.00, 0.00
-18:06:09.547 Clockwise by 2.85 from 0.23 to goal angle 3.08 at 255
-18:06:09.622 Required #[car GOAL_MODE 0.87, -0.05 ang 0.56] dx -0.87 dy 0.05 angle 3.08 for 0.87 to 0.00, 0.00
-18:06:09.697 Clockwise by 2.52 from 0.56 to goal angle 3.08 at 255
-18:06:09.772 Required #[car GOAL_MODE 0.87, -0.05 ang 0.89] dx -0.87 dy 0.05 angle 3.08 for 0.87 to 0.00, 0.00
-18:06:09.884 Clockwise by 2.19 from 0.89 to goal angle 3.08 at 255
-18:06:09.922 Required #[car GOAL_MODE 0.87, -0.05 ang 1.24] dx -0.87 dy 0.05 angle 3.08 for 0.87 to 0.00, 0.00
-18:06:10.035 Clockwise by 1.84 from 1.24 to goal angle 3.08 at 255
-18:06:10.113 Required #[car GOAL_MODE 0.87, -0.05 ang 1.56] dx -0.87 dy 0.05 angle 3.08 for 0.87 to 0.00, 0.00
-18:06:10.185 Clockwise by 1.52 from 1.56 to goal angle 3.08 at 255
-18:06:10.260 Required #[car GOAL_MODE 0.87, -0.05 ang 1.89] dx -0.87 dy 0.05 angle 3.08 for 0.87 to 0.00, 0.00
-18:06:10.372 Clockwise by 1.19 from 1.89 to goal angle 3.08 at 255
-18:06:10.410 Required #[car GOAL_MODE 0.87, -0.05 ang 2.22] dx -0.87 dy 0.05 angle 3.08 for 0.87 to 0.00, 0.00
-18:06:10.522 Clockwise by 0.86 from 2.22 to goal angle 3.08 at 255
-18:06:10.597 Required #[car GOAL_MODE 0.87, -0.05 ang 2.56] dx -0.87 dy 0.05 angle 3.08 for 0.87 to 0.00, 0.00
-18:06:10.672 Clockwise by 0.52 from 2.56 to goal angle 3.08 at 255
-18:06:10.747 Required #[car GOAL_MODE 0.87, -0.05 ang 2.90] dx -0.87 dy 0.05 angle 3.08 for 0.87 to 0.00, 0.00
-18:06:10.822 Drive Clockwise by 0.18 from 2.90 to goal angle 3.08 at 160
-18:06:10.973 Required #[car GOAL_MODE 0.82, -0.04 ang 3.15] dx -0.82 dy 0.04 angle 3.09 for 0.82 to 0.00, 0.00
-18:06:11.047 Drive Counterclockwise from 3.15 to goal angle 3.09 at 160
-18:06:11.197 Required #[car GOAL_MODE 0.73, -0.03 ang 3.20] dx -0.73 dy 0.03 angle 3.10 for 0.73 to 0.00, 0.00
-18:06:11.272 Drive Counterclockwise from 3.20 to goal angle 3.10 at 160
-18:06:11.347 Required #[car GOAL_MODE 0.63, -0.03 ang 3.15] dx -0.63 dy 0.03 angle 3.09 for 0.63 to 0.00, 0.00
-18:06:11.459 Drive Counterclockwise from 3.15 to goal angle 3.09 at 160
-18:06:11.497 Required #[car GOAL_MODE 0.55, -0.03 ang 318:06:11.560 s
-18:06:11.571 .09] dx -0.55 dy 0.03 angle 3.08 for 0.55 to 0.00, 0.00
-18:06:11.684 Required #[car GOAL_MODE 0.46, -0.03 ang 3.06] dx -0.46 dy 0.03 angle 3.08 for 0.46 to 0.00, 0.00
-18:06:11.759 Drive Clockwise by 0.02 from 3.06 to goal angle 3.08 at 160
-18:06:11.834 Command: s
+Big Enums
+
+2023-01-13 07:18:57.536 [info Heap:27] Heap Usage: 3825 / 7462 Stack Size: 169 Free RAM: 3637 [Stack 8684:8515 Heap 8703:4878]
+2023-01-13 07:19:02.704 [info Heap:27] Heap Usage: 3825 / 7315 Stack Size: 316 Free RAM: 3490 [Stack 8684:8368 Heap 8703:4878] 
+[executed]
+
+Small Enums
+2023-01-13 07:20:41.548 [info Heap:27] Heap Usage: 3825 / 7468 Stack Size: 163 Free RAM: 3643 [Stack 8684:8521 Heap 8703:4878]
+2023-01-13 07:20:44.205 [info Heap:27] Heap Usage: 3825 / 7321 Stack Size: 310 Free RAM: 3496 [Stack 8684:8374 Heap 8703:4878]
+
+More Small Enums
+2023-01-13 07:23:56.548 [info Heap:27] Heap Usage: 3825 / 7468 Stack Size: 163 Free RAM: 3643 [Stack 8684:8521 Heap 8703:4878]
+2023-01-13 07:24:00.455 [info Heap:27] Heap Usage: 3825 / 7321 Stack Size: 310 Free RAM: 3496 [Stack 8684:8374 Heap 8703:4878]
