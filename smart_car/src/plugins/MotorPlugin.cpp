@@ -81,8 +81,8 @@ void MotorPlugin::drive_forward (const int _speed)
         digitalWrite(reverse_pin, LOW);
         digitalWrite(forward_pin, HIGH);
         analogWrite(enable_pin, _speed);
-        cout << "drive " << location << " " << direction << " at " << speed << " mps "
-                << measured_velocity << std::endl;
+        cout << "drive " << location << " " << direction << " at " << speed << " power "
+                << measured_velocity << " mps" << std::endl;
     }
 }
 
@@ -97,12 +97,18 @@ void MotorPlugin::drive_reverse (const int _speed)
         digitalWrite(forward_pin, LOW);
         digitalWrite(reverse_pin, HIGH);
         analogWrite(enable_pin, _speed);
-        cout << "drive " << location << " " << direction << " at " << speed << " mps "
-                << measured_velocity << std::endl;
+        cout << "drive " << location << " " << direction << " at " << speed << " power "
+                << measured_velocity << " mps" << std::endl;
     }
 }
 
 void MotorPlugin::drive_stop ()
+{
+    drive_zero_speed();
+    auto_velocity = false;
+}
+
+void MotorPlugin::drive_zero_speed ()
 {
     if (direction != MotorDirection::STOP || speed != 0 || desired_velocity != 0
             || cumulative_velocity_error != 0)
@@ -116,10 +122,9 @@ void MotorPlugin::drive_stop ()
         digitalWrite(forward_pin, LOW);
         digitalWrite(reverse_pin, LOW);
         analogWrite(enable_pin, LOW);
-        cout << "drive " << location << " " << direction << " at " << speed << " mps "
-                << measured_velocity << std::endl;
+        cout << "drive " << location << " " << direction << " at " << speed << " power "
+                << measured_velocity << " mps" << std::endl;
     }
-    auto_velocity = false;
 }
 
 MotorLocation MotorPlugin::get_location () const
@@ -149,7 +154,7 @@ void MotorPlugin::set_speed (const int speed)
     }
     else
     {
-        drive_stop();
+        drive_zero_speed();
     }
 }
 
@@ -178,6 +183,11 @@ void MotorPlugin::set_desired_velocity (const float _desired_velocity)
     }
 }
 
+void MotorPlugin::cancel_auto_velocity ()
+{
+    auto_velocity = false;
+}
+
 float MotorPlugin::get_velocity_error () const
 {
     return velocity_error;
@@ -190,7 +200,7 @@ int MotorPlugin::get_preferred_interval () const
 
 int MotorPlugin::get_expected_us () const
 {
-    return 15;
+    return 1500;
 }
 
 void MotorPlugin::cycle ()
@@ -206,7 +216,7 @@ void MotorPlugin::cycle ()
             speed_counter =
                     (location == MotorLocation::RIGHT) ? get_right_speed_counter() :
                                                          get_left_speed_counter();
-            const unsigned long measured_distance = (speed_counter - previous_speed_counter)
+            const double measured_distance = (speed_counter - previous_speed_counter)
                     * count_to_meters_per_second;
             measured_velocity = measured_distance / delta_seconds;
             velocity_error = desired_velocity - measured_velocity;
@@ -215,16 +225,9 @@ void MotorPlugin::cycle ()
             cumulative_velocity_error += velocity_error * delta_seconds;
             last_cycle_ms = now;
             const float control = k0
-                    * (velocity_error + k1 * cumulative_velocity_error + k2 * velocity_error_rate);
-            const float previous_desired_velocity = desired_velocity;
+                    * (velocity_error + k1 * cumulative_velocity_error + k2 * velocity_error_rate
+                            + (abs(measured_velocity) < 0.2 ? velocity_error * k3 : 0));
             set_speed(control);
-            if (previous_desired_velocity != 0)
-            {
-                // could turn off if control == 0
-                // [TODO] drive_stop sets desired_velocity to 0 which makes auto_velocity stop
-                auto_velocity = true;
-                desired_velocity = previous_desired_velocity;
-            }
 //        if (velocity_error != 0)
 //        {
 //            cout << "ds: " << delta_seconds << " ve: " << velocity_error << " cve: "

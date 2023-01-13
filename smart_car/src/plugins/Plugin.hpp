@@ -10,7 +10,7 @@
 #include <string>
 #include "../robot/Mode.hpp"
 
-enum PluginId
+enum PluginId : unsigned char
 {
     CLOCK_PLUGIN,
     CLOCKWISE_PLUGIN,

@@ -9,7 +9,7 @@
 
 #include <ostream>
 
-enum Mode
+enum Mode : unsigned char
 {
     COMMAND_MODE = 0,
     DEMO_MODE,

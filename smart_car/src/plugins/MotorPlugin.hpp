@@ -22,7 +22,7 @@ const int SPEED_Q1 = 64;
 const int SPEED_CRAWL = 32;
 const int SPEED_STOP = 0;
 
-enum MotorDirection
+enum MotorDirection : unsigned char
 {
     STOP,
     FORWARD,
@@ -31,7 +31,7 @@ enum MotorDirection
 
 std::ostream& operator<< (std::ostream &lhs, MotorDirection direction);
 
-enum MotorLocation
+enum MotorLocation : unsigned char
 {
     RIGHT = 0,
     LEFT = 1
@@ -64,6 +64,7 @@ class MotorPlugin : public Plugin
         float get_measured_velocity () const;
         float get_desired_velocity () const;
         void set_desired_velocity (const float desired_velocity);
+        void cancel_auto_velocity ();
         float get_velocity_error () const;
         virtual int get_preferred_interval () const override;
         virtual int get_expected_us () const override;
@@ -87,9 +88,10 @@ class MotorPlugin : public Plugin
         // meters-per-micro = PI *diameter / encoder_slots
         static constexpr double count_to_meters_per_second = M_PI * 0.055 / 20.0;
 
-        static constexpr float k0 = 0.2 * SPEED_FULL;
+        static constexpr float k0 = 0.25 * SPEED_FULL;
         static constexpr float k1 = 0.3;
-        static constexpr float k2 = -0.1;
+        static constexpr float k2 = -0.2;
+        static constexpr float k3 = 0.1;
         bool auto_velocity = false;
         float desired_velocity = 0;
         float measured_velocity = 0;
@@ -97,5 +99,6 @@ class MotorPlugin : public Plugin
         unsigned long speed_counter = 0;
         float velocity_error = 0;
         float cumulative_velocity_error = 0;
+        void drive_zero_speed ();
 };
 
