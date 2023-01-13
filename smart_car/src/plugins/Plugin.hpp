@@ -54,10 +54,15 @@ class Plugin
         unsigned long get_cycle_count () const;
         unsigned long get_total_micros () const;
         unsigned long get_overrun_count () const;
+        int get_state () const;
+        void set_state (const int state);
+        virtual void enter_state (const int state);
+        virtual void exit_state (const int state);
 
     private:
         const PluginId id;
         bool enable = false;
+        int state = 0;
         unsigned long cycle_count = 0;
         unsigned long overrun_count = 0;
         unsigned long cycle_start_micros = 0;

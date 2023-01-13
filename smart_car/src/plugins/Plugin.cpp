@@ -144,3 +144,24 @@ unsigned long Plugin::get_overrun_count () const
 {
     return overrun_count;
 }
+
+int Plugin::get_state () const
+{
+    return state;
+}
+
+void Plugin::set_state (const int _state)
+{
+    exit_state(state);
+    enter_state(_state);
+}
+
+virtual void Plugin::enter_state (const int state)
+{
+
+}
+
+virtual void Plugin::exit_state (const int state)
+{
+
+}
