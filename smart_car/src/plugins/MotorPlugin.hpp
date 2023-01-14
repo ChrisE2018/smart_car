@@ -90,10 +90,10 @@ class MotorPlugin : public Plugin
         // meters-per-micro = PI *diameter / encoder_slots
         static constexpr double count_to_meters_per_second = M_PI * 0.055 / 20.0;
 
-        static constexpr float k0 = 0.35 * SPEED_FULL;
-        static constexpr float k1 = 0.35;
+        static constexpr float k0 = 0.30 * SPEED_FULL;
+        static constexpr float k1 = 0.30;
         static constexpr float k2 = -0.01;
-        static constexpr float k3 = 0.1;
+        static constexpr float k3 = 0.15;
         static constexpr float k4 = 0.2;
         bool auto_velocity = false;
         float desired_velocity = 0;

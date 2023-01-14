@@ -110,7 +110,7 @@ void MotorPlugin::drive_reverse (const int _speed)
         digitalWrite(forward_pin, LOW);
         digitalWrite(reverse_pin, HIGH);
         analogWrite(enable_pin, _speed);
-        cout << location << "_" << direction << ": " << speed << " mps: " << measured_velocity << std::endl;
+        cout << location << "_" << direction << ": " << speed << " mps: " << -measured_velocity << std::endl;
     }
 }
 
@@ -219,7 +219,7 @@ void MotorPlugin::cycle ()
     const unsigned long now = millis();
     if (now - last_cycle_ms > 100)
     {
-        const float delta_seconds = (now - last_cycle_ms) * 0.001;
+        const float delta_seconds = static_cast<float>(now - last_cycle_ms) * 0.001;
         const unsigned long previous_speed_counter = speed_counter;
         speed_counter = (location == MotorLocation::RIGHT) ? get_right_speed_counter() : get_left_speed_counter();
         const double measured_distance = (speed_counter - previous_speed_counter) * count_to_meters_per_second;

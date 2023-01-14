@@ -51,11 +51,6 @@ void loop ()
         cycle_count = cycle;
         car->cycle();
     }
-    else
-    {
-        // We have part of a cycle idle time
-        //robot_appender->flush();
-    }
 }
 
 /* The rule of thumb is: Your FLASH usage is fine as long as it does not go
