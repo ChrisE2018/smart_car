@@ -21,6 +21,7 @@ class MpuPlugin : public Plugin
         void calibrate ();
         void print_imu ();
         void cycle () override;
+        void trace () override;
 
         float get_Ax ();
         float get_Ay ();

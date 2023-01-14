@@ -94,6 +94,16 @@ void Plugin::set_enabled (const bool _enable)
     enable = _enable;
 }
 
+bool Plugin::is_trace () const
+{
+    return enable_trace;
+}
+
+void Plugin::set_trace (const bool _trace)
+{
+    enable_trace = _trace;
+}
+
 int Plugin::get_preferred_interval () const
 {
     return 100;
@@ -128,6 +138,10 @@ void Plugin::end_cycle ()
         Serial.print(F(" > "));
         Serial.println(expected_us);
     }
+}
+
+void Plugin::trace ()
+{
 }
 
 unsigned long Plugin::get_cycle_count () const

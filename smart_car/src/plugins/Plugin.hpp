@@ -48,9 +48,12 @@ class Plugin
         virtual int get_expected_us () const;
         bool is_enabled () const;
         virtual void set_enabled (const bool enable);
+        bool is_trace () const;
+        void set_trace (const bool enable);
         virtual void cycle ();
         void start_cycle ();
         void end_cycle ();
+        virtual void trace ();
         unsigned long get_cycle_count () const;
         unsigned long get_total_micros () const;
         unsigned long get_overrun_count () const;
@@ -62,6 +65,7 @@ class Plugin
     private:
         const PluginId id;
         bool enable = false;
+        bool enable_trace = false;
         int state = 0;
         unsigned long cycle_count = 0;
         unsigned long overrun_count = 0;

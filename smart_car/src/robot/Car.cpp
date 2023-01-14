@@ -225,6 +225,10 @@ void Car::cycle ()
             plugin->start_cycle();
             plugin->cycle();
             plugin->end_cycle();
+            if (plugin->is_trace())
+            {
+                plugin->trace();
+            }
         }
     }
 

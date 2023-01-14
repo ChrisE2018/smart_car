@@ -23,11 +23,13 @@ class UltrasoundPlugin : public Plugin
         virtual int get_preferred_interval () const;
         virtual int get_expected_us () const;
         virtual bool is_cyclic () const;
-        long get_distance ();
-        void cycle () override;
+        long get_distance () const;
+        virtual void cycle () override;
+        virtual void trace () override;
 
     private:
         Car &car;
         SR04 sr04;
+        long distance = 0;
 };
 

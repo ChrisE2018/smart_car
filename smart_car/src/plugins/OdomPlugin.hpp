@@ -13,7 +13,7 @@
 
 class Car;
 
-class OdomPlugin : public Plugin
+class OdomPlugin: public Plugin
 {
     public:
         OdomPlugin (Car &car);
@@ -21,11 +21,16 @@ class OdomPlugin : public Plugin
         virtual int get_preferred_interval () const override;
         virtual int get_expected_us () const;
         void cycle () override;
+        void trace () override;
         void update_transforms (const float angle);
 
     private:
         Car &car;
         long t = 0;
+        float dt = 0;
+        float right_velocity = 0;
+        float left_velocity = 0;
+
         // x, y, angle, dx, dy, da
         BLA::Matrix<6> state;
         // dx, dy, da

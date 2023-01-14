@@ -25,6 +25,7 @@ class KalmanPlugin : public Plugin
         virtual int get_preferred_interval () const;
         virtual int get_expected_us () const;
         void cycle () override;
+        void trace () override;
         void update_transforms (const float angle);
         float get_x () const;
         float get_y () const;
@@ -41,6 +42,7 @@ class KalmanPlugin : public Plugin
 
         Car &car;
         unsigned long t = 0;
+        float dt  = 0;
         // Px, Py, Pa, Vx, Vy, Va, Ax, Ay, Aa
         BLA::Matrix<Nstate> state; // state vector
         BLA::Matrix<Nobs> odom_obs; // observation vector

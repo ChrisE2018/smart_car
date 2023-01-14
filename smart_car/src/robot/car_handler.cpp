@@ -77,7 +77,7 @@ void Car::execute_command (const std::vector<String> &words)
     }
     else if (command == F("distance"))
     {
-        ultrasound_plugin->set_enabled(!ultrasound_plugin->is_enabled());
+        ultrasound_plugin->set_trace(!ultrasound_plugin->is_trace());
     }
     else if (command == F("f"))
     {
@@ -122,7 +122,7 @@ void Car::execute_command (const std::vector<String> &words)
     }
     else if (command == F("kalman"))
     {
-        kalman_plugin->set_enabled(!kalman_plugin->is_enabled());
+        kalman_plugin->set_trace(!kalman_plugin->is_trace());
     }
     else if (command == F("led"))
     {
@@ -170,11 +170,11 @@ void Car::execute_command (const std::vector<String> &words)
 //    }
     else if (command == F("mpu"))
     {
-        mpu_plugin->set_enabled(!mpu_plugin->is_enabled());
+        mpu_plugin->set_trace(!mpu_plugin->is_trace());
     }
     else if (command == "odom")
     {
-        odom_plugin->set_enabled(!odom_plugin->is_enabled());
+        odom_plugin->set_trace(!odom_plugin->is_trace());
     }
     else if (command == "plugins")
     {

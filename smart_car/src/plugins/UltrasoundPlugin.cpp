@@ -14,9 +14,9 @@
 static Logger logger(__FILE__, Level::info);
 
 UltrasoundPlugin::UltrasoundPlugin (Car &car) :
-                car(car), Plugin(PluginId::ULTRASOUND_PLUGIN),
-                sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)
+        car(car), Plugin(PluginId::ULTRASOUND_PLUGIN), sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)
 {
+    set_enabled(false);
 }
 
 int UltrasoundPlugin::get_preferred_interval () const
@@ -26,47 +26,52 @@ int UltrasoundPlugin::get_preferred_interval () const
 
 int UltrasoundPlugin::get_expected_us () const
 {
-    return 100;
+    return 2800;
 }
 
 bool UltrasoundPlugin::is_cyclic () const
 {
-    return false;
+    return true;
 }
 
-long UltrasoundPlugin::get_distance ()
+long UltrasoundPlugin::get_distance () const
 {
-    // This method is not const and includes a 25 ms delay.
-    // That line has been commented out in the library routine.
-    return sr04.Distance();
+    return distance;
 }
 
 void UltrasoundPlugin::cycle ()
 {
-    const long d = sr04.Distance();
+    // This method is not const and includes a 25 ms delay.
+    // That line has been commented out in the library routine.
+    distance = sr04.Distance();
+
     if (is_enabled())
     {
-        logger.info() << "Distance " << d << " cm" << std::endl;
+        if (distance < 10)
+        {
+            bool did_stop = false;
+            MotorPlugin &right_motor = car.get_motor(MotorLocation::RIGHT);
+            MotorPlugin &left_motor = car.get_motor(MotorLocation::LEFT);
+            // Only stop if moving forward toward the obstacle.
+            if (right_motor.get_measured_velocity() > 0)
+            {
+                did_stop = true;
+                right_motor.drive_stop();
+            }
+            if (left_motor.get_measured_velocity() > 0)
+            {
+                did_stop = true;
+                left_motor.drive_stop();
+            }
+            if (did_stop)
+            {
+                LOG_INFO(logger, "Stopped due to object at %d cm", distance);
+            }
+        }
     }
-    if (d < 10)
-    {
-        bool did_stop = false;
-        MotorPlugin &right_motor = car.get_motor(MotorLocation::RIGHT);
-        MotorPlugin &left_motor = car.get_motor(MotorLocation::LEFT);
-        // Only stop if moving forward toward the obstacle.
-        if (right_motor.get_measured_velocity() > 0)
-        {
-            did_stop = true;
-            right_motor.drive_stop();
-        }
-        if (left_motor.get_measured_velocity() > 0)
-        {
-            did_stop = true;
-            left_motor.drive_stop();
-        }
-        if (did_stop)
-        {
-            LOG_INFO(logger, "Stopped due to object at %d cm", d);
-        }
-    }
+}
+
+void UltrasoundPlugin::trace ()
+{
+    logger.info() << "Distance " << distance << " cm" << std::endl;
 }
