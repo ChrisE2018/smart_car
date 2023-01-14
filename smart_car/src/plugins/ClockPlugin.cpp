@@ -32,7 +32,7 @@ bool ClockPlugin::setup ()
     }
 }
 
-const bool ClockPlugin::is_cyclic () const
+bool ClockPlugin::is_cyclic () const
 {
     return false;
 }

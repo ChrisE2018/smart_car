@@ -43,10 +43,10 @@ class Plugin
         const PluginId get_id () const;
         virtual bool setup ();
         virtual bool reset ();
-        virtual const bool is_cyclic () const;
+        virtual bool is_cyclic () const;
         virtual int get_preferred_interval () const;
         virtual int get_expected_us () const;
-        const bool is_enabled () const;
+        bool is_enabled () const;
         virtual void set_enabled (const bool enable);
         virtual void cycle ();
         void start_cycle ();

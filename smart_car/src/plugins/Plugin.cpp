@@ -79,12 +79,12 @@ bool Plugin::reset ()
     return setup();
 }
 
-const bool Plugin::is_cyclic () const
+bool Plugin::is_cyclic () const
 {
     return true;
 }
 
-const bool Plugin::is_enabled () const
+bool Plugin::is_enabled () const
 {
     return enable;
 }

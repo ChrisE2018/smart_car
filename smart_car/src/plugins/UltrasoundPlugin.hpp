@@ -22,7 +22,7 @@ class UltrasoundPlugin : public Plugin
         UltrasoundPlugin (Car &car);
         virtual int get_preferred_interval () const;
         virtual int get_expected_us () const;
-        virtual const bool is_cyclic () const;
+        virtual bool is_cyclic () const;
         long get_distance ();
         void cycle () override;
 

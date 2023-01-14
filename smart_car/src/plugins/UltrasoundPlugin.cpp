@@ -29,7 +29,7 @@ int UltrasoundPlugin::get_expected_us () const
     return 100;
 }
 
-const bool UltrasoundPlugin::is_cyclic () const
+bool UltrasoundPlugin::is_cyclic () const
 {
     return false;
 }
