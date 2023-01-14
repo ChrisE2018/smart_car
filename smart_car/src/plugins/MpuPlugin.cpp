@@ -10,7 +10,7 @@
 #include "smart_car.hpp"
 
 MpuPlugin::MpuPlugin () :
-                Plugin(PluginId::MPU_PLUGIN), mpu(MPU_addr)
+        Plugin(PluginId::MPU_PLUGIN), mpu(MPU_addr)
 {
 }
 
@@ -97,11 +97,8 @@ void MpuPlugin::cycle ()
 
 void MpuPlugin::trace ()
 {
-    if (is_enabled())
-    {
-        cout << "Yaw: " << get_yaw() << " Pitch: " << get_pitch() << " Roll: " << get_roll()
-                << " Ax: " << get_Ax() << " Ay: " << get_Ay() << " Az: " << get_Az() << "\n";
-    }
+    cout << "Yaw: " << get_yaw() << " Pitch: " << get_pitch() << " Roll: " << get_roll() << " Ax: " << get_Ax()
+            << " Ay: " << get_Ay() << " Az: " << get_Az() << "\n";
 }
 
 void MpuPlugin::readFifoBuffer ()
