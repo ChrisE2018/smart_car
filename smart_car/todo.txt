@@ -9,7 +9,6 @@
 * Consider removing cycle schedule
 * Schedule multiple plugins in one cycle - define PluginId for each combination
 * Detect skipped cycles
-* Plugin needs a cycle_trace method to keep logging from causing overruns
 
 PHYSICAL
 * Work on GPS
@@ -45,3 +44,4 @@ DONE DONE DONE
 * Startup status logger
 * Separate data logger for real time variables w/plotter tools
 	- logstream : message
+* Plugin needs a cycle_trace method to keep logging from causing overruns
