@@ -17,7 +17,7 @@ class Car;
 #define Nstate 9 // length of the state vector
 #define Nobs 9   // length of the measurement vector
 
-class KalmanPlugin : public Plugin
+class KalmanPlugin: public Plugin
 {
     public:
         KalmanPlugin (Car &car);
@@ -42,7 +42,7 @@ class KalmanPlugin : public Plugin
 
         Car &car;
         unsigned long t = 0;
-        float dt  = 0;
+        float dt = 0;
         // Px, Py, Pa, Vx, Vy, Va, Ax, Ay, Aa
         BLA::Matrix<Nstate> state; // state vector
         BLA::Matrix<Nobs> odom_obs; // observation vector
@@ -56,10 +56,10 @@ class KalmanPlugin : public Plugin
         BLA::Matrix<2, 2> body_2_world;
         BLA::Matrix<2, 2> world_2_body;
 
-        const int interval = 5;
+        static const float angular_meters_2_angular_radians = M_PI / 0.534;
+        const int interval = 100; // ms
         unsigned long deadline = 0;
-        void hadamard (const BLA::Matrix<Nobs> &a, const BLA::Matrix<Nobs> &b,
-                BLA::Matrix<Nobs> &result) const;
+        void hadamard (const BLA::Matrix<Nobs> &a, const BLA::Matrix<Nobs> &b, BLA::Matrix<Nobs> &result) const;
 
 };
 
