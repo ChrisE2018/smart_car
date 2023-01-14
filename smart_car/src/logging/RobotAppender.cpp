@@ -13,12 +13,11 @@
 RobotAppender *robot_appender = nullptr;
 
 RobotAppender::RobotAppender (Car &car, const Level level) :
-                car(car), level(level)
+        car(car), level(level)
 {
 }
 
-void RobotAppender::append (const Logger *const logger, const Level level, const int line,
-        const char *const message)
+void RobotAppender::append (const Logger *const logger, const Level level, const int line, const char *const message)
 {
     const time_t t = get_unixtime(car);
     struct tm *const lt = localtime(&t);
@@ -78,8 +77,12 @@ void RobotAppender::log_data_p (const char *format, ...)
 {
     va_list args;
     va_start(args, format);
-    vsnprintf_P(buffer, buffer_size, format, args);
-    append_file(buffer);
+    const time_t t = get_unixtime(car);
+    struct tm *const lt = localtime(&t);
+    const int ms = millis() % 1000;
+    const int n = snprintf(buffer, buffer_size, "%s.%03d", isotime(lt), ms);
+    vsnprintf_P(buffer + n, buffer_size - n, format, args);
+    append_file(buffer, false);
     va_end(args);
 
 }
@@ -88,8 +91,8 @@ void RobotAppender::get_logfile ()
 {
     const time_t t = get_unixtime(car);
     struct tm *const lt = localtime(&t);
-    const int size = snprintf(log_filename, filename_size, "LOGS/Y%4d/M%02d/D%02d/",
-            2000 + lt->tm_year, lt->tm_mon + 1, lt->tm_mday);
+    const int size = snprintf(log_filename, filename_size, "LOGS/Y%4d/M%02d/D%02d/", 2000 + lt->tm_year, lt->tm_mon + 1,
+            lt->tm_mday);
     SD.mkdir(log_filename);
     snprintf(log_filename + size, filename_size - size, "L%02d-%02d.TXT", lt->tm_hour, lt->tm_min);
 }

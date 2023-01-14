@@ -56,7 +56,7 @@ std::ostream& operator<< (std::ostream &lhs, const PluginId id)
 }
 
 Plugin::Plugin (const PluginId id) :
-                id(id)
+        id(id)
 {
 }
 
@@ -156,12 +156,12 @@ void Plugin::set_state (const int _state)
     enter_state(_state);
 }
 
-virtual void Plugin::enter_state (const int state)
+void Plugin::enter_state (const int state)
 {
 
 }
 
-virtual void Plugin::exit_state (const int state)
+void Plugin::exit_state (const int state)
 {
 
 }

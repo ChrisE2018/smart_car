@@ -82,6 +82,7 @@ void Car::setup ()
         {
             logger.info(__LINE__) << F("Setup ") << plugin->get_id() << std::endl;
             plugins.push_back(plugin);
+            plugin->enter_state(0);
         }
         else
         {

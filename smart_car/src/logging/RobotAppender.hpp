@@ -12,7 +12,8 @@
 #include <SD.h>
 class Car;
 
-#define LOG_DATA(fmt, args...) robot_appender.log_data_p((const char *)F(fmt), args);
+#define LOG_DATA(fmt, args...) robot_appender->log_data_p((const char *)F(fmt), args);
+#define FLUSH_DATA(fmt, args...) robot_appender->flush();
 
 class RobotAppender : public Appender
 {
@@ -47,7 +48,7 @@ class RobotAppender : public Appender
         static const int filename_size = 32;
         char log_filename[filename_size];
         File log_file;
-        static const int buffer_size = 128;
+        static const int buffer_size = 256;
         char buffer[buffer_size];
 
         bool usb_logger = true;
