@@ -14,6 +14,8 @@
 * Consider removing cycle schedule
 * Schedule multiple plugins in one cycle - define PluginId for each combination
 * Detect skipped cycles
+* Plugins need an initialization priority to define order so data logging can be done early
+* Plugin needs a cycle_trace method to keep logging from causing overruns
 
 PHYSICAL
 * Work on GPS

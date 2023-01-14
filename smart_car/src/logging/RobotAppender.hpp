@@ -25,7 +25,7 @@ class RobotAppender : public Appender
         void append (const Level level, const char *const message);
         void append_usb (const char *const message);
         void append_bluetooth (const char *const message);
-        void append_file (const char *const message, const bool flush=true);
+        void append_file (const char *const message, const bool flush=false);
         void log_data_p(const char *format, ...);
         void open_logfile ();
         void flush ();

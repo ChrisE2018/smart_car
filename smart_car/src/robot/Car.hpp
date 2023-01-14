@@ -109,7 +109,7 @@ class Car : public Executor
                 PluginId::MOTOR_LEFT_PLUGIN, MotorLocation::LEFT, enA, in1, in2,
                 left_speed_counter_pin, LEFT_LED_FORWARD, LEFT_LED_REVERSE)};
 
-        static constexpr int schedule_size = 50;
+        static constexpr int schedule_size = 70;
         PluginId schedule[schedule_size];
         Mode mode = Mode::COMMAND_MODE;
 

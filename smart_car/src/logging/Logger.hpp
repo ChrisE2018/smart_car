@@ -18,7 +18,8 @@ enum class Level
     error,
     warning,
     info,
-    debug
+    debug,
+    data
 };
 
 const char* stringify (const Level level);
@@ -27,6 +28,7 @@ const char* stringify (const Level level);
 #define LOG_WARNING(logger, fmt, args...) logger.logging_p(Level::warning, __LINE__, (const char *)F(fmt), args);
 #define LOG_INFO(logger, fmt, args...) logger.logging_p(Level::info, __LINE__, (const char *)F(fmt), args);
 #define LOG_DEBUG(logger, fmt, args...) logger.logging_p(Level::debug, __LINE__, (const char *)F(fmt), args);
+#define LOG_DATA(logger, fmt, args...) logger.logging_p(Level::data, __LINE__, (const char *)F(fmt), args);
 
 class Logger
 {
@@ -41,6 +43,7 @@ class Logger
         void add_appender (Appender *const appender);
         LogBuffer& info ();
         LogBuffer& debug ();
+        LogBuffer& data ();
         LogBuffer& info (const int line);
         LogBuffer& debug (const int line);
         void logging (const Level level, const int line, const char *format, ...);

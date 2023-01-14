@@ -202,12 +202,15 @@ void Car::cycle ()
     {
         if (robot_appender != nullptr)
         {
+            robot_appender->flush();
             if (serial_parser.has_input())
             {
                 robot_appender->enable_usb_logger(true);
+                robot_appender->enable_bluetooth_logger(false);
             }
             if (bluetooth_parser.has_input())
             {
+                robot_appender->enable_usb_logger(false);
                 robot_appender->enable_bluetooth_logger(true);
             }
         }

@@ -1,13 +1,149 @@
-Big Enums
+2023-01-14 08:59:08.989 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.84, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:08.149 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.16, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:08.289 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:08.429 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:09.570 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:09.709 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:09.849 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:09.989 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:09.149 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.16, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:09.289 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:09.429 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:10.569 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:10.709 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:10.850 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:10.989 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:10.219 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.23, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:10.230 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 1.00, cumulative_velocity_error, 0.23, smallness, 0.20, control, 13.99
+2023-01-14 08:59:10.429 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.21, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:10.439 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 1.00, cumulative_velocity_error, 0.44, smallness, 0.20, control, 73.44
+2023-01-14 08:59:11.569 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:11.580 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 1.00, cumulative_velocity_error, 0.58, smallness, 0.20, control, 76.12
+2023-01-14 08:59:11.709 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 0, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:11.719 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 1.00, cumulative_velocity_error, 0.72, smallness, 0.20, control, 78.79
+2023-01-14 08:59:11.849 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 2, measured_velocity, 0.12, measured_distance, 0.02
+2023-01-14 08:59:11.863 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.88, cumulative_velocity_error, 0.84, smallness, 0.08, control, 83.67
 
-2023-01-13 07:18:57.536 [info Heap:27] Heap Usage: 3825 / 7462 Stack Size: 169 Free RAM: 3637 [Stack 8684:8515 Heap 8703:4878]
-2023-01-13 07:19:02.704 [info Heap:27] Heap Usage: 3825 / 7315 Stack Size: 316 Free RAM: 3490 [Stack 8684:8368 Heap 8703:4878] 
-[executed]
+        static constexpr float k0 = 0.25 * SPEED_FULL = 63.75
+        static constexpr float k1 = 0.3;
+        static constexpr float k2 = -0.2;
+        static constexpr float k3 = 0.1;
+        static constexpr float k4 = 0.2;
 
-Small Enums
-2023-01-13 07:20:41.548 [info Heap:27] Heap Usage: 3825 / 7468 Stack Size: 163 Free RAM: 3643 [Stack 8684:8521 Heap 8703:4878]
-2023-01-13 07:20:44.205 [info Heap:27] Heap Usage: 3825 / 7321 Stack Size: 310 Free RAM: 3496 [Stack 8684:8374 Heap 8703:4878]
+2023-01-14 08:59:11.989 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 15, measured_velocity, 0.80, measured_distance, 0.11
+2023-01-14 08:59:11.004 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.20, cumulative_velocity_error, 0.87, smallness, 0.00, control, 91.07
+velocity_error_rate=(0.20 - 0.88) / 0.14 = -0.68 / 0.14 = -4.85714
+control = k0 * (velocity_error + k1 * cumulative_velocity_error + k2 * velocity_error_rate + smallness * velocity_error * k3);
+control = k0 * (0.2 + k1 * 0.87 + k2 * -4.85 ) = k0 * (0.2 + .261 + 0.97 ) = k0 * 1.431 = = 91.22
 
-More Small Enums
-2023-01-13 07:23:56.548 [info Heap:27] Heap Usage: 3825 / 7468 Stack Size: 163 Free RAM: 3643 [Stack 8684:8521 Heap 8703:4878]
-2023-01-13 07:24:00.455 [info Heap:27] Heap Usage: 3825 / 7321 Stack Size: 310 Free RAM: 3496 [Stack 8684:8374 Heap 8703:4878]
+
+2023-01-14 08:59:11.149 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.16, speed_counter, 35, measured_velocity, 1.08, measured_distance, 0.17
+2023-01-14 08:59:11.159 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.08, cumulative_velocity_error, 0.86, smallness, 0.00, control, 33.44
+velocity_error_rate=(-0.08 - 0.20) / 0.16 = 1.75
+control = k0 * (velocity_error + k1 * cumulative_velocity_error + k2 * velocity_error_rate );
+control = k0 * (-0.08 + k1 * 0.86 + k2 * 1.75) = 63.75 * (-0.08 + 0.3 * 0.86 + -0.2 * 1.75) = 63.75 * (-0.08 + .258 + -0.35) = 63.75 * -0.0172 = -10.965
+
+2023-01-14 08:59:11.289 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 54, measured_velocity, 1.17, measured_distance, 0.16
+2023-01-14 08:59:11.300 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.17, cumulative_velocity_error, 0.83, smallness, 0.00, control, 13.37
+2023-01-14 08:59:11.499 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.21, speed_counter, 69, measured_velocity, 0.62, measured_distance, 0.13
+2023-01-14 08:59:11.509 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.38, cumulative_velocity_error, 0.91, smallness, 0.00, control, 8.17
+2023-01-14 08:59:12.640 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 76, measured_velocity, 0.43, measured_distance, 0.06
+2023-01-14 08:59:12.648 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.57, cumulative_velocity_error, 0.99, smallness, 0.00, control, 38.35
+2023-01-14 08:59:12.779 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 76, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:12.792 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 1.00, cumulative_velocity_error, 1.13, smallness, 0.20, control, 47.36
+2023-01-14 08:59:12.919 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 76, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:12.929 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 1.00, cumulative_velocity_error, 1.27, smallness, 0.20, control, 89.38
+2023-01-14 08:59:12.079 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.16, speed_counter, 87, measured_velocity, 0.59, measured_distance, 0.10
+2023-01-14 08:59:12.089 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.41, cumulative_velocity_error, 1.34, smallness, 0.00, control, 98.81
+2023-01-14 08:59:12.219 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 101, measured_velocity, 0.86, measured_distance, 0.12
+2023-01-14 08:59:12.229 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.14, cumulative_velocity_error, 1.36, smallness, 0.00, control, 59.22
+2023-01-14 08:59:12.359 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 124, measured_velocity, 1.42, measured_distance, 0.20
+2023-01-14 08:59:12.370 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.42, cumulative_velocity_error, 1.30, smallness, 0.00, control, 48.69
+2023-01-14 08:59:12.499 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 142, measured_velocity, 1.11, measured_distance, 0.16
+2023-01-14 08:59:13.514 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.11, cumulative_velocity_error, 1.28, smallness, 0.00, control, -10.62
+2023-01-14 08:59:13.639 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 151, measured_velocity, 0.56, measured_distance, 0.08
+2023-01-14 08:59:13.654 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.44, cumulative_velocity_error, 1.35, smallness, 0.00, control, 3.50
+2023-01-14 08:59:13.779 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 153, measured_velocity, 0.12, measured_distance, 0.02
+2023-01-14 08:59:13.790 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.88, cumulative_velocity_error, 1.47, smallness, 0.08, control, 45.05
+2023-01-14 08:59:13.920 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 153, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:13.928 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 1.00, cumulative_velocity_error, 1.61, smallness, 0.20, control, 84.54
+2023-01-14 08:59:13.079 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.16, speed_counter, 157, measured_velocity, 0.22, measured_distance, 0.03
+2023-01-14 08:59:13.091 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.78, cumulative_velocity_error, 1.73, smallness, 0.00, control, 100.35
+2023-01-14 08:59:13.220 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 173, measured_velocity, 0.99, measured_distance, 0.14
+2023-01-14 08:59:13.231 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.01, cumulative_velocity_error, 1.74, smallness, 0.00, control, 104.25
+2023-01-14 08:59:13.359 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 194, measured_velocity, 1.30, measured_distance, 0.18
+2023-01-14 08:59:13.374 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.30, cumulative_velocity_error, 1.69, smallness, 0.00, control, 41.63
+2023-01-14 08:59:13.499 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 216, measured_velocity, 1.36, measured_distance, 0.19
+2023-01-14 08:59:13.510 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.36, cumulative_velocity_error, 1.64, smallness, 0.00, control, 14.26
+2023-01-14 08:59:14.639 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 230, measured_velocity, 0.86, measured_distance, 0.12
+2023-01-14 08:59:14.651 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.14, cumulative_velocity_error, 1.66, smallness, 0.00, control, -4.48
+2023-01-14 08:59:14.779 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 236, measured_velocity, 0.37, measured_distance, 0.05
+2023-01-14 08:59:14.790 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.63, cumulative_velocity_error, 1.75, smallness, 0.00, control, 28.68
+2023-01-14 08:59:14.919 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 236, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:14.930 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 1.00, cumulative_velocity_error, 1.89, smallness, 0.20, control, 67.47
+2023-01-14 08:59:14.079 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.16, speed_counter, 236, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:14.093 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 1.00, cumulative_velocity_error, 2.05, smallness, 0.20, control, 104.25
+2023-01-14 08:59:14.219 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 246, measured_velocity, 0.62, measured_distance, 0.09
+2023-01-14 08:59:14.233 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.38, cumulative_velocity_error, 2.10, smallness, 0.00, control, 120.86
+2023-01-14 08:59:14.359 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 266, measured_velocity, 1.23, measured_distance, 0.17
+2023-01-14 08:59:14.371 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.23, cumulative_velocity_error, 2.07, smallness, 0.00, control, 80.90
+2023-01-14 08:59:14.500 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 289, measured_velocity, 1.42, measured_distance, 0.20
+2023-01-14 08:59:15.511 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.42, cumulative_velocity_error, 2.01, smallness, 0.00, control, 28.63
+2023-01-14 08:59:15.639 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 309, measured_velocity, 1.23, measured_distance, 0.17
+2023-01-14 08:59:15.650 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.23, cumulative_velocity_error, 1.98, smallness, 0.00, control, 6.09
+2023-01-14 08:59:15.779 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 320, measured_velocity, 0.68, measured_distance, 0.10
+2023-01-14 08:59:15.790 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.32, cumulative_velocity_error, 2.03, smallness, 0.00, control, 8.63
+2023-01-14 08:59:15.919 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 324, measured_velocity, 0.25, measured_distance, 0.03
+2023-01-14 08:59:15.934 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.75, cumulative_velocity_error, 2.13, smallness, 0.00, control, 49.43
+2023-01-14 08:59:15.079 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.16, speed_counter, 324, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:15.102 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 1.00, cumulative_velocity_error, 2.29, smallness, 0.20, control, 89.17
+2023-01-14 08:59:15.219 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 330, measured_velocity, 0.37, measured_distance, 0.05
+2023-01-14 08:59:15.231 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.63, cumulative_velocity_error, 2.38, smallness, 0.00, control, 119.36
+2023-01-14 08:59:15.359 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 351, measured_velocity, 1.30, measured_distance, 0.18
+2023-01-14 08:59:15.370 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.30, cumulative_velocity_error, 2.34, smallness, 0.00, control, 110.14
+2023-01-14 08:59:15.499 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 377, measured_velocity, 1.60, measured_distance, 0.22
+2023-01-14 08:59:16.507 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.60, cumulative_velocity_error, 2.25, smallness, 0.00, control, 32.65
+2023-01-14 08:59:16.639 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 399, measured_velocity, 1.36, measured_distance, 0.19
+2023-01-14 08:59:16.647 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.36, cumulative_velocity_error, 2.20, smallness, 0.00, control, -3.15
+2023-01-14 08:59:16.780 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 414, measured_velocity, 0.93, measured_distance, 0.13
+2023-01-14 08:59:16.794 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.07, cumulative_velocity_error, 2.21, smallness, 0.00, control, 7.73
+2023-01-14 08:59:16.919 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 419, measured_velocity, 0.31, measured_distance, 0.04
+2023-01-14 08:59:16.929 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.69, cumulative_velocity_error, 2.31, smallness, 0.00, control, 32.06
+2023-01-14 08:59:16.080 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.16, speed_counter, 419, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:16.090 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 1.00, cumulative_velocity_error, 2.47, smallness, 0.20, control, 87.68
+2023-01-14 08:59:16.219 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 423, measured_velocity, 0.25, measured_distance, 0.03
+2023-01-14 08:59:16.229 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.75, cumulative_velocity_error, 2.58, smallness, 0.00, control, 119.75
+2023-01-14 08:59:16.359 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 440, measured_velocity, 1.05, measured_distance, 0.15
+2023-01-14 08:59:16.366 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.05, cumulative_velocity_error, 2.57, smallness, 0.00, control, 119.06
+2023-01-14 08:59:16.499 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 465, measured_velocity, 1.54, measured_distance, 0.22
+2023-01-14 08:59:17.514 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.54, cumulative_velocity_error, 2.49, smallness, 0.00, control, 58.03
+2023-01-14 08:59:17.639 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 491, measured_velocity, 1.60, measured_distance, 0.22
+2023-01-14 08:59:17.653 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.60, cumulative_velocity_error, 2.41, smallness, 0.00, control, 13.14
+2023-01-14 08:59:17.779 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 508, measured_velocity, 1.05, measured_distance, 0.15
+2023-01-14 08:59:17.789 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.05, cumulative_velocity_error, 2.40, smallness, 0.00, control, -7.79
+2023-01-14 08:59:17.989 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.21, speed_counter, 518, measured_velocity, 0.41, measured_distance, 0.09
+2023-01-14 08:59:17.000 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.59, cumulative_velocity_error, 2.52, smallness, 0.00, control, 47.09
+2023-01-14 08:59:17.149 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.16, speed_counter, 518, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:17.160 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 1.00, cumulative_velocity_error, 2.68, smallness, 0.20, control, 83.59
+2023-01-14 08:59:17.289 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 520, measured_velocity, 0.12, measured_distance, 0.02
+2023-01-14 08:59:17.300 [data MotorPlugin:0] /motor/RIGHT/velocity_error, 0.88, cumulative_velocity_error, 2.81, smallness, 0.08, control, 121.24
+2023-01-14 08:59:17.429 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 537, measured_velocity, 1.05, measured_distance, 0.15
+2023-01-14 08:59:17.445 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.05, cumulative_velocity_error, 2.80, smallness, 0.00, control, 134.73
+2023-01-14 08:59:18.569 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 561, measured_velocity, 1.48, measured_distance, 0.21
+2023-01-14 08:59:18.581 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.48, cumulative_velocity_error, 2.73, smallness, 0.00, control, 60.95
+2023-01-14 08:59:18.709 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 586, measured_velocity, 1.54, measured_distance, 0.22
+2023-01-14 08:59:18.720 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.54, cumulative_velocity_error, 2.66, smallness, 0.00, control, 21.84
+2023-01-14 08:59:18.849 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 606, measured_velocity, 1.23, measured_distance, 0.17
+2023-01-14 08:59:18.860 [data MotorPlugin:0] /motor/RIGHT/velocity_error, -0.23, cumulative_velocity_error, 2.62, smallness, 0.00, control, 7.16
+2023-01-14 08:59:18.149 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.30, speed_counter, 619, measured_velocity, 0.37, measured_distance, 0.11
+2023-01-14 08:59:18.289 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 619, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:18.429 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 619, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:19.569 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 619, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:19.709 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 619, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:19.849 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 619, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:19.989 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 619, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:19.150 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.16, speed_counter, 619, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:19.289 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 619, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:19.429 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 619, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:20.569 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 619, measured_velocity, 0.00, measured_distance, 0.00
+2023-01-14 08:59:20.709 [data MotorPlugin:0] /motor/RIGHT/delta_seconds, 0.14, speed_counter, 619, measured_velocity, 0.00, measured_distance, 0.00

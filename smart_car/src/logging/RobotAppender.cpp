@@ -46,7 +46,7 @@ void RobotAppender::append (const Level _level, const char *const message)
         if (file_logger)
         {
             log_file.println(message);
-            log_file.flush();
+            //log_file.flush();
         }
     }
 }
@@ -61,7 +61,7 @@ void RobotAppender::append_bluetooth (const char *const message)
     Serial3.println(message);
 }
 
-void RobotAppender::append_file (const char *const message, const bool flush = true)
+void RobotAppender::append_file (const char *const message, const bool flush = false)
 {
     if (log_file)
     {

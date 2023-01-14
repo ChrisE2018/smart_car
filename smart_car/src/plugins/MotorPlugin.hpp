@@ -29,6 +29,7 @@ enum MotorDirection : unsigned char
     REVERSE
 };
 
+const std::string stringify (const MotorDirection id);
 std::ostream& operator<< (std::ostream &lhs, MotorDirection direction);
 
 enum MotorLocation : unsigned char
@@ -37,6 +38,7 @@ enum MotorLocation : unsigned char
     LEFT = 1
 };
 
+const std::string stringify (const MotorLocation id);
 std::ostream& operator<< (std::ostream &lhs, MotorLocation location);
 
 class MotorPlugin : public Plugin
@@ -88,10 +90,11 @@ class MotorPlugin : public Plugin
         // meters-per-micro = PI *diameter / encoder_slots
         static constexpr double count_to_meters_per_second = M_PI * 0.055 / 20.0;
 
-        static constexpr float k0 = 0.25 * SPEED_FULL;
-        static constexpr float k1 = 0.3;
-        static constexpr float k2 = -0.2;
+        static constexpr float k0 = 0.35 * SPEED_FULL;
+        static constexpr float k1 = 0.35;
+        static constexpr float k2 = -0.01;
         static constexpr float k3 = 0.1;
+        static constexpr float k4 = 0.2;
         bool auto_velocity = false;
         float desired_velocity = 0;
         float measured_velocity = 0;

@@ -22,6 +22,8 @@ const char* stringify (const Level level)
             return "info";
         case Level::debug:
             return "debug";
+        case Level::data:
+            return "data";
         default:
             return "?level?";
     }
@@ -96,6 +98,14 @@ LogBuffer& Logger::debug ()
 {
     stream.set_logger(this);
     stream.set_level(Level::debug);
+    stream.set_line(0);
+    return stream;
+}
+
+LogBuffer& Logger::data ()
+{
+    stream.set_logger(this);
+    stream.set_level(Level::data);
     stream.set_line(0);
     return stream;
 }
