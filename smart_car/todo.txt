@@ -1,8 +1,4 @@
 * Issue tracker
-* Separate data logger for real time variables w/plotter tools
-	- logstream : message
-* Startup status logger
-* Use c20?
 * Future events on schedule or condition
 	- time based
 	- event based, like distance motor moves or angle or goal position
@@ -10,11 +6,9 @@
 	- behavior trees?
 * Motor control to run for a specified distance or distance/time curve
 	- Control input to kalman filter?
-* Minimum speed sensor count for PID control instead of minimum time
 * Consider removing cycle schedule
 * Schedule multiple plugins in one cycle - define PluginId for each combination
 * Detect skipped cycles
-* Plugins need an initialization priority to define order so data logging can be done early
 * Plugin needs a cycle_trace method to keep logging from causing overruns
 
 PHYSICAL
@@ -43,3 +37,11 @@ DONE DONE DONE
 * Separate command handler from Car class
 * Disable robot_appender output from inactive serial port. Add commands.
 * State in plugin (start_start, end_state methods)
+
+1/14/2023
+* Plugins need an initialization priority to define order so data logging can be done early
+* Minimum speed sensor count for PID control instead of minimum time
+* Use c20?
+* Startup status logger
+* Separate data logger for real time variables w/plotter tools
+	- logstream : message

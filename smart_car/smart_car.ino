@@ -31,8 +31,8 @@ void setup ()
     car = new Car();
     robot_appender = new RobotAppender(*car, Level::debug);
     Logger::ROOT->add_appender(robot_appender);
-    car->setup();
     robot_appender->open_logfile();
+    car->setup();
     car->demo_drive_leds();
     setup_speed_counter();
     print_heap_state();
