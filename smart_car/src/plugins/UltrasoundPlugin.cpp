@@ -43,9 +43,9 @@ void UltrasoundPlugin::cycle ()
 {
     // This method is not const and includes a 25 ms delay.
     // That line has been commented out in the library routine.
-    distance = sr04.Distance();
+    //distance = sr04.Distance();
 
-    if (is_enabled())
+    if (false && is_enabled())
     {
         if (distance < 10)
         {
