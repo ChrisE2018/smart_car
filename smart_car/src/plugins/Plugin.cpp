@@ -111,7 +111,7 @@ int Plugin::get_preferred_interval () const
 
 int Plugin::get_expected_us () const
 {
-    return 10;
+    return 25;
 }
 
 void Plugin::cycle ()
@@ -132,11 +132,15 @@ void Plugin::end_cycle ()
     if (cycle_micros > expected_us)
     {
         overrun_count++;
-        Serial.print(stringify(id).c_str());
-        Serial.print(F(" overrun "));
-        Serial.print(cycle_micros);
-        Serial.print(F(" > "));
-        Serial.println(expected_us);
+        if (overrun_count % 100 == 0)
+        {
+            Serial.print(stringify(id).c_str());
+            Serial.print(F(" overrun "));
+            Serial.print(cycle_micros);
+            Serial.print(F(" > "));
+            Serial.print(expected_us);
+            Serial.println(F(" micros"));
+        }
     }
 }
 
