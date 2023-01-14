@@ -23,24 +23,18 @@
 extern HardwareSerial Serial;
 
 Car::Car () :
-                logger(__FILE__, Level::debug), serial_parser(Serial), bluetooth_parser(Serial3),
-                clock_plugin(new ClockPlugin()),
-                clockwise_plugin(
-                        new DrivePlugin(PluginId::CLOCKWISE_PLUGIN, *this, 500,
-                                MotorDirection::FORWARD, MotorDirection::REVERSE)),
-                counterclockwise_plugin(
-                        new DrivePlugin(PluginId::COUNTERCLOCKWISE_PLUGIN, *this, 500,
-                                MotorDirection::REVERSE, MotorDirection::FORWARD)),
-                demo_plugin(new DemoPlugin(*this)),
-                forward_plugin(
-                        new DrivePlugin(PluginId::FORWARD_PLUGIN, *this, 500,
-                                MotorDirection::FORWARD, MotorDirection::FORWARD)),
-                goal_plugin(new GoalPlugin(*this)), mpu_plugin(new MpuPlugin()),
-                kalman_plugin(new KalmanPlugin(*this)), odom_plugin(new OdomPlugin(*this)),
-                reverse_plugin(
-                        new DrivePlugin(PluginId::REVERSE_PLUGIN, *this, 500,
-                                MotorDirection::REVERSE, MotorDirection::REVERSE)),
-                ultrasound_plugin(new UltrasoundPlugin(*this)), wall_plugin(new WallPlugin(*this))
+        logger(__FILE__, Level::debug), serial_parser(Serial), bluetooth_parser(Serial3), clock_plugin(
+                new ClockPlugin()), clockwise_plugin(
+                new DrivePlugin(PluginId::CLOCKWISE_PLUGIN, *this, 500, MotorDirection::FORWARD,
+                        MotorDirection::REVERSE)), counterclockwise_plugin(
+                new DrivePlugin(PluginId::COUNTERCLOCKWISE_PLUGIN, *this, 500, MotorDirection::REVERSE,
+                        MotorDirection::FORWARD)), demo_plugin(new DemoPlugin(*this)), forward_plugin(
+                new DrivePlugin(PluginId::FORWARD_PLUGIN, *this, 500, MotorDirection::FORWARD,
+                        MotorDirection::FORWARD)), goal_plugin(new GoalPlugin(*this)), mpu_plugin(new MpuPlugin()), kalman_plugin(
+                new KalmanPlugin(*this)), odom_plugin(new OdomPlugin(*this)), reverse_plugin(
+                new DrivePlugin(PluginId::REVERSE_PLUGIN, *this, 500, MotorDirection::REVERSE,
+                        MotorDirection::REVERSE)), ultrasound_plugin(new UltrasoundPlugin(*this)), wall_plugin(
+                new WallPlugin(*this))
 {
     available_plugins.push_back(clock_plugin);
     available_plugins.push_back(demo_plugin);
@@ -69,8 +63,8 @@ Car::~Car ()
 
 std::ostream& operator<< (std::ostream &lhs, const Car &car)
 {
-    return lhs << "#[car " << car.mode << " " << car.kalman_plugin->get_x() << ", "
-            << car.kalman_plugin->get_y() << " ang " << car.kalman_plugin->get_angle() << "]";
+    return lhs << "#[car " << car.mode << " " << car.kalman_plugin->get_x() << ", " << car.kalman_plugin->get_y()
+            << " ang " << car.kalman_plugin->get_angle() << "]";
 }
 
 void Car::setup ()
@@ -138,8 +132,7 @@ void Car::setup ()
     }
     if (scheduled_count < plugins.size())
     {
-        LOG_WARNING(logger, "Scheduled only %d of %d enabled plugins", scheduled_count,
-                plugins.size());
+        LOG_WARNING(logger, "Scheduled only %d of %d enabled plugins", scheduled_count, plugins.size());
     }
     else
     {
@@ -193,6 +186,18 @@ void Car::set_mode (const Mode _mode)
 
 void Car::cycle ()
 {
+    if (use_simple_cycle)
+    {
+        simple_cycle();
+    }
+    else
+    {
+        schedule_cycle ();
+    }
+}
+
+void Car::schedule_cycle ()
+{
     const unsigned long cycle_start_us = micros();
     const int ms = millis() % 1000;
     const int cycle = ms % schedule_size;
@@ -200,22 +205,7 @@ void Car::cycle ()
     const PluginId scheduled_plugin = schedule[cycle];
     if (scheduled_plugin == PluginId::COMMAND_CYCLE)
     {
-        if (robot_appender != nullptr)
-        {
-            robot_appender->flush();
-            if (serial_parser.has_input())
-            {
-                robot_appender->enable_usb_logger(true);
-                robot_appender->enable_bluetooth_logger(false);
-            }
-            if (bluetooth_parser.has_input())
-            {
-                robot_appender->enable_usb_logger(false);
-                robot_appender->enable_bluetooth_logger(true);
-            }
-        }
-        serial_parser.handle_command(*this);
-        bluetooth_parser.handle_command(*this);
+        command_cycle();
     }
     else
     {
@@ -236,6 +226,50 @@ void Car::cycle ()
     cycle_count++;
 }
 
+void Car::simple_cycle ()
+{
+    const unsigned long cycle_start_us = micros();
+
+    for (Plugin *const plugin : plugins)
+    {
+        plugin->start_cycle();
+        plugin->cycle();
+        plugin->end_cycle();
+        if (plugin->is_trace())
+        {
+            plugin->trace();
+        }
+    }
+    command_cycle();
+
+    total_cycle_us += (micros() - cycle_start_us);
+    cycle_count++;
+}
+
+void Car::command_cycle ()
+{
+    if (robot_appender == nullptr)
+    {
+        serial_parser.handle_command(*this);
+        bluetooth_parser.handle_command(*this);
+    }
+    else
+    {
+        if (serial_parser.has_input())
+        {
+            robot_appender->enable_usb_logger(true);
+            robot_appender->enable_bluetooth_logger(false);
+            serial_parser.handle_command(*this);
+        }
+        if (bluetooth_parser.has_input())
+        {
+            robot_appender->enable_usb_logger(false);
+            robot_appender->enable_bluetooth_logger(true);
+            bluetooth_parser.handle_command(*this);
+        }
+        robot_appender->flush();
+    }
+}
 void Car::demo_drive_leds ()
 {
     int duration = 150;

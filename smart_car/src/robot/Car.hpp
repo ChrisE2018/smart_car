@@ -26,7 +26,7 @@ class WallPlugin;
 
 const int MOTOR_COUNT = 2;
 
-class Car : public Executor
+class Car: public Executor
 {
     public:
         Car ();
@@ -69,6 +69,7 @@ class Car : public Executor
         Logger logger;
         unsigned long cycle_count = 0;
         unsigned long total_cycle_us = 0;
+        const bool use_simple_cycle = true;
 
         Parser serial_parser;
         Parser bluetooth_parser;
@@ -104,15 +105,17 @@ class Car : public Executor
         static constexpr int LEFT_LED_FORWARD = 26; // red led left
         static constexpr int LEFT_LED_REVERSE = 28; // green led left
         MotorPlugin motors[MOTOR_COUNT] =
-        {MotorPlugin(PluginId::MOTOR_RIGHT_PLUGIN, MotorLocation::RIGHT, enB, in4, in3,
-                right_speed_counter_pin, RIGHT_LED_FORWARD, RIGHT_LED_REVERSE), MotorPlugin(
-                PluginId::MOTOR_LEFT_PLUGIN, MotorLocation::LEFT, enA, in1, in2,
-                left_speed_counter_pin, LEFT_LED_FORWARD, LEFT_LED_REVERSE)};
+        { MotorPlugin(PluginId::MOTOR_RIGHT_PLUGIN, MotorLocation::RIGHT, enB, in4, in3, right_speed_counter_pin,
+                RIGHT_LED_FORWARD, RIGHT_LED_REVERSE), MotorPlugin(PluginId::MOTOR_LEFT_PLUGIN, MotorLocation::LEFT,
+                enA, in1, in2, left_speed_counter_pin, LEFT_LED_FORWARD, LEFT_LED_REVERSE) };
 
         static constexpr int schedule_size = 70;
         PluginId schedule[schedule_size];
         Mode mode = Mode::COMMAND_MODE;
 
+        void schedule_cycle ();
+        void simple_cycle ();
+        void command_cycle ();
         void help_command () const;
         Plugin* get_plugin (const PluginId id) const;
         int get_actual_interval (const int cycle, const PluginId id) const;
