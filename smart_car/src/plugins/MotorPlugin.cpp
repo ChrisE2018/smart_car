@@ -95,7 +95,8 @@ void MotorPlugin::drive_forward (const int _speed)
         digitalWrite(reverse_pin, LOW);
         digitalWrite(forward_pin, HIGH);
         analogWrite(enable_pin, _speed);
-        cout << location << "_" << direction << ": " << speed << " mps: " << measured_velocity << std::endl;
+        cout << location << //"_" << direction <<
+                ": " << speed << " " << location << "_mps: " << measured_velocity << std::endl;
     }
 }
 
@@ -110,7 +111,8 @@ void MotorPlugin::drive_reverse (const int _speed)
         digitalWrite(forward_pin, LOW);
         digitalWrite(reverse_pin, HIGH);
         analogWrite(enable_pin, _speed);
-        cout << location << "_" << direction << ": " << speed << " mps: " << -measured_velocity << std::endl;
+        cout << location << //"_" << direction <<
+                ": " << speed << " " << location << "_mps: " << -measured_velocity << std::endl;
     }
 }
 

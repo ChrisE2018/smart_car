@@ -26,6 +26,8 @@ static unsigned long cycle_count = 0;
 void setup ()
 {
     Serial.begin(9600);
+    Serial.println(F("RIGHT: 0 RIGHT_mps: 0"));
+    Serial.println(F("LEFT: 0 LEFT_mps: 0"));
     Serial.println(F("Smart car"));
     Serial3.begin(9600);
     car = new Car();
