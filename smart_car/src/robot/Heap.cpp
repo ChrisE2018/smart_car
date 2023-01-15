@@ -29,17 +29,17 @@ void print_heap_state ()
 
 unsigned long get_free_ram ()
 {
-    int *heap_var = (int*) malloc(sizeof(int));
-    unsigned long heap_var_address = (unsigned long) heap_var;
+    char *const heap_var = (char*) malloc(sizeof(char));
+    const unsigned long heap_address = (unsigned long) heap_var;
     free(heap_var);
 
-    return SP - heap_var_address;
+    return SP - heap_address;
 }
 
 unsigned long get_heap_address ()
 {
-    int *heap_var = (int*) calloc(1, sizeof(int));
-    unsigned long heap_address = (unsigned long) heap_var;
+    char *const heap_var = (char*) malloc(sizeof(char));
+    const unsigned long heap_address = (unsigned long) heap_var;
     free(heap_var);
     return heap_address;
 }
