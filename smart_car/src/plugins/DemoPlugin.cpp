@@ -72,8 +72,8 @@ void DemoPlugin::set_phase (const DemoPhase phase)
         {
             phase_change = phase_start + 5000;
             next_phase = DemoPhase::reverse_phase;
-            car.drive_stop(MotorLocation::RIGHT);
-            car.drive_stop(MotorLocation::LEFT);
+            car.drive_stop(MotorLocation::RIGHT_FRONT);
+            car.drive_stop(MotorLocation::LEFT_FRONT);
             break;
         }
 
@@ -97,8 +97,8 @@ void DemoPlugin::set_phase (const DemoPhase phase)
         {
             phase_change = phase_start + 5000;
             next_phase = DemoPhase::clockwise_phase;
-            car.drive_stop(MotorLocation::RIGHT);
-            car.drive_stop(MotorLocation::LEFT);
+            car.drive_stop(MotorLocation::RIGHT_FRONT);
+            car.drive_stop(MotorLocation::LEFT_FRONT);
             break;
         }
 
@@ -122,8 +122,8 @@ void DemoPlugin::set_phase (const DemoPhase phase)
         {
             phase_change = phase_start + 5000;
             next_phase = DemoPhase::counterclockwise_phase;
-            car.drive_stop(MotorLocation::RIGHT);
-            car.drive_stop(MotorLocation::LEFT);
+            car.drive_stop(MotorLocation::RIGHT_FRONT);
+            car.drive_stop(MotorLocation::LEFT_FRONT);
             break;
         }
 
@@ -148,8 +148,8 @@ void DemoPlugin::set_phase (const DemoPhase phase)
             phase_change = phase_start + 5000;
             next_phase = DemoPhase::forward_phase;
             speed = SPEED_STOP;
-            car.drive_stop(MotorLocation::RIGHT);
-            car.drive_stop(MotorLocation::LEFT);
+            car.drive_stop(MotorLocation::RIGHT_FRONT);
+            car.drive_stop(MotorLocation::LEFT_FRONT);
             break;
         }
     }

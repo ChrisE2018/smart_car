@@ -59,8 +59,8 @@ void Car::execute_command (const std::vector<String> &words)
             velocity = -words[1].toFloat();
         }
         set_mode(Mode::COMMAND_MODE);
-        motors[static_cast<int>(MotorLocation::RIGHT)].set_desired_velocity(velocity);
-        motors[static_cast<int>(MotorLocation::LEFT)].set_desired_velocity(velocity);
+        motors[static_cast<int>(MotorLocation::RIGHT_FRONT)].set_desired_velocity(velocity);
+        motors[static_cast<int>(MotorLocation::LEFT_FRONT)].set_desired_velocity(velocity);
     }
     else if (command == F("calibrate"))
     {
@@ -106,8 +106,8 @@ void Car::execute_command (const std::vector<String> &words)
             velocity = words[1].toFloat();
         }
         set_mode(Mode::COMMAND_MODE);
-        motors[static_cast<int>(MotorLocation::RIGHT)].set_desired_velocity(velocity);
-        motors[static_cast<int>(MotorLocation::LEFT)].set_desired_velocity(velocity);
+        motors[static_cast<int>(MotorLocation::RIGHT_FRONT)].set_desired_velocity(velocity);
+        motors[static_cast<int>(MotorLocation::LEFT_FRONT)].set_desired_velocity(velocity);
     }
     else if (command == F("goal"))
     {
@@ -129,7 +129,7 @@ void Car::execute_command (const std::vector<String> &words)
     {
         demo_drive_leds();
     }
-    else if (command == F("l"))
+    else if (command == F("lf"))
     {
         float desired_velocity = 0.5;
         if (n > 1)
@@ -137,7 +137,17 @@ void Car::execute_command (const std::vector<String> &words)
             desired_velocity = words[1].toFloat();
         }
 //        set_mode(Mode::COMMAND_MODE);
-        motors[static_cast<int>(MotorLocation::LEFT)].set_desired_velocity(desired_velocity);
+        motors[static_cast<int>(MotorLocation::LEFT_FRONT)].set_desired_velocity(desired_velocity);
+    }
+    else if (command == F("lr"))
+    {
+        float desired_velocity = 0.5;
+        if (n > 1)
+        {
+            desired_velocity = words[1].toFloat();
+        }
+//        set_mode(Mode::COMMAND_MODE);
+        motors[static_cast<int>(MotorLocation::LEFT_REAR)].set_desired_velocity(desired_velocity);
     }
     else if (command == F("left"))
     {
@@ -196,7 +206,7 @@ void Car::execute_command (const std::vector<String> &words)
                 << total_cycle_us << F(" average micros per cycle ") << f_total_micros / cycle_count
                 << std::endl;
     }
-    else if (command == F("r"))
+    else if (command == F("rf"))
     {
         float desired_velocity = 0.5;
         if (n > 1)
@@ -204,7 +214,17 @@ void Car::execute_command (const std::vector<String> &words)
             desired_velocity = words[1].toFloat();
         }
 //        set_mode(Mode::COMMAND_MODE);
-        motors[static_cast<int>(MotorLocation::RIGHT)].set_desired_velocity(desired_velocity);
+        motors[static_cast<int>(MotorLocation::RIGHT_FRONT)].set_desired_velocity(desired_velocity);
+    }
+    else if (command == F("rr"))
+    {
+        float desired_velocity = 0.5;
+        if (n > 1)
+        {
+            desired_velocity = words[1].toFloat();
+        }
+//        set_mode(Mode::COMMAND_MODE);
+        motors[static_cast<int>(MotorLocation::RIGHT_REAR)].set_desired_velocity(desired_velocity);
     }
     else if (command == F("right"))
     {

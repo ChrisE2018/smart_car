@@ -24,7 +24,7 @@ class OdomPlugin;
 class UltrasoundPlugin;
 class WallPlugin;
 
-const int MOTOR_COUNT = 2;
+const int MOTOR_COUNT = 4;
 
 class Car: public Executor
 {
@@ -90,24 +90,45 @@ class Car: public Executor
         std::vector<Plugin*> available_plugins;
         std::vector<Plugin*> plugins;
 
-        static constexpr int right_speed_counter_pin = 2; // right
-        static constexpr int left_speed_counter_pin = 3; // left
+//        static constexpr int front_right_speed_counter_pin = 2;
+//        static constexpr int front_left_speed_counter_pin = 3;
+//        static constexpr int rear_left_speed_counter_pin = 18;
+//        static constexpr int rear_right_speed_counter_pin = 19;
 
-        static constexpr int in1 = 49; // yellow = in1 left
-        static constexpr int in2 = 48; // orange = in2 left
-        static constexpr int in3 = 47; // purple = in3 right
-        static constexpr int in4 = 46; // blue = in4 right
-        static constexpr int enA = 45; // blue = enA left
-        static constexpr int enB = 44; // green = enB right
+// Left side
+        static constexpr int left_rear_in1 = 49; // yellow = in1
+        static constexpr int left_rear_in2 = 48; // orange = in2
+        static constexpr int left_front_in3 = 47; // purple = in3
+        static constexpr int left_front_in4 = 46; // blue = in4
+        static constexpr int left_rear_enA = 45; // blue = enA
+        static constexpr int left_front_enB = 44; // green = enB
+
+        // Right side
+        static constexpr int right_front_in1 = 43; // yellow = in1
+        static constexpr int right_front_in2 = 42; // orange = in2
+        static constexpr int right_rear_in3 = 41; // purple = in3
+        static constexpr int right_rear_in4 = 40; // gray = in4
+        static constexpr int right_front_enA = 39; // gray = enA
+        static constexpr int right_rear_enB = 38; // green = enB
+
+        static constexpr int DISABLED_LED = 99;
 
         static constexpr int RIGHT_LED_FORWARD = 22; // red led right
         static constexpr int RIGHT_LED_REVERSE = 24; // green led right
         static constexpr int LEFT_LED_FORWARD = 26; // red led left
         static constexpr int LEFT_LED_REVERSE = 28; // green led left
         MotorPlugin motors[MOTOR_COUNT] =
-        { MotorPlugin(PluginId::MOTOR_RIGHT_PLUGIN, MotorLocation::RIGHT, enB, in4, in3, right_speed_counter_pin,
-                RIGHT_LED_FORWARD, RIGHT_LED_REVERSE), MotorPlugin(PluginId::MOTOR_LEFT_PLUGIN, MotorLocation::LEFT,
-                enA, in1, in2, left_speed_counter_pin, LEFT_LED_FORWARD, LEFT_LED_REVERSE) };
+        { MotorPlugin(PluginId::MOTOR_RIGHT_FRONT_PLUGIN, MotorLocation::RIGHT_FRONT, right_front_enA, right_front_in2,
+                right_front_in1, RIGHT_LED_FORWARD, RIGHT_LED_REVERSE),
+        //
+                MotorPlugin(PluginId::MOTOR_LEFT_FRONT_PLUGIN, MotorLocation::LEFT_FRONT, left_front_enB,
+                        left_front_in3, left_front_in4, LEFT_LED_FORWARD, LEFT_LED_REVERSE),
+                //
+                MotorPlugin(PluginId::MOTOR_RIGHT_REAR_PLUGIN, MotorLocation::RIGHT_REAR, right_rear_enB,
+                        right_rear_in3, right_rear_in4, DISABLED_LED, DISABLED_LED),
+                //
+                MotorPlugin(PluginId::MOTOR_LEFT_REAR_PLUGIN, MotorLocation::LEFT_REAR, left_rear_enA, left_rear_in2,
+                        left_rear_in1, DISABLED_LED, DISABLED_LED) };
 
         static constexpr int schedule_size = 70;
         PluginId schedule[schedule_size];
@@ -116,7 +137,7 @@ class Car: public Executor
         void schedule_cycle ();
         void simple_cycle ();
         void command_cycle ();
-        void help_command () ;
+        void help_command ();
         Plugin* get_plugin (const PluginId id) const;
         int get_actual_interval (const int cycle, const PluginId id) const;
 };

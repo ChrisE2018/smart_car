@@ -49,8 +49,8 @@ void WallPlugin::cycle ()
             {
                 speed = SPEED_HALF;
             }
-            car.drive_forward(MotorLocation::RIGHT, speed);
-            car.drive_forward(MotorLocation::LEFT, speed);
+            car.drive_forward(MotorLocation::RIGHT_FRONT, speed);
+            car.drive_forward(MotorLocation::LEFT_FRONT, speed);
         }
     }
 }

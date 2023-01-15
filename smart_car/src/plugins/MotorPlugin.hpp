@@ -32,7 +32,7 @@ std::ostream& operator<< (std::ostream &lhs, MotorDirection direction);
 
 enum MotorLocation : unsigned char
 {
-    RIGHT = 0, LEFT = 1
+    RIGHT_FRONT, LEFT_FRONT, RIGHT_REAR, LEFT_REAR
 };
 
 const std::string stringify (const MotorLocation id);
@@ -42,11 +42,7 @@ class MotorPlugin: public Plugin
 {
     public:
         MotorPlugin (const PluginId id, const MotorLocation location, int enable, int forward, int reverse,
-                int speed_counter_pin, int forward_led, int reverse_led) :
-                location(location), enable_pin(enable), forward_pin(forward), reverse_pin(reverse), speed_counter_pin(
-                        speed_counter_pin), forward_led(forward_led), reverse_led(reverse_led), Plugin(id)
-        {
-        }
+                int forward_led, int reverse_led);
 
         friend std::ostream& operator<< (std::ostream &lhs, const MotorPlugin &motor);
         bool setup ();
@@ -69,11 +65,12 @@ class MotorPlugin: public Plugin
         void cycle () override;
 
     private:
+        static constexpr int DISABLED_LED = 99;
+
         const MotorLocation location;
         const int enable_pin;
         const int forward_pin;
         const int reverse_pin;
-        const int speed_counter_pin;
         const int forward_led;
         const int reverse_led;
         MotorDirection direction = MotorDirection::STOP;
@@ -81,7 +78,7 @@ class MotorPlugin: public Plugin
 
         // Support for speed encoders
         static constexpr int minimum_cycle_ms = 100;
-        static constexpr int minimum_speed_ticks = 5;
+        static constexpr int minimum_speed_ticks = 10;
 
         // 55 mm wheels
         // 20 encoder slots per revolution
@@ -104,5 +101,6 @@ class MotorPlugin: public Plugin
 
         // Only returns +1 or -1 unlike signum
         int sign (const float direction) const;
+        int get_raw_ticks() const;
 };
 

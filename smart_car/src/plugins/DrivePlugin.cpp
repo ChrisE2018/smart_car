@@ -34,25 +34,25 @@ void DrivePlugin::set_enabled (const bool enable)
         switch (right_motor_direction)
         {
             case MotorDirection::STOP:
-                car.drive_stop(MotorLocation::RIGHT);
+                car.drive_stop(MotorLocation::RIGHT_FRONT);
                 break;
             case MotorDirection::FORWARD:
-                car.drive_forward(MotorLocation::RIGHT, right_motor_speed);
+                car.drive_forward(MotorLocation::RIGHT_FRONT, right_motor_speed);
                 break;
             case MotorDirection::REVERSE:
-                car.drive_reverse(MotorLocation::RIGHT, right_motor_speed);
+                car.drive_reverse(MotorLocation::RIGHT_FRONT, right_motor_speed);
                 break;
         }
         switch (left_motor_direction)
         {
             case MotorDirection::STOP:
-                car.drive_stop(MotorLocation::LEFT);
+                car.drive_stop(MotorLocation::LEFT_FRONT);
                 break;
             case MotorDirection::FORWARD:
-                car.drive_forward(MotorLocation::LEFT, left_motor_speed);
+                car.drive_forward(MotorLocation::LEFT_FRONT, left_motor_speed);
                 break;
             case MotorDirection::REVERSE:
-                car.drive_reverse(MotorLocation::LEFT, left_motor_speed);
+                car.drive_reverse(MotorLocation::LEFT_FRONT, left_motor_speed);
                 break;
         }
     }

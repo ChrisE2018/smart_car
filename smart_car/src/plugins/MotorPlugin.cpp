@@ -39,10 +39,14 @@ const std::string stringify (const MotorLocation location)
 {
     switch (location)
     {
-        case MotorLocation::RIGHT:
-            return "RIGHT";
-        case MotorLocation::LEFT:
-            return "LEFT";
+        case MotorLocation::RIGHT_FRONT:
+            return "RIGHT_FRONT";
+        case MotorLocation::LEFT_FRONT:
+            return "LEFT_FRONT";
+        case MotorLocation::RIGHT_REAR:
+            return "RIGHT_REAR";
+        case MotorLocation::LEFT_REAR:
+            return "LEFT_REAR";
         default:
             return "?MotorLocation?";
     }
@@ -59,13 +63,26 @@ std::ostream& operator<< (std::ostream &lhs, const MotorPlugin &motor)
             << "]";
 }
 
+MotorPlugin::MotorPlugin (const PluginId id, const MotorLocation location, int enable, int forward, int reverse,
+        int forward_led, int reverse_led) :
+        location(location), enable_pin(enable), forward_pin(forward), reverse_pin(reverse), forward_led(forward_led), reverse_led(
+                reverse_led), Plugin(id)
+{
+}
+
 bool MotorPlugin::setup ()
 {
     pinMode(enable_pin, OUTPUT);
     pinMode(forward_pin, OUTPUT);
     pinMode(reverse_pin, OUTPUT);
-    pinMode(forward_led, OUTPUT);
-    pinMode(reverse_led, OUTPUT);
+    if (forward_led != DISABLED_LED)
+    {
+        pinMode(forward_led, OUTPUT);
+    }
+    if (reverse_led != DISABLED_LED)
+    {
+        pinMode(reverse_led, OUTPUT);
+    }
     drive_stop();
     logger.data() << F("k0: ") << k0 << F(" k1: ") << k1 << F(" k2: ") << k2 << F(" k3: ") << k3 << F(" k4: ") << k4
             << std::endl;
@@ -74,14 +91,20 @@ bool MotorPlugin::setup ()
 
 void MotorPlugin::led_demo (const int duration) const
 {
-    digitalWrite(forward_led, HIGH);
-    delay(duration);
-    digitalWrite(forward_led, LOW);
-    delay(duration);
-    digitalWrite(reverse_led, HIGH);
-    delay(duration);
-    digitalWrite(reverse_led, LOW);
-    delay(duration);
+    if (forward_led != DISABLED_LED)
+    {
+        digitalWrite(forward_led, HIGH);
+        delay(duration);
+        digitalWrite(forward_led, LOW);
+        delay(duration);
+    }
+    if (reverse_led != DISABLED_LED)
+    {
+        digitalWrite(reverse_led, HIGH);
+        delay(duration);
+        digitalWrite(reverse_led, LOW);
+        delay(duration);
+    }
 }
 
 void MotorPlugin::drive_forward (const int _speed)
@@ -90,8 +113,14 @@ void MotorPlugin::drive_forward (const int _speed)
     {
         speed = _speed;
         direction = MotorDirection::FORWARD;
-        digitalWrite(forward_led, HIGH);
-        digitalWrite(reverse_led, LOW);
+        if (forward_led != DISABLED_LED)
+        {
+            digitalWrite(forward_led, HIGH);
+        }
+        if (reverse_led != DISABLED_LED)
+        {
+            digitalWrite(reverse_led, LOW);
+        }
         digitalWrite(reverse_pin, LOW);
         digitalWrite(forward_pin, HIGH);
         analogWrite(enable_pin, _speed);
@@ -106,8 +135,14 @@ void MotorPlugin::drive_reverse (const int _speed)
     {
         speed = _speed;
         direction = MotorDirection::REVERSE;
-        digitalWrite(forward_led, LOW);
-        digitalWrite(reverse_led, HIGH);
+        if (forward_led != DISABLED_LED)
+        {
+            digitalWrite(forward_led, LOW);
+        }
+        if (reverse_led != DISABLED_LED)
+        {
+            digitalWrite(reverse_led, HIGH);
+        }
         digitalWrite(forward_pin, LOW);
         digitalWrite(reverse_pin, HIGH);
         analogWrite(enable_pin, -speed);
@@ -131,8 +166,14 @@ void MotorPlugin::drive_zero_speed ()
     {
         direction = MotorDirection::STOP;
         speed = 0;
-        digitalWrite(forward_led, LOW);
-        digitalWrite(reverse_led, LOW);
+        if (forward_led != DISABLED_LED)
+        {
+            digitalWrite(forward_led, LOW);
+        }
+        if (reverse_led != DISABLED_LED)
+        {
+            digitalWrite(reverse_led, LOW);
+        }
         digitalWrite(forward_pin, LOW);
         digitalWrite(reverse_pin, LOW);
         analogWrite(enable_pin, LOW);
@@ -230,12 +271,30 @@ int MotorPlugin::sign (const float direction) const
     return 1;
 }
 
+int MotorPlugin::get_raw_ticks () const
+{
+    switch (location)
+    {
+        case MotorLocation::RIGHT_FRONT:
+            return get_right_front_speed_counter();
+
+        case MotorLocation::LEFT_FRONT:
+            return get_left_front_speed_counter();
+
+        case MotorLocation::RIGHT_REAR:
+            return get_right_rear_speed_counter();
+
+        case MotorLocation::LEFT_REAR:
+            return get_left_rear_speed_counter();
+    }
+    return 0;
+}
+
 void MotorPlugin::cycle ()
 {
     const unsigned long now = millis();
     const unsigned long delta_ms = now - last_cycle_ms;
-    const long raw_speed_ticks =
-            (location == MotorLocation::RIGHT) ? get_right_speed_counter() : get_left_speed_counter();
+    const long raw_speed_ticks = get_raw_ticks();
     const long measured_speed_counter = sign(desired_velocity) * raw_speed_ticks;
     const long speed_ticks = measured_speed_counter - speed_counter;
     if (delta_ms > minimum_cycle_ms || abs(speed_ticks) > minimum_speed_ticks)
@@ -247,9 +306,11 @@ void MotorPlugin::cycle ()
         measured_velocity = measured_distance / delta_seconds;
         if (abs(measured_velocity) > 0)
         {
-            logger.data() << F("/motor/") << stringify(location).c_str() << F("/delta_seconds,")
-                    << delta_seconds << F(",speed_counter,") << speed_counter << F(",measured_velocity,")
-                    << measured_velocity << F(",measured_distance,") << measured_distance << std::endl;
+            logger.info() << F("/motor/") << stringify(location).c_str() << F("/delta_seconds,") << delta_seconds
+                    << F(",speed_counter,") << speed_counter << F(",measured_velocity,") << measured_velocity
+                    << F(",measured_distance,") << measured_distance
+                    << F(",raw_speed_ticks,") << raw_speed_ticks <<
+                    std::endl;
         }
         if (auto_velocity)
         {
@@ -263,10 +324,9 @@ void MotorPlugin::cycle ()
                             + smallness * velocity_error * k3);
             // No reversing
             const float control = desired_velocity >= 0.0f ? std::max(0.0f, control_raw) : std::min(0.0f, control_raw);
-            logger.data() << F("/motor/") << stringify(location).c_str() << F("/velocity_error,")
-                    << velocity_error << F(",cumulative_velocity_error,") << cumulative_velocity_error
-                    << F(",velocity_error_rate,") << velocity_error_rate << F(",smallness,") << smallness
-                    << F(",control,") << control << std::endl;
+            logger.data() << F("/motor/") << stringify(location).c_str() << F("/velocity_error,") << velocity_error
+                    << F(",cumulative_velocity_error,") << cumulative_velocity_error << F(",velocity_error_rate,")
+                    << velocity_error_rate << F(",smallness,") << smallness << F(",control,") << control << std::endl;
             set_speed(control);
         }
         last_cycle_ms = now;

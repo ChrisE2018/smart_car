@@ -50,8 +50,8 @@ void UltrasoundPlugin::cycle ()
         if (distance < 10)
         {
             bool did_stop = false;
-            MotorPlugin &right_motor = car.get_motor(MotorLocation::RIGHT);
-            MotorPlugin &left_motor = car.get_motor(MotorLocation::LEFT);
+            MotorPlugin &right_motor = car.get_motor(MotorLocation::RIGHT_FRONT);
+            MotorPlugin &left_motor = car.get_motor(MotorLocation::LEFT_FRONT);
             // Only stop if moving forward toward the obstacle.
             if (right_motor.get_measured_velocity() > 0)
             {

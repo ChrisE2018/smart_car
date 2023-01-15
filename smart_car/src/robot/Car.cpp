@@ -43,8 +43,10 @@ Car::Car () :
     available_plugins.push_back(reverse_plugin);
     available_plugins.push_back(clockwise_plugin);
     available_plugins.push_back(counterclockwise_plugin);
-    available_plugins.push_back(&motors[static_cast<int>(MotorLocation::RIGHT)]);
-    available_plugins.push_back(&motors[static_cast<int>(MotorLocation::LEFT)]);
+    available_plugins.push_back(&motors[static_cast<int>(MotorLocation::RIGHT_FRONT)]);
+    available_plugins.push_back(&motors[static_cast<int>(MotorLocation::LEFT_FRONT)]);
+    available_plugins.push_back(&motors[static_cast<int>(MotorLocation::RIGHT_REAR)]);
+    available_plugins.push_back(&motors[static_cast<int>(MotorLocation::LEFT_REAR)]);
     available_plugins.push_back(mpu_plugin);
     available_plugins.push_back(kalman_plugin);
     available_plugins.push_back(odom_plugin);
@@ -308,7 +310,7 @@ MotorPlugin& Car::get_motor (const MotorLocation motor)
 
 void Car::drive_stop (const MotorLocation motor)
 {
-    if (motor == MotorLocation::RIGHT || motor == MotorLocation::LEFT)
+    if (motor == MotorLocation::RIGHT_FRONT || motor == MotorLocation::LEFT_FRONT)
     {
         motors[static_cast<int>(motor)].drive_stop();
     }
@@ -357,7 +359,7 @@ MotorDirection Car::get_drive_direction (const MotorLocation motor) const
 
 void Car::drive_forward (const MotorLocation motor, const int speed)
 {
-    if (motor == MotorLocation::RIGHT || motor == MotorLocation::LEFT)
+    if (motor == MotorLocation::RIGHT_FRONT || motor == MotorLocation::LEFT_FRONT)
     {
         motors[static_cast<int>(motor)].drive_forward(speed);
     }
@@ -365,7 +367,7 @@ void Car::drive_forward (const MotorLocation motor, const int speed)
 
 void Car::drive_reverse (const MotorLocation motor, const int speed)
 {
-    if (motor == MotorLocation::RIGHT || motor == MotorLocation::LEFT)
+    if (motor == MotorLocation::RIGHT_FRONT || motor == MotorLocation::LEFT_FRONT)
     {
         motors[static_cast<int>(motor)].drive_reverse(speed);
     }
@@ -449,10 +451,14 @@ Plugin* Car::get_plugin (const PluginId id) const
             return goal_plugin;
         case PluginId::KALMAN_PLUGIN:
             return kalman_plugin;
-        case PluginId::MOTOR_RIGHT_PLUGIN:
-            return &motors[static_cast<int>(MotorLocation::RIGHT)];
-        case PluginId::MOTOR_LEFT_PLUGIN:
-            return &motors[static_cast<int>(MotorLocation::LEFT)];
+        case PluginId::MOTOR_RIGHT_FRONT_PLUGIN:
+            return &motors[static_cast<int>(MotorLocation::RIGHT_FRONT)];
+        case PluginId::MOTOR_LEFT_FRONT_PLUGIN:
+            return &motors[static_cast<int>(MotorLocation::LEFT_FRONT)];
+        case PluginId::MOTOR_RIGHT_REAR_PLUGIN:
+            return &motors[static_cast<int>(MotorLocation::RIGHT_REAR)];
+        case PluginId::MOTOR_LEFT_REAR_PLUGIN:
+            return &motors[static_cast<int>(MotorLocation::LEFT_REAR)];
         case PluginId::MPU_PLUGIN:
             return mpu_plugin;
         case PluginId::ODOM_PLUGIN:
