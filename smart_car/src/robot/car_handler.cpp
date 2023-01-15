@@ -29,7 +29,8 @@ void Car::execute_command (const std::vector<String> &words)
         if (n > 1)
         {
             set_mode(Mode::GOAL_MODE);
-            goal_plugin->set_goal(words[1].toFloat());
+            const float goal = words[1].toFloat();
+            goal_plugin->set_goal(goal);
         }
     }
     else if (command == F("b"))
@@ -268,7 +269,7 @@ void Car::execute_command (const std::vector<String> &words)
     }
 }
 
-void Car::help_command () const
+void Car::help_command ()
 {
     logger.info(__LINE__) << F("Robot ") << *this << std::endl;
     long d = ultrasound_plugin->get_distance();

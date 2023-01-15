@@ -6,9 +6,10 @@
 	- behavior trees?
 * Motor control to run for a specified distance or distance/time curve
 	- Control input to kalman filter?
-* Consider removing cycle schedule
-* Schedule multiple plugins in one cycle - define PluginId for each combination
-* Detect skipped cycles
+* Use state for MotorPlugin::auto_velocity flag and control of ultrasound mode
+* New sketch to figure out plotter
+* auto_velocity sometimes stops at drive RIGHT STOP at 0 power 0.00 mps (but did not cancel)
+* auto_velocity sometimes races in reverse
 
 PHYSICAL
 * Work on GPS
@@ -45,3 +46,8 @@ DONE DONE DONE
 * Separate data logger for real time variables w/plotter tools
 	- logstream : message
 * Plugin needs a cycle_trace method to keep logging from causing overruns
+
+1/15/2023
+* Consider removing cycle schedule
+* Schedule multiple plugins in one cycle - define PluginId for each combination
+* Detect skipped cycles

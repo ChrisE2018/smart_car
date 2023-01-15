@@ -116,7 +116,7 @@ class Car: public Executor
         void schedule_cycle ();
         void simple_cycle ();
         void command_cycle ();
-        void help_command () const;
+        void help_command () ;
         Plugin* get_plugin (const PluginId id) const;
         int get_actual_interval (const int cycle, const PluginId id) const;
 };

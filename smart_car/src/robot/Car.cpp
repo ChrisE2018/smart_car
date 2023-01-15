@@ -332,12 +332,7 @@ void Car::drive (const MotorLocation motor, const int speed)
 
 int Car::get_drive_speed (const MotorLocation motor) const
 {
-    const int speed = motors[static_cast<int>(motor)].get_speed();
-    if (motors[static_cast<int>(motor)].get_direction() == MotorDirection::REVERSE)
-    {
-        return -speed;
-    }
-    return speed;
+    return motors[static_cast<int>(motor)].get_speed();
 }
 
 float Car::get_measured_velocity (const MotorLocation motor) const
