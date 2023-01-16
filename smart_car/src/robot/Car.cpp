@@ -194,7 +194,7 @@ void Car::cycle ()
     }
     else
     {
-        schedule_cycle ();
+        schedule_cycle();
     }
 }
 
@@ -310,10 +310,7 @@ MotorPlugin& Car::get_motor (const MotorLocation motor)
 
 void Car::drive_stop (const MotorLocation motor)
 {
-    if (motor == MotorLocation::RIGHT_FRONT || motor == MotorLocation::LEFT_FRONT)
-    {
-        motors[static_cast<int>(motor)].drive_stop();
-    }
+    motors[static_cast<int>(motor)].drive_stop();
 }
 
 void Car::drive (const MotorLocation motor, const int speed)
@@ -359,18 +356,12 @@ MotorDirection Car::get_drive_direction (const MotorLocation motor) const
 
 void Car::drive_forward (const MotorLocation motor, const int speed)
 {
-    if (motor == MotorLocation::RIGHT_FRONT || motor == MotorLocation::LEFT_FRONT)
-    {
-        motors[static_cast<int>(motor)].drive_forward(speed);
-    }
+    motors[static_cast<int>(motor)].drive_forward(speed);
 }
 
 void Car::drive_reverse (const MotorLocation motor, const int speed)
 {
-    if (motor == MotorLocation::RIGHT_FRONT || motor == MotorLocation::LEFT_FRONT)
-    {
-        motors[static_cast<int>(motor)].drive_reverse(speed);
-    }
+    motors[static_cast<int>(motor)].drive_reverse(speed);
 }
 
 ClockPlugin* Car::get_clock_plugin () const

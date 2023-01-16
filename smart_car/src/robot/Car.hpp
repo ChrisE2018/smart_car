@@ -108,8 +108,8 @@ class Car: public Executor
         static constexpr int right_front_in2 = 42; // orange = in2
         static constexpr int right_rear_in3 = 41; // purple = in3
         static constexpr int right_rear_in4 = 40; // gray = in4
-        static constexpr int right_front_enA = 39; // gray = enA
-        static constexpr int right_rear_enB = 38; // green = enB
+        static constexpr int right_front_enA = 5; // gray = enA
+        static constexpr int right_rear_enB = 6; // green = enB
 
         static constexpr int DISABLED_LED = 99;
 

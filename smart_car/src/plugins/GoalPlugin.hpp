@@ -25,7 +25,7 @@ class GoalPlugin : public Plugin
 
     private:
         Car &car;
-        const float angle_tolerance = 0.01;
+        const float angle_tolerance = 0.05;
         const float angle_desired_velocity = 1.0;
         const float medium_speed_angle = 0.3;
         const float slow_speed_angle = 0.2;
