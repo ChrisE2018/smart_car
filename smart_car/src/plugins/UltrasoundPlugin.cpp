@@ -16,7 +16,7 @@ static Logger logger(__FILE__, Level::info);
 UltrasoundPlugin::UltrasoundPlugin (Car &car) :
         car(car), Plugin(PluginId::ULTRASOUND_PLUGIN), sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)
 {
-    set_enabled(false);
+    set_state(static_cast<int>(UltrasoundState::INACTIVE));
 }
 
 int UltrasoundPlugin::get_preferred_interval () const
@@ -29,11 +29,6 @@ int UltrasoundPlugin::get_expected_us () const
     return 2800;
 }
 
-bool UltrasoundPlugin::is_cyclic () const
-{
-    return true;
-}
-
 long UltrasoundPlugin::get_distance () const
 {
     return distance;
@@ -41,31 +36,31 @@ long UltrasoundPlugin::get_distance () const
 
 void UltrasoundPlugin::cycle ()
 {
-    // This method is not const and includes a 25 ms delay.
-    // That line has been commented out in the library routine.
-    //distance = sr04.Distance();
-
-    if (false && is_enabled())
+    UltrasoundState state = get_state();
+    if (state != UltrasoundState::INACTIVE)
     {
-        if (distance < 10)
+        // This method is not const and includes a 25 ms delay.
+        // That line has been commented out in the library routine.
+        distance = sr04.Distance();
+        if (state == UltrasoundState::BLOCKING)
         {
-            bool did_stop = false;
-            MotorPlugin &right_motor = car.get_motor(MotorLocation::RIGHT_FRONT);
-            MotorPlugin &left_motor = car.get_motor(MotorLocation::LEFT_FRONT);
-            // Only stop if moving forward toward the obstacle.
-            if (right_motor.get_measured_velocity() > 0)
+            if (distance < blocking_distance)
             {
-                did_stop = true;
-                right_motor.drive_stop();
-            }
-            if (left_motor.get_measured_velocity() > 0)
-            {
-                did_stop = true;
-                left_motor.drive_stop();
-            }
-            if (did_stop)
-            {
-                LOG_INFO(logger, "Stopped due to object at %d cm", distance);
+                bool did_stop = false;
+                for (int m = 0; m < MOTOR_COUNT; m++)
+                {
+                    MotorPlugin &motor = car.get_motor(static_cast<MotorLocation>(m));
+                    // Only stop if moving forward toward the obstacle.
+                    if (motor.get_measured_velocity() > 0)
+                    {
+                        did_stop = true;
+                        motor.drive_stop();
+                    }
+                }
+                if (did_stop)
+                {
+                    LOG_INFO(logger, "Stopped due to object at %d cm", distance);
+                }
             }
         }
     }

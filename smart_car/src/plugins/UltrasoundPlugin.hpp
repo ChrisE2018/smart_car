@@ -16,13 +16,17 @@ const int ULTRASOUND_ECHO = 11;     // green
 
 class Car;
 
-class UltrasoundPlugin : public Plugin
+enum UltrasoundState
+{
+    INACTIVE, READING, BLOCKING
+};
+
+class UltrasoundPlugin: public Plugin
 {
     public:
         UltrasoundPlugin (Car &car);
         virtual int get_preferred_interval () const;
         virtual int get_expected_us () const;
-        virtual bool is_cyclic () const;
         long get_distance () const;
         virtual void cycle () override;
         virtual void trace () override;
@@ -31,5 +35,6 @@ class UltrasoundPlugin : public Plugin
         Car &car;
         SR04 sr04;
         long distance = 0;
+        static constexpr int blocking_distance = 10; // centimeters
 };
 
