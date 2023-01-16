@@ -306,7 +306,7 @@ void MotorPlugin::cycle ()
         measured_velocity = measured_distance / delta_seconds;
         if (abs(measured_velocity) > 0)
         {
-            logger.info() << F("/motor/") << stringify(location).c_str() << F("/delta_seconds,") << delta_seconds
+            logger.data() << F("/motor/") << stringify(location).c_str() << F("/delta_seconds,") << delta_seconds
                     << F(",speed_counter,") << speed_counter << F(",measured_velocity,") << measured_velocity
                     << F(",measured_distance,") << measured_distance
                     << F(",raw_speed_ticks,") << raw_speed_ticks <<
