@@ -10,7 +10,6 @@
 * New sketch to figure out plotter
 * auto_velocity sometimes stops at drive RIGHT STOP at 0 power 0.00 mps (but did not cancel)
 * auto_velocity sometimes races in reverse
-* Eliminate clockwise and counterclockwise plugins
 
 PHYSICAL
 * Work on GPS
@@ -54,3 +53,6 @@ DONE DONE DONE
 * Fix breadboard in position
 	- Try to cut clear disk (done)
 	- drill holes
+
+1/16/2023
+* Eliminate clockwise and counterclockwise plugins

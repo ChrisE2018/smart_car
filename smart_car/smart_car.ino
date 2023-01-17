@@ -38,6 +38,8 @@ void setup ()
     car->demo_drive_leds();
     setup_speed_counter();
     print_heap_state();
+    Serial.print(F("C++ version "));
+    Serial.println(__cplusplus);
     Serial.println(F("Ready"));
     Serial.println();
 //    robot_appender->enable_usb_logger(false);
