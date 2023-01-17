@@ -21,7 +21,7 @@ class GoalPlugin : public Plugin
         bool setup ();
         virtual int get_preferred_interval () const;
         virtual int get_expected_us () const;
-        void cycle ();
+        virtual void cycle () override;
 
     private:
         Car &car;

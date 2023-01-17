@@ -16,7 +16,7 @@ static Logger logger(__FILE__, Level::info);
 UltrasoundPlugin::UltrasoundPlugin (Car &car) :
         car(car), Plugin(PluginId::ULTRASOUND_PLUGIN), sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)
 {
-    set_state(static_cast<int>(UltrasoundState::INACTIVE));
+    set_state(Plugin::DISABLE);
 }
 
 int UltrasoundPlugin::get_preferred_interval () const
@@ -36,13 +36,13 @@ long UltrasoundPlugin::get_distance () const
 
 void UltrasoundPlugin::cycle ()
 {
-    UltrasoundState state = get_state();
-    if (state != UltrasoundState::INACTIVE)
+    const int state = get_state();
+    if (state != Plugin::DISABLE)
     {
         // This method is not const and includes a 25 ms delay.
         // That line has been commented out in the library routine.
         distance = sr04.Distance();
-        if (state == UltrasoundState::BLOCKING)
+        if (state == BLOCKING)
         {
             if (distance < blocking_distance)
             {

@@ -36,6 +36,9 @@ std::ostream& operator<< (std::ostream &lhs, const PluginId id);
 class Plugin
 {
     public:
+        static constexpr int DISABLE = 0;
+        static constexpr int ENABLE = 1;
+
         Plugin (const PluginId id);
         virtual ~Plugin ();
 
@@ -65,7 +68,7 @@ class Plugin
         const PluginId id;
         bool enable = false;
         bool enable_trace = false;
-        int state = 0;
+        int state = DISABLE;
         unsigned long cycle_count = 0;
         unsigned long overrun_count = 0;
         unsigned long cycle_start_micros = 0;

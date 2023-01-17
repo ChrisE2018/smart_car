@@ -16,14 +16,11 @@ const int ULTRASOUND_ECHO = 11;     // green
 
 class Car;
 
-enum UltrasoundState
-{
-    INACTIVE, READING, BLOCKING
-};
-
 class UltrasoundPlugin: public Plugin
 {
     public:
+        static constexpr int READING = 2;
+        static constexpr int BLOCKING = 3;
         UltrasoundPlugin (Car &car);
         virtual int get_preferred_interval () const;
         virtual int get_expected_us () const;
