@@ -121,6 +121,17 @@ int Plugin::get_expected_us () const
     return 25;
 }
 
+void Plugin::major_cycle ()
+{
+    start_cycle();
+    cycle();
+    end_cycle();
+    if (enable_trace)
+    {
+        trace();
+    }
+}
+
 void Plugin::cycle ()
 {
 }

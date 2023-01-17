@@ -56,6 +56,7 @@ class Plugin
         virtual void set_enabled (const bool enable);
         bool is_trace () const;
         void set_trace (const bool enable);
+        void major_cycle ();
         virtual void cycle ();
         void start_cycle ();
         void end_cycle ();

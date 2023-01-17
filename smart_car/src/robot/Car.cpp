@@ -207,13 +207,7 @@ void Car::schedule_cycle ()
         Plugin *const plugin = get_plugin(scheduled_plugin);
         if (plugin != nullptr)
         {
-            plugin->start_cycle();
-            plugin->cycle();
-            plugin->end_cycle();
-            if (plugin->is_trace())
-            {
-                plugin->trace();
-            }
+            plugin->major_cycle();
         }
     }
 
@@ -227,13 +221,7 @@ void Car::simple_cycle ()
 
     for (Plugin *const plugin : plugins)
     {
-        plugin->start_cycle();
-        plugin->cycle();
-        plugin->end_cycle();
-        if (plugin->is_trace())
-        {
-            plugin->trace();
-        }
+        plugin->major_cycle();
     }
     command_cycle();
 
