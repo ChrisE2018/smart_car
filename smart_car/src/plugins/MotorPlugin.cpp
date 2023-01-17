@@ -9,6 +9,7 @@
 
 #include "../logging/RobotAppender.hpp"
 #include "smart_car.hpp"
+#include "../robot/speed_counter.hpp"
 
 #include "../logging/Logger.hpp"
 
@@ -138,6 +139,16 @@ void MotorPlugin::set_speed (const int speed)
     {
         drive_zero_speed();
     }
+}
+
+void MotorPlugin::set_limit (const unsigned long limit,  const int value)
+{
+    set_speed_counter_limit(location, limit, enable_pin, value);
+}
+
+void MotorPlugin::set_delta_limit (const unsigned long delta, const int value)
+{
+    set_speed_counter_delta_limit(location, delta, enable_pin, value);
 }
 
 void MotorPlugin::drive_forward (const int _speed)

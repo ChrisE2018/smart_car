@@ -71,6 +71,12 @@ Plugin::~Plugin ()
 {
 }
 
+std::ostream& operator<< (std::ostream &lhs, const Plugin &plugin)
+{
+    lhs << "#[" << stringify(plugin.id).c_str() << " state " << plugin.state << " cycles " << plugin.cycle_count << "]";
+    return lhs;
+}
+
 const PluginId Plugin::get_id () const
 {
     return id;
@@ -189,6 +195,7 @@ int Plugin::get_state () const
 void Plugin::set_state (const int _state)
 {
     exit_state(state);
+    state = _state;
     enter_state(_state);
 }
 

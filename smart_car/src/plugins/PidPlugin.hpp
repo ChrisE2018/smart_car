@@ -15,7 +15,7 @@ class Car;
 class PidPlugin: public Plugin
 {
     public:
-        PidPlugin (const PluginId id, MotorPlugin & motor_plugin);
+        PidPlugin (const PluginId id, MotorPlugin &motor_plugin);
         friend std::ostream& operator<< (std::ostream &lhs, const PidPlugin &motor);
         MotorLocation get_location () const;
         unsigned long get_speed_counter () const;
@@ -38,11 +38,6 @@ class PidPlugin: public Plugin
         static constexpr int minimum_cycle_ms = 100;
         static constexpr int minimum_speed_ticks = 10;
 
-        // 55 mm wheels
-        // 20 encoder slots per revolution
-        // meters-per-micro = PI *diameter / encoder_slots
-        static constexpr double count_to_meters_per_second = M_PI * 0.055 / 20.0;
-
         static constexpr float k0 = 0.45 * SPEED_FULL;
         static constexpr float k1 = 0.15; //0.30;
         static constexpr float k2 = -0.01;
@@ -57,6 +52,5 @@ class PidPlugin: public Plugin
         float cumulative_velocity_error = 0;
         // Only returns +1 or -1 unlike signum
         int sign (const float direction) const;
-        int get_raw_ticks () const;
 };
 

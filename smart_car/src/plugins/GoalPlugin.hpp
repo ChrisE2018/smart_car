@@ -25,7 +25,19 @@ class GoalPlugin : public Plugin
         virtual int get_expected_us () const;
         virtual void cycle () override;
 
+        /* Rotation distance calculation.
+         * a = 11 cm wheel distance front to back center to center
+         * b = 13 cm = wheel distance side to side center to center
+         * D = diagonal wheel distance
+         * a^2 + b^2 == D^2
+         * 290 = D^2
+         * D = 17 // cm
+         * Assume it is a circle
+         * P = 53.4 cm = perimeter = pi * D = distance wheels move in one full circle in place
+         */
     private:
+        static constexpr float rotation_perimeter = M_PI * 0.17; // meters
+
         Car &car;
         const float angle_tolerance = 0.05;
         const float angle_desired_velocity = 1.0;
@@ -40,7 +52,6 @@ class GoalPlugin : public Plugin
         float goal_x = 0;
         float goal_y = 0;
         void angle_cycle (const float measured_angle, const float desired_angle);
-        void angle_step (const float measured_angle, const float desired_angle, const float delta);
         void position_cycle (const float measured_angle, const float measured_x,
                 const float measured_y, const float desired_x, const float desired_y);
         void position_step (const float measured_angle, const float measured_x,

@@ -7,6 +7,7 @@
 
 #include "../robot/Car.hpp"
 #include "../robot/robot_math.hpp"
+#include "../robot/speed_counter.hpp"
 #include "GoalPlugin.hpp"
 #include "KalmanPlugin.hpp"
 #include "MpuPlugin.hpp"
@@ -83,11 +84,7 @@ void GoalPlugin::cycle ()
 void GoalPlugin::angle_cycle (const float measured_angle, const float desired_angle)
 {
     const float delta = angle_delta(desired_angle, measured_angle);
-    if (abs(delta) > angle_tolerance)
-    {
-        angle_step(measured_angle, desired_angle, delta);
-    }
-    else
+    if (abs(delta) < angle_tolerance)
     {
         logger.info(__LINE__) << "Car " << car << " at " << measured_angle << " is goal angle " << desired_angle
                 << std::endl;
@@ -97,29 +94,33 @@ void GoalPlugin::angle_cycle (const float measured_angle, const float desired_an
         car.drive_stop(MotorLocation::LEFT_REAR);
         set_state(DISABLE);
     }
-}
-
-void GoalPlugin::angle_step (const float measured_angle, const float desired_angle, const float delta)
-{
-    MpuPlugin *const mpu_plugin = car.get_mpu_plugin();
-    const float yaw = mpu_plugin->get_yaw();
-    if (delta > 0)
+    else
     {
-        logger.info(__LINE__) << yaw << "=yaw Clockwise from " << measured_angle << " by " << delta << " to goal angle "
-                << desired_angle << std::endl;
-        car.set_desired_velocity(MotorLocation::RIGHT_FRONT, -angle_desired_velocity);
-        car.set_desired_velocity(MotorLocation::RIGHT_REAR, -angle_desired_velocity);
-        car.set_desired_velocity(MotorLocation::LEFT_FRONT, angle_desired_velocity);
-        car.set_desired_velocity(MotorLocation::LEFT_REAR, angle_desired_velocity);
-    }
-    else if (delta < 0)
-    {
-        logger.info(__LINE__) << yaw << "=yaw Counterclockwise from " << measured_angle << " by " << delta
-                << " to goal angle " << desired_angle << std::endl;
-        car.set_desired_velocity(MotorLocation::RIGHT_FRONT, angle_desired_velocity);
-        car.set_desired_velocity(MotorLocation::RIGHT_REAR, angle_desired_velocity);
-        car.set_desired_velocity(MotorLocation::LEFT_FRONT, -angle_desired_velocity);
-        car.set_desired_velocity(MotorLocation::LEFT_REAR, -angle_desired_velocity);
+        if (delta > 0)
+        {
+            logger.info(__LINE__) << measured_angle << "=yaw Clockwise from " << measured_angle << " by " << delta
+                    << " to goal angle " << desired_angle << std::endl;
+            car.set_desired_velocity(MotorLocation::RIGHT_FRONT, -angle_desired_velocity);
+            car.set_desired_velocity(MotorLocation::RIGHT_REAR, -angle_desired_velocity);
+            car.set_desired_velocity(MotorLocation::LEFT_FRONT, angle_desired_velocity);
+            car.set_desired_velocity(MotorLocation::LEFT_REAR, angle_desired_velocity);
+        }
+        else if (delta < 0)
+        {
+            logger.info(__LINE__) << measured_angle << "=yaw Counterclockwise from " << measured_angle << " by "
+                    << delta << " to goal angle " << desired_angle << std::endl;
+            car.set_desired_velocity(MotorLocation::RIGHT_FRONT, angle_desired_velocity);
+            car.set_desired_velocity(MotorLocation::RIGHT_REAR, angle_desired_velocity);
+            car.set_desired_velocity(MotorLocation::LEFT_FRONT, -angle_desired_velocity);
+            car.set_desired_velocity(MotorLocation::LEFT_REAR, -angle_desired_velocity);
+        }
+        const float yaw_perimeter_meters = abs(measured_angle) * rotation_perimeter / 2.0 * M_PI; // meters
+        const unsigned long delta_ticks = yaw_perimeter_meters / (2.0 * count_to_meters);
+        logger.info(__LINE__) << "perimeter " << yaw_perimeter_meters << " speed ticks " << delta_ticks << std::endl;
+        car.get_motor(RIGHT_FRONT).set_delta_limit(delta_ticks, 0);
+        car.get_motor(RIGHT_REAR).set_delta_limit(delta_ticks, 0);
+        car.get_motor(LEFT_FRONT).set_delta_limit(delta_ticks, 0);
+        car.get_motor(LEFT_REAR).set_delta_limit(delta_ticks, 0);
     }
 }
 
@@ -160,7 +161,7 @@ void GoalPlugin::position_step (const float measured_angle, const float measured
 
     if (abs_delta_angle >= 1.0 || abs_delta_angle > distance)
     {
-        angle_step(measured_angle, desired_angle, delta_angle);
+        angle_cycle(measured_angle, desired_angle);
     }
     else if (abs_delta_angle < angle_tolerance)
     {

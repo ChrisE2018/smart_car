@@ -275,6 +275,7 @@ void Car::all_stop ()
     forward_plugin->set_enabled(false);
     reverse_plugin->set_enabled(false);
     goal_plugin->set_enabled(false);
+    goal_plugin->set_state(Plugin::DISABLE);
 }
 
 const MotorPlugin& Car::get_motor (const MotorLocation motor) const

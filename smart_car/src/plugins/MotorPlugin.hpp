@@ -52,6 +52,8 @@ class MotorPlugin: public Plugin
         MotorDirection get_direction () const;
         int get_speed () const;
         void set_speed (const int speed);
+        void set_limit(const unsigned long limit, const int value);
+        void set_delta_limit(const unsigned long delta, const int value);
 
     private:
         static constexpr int DISABLED_LED = 99;

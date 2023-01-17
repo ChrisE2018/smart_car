@@ -34,7 +34,6 @@ enum PluginId : unsigned char
 };
 
 const std::string stringify (const PluginId id);
-
 std::ostream& operator<< (std::ostream &lhs, const PluginId id);
 
 class Plugin
@@ -45,6 +44,7 @@ class Plugin
 
         Plugin (const PluginId id);
         virtual ~Plugin ();
+        friend std::ostream& operator<< (std::ostream &lhs, const Plugin& plugin);
 
         const PluginId get_id () const;
         virtual bool setup ();

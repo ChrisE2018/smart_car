@@ -51,8 +51,6 @@ float PidPlugin::get_desired_velocity () const
     return desired_velocity;
 }
 
-// [TODO] Set max time, max distance
-// [TODO] set_desired_distance (leave velocity unspecified)
 void PidPlugin::set_desired_velocity (const float _desired_velocity)
 {
     auto_velocity = true;
@@ -75,7 +73,7 @@ void PidPlugin::cancel_auto_velocity ()
 void PidPlugin::drive_stop ()
 {
     motor_plugin.set_speed(0);
-    cancel_auto_velocity ();
+    cancel_auto_velocity();
     LOG_INFO(logger, "drive_stop %s", stringify(location).c_str());
 }
 
@@ -103,30 +101,11 @@ int PidPlugin::sign (const float direction) const
     return 1;
 }
 
-int PidPlugin::get_raw_ticks () const
-{
-    switch (location)
-    {
-        case MotorLocation::RIGHT_FRONT:
-            return get_right_front_speed_counter();
-
-        case MotorLocation::LEFT_FRONT:
-            return get_left_front_speed_counter();
-
-        case MotorLocation::RIGHT_REAR:
-            return get_right_rear_speed_counter();
-
-        case MotorLocation::LEFT_REAR:
-            return get_left_rear_speed_counter();
-    }
-    return 0;
-}
-
 void PidPlugin::cycle ()
 {
     const unsigned long now = millis();
     const unsigned long delta_ms = now - last_cycle_ms;
-    const long raw_speed_ticks = get_raw_ticks();
+    const long raw_speed_ticks = get_speed_counter_value(location);
     const long measured_speed_counter = sign(desired_velocity) * raw_speed_ticks;
     const long speed_ticks = measured_speed_counter - speed_counter;
     if (delta_ms > minimum_cycle_ms || abs(speed_ticks) > minimum_speed_ticks)
@@ -134,7 +113,7 @@ void PidPlugin::cycle ()
         const float delta_seconds = delta_ms * 0.001;
         const long previous_speed_counter = speed_counter;
         speed_counter = measured_speed_counter;
-        const double measured_distance = speed_ticks * count_to_meters_per_second;
+        const double measured_distance = speed_ticks * count_to_meters;
         measured_velocity = measured_distance / delta_seconds;
         if (abs(measured_velocity) > 0)
         {
