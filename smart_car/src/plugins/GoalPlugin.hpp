@@ -14,6 +14,8 @@ class Car;
 class GoalPlugin : public Plugin
 {
     public:
+        static constexpr int ADJUST_ANGLE = 3;
+        static constexpr int ADJUST_POSITION = 4;
         GoalPlugin (Car &Car);
 
         void set_goal (const float angle);
@@ -29,12 +31,12 @@ class GoalPlugin : public Plugin
         const float angle_desired_velocity = 1.0;
         const float medium_speed_angle = 0.3;
         const float slow_speed_angle = 0.2;
-        bool adjust_angle = false;
+
         float goal_angle = 0;
         const float position_tolerance = 0.05;
         const float slow_speed_distance = 0.25;
         const float medium_speed_distance = 0.5;
-        bool adjust_position = false;
+
         float goal_x = 0;
         float goal_y = 0;
         void angle_cycle (const float measured_angle, const float desired_angle);

@@ -107,6 +107,37 @@ void MotorPlugin::led_demo (const int duration) const
     }
 }
 
+MotorLocation MotorPlugin::get_location () const
+{
+    return location;
+}
+
+MotorDirection MotorPlugin::get_direction () const
+{
+    return direction;
+}
+
+int MotorPlugin::get_speed () const
+{
+    return speed;
+}
+
+void MotorPlugin::set_speed (const int speed)
+{
+    if (speed > 0)
+    {
+        drive_forward(std::min(SPEED_FULL, speed));
+    }
+    else if (speed < 0)
+    {
+        drive_reverse(std::max(-SPEED_FULL, speed));
+    }
+    else
+    {
+        drive_zero_speed();
+    }
+}
+
 void MotorPlugin::drive_forward (const int _speed)
 {
     if (direction != MotorDirection::FORWARD || speed != _speed)
@@ -179,37 +210,6 @@ void MotorPlugin::drive_zero_speed ()
         analogWrite(enable_pin, LOW);
         cout << "drive " << location << " " << direction << " at " << speed << " power " << measured_velocity << " mps"
                 << " cve: " << cumulative_velocity_error << std::endl;
-    }
-}
-
-MotorLocation MotorPlugin::get_location () const
-{
-    return location;
-}
-
-MotorDirection MotorPlugin::get_direction () const
-{
-    return direction;
-}
-
-int MotorPlugin::get_speed () const
-{
-    return speed;
-}
-
-void MotorPlugin::set_speed (const int speed)
-{
-    if (speed > 0)
-    {
-        drive_forward(std::min(SPEED_FULL, speed));
-    }
-    else if (speed < 0)
-    {
-        drive_reverse(std::max(-SPEED_FULL, speed));
-    }
-    else
-    {
-        drive_zero_speed();
     }
 }
 
@@ -308,9 +308,8 @@ void MotorPlugin::cycle ()
         {
             logger.data() << F("/motor/") << stringify(location).c_str() << F("/delta_seconds,") << delta_seconds
                     << F(",speed_counter,") << speed_counter << F(",measured_velocity,") << measured_velocity
-                    << F(",measured_distance,") << measured_distance
-                    << F(",raw_speed_ticks,") << raw_speed_ticks <<
-                    std::endl;
+                    << F(",measured_distance,") << measured_distance << F(",raw_speed_ticks,") << raw_speed_ticks
+                    << std::endl;
         }
         if (auto_velocity)
         {

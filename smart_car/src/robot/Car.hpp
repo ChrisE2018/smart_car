@@ -44,14 +44,14 @@ class Car: public Executor
         const MotorPlugin& get_motor (const MotorLocation motor) const;
         MotorPlugin& get_motor (const MotorLocation motor);
         void drive_stop (const MotorLocation motor);
-        void drive (const MotorLocation motor, const int speed);
+        void set_speed (const MotorLocation motor, const int speed);
+        void set_right_speed (const int speed);
+        void set_left_speed (const int speed);
         int get_drive_speed (const MotorLocation motor) const;
         float get_measured_velocity (const MotorLocation motor) const;
         float get_desired_velocity (const MotorLocation motor) const;
         void set_desired_velocity (const MotorLocation motor, const float velocity);
         MotorDirection get_drive_direction (const MotorLocation motor) const;
-        void drive_forward (const MotorLocation motor, const int speed);
-        void drive_reverse (const MotorLocation motor, const int speed);
 
         ClockPlugin* get_clock_plugin () const;
         DrivePlugin* get_forward_plugin () const;

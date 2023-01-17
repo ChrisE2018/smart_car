@@ -47,13 +47,11 @@ class MotorPlugin: public Plugin
         friend std::ostream& operator<< (std::ostream &lhs, const MotorPlugin &motor);
         bool setup ();
         void led_demo (const int duration) const;
-        void drive_forward (const int speed);
-        void drive_reverse (const int speed);
-        void drive_stop ();
         MotorLocation get_location () const;
         MotorDirection get_direction () const;
         int get_speed () const;
         void set_speed (const int speed);
+        void drive_stop ();
         unsigned long get_speed_counter () const;
         float get_measured_velocity () const;
         float get_desired_velocity () const;
@@ -97,6 +95,8 @@ class MotorPlugin: public Plugin
         long speed_counter = 0;
         float velocity_error = 0;
         float cumulative_velocity_error = 0;
+        void drive_forward (const int speed);
+        void drive_reverse (const int speed);
         void drive_zero_speed ();
 
         // Only returns +1 or -1 unlike signum

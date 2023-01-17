@@ -299,20 +299,21 @@ void Car::drive_stop (const MotorLocation motor)
     motors[static_cast<int>(motor)].drive_stop();
 }
 
-void Car::drive (const MotorLocation motor, const int speed)
+void Car::set_speed (const MotorLocation motor, const int speed)
 {
-    if (speed > 0)
-    {
-        motors[static_cast<int>(motor)].drive_forward(speed);
-    }
-    else if (speed < 0)
-    {
-        motors[static_cast<int>(motor)].drive_reverse(-speed);
-    }
-    else
-    {
-        motors[static_cast<int>(motor)].drive_stop();
-    }
+    motors[static_cast<int>(motor)].set_speed(speed);
+}
+
+void Car::set_right_speed (const int speed)
+{
+    motors[MotorLocation::RIGHT_FRONT].set_speed(speed);
+    motors[MotorLocation::RIGHT_REAR].set_speed(speed);
+}
+
+void Car::set_left_speed (const int speed)
+{
+    motors[MotorLocation::LEFT_FRONT].set_speed(speed);
+    motors[MotorLocation::LEFT_REAR].set_speed(speed);
 }
 
 int Car::get_drive_speed (const MotorLocation motor) const
@@ -338,16 +339,6 @@ void Car::set_desired_velocity (const MotorLocation motor, const float velocity)
 MotorDirection Car::get_drive_direction (const MotorLocation motor) const
 {
     return motors[static_cast<int>(motor)].get_direction();
-}
-
-void Car::drive_forward (const MotorLocation motor, const int speed)
-{
-    motors[static_cast<int>(motor)].drive_forward(speed);
-}
-
-void Car::drive_reverse (const MotorLocation motor, const int speed)
-{
-    motors[static_cast<int>(motor)].drive_reverse(speed);
 }
 
 ClockPlugin* Car::get_clock_plugin () const

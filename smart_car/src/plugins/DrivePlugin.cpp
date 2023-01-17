@@ -13,11 +13,10 @@
 
 static Logger logger(__FILE__, Level::info);
 
-DrivePlugin::DrivePlugin (const PluginId id, Car &car, const int duration,
-        const MotorDirection right_motor_direction, const MotorDirection left_motor_direction) :
-                Plugin(id), car(car), duration(duration),
-                right_motor_direction(right_motor_direction),
-                left_motor_direction(left_motor_direction)
+DrivePlugin::DrivePlugin (const PluginId id, Car &car, const int duration, const MotorDirection right_motor_direction,
+        const MotorDirection left_motor_direction) :
+        Plugin(id), car(car), duration(duration), right_motor_direction(right_motor_direction), left_motor_direction(
+                left_motor_direction)
 {
 }
 
@@ -28,19 +27,18 @@ void DrivePlugin::set_enabled (const bool enable)
     {
         unsigned long now = millis();
         deadline = now + duration;
-        logger.info() << "Starting DriveMode: " << get_id() << " speed " << right_motor_speed
-                << ", " << left_motor_speed << " for " << duration << " from " << now << " until "
-                << deadline << std::endl;
+        logger.info() << "Starting DriveMode: " << get_id() << " speed " << motor_speed << " for " << duration
+                << " from " << now << " until " << deadline << std::endl;
         switch (right_motor_direction)
         {
             case MotorDirection::STOP:
                 car.drive_stop(MotorLocation::RIGHT_FRONT);
                 break;
             case MotorDirection::FORWARD:
-                car.drive_forward(MotorLocation::RIGHT_FRONT, right_motor_speed);
+                car.set_speed(MotorLocation::RIGHT_FRONT, motor_speed);
                 break;
             case MotorDirection::REVERSE:
-                car.drive_reverse(MotorLocation::RIGHT_FRONT, right_motor_speed);
+                car.set_speed(MotorLocation::RIGHT_FRONT, -motor_speed);
                 break;
         }
         switch (left_motor_direction)
@@ -49,10 +47,10 @@ void DrivePlugin::set_enabled (const bool enable)
                 car.drive_stop(MotorLocation::LEFT_FRONT);
                 break;
             case MotorDirection::FORWARD:
-                car.drive_forward(MotorLocation::LEFT_FRONT, left_motor_speed);
+                car.set_speed(MotorLocation::LEFT_FRONT, motor_speed);
                 break;
             case MotorDirection::REVERSE:
-                car.drive_reverse(MotorLocation::LEFT_FRONT, left_motor_speed);
+                car.set_speed(MotorLocation::LEFT_FRONT, -motor_speed);
                 break;
         }
     }
@@ -81,12 +79,8 @@ void DrivePlugin::set_duration (const int _duration)
     duration = _duration;
 }
 
-void DrivePlugin::set_right_speed (const int speed)
+void DrivePlugin::set_motor_speed (const int speed)
 {
-    right_motor_speed = speed;
+    motor_speed = speed;
 }
 
-void DrivePlugin::set_left_speed (const int speed)
-{
-    left_motor_speed = speed;
-}

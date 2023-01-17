@@ -10,7 +10,7 @@
 #include "UltrasoundPlugin.hpp"
 
 WallPlugin::WallPlugin (Car &car) :
-                Plugin(PluginId::WALL_PLUGIN), car(car)
+        Plugin(PluginId::WALL_PLUGIN), car(car)
 {
 }
 
@@ -49,8 +49,8 @@ void WallPlugin::cycle ()
             {
                 speed = SPEED_HALF;
             }
-            car.drive_forward(MotorLocation::RIGHT_FRONT, speed);
-            car.drive_forward(MotorLocation::LEFT_FRONT, speed);
+            car.set_right_speed(speed);
+            car.set_left_speed(speed);
         }
     }
 }

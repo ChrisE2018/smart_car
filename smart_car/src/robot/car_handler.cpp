@@ -47,8 +47,7 @@ void Car::execute_command (const std::vector<String> &words)
         }
         set_mode(Mode::COMMAND_MODE);
         reverse_plugin->set_duration(duration);
-        reverse_plugin->set_right_speed(speed);
-        reverse_plugin->set_left_speed(speed);
+        reverse_plugin->set_motor_speed(speed);
         reverse_plugin->set_enabled(true);
     }
     else if (command == F("bb"))
@@ -94,8 +93,7 @@ void Car::execute_command (const std::vector<String> &words)
         }
         set_mode(Mode::COMMAND_MODE);
         forward_plugin->set_duration(duration);
-        forward_plugin->set_right_speed(speed);
-        forward_plugin->set_left_speed(speed);
+        forward_plugin->set_motor_speed(speed);
         forward_plugin->set_enabled(true);
     }
     else if (command == F("ff"))
@@ -172,9 +170,8 @@ void Car::execute_command (const std::vector<String> &words)
             }
         }
         const float f_total_micros = total_cycle_us;
-        logger.info(__LINE__) << F("Cycle count ") << cycle_count << F(" total cycle micros ")
-                << total_cycle_us << F(" average micros per cycle ") << f_total_micros / cycle_count
-                << std::endl;
+        logger.info(__LINE__) << F("Cycle count ") << cycle_count << F(" total cycle micros ") << total_cycle_us
+                << F(" average micros per cycle ") << f_total_micros / cycle_count << std::endl;
     }
     else if (command == F("rf"))
     {
@@ -248,26 +245,23 @@ void Car::help_command ()
     logger.info(__LINE__) << F("Distance ") << d << F(" cm") << std::endl;
 
     const BLA::Matrix<Nstate> &state = kalman_plugin->get_state();
-    logger.info(__LINE__) << F("Position ") << state(0) << F(", ") << state(1) << F(" angle ")
-            << state(2) << F(" Velocity ") << state(3) << F(", ") << state(4) << F(" angle ")
-            << state(5) << F(" Acceleration ") << state(6) << F(", ") << state(7) << F(" angle ")
-            << state(8) << std::endl;
+    logger.info(__LINE__) << F("Position ") << state(0) << F(", ") << state(1) << F(" angle ") << state(2)
+            << F(" Velocity ") << state(3) << F(", ") << state(4) << F(" angle ") << state(5) << F(" Acceleration ")
+            << state(6) << F(", ") << state(7) << F(" angle ") << state(8) << std::endl;
     logger.info(__LINE__) << F("Angle: ") << kalman_plugin->get_angle() << std::endl;
 
     LOG_INFO(logger, "Plugins %d", plugins.size());
     if (cycle_count > 0)
     {
         const float f_total_micros = total_cycle_us;
-        logger.info(__LINE__) << F("Cycle count ") << cycle_count << F(" total cycle micros ")
-                << total_cycle_us << F(" average micros per cycle ") << f_total_micros / cycle_count
-                << std::endl;
+        logger.info(__LINE__) << F("Cycle count ") << cycle_count << F(" total cycle micros ") << total_cycle_us
+                << F(" average micros per cycle ") << f_total_micros / cycle_count << std::endl;
     }
 
     for (int motor = 0; motor < MOTOR_COUNT; motor++)
     {
         const MotorPlugin &m = motors[motor];
-        logger.info(__LINE__) << m.get_location() << F(" speed counter ") << m.get_speed_counter()
-                << std::endl;
+        logger.info(__LINE__) << m.get_location() << F(" speed counter ") << m.get_speed_counter() << std::endl;
     }
 }
 
