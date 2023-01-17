@@ -7,12 +7,13 @@
 
 #include "Arduino.h"
 #include "speed_counter.hpp"
+#include "board_pins.hpp"
 
-static constexpr int front_right_speed_counter_pin = 2;
-static constexpr int front_left_speed_counter_pin = 3;
+static constexpr int front_right_speed_counter_pin = PIN_2_INT4_PWM;
+static constexpr int front_left_speed_counter_pin = PIN_3_INT5_PWM;
 
-static constexpr int rear_left_speed_counter_pin = 18;
-static constexpr int rear_right_speed_counter_pin = 19;
+static constexpr int rear_left_speed_counter_pin = PIN_18_INT3_TX1;
+static constexpr int rear_right_speed_counter_pin = PIN_19_INT2_RX1;
 
 static unsigned long speed_counter_right_front = 0;
 static unsigned long speed_counter_left_front = 0;

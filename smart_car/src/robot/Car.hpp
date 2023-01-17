@@ -13,6 +13,7 @@
 #include "../plugins/MotorPlugin.hpp"
 #include "Mode.hpp"
 #include "Parser.hpp"
+#include "board_pins.hpp"
 
 class ClockPlugin;
 class DemoPlugin;
@@ -90,33 +91,28 @@ class Car: public Executor
         std::vector<Plugin*> available_plugins;
         std::vector<Plugin*> plugins;
 
-//        static constexpr int front_right_speed_counter_pin = 2;
-//        static constexpr int front_left_speed_counter_pin = 3;
-//        static constexpr int rear_left_speed_counter_pin = 18;
-//        static constexpr int rear_right_speed_counter_pin = 19;
-
-// Left side
-        static constexpr int left_rear_in1 = 49; // yellow = in1
-        static constexpr int left_rear_in2 = 48; // orange = in2
-        static constexpr int left_front_in3 = 47; // purple = in3
-        static constexpr int left_front_in4 = 46; // blue = in4
-        static constexpr int left_rear_enA = 45; // blue = enA
-        static constexpr int left_front_enB = 44; // green = enB
+        // Left side
+        static constexpr int left_rear_in1 = PIN_49_DIG; // yellow = in1
+        static constexpr int left_rear_in2 = PIN_48_DIG; // orange = in2
+        static constexpr int left_front_in3 = PIN_47_DIG; // purple = in3
+        static constexpr int left_front_in4 = PIN_46_PWM; // blue = in4 (this does not require a PWM pin)
+        static constexpr int left_rear_enA = PIN_45_PWM; // blue = enA
+        static constexpr int left_front_enB = PIN_44_PWM; // green = enB
 
         // Right side
-        static constexpr int right_front_in1 = 43; // yellow = in1
-        static constexpr int right_front_in2 = 42; // orange = in2
-        static constexpr int right_rear_in3 = 41; // purple = in3
-        static constexpr int right_rear_in4 = 40; // gray = in4
-        static constexpr int right_front_enA = 5; // gray = enA
-        static constexpr int right_rear_enB = 6; // green = enB
+        static constexpr int right_front_in1 = PIN_43_DIG; // yellow = in1
+        static constexpr int right_front_in2 = PIN_42_DIG; // orange = in2
+        static constexpr int right_rear_in3 = PIN_41_DIG; // purple = in3
+        static constexpr int right_rear_in4 = PIN_40_DIG; // gray = in4
+        static constexpr int right_front_enA = PIN_5_PWM; // gray = enA
+        static constexpr int right_rear_enB = PIN_6_PWM; // green = enB
 
         static constexpr int DISABLED_LED = 99;
 
-        static constexpr int RIGHT_LED_FORWARD = 22; // red led right
-        static constexpr int RIGHT_LED_REVERSE = 24; // green led right
-        static constexpr int LEFT_LED_FORWARD = 26; // red led left
-        static constexpr int LEFT_LED_REVERSE = 28; // green led left
+        static constexpr int RIGHT_LED_FORWARD = PIN_22_DIG; // red led right
+        static constexpr int RIGHT_LED_REVERSE = PIN_24_DIG; // green led right
+        static constexpr int LEFT_LED_FORWARD = PIN_26_DIG; // red led left
+        static constexpr int LEFT_LED_REVERSE = PIN_28_DIG; // green led left
         MotorPlugin motors[MOTOR_COUNT] =
         { MotorPlugin(PluginId::MOTOR_RIGHT_FRONT_PLUGIN, MotorLocation::RIGHT_FRONT, right_front_enA, right_front_in2,
                 right_front_in1, RIGHT_LED_FORWARD, RIGHT_LED_REVERSE),

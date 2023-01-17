@@ -6,20 +6,16 @@
 	- behavior trees?
 * Motor control to run for a specified distance or distance/time curve
 	- Control input to kalman filter?
-* Use state for MotorPlugin::auto_velocity flag and control of ultrasound mode
+* Use state for MotorPlugin::auto_velocity flag 
 * New sketch to figure out plotter
 * auto_velocity sometimes stops at drive RIGHT STOP at 0 power 0.00 mps (but did not cancel)
 * auto_velocity sometimes races in reverse
+* Eliminate clockwise and counterclockwise plugins
 
 PHYSICAL
 * Work on GPS
 * Battery level sensor(s)
-* Second motor control/speed sensors
-* Extra holes to properly mount motor controller
 * Mount for computer battery
-* Fix breadboard in position
-	- Try to cut clear disk (done)
-	- drill holes
 
 DONE DONE DONE
 
@@ -51,3 +47,10 @@ DONE DONE DONE
 * Consider removing cycle schedule
 * Schedule multiple plugins in one cycle - define PluginId for each combination
 * Detect skipped cycles
+* use state for control of ultrasound mode
+
+* Second motor control/speed sensors
+* Extra holes to properly mount motor controller
+* Fix breadboard in position
+	- Try to cut clear disk (done)
+	- drill holes
