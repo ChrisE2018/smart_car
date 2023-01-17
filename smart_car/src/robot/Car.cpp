@@ -10,7 +10,6 @@
 #include "smart_car.hpp"
 
 #include "../plugins/ClockPlugin.hpp"
-#include "../plugins/DemoPlugin.hpp"
 #include "../plugins/DrivePlugin.hpp"
 #include "../plugins/GoalPlugin.hpp"
 #include "../plugins/KalmanPlugin.hpp"
@@ -24,13 +23,7 @@ extern HardwareSerial Serial;
 
 Car::Car () :
         logger(__FILE__, Level::debug), serial_parser(Serial), bluetooth_parser(Serial3), clock_plugin(
-                new ClockPlugin()),
-                clockwise_plugin(
-                new DrivePlugin(PluginId::CLOCKWISE_PLUGIN, *this, 500, MotorDirection::FORWARD,
-                        MotorDirection::REVERSE)), counterclockwise_plugin(
-                new DrivePlugin(PluginId::COUNTERCLOCKWISE_PLUGIN, *this, 500, MotorDirection::REVERSE,
-                        MotorDirection::FORWARD)),
-                        demo_plugin(new DemoPlugin(*this)), forward_plugin(
+                new ClockPlugin()), forward_plugin(
                 new DrivePlugin(PluginId::FORWARD_PLUGIN, *this, 500, MotorDirection::FORWARD,
                         MotorDirection::FORWARD)), goal_plugin(new GoalPlugin(*this)), mpu_plugin(new MpuPlugin()), kalman_plugin(
                 new KalmanPlugin(*this)), odom_plugin(new OdomPlugin(*this)), reverse_plugin(
@@ -39,12 +32,9 @@ Car::Car () :
                 new WallPlugin(*this))
 {
     available_plugins.push_back(clock_plugin);
-    available_plugins.push_back(demo_plugin);
     available_plugins.push_back(forward_plugin);
     available_plugins.push_back(goal_plugin);
     available_plugins.push_back(reverse_plugin);
-    available_plugins.push_back(clockwise_plugin);
-    available_plugins.push_back(counterclockwise_plugin);
     available_plugins.push_back(&motors[static_cast<int>(MotorLocation::RIGHT_FRONT)]);
     available_plugins.push_back(&motors[static_cast<int>(MotorLocation::LEFT_FRONT)]);
     available_plugins.push_back(&motors[static_cast<int>(MotorLocation::RIGHT_REAR)]);
@@ -167,22 +157,18 @@ void Car::set_mode (const Mode _mode)
     {
         case Mode::COMMAND_MODE:
             all_stop();
-            demo_plugin->set_enabled(false);
             wall_plugin->set_enabled(false);
             break;
         case Mode::DEMO_MODE:
             all_stop();
-            demo_plugin->set_enabled(true);
             wall_plugin->set_enabled(false);
             break;
         case Mode::GOAL_MODE:
             all_stop();
-            demo_plugin->set_enabled(false);
             wall_plugin->set_enabled(false);
             break;
         case Mode::WALL_MODE:
             all_stop();
-            demo_plugin->set_enabled(false);
             wall_plugin->set_enabled(true);
             break;
     }
@@ -295,8 +281,6 @@ void Car::all_stop ()
     }
     forward_plugin->set_enabled(false);
     reverse_plugin->set_enabled(false);
-    clockwise_plugin->set_enabled(false);
-    counterclockwise_plugin->set_enabled(false);
     goal_plugin->set_enabled(false);
 }
 
@@ -371,11 +355,6 @@ ClockPlugin* Car::get_clock_plugin () const
     return clock_plugin;
 }
 
-DemoPlugin* Car::get_demo_plugin () const
-{
-    return demo_plugin;
-}
-
 DrivePlugin* Car::get_forward_plugin () const
 {
     return forward_plugin;
@@ -389,16 +368,6 @@ GoalPlugin* Car::get_goal_plugin () const
 DrivePlugin* Car::get_reverse_plugin () const
 {
     return reverse_plugin;
-}
-
-DrivePlugin* Car::get_clockwise_plugin () const
-{
-    return clockwise_plugin;
-}
-
-DrivePlugin* Car::get_counterclockwise_plugin () const
-{
-    return counterclockwise_plugin;
 }
 
 MpuPlugin* Car::get_mpu_plugin () const
@@ -432,12 +401,6 @@ Plugin* Car::get_plugin (const PluginId id) const
     {
         case PluginId::CLOCK_PLUGIN:
             return clock_plugin;
-        case PluginId::CLOCKWISE_PLUGIN:
-            return clockwise_plugin;
-        case PluginId::COUNTERCLOCKWISE_PLUGIN:
-            return counterclockwise_plugin;
-        case PluginId::DEMO_PLUGIN:
-            return demo_plugin;
         case PluginId::FORWARD_PLUGIN:
             return forward_plugin;
         case PluginId::GOAL_PLUGIN:

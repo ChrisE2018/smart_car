@@ -149,36 +149,6 @@ void Car::execute_command (const std::vector<String> &words)
 //        set_mode(Mode::COMMAND_MODE);
         motors[static_cast<int>(MotorLocation::LEFT_REAR)].set_desired_velocity(desired_velocity);
     }
-    else if (command == F("left"))
-    {
-        int speed = SPEED_FULL;
-        int duration = 500;
-        if (n > 1)
-        {
-            speed = words[1].toInt();
-        }
-        if (n > 2)
-        {
-            duration = words[2].toInt();
-        }
-        set_mode(Mode::COMMAND_MODE);
-        clockwise_plugin->set_duration(duration);
-        clockwise_plugin->set_right_speed(speed);
-        clockwise_plugin->set_left_speed(speed);
-        clockwise_plugin->set_enabled(true);
-    }
-//    else if (command == F("log"))
-//    {
-//        if (robot_appender != nullptr && n > 1)
-//        {
-//            if (n > 2)
-//            {
-//                robot_appender->set_logger_state(words[1], words[2]);
-//            }
-//            logger.info(__LINE__) << words[1].c_str() << F(": ")
-//                    << robot_appender->get_logger_state(words[1]) << std::endl;
-//        }
-//    }
     else if (command == F("mpu"))
     {
         mpu_plugin->set_trace(!mpu_plugin->is_trace());
@@ -225,24 +195,6 @@ void Car::execute_command (const std::vector<String> &words)
         }
 //        set_mode(Mode::COMMAND_MODE);
         motors[static_cast<int>(MotorLocation::RIGHT_REAR)].set_desired_velocity(desired_velocity);
-    }
-    else if (command == F("right"))
-    {
-        int speed = SPEED_FULL;
-        int duration = 500;
-        if (n > 1)
-        {
-            speed = words[1].toInt();
-        }
-        if (n > 2)
-        {
-            duration = words[2].toInt();
-        }
-        set_mode(Mode::COMMAND_MODE);
-        counterclockwise_plugin->set_duration(duration);
-        counterclockwise_plugin->set_right_speed(speed);
-        counterclockwise_plugin->set_left_speed(speed);
-        counterclockwise_plugin->set_enabled(true);
     }
     else if (command == F("reset"))
     {

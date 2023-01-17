@@ -54,12 +54,9 @@ class Car: public Executor
         void drive_reverse (const MotorLocation motor, const int speed);
 
         ClockPlugin* get_clock_plugin () const;
-        DemoPlugin* get_demo_plugin () const;
         DrivePlugin* get_forward_plugin () const;
         GoalPlugin* get_goal_plugin () const;
         DrivePlugin* get_reverse_plugin () const;
-        DrivePlugin* get_clockwise_plugin () const;
-        DrivePlugin* get_counterclockwise_plugin () const;
         MpuPlugin* get_mpu_plugin () const;
         KalmanPlugin* get_kalman_plugin () const;
         OdomPlugin* get_odom_plugin () const;
@@ -76,9 +73,6 @@ class Car: public Executor
         Parser bluetooth_parser;
 
         ClockPlugin *const clock_plugin;
-        DrivePlugin *const clockwise_plugin;
-        DrivePlugin *const counterclockwise_plugin;
-        DemoPlugin *const demo_plugin;
         DrivePlugin *const forward_plugin;
         GoalPlugin *const goal_plugin;
         MpuPlugin *const mpu_plugin;

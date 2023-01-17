@@ -6,6 +6,7 @@
  */
 
 #include <Arduino.h>
+#include <WString.h>
 #include "Plugin.hpp"
 
 const std::string stringify (const PluginId id)
@@ -14,12 +15,6 @@ const std::string stringify (const PluginId id)
     {
         case PluginId::CLOCK_PLUGIN:
             return "CLOCK_PLUGIN";
-        case PluginId::CLOCKWISE_PLUGIN:
-            return "CLOCKWISE_PLUGIN";
-        case PluginId::COUNTERCLOCKWISE_PLUGIN:
-            return "COUNTERCLOCKWISE_PLUGIN";
-        case PluginId::DEMO_PLUGIN:
-            return "DEMO_PLUGIN";
         case PluginId::FORWARD_PLUGIN:
             return "FORWARD_PLUGIN";
         case PluginId::GOAL_PLUGIN:
