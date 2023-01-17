@@ -49,7 +49,7 @@ void UltrasoundPlugin::cycle ()
                 bool did_stop = false;
                 for (int m = 0; m < MOTOR_COUNT; m++)
                 {
-                    MotorPlugin &motor = car.get_motor(static_cast<MotorLocation>(m));
+                    PidPlugin &motor = car.get_pid_plugin(static_cast<MotorLocation>(m));
                     // Only stop if moving forward toward the obstacle.
                     if (motor.get_measured_velocity() > 0)
                     {

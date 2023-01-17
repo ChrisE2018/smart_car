@@ -19,12 +19,10 @@ const std::string stringify (const PluginId id)
             return "FORWARD_PLUGIN";
         case PluginId::GOAL_PLUGIN:
             return "GOAL_PLUGIN";
-        case PluginId::MPU_PLUGIN:
-            return "MPU_PLUGIN";
         case PluginId::KALMAN_PLUGIN:
             return "KALMAN_PLUGIN";
-        case PluginId::ODOM_PLUGIN:
-            return "ODOM_PLUGIN";
+        case PluginId::MPU_PLUGIN:
+            return "MPU_PLUGIN";
         case PluginId::MOTOR_LEFT_FRONT_PLUGIN:
             return "MOTOR_LEFT_FRONT_PLUGIN";
         case PluginId::MOTOR_RIGHT_FRONT_PLUGIN:
@@ -33,6 +31,16 @@ const std::string stringify (const PluginId id)
             return "MOTOR_LEFT_REAR_PLUGIN";
         case PluginId::MOTOR_RIGHT_REAR_PLUGIN:
             return "MOTOR_RIGHT_REAR_PLUGIN";
+        case PluginId::ODOM_PLUGIN:
+            return "ODOM_PLUGIN";
+        case PID_LEFT_FRONT_PLUGIN:
+            return "PID_LEFT_FRONT_PLUGIN";
+        case PID_RIGHT_FRONT_PLUGIN:
+            return "PID_RIGHT_FRONT_PLUGIN";
+        case PID_LEFT_REAR_PLUGIN:
+            return "PID_LEFT_REAR_PLUGIN";
+        case PID_RIGHT_REAR_PLUGIN:
+            return "PID_RIGHT_REAR_PLUGIN";
         case PluginId::REVERSE_PLUGIN:
             return "REVERSE_PLUGIN";
         case PluginId::ULTRASOUND_PLUGIN:

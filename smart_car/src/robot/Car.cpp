@@ -15,6 +15,7 @@
 #include "../plugins/KalmanPlugin.hpp"
 #include "../plugins/MpuPlugin.hpp"
 #include "../plugins/OdomPlugin.hpp"
+#include "../plugins/PidPlugin.hpp"
 #include "../plugins/UltrasoundPlugin.hpp"
 #include "../plugins/WallPlugin.hpp"
 
@@ -39,6 +40,10 @@ Car::Car () :
     available_plugins.push_back(&motors[static_cast<int>(MotorLocation::LEFT_FRONT)]);
     available_plugins.push_back(&motors[static_cast<int>(MotorLocation::RIGHT_REAR)]);
     available_plugins.push_back(&motors[static_cast<int>(MotorLocation::LEFT_REAR)]);
+    available_plugins.push_back(&pid_controls[static_cast<int>(MotorLocation::RIGHT_FRONT)]);
+    available_plugins.push_back(&pid_controls[static_cast<int>(MotorLocation::LEFT_FRONT)]);
+    available_plugins.push_back(&pid_controls[static_cast<int>(MotorLocation::RIGHT_REAR)]);
+    available_plugins.push_back(&pid_controls[static_cast<int>(MotorLocation::LEFT_REAR)]);
     available_plugins.push_back(mpu_plugin);
     available_plugins.push_back(kalman_plugin);
     available_plugins.push_back(odom_plugin);
@@ -277,7 +282,7 @@ void Car::all_stop ()
 {
     for (int motor = 0; motor < MOTOR_COUNT; motor++)
     {
-        motors[motor].drive_stop();
+        pid_controls[motor].drive_stop();
     }
     forward_plugin->set_enabled(false);
     reverse_plugin->set_enabled(false);
@@ -296,7 +301,7 @@ MotorPlugin& Car::get_motor (const MotorLocation motor)
 
 void Car::drive_stop (const MotorLocation motor)
 {
-    motors[static_cast<int>(motor)].drive_stop();
+    pid_controls[static_cast<int>(motor)].drive_stop();
 }
 
 void Car::set_speed (const MotorLocation motor, const int speed)
@@ -323,17 +328,17 @@ int Car::get_drive_speed (const MotorLocation motor) const
 
 float Car::get_measured_velocity (const MotorLocation motor) const
 {
-    return motors[static_cast<int>(motor)].get_measured_velocity();
+    return pid_controls[static_cast<int>(motor)].get_measured_velocity();
 }
 
 float Car::get_desired_velocity (const MotorLocation motor) const
 {
-    return motors[static_cast<int>(motor)].get_desired_velocity();
+    return pid_controls[static_cast<int>(motor)].get_desired_velocity();
 }
 
 void Car::set_desired_velocity (const MotorLocation motor, const float velocity)
 {
-    motors[static_cast<int>(motor)].set_desired_velocity(velocity);
+    pid_controls[static_cast<int>(motor)].set_desired_velocity(velocity);
 }
 
 MotorDirection Car::get_drive_direction (const MotorLocation motor) const
@@ -374,6 +379,16 @@ KalmanPlugin* Car::get_kalman_plugin () const
 OdomPlugin* Car::get_odom_plugin () const
 {
     return odom_plugin;
+}
+
+const PidPlugin& Car::get_pid_plugin (const MotorLocation location) const
+{
+    return pid_controls[static_cast<int>(location)];
+}
+
+PidPlugin& Car::get_pid_plugin (const MotorLocation location)
+{
+    return pid_controls[static_cast<int>(location)];
 }
 
 UltrasoundPlugin* Car::get_ultrasound_plugin () const

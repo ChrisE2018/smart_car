@@ -11,6 +11,7 @@
 #include <vector>
 #include "../logging/Logger.hpp"
 #include "../plugins/MotorPlugin.hpp"
+#include "../plugins/PidPlugin.hpp"
 #include "Mode.hpp"
 #include "Parser.hpp"
 #include "board_pins.hpp"
@@ -60,6 +61,8 @@ class Car: public Executor
         MpuPlugin* get_mpu_plugin () const;
         KalmanPlugin* get_kalman_plugin () const;
         OdomPlugin* get_odom_plugin () const;
+        const PidPlugin& get_pid_plugin (const MotorLocation location) const;
+        PidPlugin& get_pid_plugin (const MotorLocation location);
         UltrasoundPlugin* get_ultrasound_plugin () const;
         WallPlugin* get_wall_plugin () const;
 
@@ -120,6 +123,10 @@ class Car: public Executor
                 MotorPlugin(PluginId::MOTOR_LEFT_REAR_PLUGIN, MotorLocation::LEFT_REAR, left_rear_enA, left_rear_in2,
                         left_rear_in1, DISABLED_LED, DISABLED_LED) };
 
+        PidPlugin pid_controls[MOTOR_COUNT] =
+        { PidPlugin(PluginId::PID_RIGHT_FRONT_PLUGIN, motors[0]), PidPlugin(PluginId::PID_LEFT_FRONT_PLUGIN, motors[1]),
+                PidPlugin(PluginId::PID_RIGHT_REAR_PLUGIN, motors[2]), PidPlugin(PluginId::PID_LEFT_REAR_PLUGIN,
+                        motors[3]) };
         static constexpr int schedule_size = 70;
         PluginId schedule[schedule_size];
         Mode mode = Mode::COMMAND_MODE;

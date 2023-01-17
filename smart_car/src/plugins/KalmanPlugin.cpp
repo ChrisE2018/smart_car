@@ -90,8 +90,8 @@ void KalmanPlugin::cycle ()
         // Rotation from body to world for current angle
         update_transforms(state(2));
 
-        const float right_velocity = car.get_motor(MotorLocation::RIGHT_FRONT).get_measured_velocity();
-        const float left_velocity = car.get_motor(MotorLocation::LEFT_FRONT).get_measured_velocity();
+        const float right_velocity = car.get_pid_plugin(MotorLocation::RIGHT_FRONT).get_measured_velocity();
+        const float left_velocity = car.get_pid_plugin(MotorLocation::LEFT_FRONT).get_measured_velocity();
 
         const BLA::Matrix<2> body_velocity =
         { (right_velocity + left_velocity) * 0.5, 0 };

@@ -58,8 +58,8 @@ void Car::execute_command (const std::vector<String> &words)
             velocity = -words[1].toFloat();
         }
         set_mode(Mode::COMMAND_MODE);
-        motors[static_cast<int>(MotorLocation::RIGHT_FRONT)].set_desired_velocity(velocity);
-        motors[static_cast<int>(MotorLocation::LEFT_FRONT)].set_desired_velocity(velocity);
+        pid_controls[static_cast<int>(MotorLocation::RIGHT_FRONT)].set_desired_velocity(velocity);
+        pid_controls[static_cast<int>(MotorLocation::LEFT_FRONT)].set_desired_velocity(velocity);
     }
     else if (command == F("calibrate"))
     {
@@ -104,8 +104,8 @@ void Car::execute_command (const std::vector<String> &words)
             velocity = words[1].toFloat();
         }
         set_mode(Mode::COMMAND_MODE);
-        motors[static_cast<int>(MotorLocation::RIGHT_FRONT)].set_desired_velocity(velocity);
-        motors[static_cast<int>(MotorLocation::LEFT_FRONT)].set_desired_velocity(velocity);
+        pid_controls[static_cast<int>(MotorLocation::RIGHT_FRONT)].set_desired_velocity(velocity);
+        pid_controls[static_cast<int>(MotorLocation::LEFT_FRONT)].set_desired_velocity(velocity);
     }
     else if (command == F("goal"))
     {
@@ -135,7 +135,7 @@ void Car::execute_command (const std::vector<String> &words)
             desired_velocity = words[1].toFloat();
         }
 //        set_mode(Mode::COMMAND_MODE);
-        motors[static_cast<int>(MotorLocation::LEFT_FRONT)].set_desired_velocity(desired_velocity);
+        pid_controls[static_cast<int>(MotorLocation::LEFT_FRONT)].set_desired_velocity(desired_velocity);
     }
     else if (command == F("lr"))
     {
@@ -145,7 +145,7 @@ void Car::execute_command (const std::vector<String> &words)
             desired_velocity = words[1].toFloat();
         }
 //        set_mode(Mode::COMMAND_MODE);
-        motors[static_cast<int>(MotorLocation::LEFT_REAR)].set_desired_velocity(desired_velocity);
+        pid_controls[static_cast<int>(MotorLocation::LEFT_REAR)].set_desired_velocity(desired_velocity);
     }
     else if (command == F("mpu"))
     {
@@ -181,7 +181,7 @@ void Car::execute_command (const std::vector<String> &words)
             desired_velocity = words[1].toFloat();
         }
 //        set_mode(Mode::COMMAND_MODE);
-        motors[static_cast<int>(MotorLocation::RIGHT_FRONT)].set_desired_velocity(desired_velocity);
+        pid_controls[static_cast<int>(MotorLocation::RIGHT_FRONT)].set_desired_velocity(desired_velocity);
     }
     else if (command == F("rr"))
     {
@@ -191,7 +191,7 @@ void Car::execute_command (const std::vector<String> &words)
             desired_velocity = words[1].toFloat();
         }
 //        set_mode(Mode::COMMAND_MODE);
-        motors[static_cast<int>(MotorLocation::RIGHT_REAR)].set_desired_velocity(desired_velocity);
+        pid_controls[static_cast<int>(MotorLocation::RIGHT_REAR)].set_desired_velocity(desired_velocity);
     }
     else if (command == F("reset"))
     {
@@ -260,7 +260,7 @@ void Car::help_command ()
 
     for (int motor = 0; motor < MOTOR_COUNT; motor++)
     {
-        const MotorPlugin &m = motors[motor];
+        const PidPlugin &m = pid_controls[motor];
         logger.info(__LINE__) << m.get_location() << F(" speed counter ") << m.get_speed_counter() << std::endl;
     }
 }
