@@ -86,6 +86,11 @@ bool MotorPlugin::setup ()
     return true;
 }
 
+bool MotorPlugin::is_cyclic () const
+{
+    return false;
+}
+
 void MotorPlugin::led_demo (const int duration) const
 {
     if (forward_led != DISABLED_LED)

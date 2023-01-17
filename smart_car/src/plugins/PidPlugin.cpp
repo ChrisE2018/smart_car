@@ -51,6 +51,8 @@ float PidPlugin::get_desired_velocity () const
     return desired_velocity;
 }
 
+// [TODO] Set max time, max distance
+// [TODO] set_desired_distance (leave velocity unspecified)
 void PidPlugin::set_desired_velocity (const float _desired_velocity)
 {
     auto_velocity = true;
@@ -73,9 +75,7 @@ void PidPlugin::cancel_auto_velocity ()
 void PidPlugin::drive_stop ()
 {
     motor_plugin.set_speed(0);
-    desired_velocity = 0;
-    cumulative_velocity_error = 0;
-    auto_velocity = false;
+    cancel_auto_velocity ();
     LOG_INFO(logger, "drive_stop %s", stringify(location).c_str());
 }
 

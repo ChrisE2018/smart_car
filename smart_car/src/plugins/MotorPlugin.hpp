@@ -46,6 +46,7 @@ class MotorPlugin: public Plugin
 
         friend std::ostream& operator<< (std::ostream &lhs, const MotorPlugin &motor);
         bool setup ();
+        virtual bool is_cyclic () const;
         void led_demo (const int duration) const;
         MotorLocation get_location () const;
         MotorDirection get_direction () const;
