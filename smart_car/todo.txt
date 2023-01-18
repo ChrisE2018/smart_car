@@ -1,12 +1,4 @@
 * Issue tracker
-* Future events on schedule or condition
-	- time based
-	- event based, like distance motor moves or angle or goal position
-	- what are the actions? (state changes)
-	- behavior trees?
-* Motor control to run for a specified distance or distance/time curve
-	- Control input to kalman filter?
-* Use state for MotorPlugin::auto_velocity flag 
 * New sketch to figure out plotter
 * auto_velocity sometimes stops at drive RIGHT STOP at 0 power 0.00 mps (but did not cancel)
 * auto_velocity sometimes races in reverse
@@ -56,3 +48,15 @@ DONE DONE DONE
 
 1/16/2023
 * Eliminate clockwise and counterclockwise plugins
+
+1/17/2023
+* Future events on schedule or condition
+	- time based
+	- event based, like distance motor moves or angle or goal position
+	- what are the actions? (state changes)
+	- behavior trees?
+* Motor control to run for a specified distance or distance/time curve
+	- Control input to kalman filter?
+
+1/18/2023
+* Use state for PidPlugin::auto_velocity flag 

@@ -51,6 +51,7 @@ class Plugin
         virtual bool reset ();
         int get_state () const;
         void set_state (const int state);
+        void _set_state (const int state);
         virtual void enter_state (const int state);
         virtual void exit_state (const int state);
         bool is_trace () const;

@@ -22,7 +22,7 @@ class PidPlugin: public Plugin
         float get_measured_velocity () const;
         float get_desired_velocity () const;
         void set_desired_velocity (const float desired_velocity);
-        void cancel_auto_velocity ();
+        virtual void enter_state (const int state) override;
         void drive_stop ();
         float get_velocity_error () const;
         virtual int get_preferred_interval () const override;
@@ -43,7 +43,7 @@ class PidPlugin: public Plugin
         static constexpr float k2 = -0.01;
         static constexpr float k3 = 0; //0.15;
         static constexpr float k4 = 0; //0.2;
-        bool auto_velocity = false;
+
         float desired_velocity = 0;
         float measured_velocity = 0;
         unsigned long last_cycle_ms = 0;

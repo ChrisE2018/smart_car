@@ -53,7 +53,7 @@ float PidPlugin::get_desired_velocity () const
 
 void PidPlugin::set_desired_velocity (const float _desired_velocity)
 {
-    auto_velocity = true;
+    set_state (Plugin::ENABLE);
     if (desired_velocity != _desired_velocity)
     {
         desired_velocity = _desired_velocity;
@@ -61,19 +61,21 @@ void PidPlugin::set_desired_velocity (const float _desired_velocity)
     }
 }
 
-void PidPlugin::cancel_auto_velocity ()
+void PidPlugin::enter_state (const int state)
 {
-    auto_velocity = false;
-    desired_velocity = 0;
-    velocity_error = 0;
-    cumulative_velocity_error = 0;
-    LOG_INFO(logger, "cancel_auto_velocity %s", stringify(location).c_str());
+    if (state == Plugin::DISABLE)
+    {
+        desired_velocity = 0;
+        velocity_error = 0;
+        cumulative_velocity_error = 0;
+        LOG_INFO(logger, "cancel_auto_velocity %s", stringify(location).c_str());
+    }
 }
 
 void PidPlugin::drive_stop ()
 {
     motor_plugin.set_speed(0);
-    cancel_auto_velocity();
+    set_state(Plugin::DISABLE);
     LOG_INFO(logger, "drive_stop %s", stringify(location).c_str());
 }
 
@@ -122,7 +124,7 @@ void PidPlugin::cycle ()
                     << F(",measured_distance,") << measured_distance << F(",raw_speed_ticks,") << raw_speed_ticks
                     << std::endl;
         }
-        if (auto_velocity)
+        if (get_state() == Plugin::ENABLE)
         {
             const float previous_velocity_error = velocity_error;
             velocity_error = desired_velocity - measured_velocity;

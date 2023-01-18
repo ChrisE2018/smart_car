@@ -99,6 +99,14 @@ int Plugin::get_state () const
 
 void Plugin::set_state (const int _state)
 {
+    if (state != _state)
+    {
+        _set_state(_state);
+    }
+}
+
+void Plugin::_set_state (const int _state)
+{
     exit_state(state);
     state = _state;
     enter_state(_state);
