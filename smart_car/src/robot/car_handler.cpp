@@ -48,7 +48,8 @@ void Car::execute_command (const std::vector<String> &words)
         set_mode(Mode::COMMAND_MODE);
         reverse_plugin->set_duration(duration);
         reverse_plugin->set_motor_speed(speed);
-        reverse_plugin->set_enabled(true);
+        reverse_plugin->set_state(Plugin::ENABLE);
+        forward_plugin->set_state(Plugin::DISABLE);
     }
     else if (command == F("bb"))
     {
@@ -94,7 +95,8 @@ void Car::execute_command (const std::vector<String> &words)
         set_mode(Mode::COMMAND_MODE);
         forward_plugin->set_duration(duration);
         forward_plugin->set_motor_speed(speed);
-        forward_plugin->set_enabled(true);
+        forward_plugin->set_state(Plugin::ENABLE);
+        reverse_plugin->set_state(Plugin::DISABLE);
     }
     else if (command == F("ff"))
     {

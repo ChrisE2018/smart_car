@@ -36,7 +36,7 @@ KalmanPlugin::KalmanPlugin (Car &car) :
 
 bool KalmanPlugin::setup ()
 {
-    set_enabled(false);
+    set_state(Plugin::DISABLE);
 
     // Initial state of the system
     // Px, Py, Pa, Vx, Vy, Va, Ax, Ay, Aa

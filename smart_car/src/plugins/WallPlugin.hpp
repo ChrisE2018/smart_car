@@ -15,8 +15,8 @@ class WallPlugin : public Plugin
 {
     public:
         WallPlugin (Car &car);
-        void set_enabled (const bool enable);
-        void cycle () override;
+        virtual void enter_state (const int state) override;
+        virtual void cycle () override;
 
     private:
         Car &car;

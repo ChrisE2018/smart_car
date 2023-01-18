@@ -17,7 +17,7 @@ class DrivePlugin: public Plugin
         DrivePlugin (const PluginId id, Car &car, const int duration, const MotorDirection right_motor_direction,
                 const MotorDirection left_motor_direction);
 
-        void set_enabled (const bool enable);
+        virtual void enter_state (const int state);
 
         virtual int get_expected_us () const;
 

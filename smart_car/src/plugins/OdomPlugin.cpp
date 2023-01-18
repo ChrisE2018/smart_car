@@ -19,7 +19,7 @@ OdomPlugin::OdomPlugin (Car &car) :
 
 bool OdomPlugin::setup ()
 {
-    set_enabled(false);
+    set_state(Plugin::DISABLE);
 
     // x, y, a, dx, dy, da
     state =

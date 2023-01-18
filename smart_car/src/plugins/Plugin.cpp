@@ -92,19 +92,26 @@ bool Plugin::reset ()
     return setup();
 }
 
-bool Plugin::is_cyclic () const
+int Plugin::get_state () const
 {
-    return true;
+    return state;
 }
 
-bool Plugin::is_enabled () const
+void Plugin::set_state (const int _state)
 {
-    return enable;
+    exit_state(state);
+    state = _state;
+    enter_state(_state);
 }
 
-void Plugin::set_enabled (const bool _enable)
+void Plugin::enter_state (const int state)
 {
-    enable = _enable;
+
+}
+
+void Plugin::exit_state (const int state)
+{
+
 }
 
 bool Plugin::is_trace () const
@@ -115,6 +122,11 @@ bool Plugin::is_trace () const
 void Plugin::set_trace (const bool _trace)
 {
     enable_trace = _trace;
+}
+
+bool Plugin::is_cyclic () const
+{
+    return true;
 }
 
 int Plugin::get_preferred_interval () const
@@ -187,24 +199,3 @@ unsigned long Plugin::get_overrun_count () const
     return overrun_count;
 }
 
-int Plugin::get_state () const
-{
-    return state;
-}
-
-void Plugin::set_state (const int _state)
-{
-    exit_state(state);
-    state = _state;
-    enter_state(_state);
-}
-
-void Plugin::enter_state (const int state)
-{
-
-}
-
-void Plugin::exit_state (const int state)
-{
-
-}

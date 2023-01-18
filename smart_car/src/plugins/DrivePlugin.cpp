@@ -20,10 +20,9 @@ DrivePlugin::DrivePlugin (const PluginId id, Car &car, const int duration, const
 {
 }
 
-void DrivePlugin::set_enabled (const bool enable)
+void DrivePlugin::enter_state (const int state)
 {
-    Plugin::set_enabled(enable);
-    if (enable)
+    if (state == Plugin::ENABLE)
     {
         unsigned long now = millis();
         deadline = now + duration;
@@ -58,12 +57,12 @@ void DrivePlugin::set_enabled (const bool enable)
 
 void DrivePlugin::cycle ()
 {
-    if (is_enabled())
+    if (get_state() == ENABLE)
     {
         if (deadline < millis())
         {
             logger.info() << "Stopping DriveMode: " << get_id() << " at " << millis() << std::endl;
-            set_enabled(false);
+            set_state(DISABLE);
             car.all_stop();
         }
     }

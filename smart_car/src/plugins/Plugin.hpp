@@ -49,13 +49,15 @@ class Plugin
         const PluginId get_id () const;
         virtual bool setup ();
         virtual bool reset ();
+        int get_state () const;
+        void set_state (const int state);
+        virtual void enter_state (const int state);
+        virtual void exit_state (const int state);
+        bool is_trace () const;
+        void set_trace (const bool enable);
         virtual bool is_cyclic () const;
         virtual int get_preferred_interval () const;
         virtual int get_expected_us () const;
-        bool is_enabled () const;
-        virtual void set_enabled (const bool enable);
-        bool is_trace () const;
-        void set_trace (const bool enable);
         void major_cycle ();
         virtual void cycle ();
         void start_cycle ();
@@ -64,16 +66,11 @@ class Plugin
         unsigned long get_cycle_count () const;
         unsigned long get_total_micros () const;
         unsigned long get_overrun_count () const;
-        int get_state () const;
-        void set_state (const int state);
-        virtual void enter_state (const int state);
-        virtual void exit_state (const int state);
 
     private:
         const PluginId id;
-        bool enable = false;
-        bool enable_trace = false;
         int state = DISABLE;
+        bool enable_trace = false;
         unsigned long cycle_count = 0;
         unsigned long overrun_count = 0;
         unsigned long cycle_start_micros = 0;

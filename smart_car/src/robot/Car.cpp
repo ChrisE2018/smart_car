@@ -95,19 +95,19 @@ void Car::set_mode (const Mode _mode)
     {
         case Mode::COMMAND_MODE:
             all_stop();
-            wall_plugin->set_enabled(false);
+            wall_plugin->set_state(Plugin::DISABLE);
             break;
         case Mode::DEMO_MODE:
             all_stop();
-            wall_plugin->set_enabled(false);
+            wall_plugin->set_state(Plugin::DISABLE);
             break;
         case Mode::GOAL_MODE:
             all_stop();
-            wall_plugin->set_enabled(false);
+            wall_plugin->set_state(Plugin::DISABLE);
             break;
         case Mode::WALL_MODE:
             all_stop();
-            wall_plugin->set_enabled(true);
+            wall_plugin->set_state(Plugin::ENABLE);
             break;
     }
 }
@@ -169,9 +169,8 @@ void Car::all_stop ()
     {
         pid_controls[motor].drive_stop();
     }
-    forward_plugin->set_enabled(false);
-    reverse_plugin->set_enabled(false);
-    goal_plugin->set_enabled(false);
+    forward_plugin->set_state(Plugin::DISABLE);
+    reverse_plugin->set_state(Plugin::DISABLE);
     goal_plugin->set_state(Plugin::DISABLE);
 }
 

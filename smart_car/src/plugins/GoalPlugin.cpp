@@ -30,7 +30,6 @@ void GoalPlugin::set_goal (const float angle)
 {
     goal_angle = angle;
     set_state(ADJUST_ANGLE);
-    set_enabled(true);
     logger.info(__LINE__) << "Set " << car << " goal angle " << goal_angle << std::endl;
 }
 
@@ -39,7 +38,6 @@ void GoalPlugin::set_goal (const float x, const float y)
     goal_x = x;
     goal_y = y;
     set_state(ADJUST_POSITION);
-    set_enabled(true);
     logger.info(__LINE__) << "Set " << car << " goal position " << x << ", " << y << std::endl;
 }
 
