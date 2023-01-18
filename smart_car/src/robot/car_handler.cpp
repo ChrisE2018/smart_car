@@ -207,16 +207,6 @@ void Car::execute_command (const std::vector<String> &words)
         all_stop();
         set_mode(Mode::COMMAND_MODE);
     }
-    else if (command == F("schedule"))
-    {
-        for (int i = 0; i < schedule_size; i++)
-        {
-            const PluginId id = schedule[i];
-            const Plugin *plugin = get_plugin(id);
-            logger.info(__LINE__) << F("[") << i << F("] ") << id << F(": ")
-                    << ((plugin == nullptr) ? F("null") : F("found")) << std::endl;
-        }
-    }
     else if (command == F("wall"))
     {
         set_mode(Mode::WALL_MODE);

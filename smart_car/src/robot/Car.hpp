@@ -70,7 +70,6 @@ class Car: public Executor
         Logger logger;
         unsigned long cycle_count = 0;
         unsigned long total_cycle_us = 0;
-        const bool use_simple_cycle = true;
 
         Parser serial_parser;
         Parser bluetooth_parser;
@@ -127,15 +126,10 @@ class Car: public Executor
         { PidPlugin(PluginId::PID_RIGHT_FRONT_PLUGIN, motors[0]), PidPlugin(PluginId::PID_LEFT_FRONT_PLUGIN, motors[1]),
                 PidPlugin(PluginId::PID_RIGHT_REAR_PLUGIN, motors[2]), PidPlugin(PluginId::PID_LEFT_REAR_PLUGIN,
                         motors[3]) };
-        static constexpr int schedule_size = 70;
-        PluginId schedule[schedule_size];
         Mode mode = Mode::COMMAND_MODE;
 
-        void schedule_cycle ();
-        void simple_cycle ();
         void command_cycle ();
         void help_command ();
         Plugin* get_plugin (const PluginId id) const;
-        int get_actual_interval (const int cycle, const PluginId id) const;
 };
 

@@ -82,76 +82,9 @@ void Car::setup ()
             logger.info(__LINE__) << F("Disabled ") << plugin->get_id() << std::endl;
         }
     }
-    for (int i = 0; i < schedule_size; i++)
-    {
-        schedule[i] = PluginId::IDLE_CYCLE;
-    }
-    int cycle = 0;
-    int scheduled_count = 0;
-    //while (cycle < schedule_size)
-    {
-        for (Plugin *plugin : available_plugins)
-        {
-            if (plugin->is_cyclic())
-            {
-                const int max_ms = 999 + plugin->get_expected_us();
-                const int expected_ms = max_ms / 1000;
-                if (cycle < schedule_size - expected_ms)
-                {
-                    const PluginId id = plugin->get_id();
-                    const int actual_interval = get_actual_interval(cycle, id);
-                    const int preferred_interval = plugin->get_preferred_interval();
-                    if (actual_interval >= preferred_interval)
-                    {
-                        scheduled_count++;
-                        schedule[cycle++] = id;
-                        for (int i = 1; i < expected_ms; i++)
-                        {
-                            schedule[cycle++] = PluginId::IDLE_CYCLE;
-                        }
-                    }
-                }
-            }
-            else
-            {
-                scheduled_count++;
-            }
-        }
-        if (cycle < schedule_size - 3)
-        {
-            schedule[cycle++] = PluginId::IDLE_CYCLE;
-            schedule[cycle++] = PluginId::COMMAND_CYCLE;
-            schedule[cycle++] = PluginId::IDLE_CYCLE;
-            schedule[cycle++] = PluginId::IDLE_CYCLE;
-        }
-        else
-        {
-            LOG_ERROR(logger, "Could not schedule command cycle in %d slots", schedule_size);
-        }
-    }
-    if (scheduled_count < plugins.size())
-    {
-        LOG_WARNING(logger, "Scheduled only %d of %d enabled plugins", scheduled_count, plugins.size());
-    }
-    else
-    {
-        LOG_INFO(logger, "Scheduled all %d enabled plugins", plugins.size());
-    }
 
     logger.info(__LINE__) << F("Testing info logging") << std::endl;
     logger.debug(__LINE__) << F("Testing debug logging") << std::endl;
-}
-
-int Car::get_actual_interval (const int cycle, const PluginId id) const
-{
-    for (int i = cycle; i >= 0; i--)
-    {
-        if (schedule[i] == id)
-        {
-            return cycle - i;
-        }
-    }
-    return 100;
 }
 
 void Car::set_mode (const Mode _mode)
@@ -180,42 +113,6 @@ void Car::set_mode (const Mode _mode)
 }
 
 void Car::cycle ()
-{
-    if (use_simple_cycle)
-    {
-        simple_cycle();
-    }
-    else
-    {
-        schedule_cycle();
-    }
-}
-
-void Car::schedule_cycle ()
-{
-    const unsigned long cycle_start_us = micros();
-    const int ms = millis() % 1000;
-    const int cycle = ms % schedule_size;
-
-    const PluginId scheduled_plugin = schedule[cycle];
-    if (scheduled_plugin == PluginId::COMMAND_CYCLE)
-    {
-        command_cycle();
-    }
-    else
-    {
-        Plugin *const plugin = get_plugin(scheduled_plugin);
-        if (plugin != nullptr)
-        {
-            plugin->major_cycle();
-        }
-    }
-
-    total_cycle_us += (micros() - cycle_start_us);
-    cycle_count++;
-}
-
-void Car::simple_cycle ()
 {
     const unsigned long cycle_start_us = micros();
 
