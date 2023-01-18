@@ -159,16 +159,20 @@ void Car::execute_command (const std::vector<String> &words)
     }
     else if (command == "plugins")
     {
-        LOG_INFO(logger, "Plugins %d", plugins.size());
+        LOG_INFO(logger, "Plugins %d / %d enabled", plugins.size(), available_plugins.size());
         for (Plugin *const plugin : plugins)
         {
             const long cycle_count = plugin->get_cycle_count();
             const float total_micros = plugin->get_total_micros();
             if (cycle_count > 0)
             {
-                logger.info(__LINE__) << *plugin << F(" average ") << total_micros / cycle_count << F(" / ")
-                        << plugin->get_expected_us() << F(" us expected over ") << cycle_count << F(" cycles")
+                logger.info(__LINE__) << plugin << F(" average ") << total_micros / cycle_count << F(" / ")
+                        << plugin->get_expected_us() << F(" us expected")
                         << std::endl;
+            }
+            else
+            {
+                logger.info(__LINE__) << plugin << std::endl;
             }
         }
         const float f_total_micros = total_cycle_us;
@@ -208,6 +212,29 @@ void Car::execute_command (const std::vector<String> &words)
     {
         all_stop();
         set_mode(Mode::COMMAND_MODE);
+    }
+    else if (command == F("schedule"))
+    {
+        LOG_INFO(logger, "Plugins %d / %d are cyclic", cyclic_plugins.size(), available_plugins.size());
+        float cycle_average = 0;
+        for (Plugin *const plugin : cyclic_plugins)
+        {
+            const long cycle_count = plugin->get_cycle_count();
+            const float total_micros = plugin->get_total_micros();
+            if (cycle_count > 0)
+            {
+                const float average = total_micros / cycle_count;
+                cycle_average += average;
+                logger.info(__LINE__) << plugin << F(" average ") << average << F(" / ") << plugin->get_expected_us()
+                        << F(" us expected") << std::endl;
+            }
+            else
+            {
+                logger.info(__LINE__) << plugin << std::endl;
+            }
+        }
+        logger.info(__LINE__) << "Cycle average " << cycle_average << " micros = " << (cycle_average / 1000.0) << " ms"
+                << std::endl;
     }
     else if (command == F("wall"))
     {

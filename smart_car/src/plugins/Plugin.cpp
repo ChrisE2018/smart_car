@@ -62,6 +62,8 @@ std::ostream& operator<< (std::ostream &lhs, const PluginId id)
     return lhs;
 }
 
+int Plugin::INSTANCE = 0;
+
 Plugin::Plugin (const PluginId id) :
         id(id), instance(INSTANCE++)
 {
@@ -73,9 +75,22 @@ Plugin::~Plugin ()
 
 std::ostream& operator<< (std::ostream &lhs, const Plugin &plugin)
 {
-    lhs << "#[" << stringify(plugin.id).c_str() << "#" << plugin.instance << " state " << plugin.state << " cycles "
-            << plugin.cycle_count << "]";
+    lhs << "#[" << stringify(plugin.id).c_str() << "#" << plugin.instance;
+    if (plugin.state != 0)
+    {
+        lhs << " state " << plugin.state;
+    }
+    if (plugin.cycle_count > 0)
+    {
+        lhs << " cycles " << plugin.cycle_count;
+    }
+    lhs << "]";
     return lhs;
+}
+
+std::ostream& operator<< (std::ostream &lhs, const Plugin *plugin)
+{
+    return operator<<(lhs, *plugin);
 }
 
 PluginId Plugin::get_id () const
