@@ -75,7 +75,11 @@ void Car::setup ()
         {
             logger.info(__LINE__) << F("Setup ") << plugin->get_id() << std::endl;
             plugins.push_back(plugin);
-            plugin->enter_state(0);
+            plugin->enter_state(Plugin::DISABLE);
+            if (plugin->is_cyclic)
+            {
+                cyclic_plugins.push_back(plugin);
+            }
         }
         else
         {
@@ -116,7 +120,7 @@ void Car::cycle ()
 {
     const unsigned long cycle_start_us = micros();
 
-    for (Plugin *const plugin : plugins)
+    for (Plugin *const plugin : cyclic_plugins)
     {
         plugin->major_cycle();
     }

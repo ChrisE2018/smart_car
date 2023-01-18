@@ -63,7 +63,7 @@ std::ostream& operator<< (std::ostream &lhs, const PluginId id)
 }
 
 Plugin::Plugin (const PluginId id) :
-        id(id)
+        id(id), instance(INSTANCE++)
 {
 }
 
@@ -73,13 +73,19 @@ Plugin::~Plugin ()
 
 std::ostream& operator<< (std::ostream &lhs, const Plugin &plugin)
 {
-    lhs << "#[" << stringify(plugin.id).c_str() << " state " << plugin.state << " cycles " << plugin.cycle_count << "]";
+    lhs << "#[" << stringify(plugin.id).c_str() << "#" << plugin.instance << " state " << plugin.state << " cycles "
+            << plugin.cycle_count << "]";
     return lhs;
 }
 
-const PluginId Plugin::get_id () const
+PluginId Plugin::get_id () const
 {
     return id;
+}
+
+int Plugin::get_instance () const
+{
+    return instance;
 }
 
 bool Plugin::setup ()
@@ -158,13 +164,13 @@ void Plugin::major_cycle ()
     }
 }
 
-void Plugin::cycle ()
-{
-}
-
 void Plugin::start_cycle ()
 {
     cycle_start_micros = micros();
+}
+
+void Plugin::cycle ()
+{
 }
 
 void Plugin::end_cycle ()

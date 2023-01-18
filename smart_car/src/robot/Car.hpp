@@ -86,6 +86,7 @@ class Car: public Executor
 
         std::vector<Plugin*> available_plugins;
         std::vector<Plugin*> plugins;
+        std::vector<Plugin*> cyclic_plugins;
 
         // Left side
         static constexpr int left_rear_in1 = PIN_49_DIG; // yellow = in1

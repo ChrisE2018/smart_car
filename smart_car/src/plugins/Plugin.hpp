@@ -44,9 +44,10 @@ class Plugin
 
         Plugin (const PluginId id);
         virtual ~Plugin ();
-        friend std::ostream& operator<< (std::ostream &lhs, const Plugin& plugin);
+        friend std::ostream& operator<< (std::ostream &lhs, const Plugin &plugin);
 
-        const PluginId get_id () const;
+        PluginId get_id () const;
+        int get_instance () const;
         virtual bool setup ();
         virtual bool reset ();
         int get_state () const;
@@ -60,8 +61,8 @@ class Plugin
         virtual int get_preferred_interval () const;
         virtual int get_expected_us () const;
         void major_cycle ();
-        virtual void cycle ();
         void start_cycle ();
+        virtual void cycle ();
         void end_cycle ();
         virtual void trace ();
         unsigned long get_cycle_count () const;
@@ -69,7 +70,9 @@ class Plugin
         unsigned long get_overrun_count () const;
 
     private:
+        static int INSTANCE = 0;
         const PluginId id;
+        const int instance;
         int state = DISABLE;
         bool enable_trace = false;
         unsigned long cycle_count = 0;
