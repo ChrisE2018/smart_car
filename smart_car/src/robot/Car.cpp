@@ -73,17 +73,17 @@ void Car::setup ()
     {
         if (plugin->setup())
         {
-            logger.info(__LINE__) << F("Setup ") << plugin->get_id() << std::endl;
+            logger.info(__LINE__) << F("Setup ") << plugin << std::endl;
             plugins.push_back(plugin);
             plugin->enter_state(Plugin::DISABLE);
-            if (plugin->is_cyclic)
+            if (plugin->is_cyclic())
             {
                 cyclic_plugins.push_back(plugin);
             }
         }
         else
         {
-            logger.info(__LINE__) << F("Disabled ") << plugin->get_id() << std::endl;
+            logger.info(__LINE__) << F("Disabled ") << plugin << std::endl;
         }
     }
 

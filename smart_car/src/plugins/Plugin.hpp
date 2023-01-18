@@ -45,6 +45,7 @@ class Plugin
         Plugin (const PluginId id);
         virtual ~Plugin ();
         friend std::ostream& operator<< (std::ostream &lhs, const Plugin &plugin);
+        friend std::ostream& operator<< (std::ostream &lhs, const Plugin *plugin);
 
         PluginId get_id () const;
         int get_instance () const;
@@ -70,7 +71,7 @@ class Plugin
         unsigned long get_overrun_count () const;
 
     private:
-        static int INSTANCE = 0;
+        static int INSTANCE;
         const PluginId id;
         const int instance;
         int state = DISABLE;

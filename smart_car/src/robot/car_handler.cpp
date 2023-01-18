@@ -159,16 +159,20 @@ void Car::execute_command (const std::vector<String> &words)
     }
     else if (command == "plugins")
     {
-        LOG_INFO(logger, "Plugins %d", plugins.size());
+        LOG_INFO(logger, "Plugins %d / %d enabled", plugins.size(), available_plugins.size());
         for (Plugin *const plugin : plugins)
         {
             const long cycle_count = plugin->get_cycle_count();
             const float total_micros = plugin->get_total_micros();
             if (cycle_count > 0)
             {
-                logger.info(__LINE__) << *plugin << F(" average ") << total_micros / cycle_count << F(" / ")
+                logger.info(__LINE__) << plugin << F(" average ") << total_micros / cycle_count << F(" / ")
                         << plugin->get_expected_us() << F(" us expected over ") << cycle_count << F(" cycles")
                         << std::endl;
+            }
+            else
+            {
+                logger.info(__LINE__) << plugin << std::endl;
             }
         }
         const float f_total_micros = total_cycle_us;
