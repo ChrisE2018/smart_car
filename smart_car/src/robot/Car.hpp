@@ -52,7 +52,7 @@ class Car: public Executor
         float get_measured_velocity (const MotorLocation motor) const;
         float get_desired_velocity (const MotorLocation motor) const;
         void set_desired_velocity (const MotorLocation motor, const float velocity);
-        MotorDirection get_drive_direction (const MotorLocation motor) const;
+        float get_measured_velocity (const MotorLocation motor);
 
         ClockPlugin* get_clock_plugin () const;
         DrivePlugin* get_forward_plugin () const;
@@ -111,17 +111,17 @@ class Car: public Executor
         static constexpr int LEFT_LED_FORWARD = PIN_26_DIG; // red led left
         static constexpr int LEFT_LED_REVERSE = PIN_28_DIG; // green led left
         MotorPlugin motors[MOTOR_COUNT] =
-        { MotorPlugin(PluginId::MOTOR_RIGHT_FRONT_PLUGIN, MotorLocation::RIGHT_FRONT, right_front_enA, right_front_in2,
-                right_front_in1, RIGHT_LED_FORWARD, RIGHT_LED_REVERSE),
+        { MotorPlugin(*this, PluginId::MOTOR_RIGHT_FRONT_PLUGIN, MotorLocation::RIGHT_FRONT, right_front_enA,
+                right_front_in2, right_front_in1, RIGHT_LED_FORWARD, RIGHT_LED_REVERSE),
         //
-                MotorPlugin(PluginId::MOTOR_LEFT_FRONT_PLUGIN, MotorLocation::LEFT_FRONT, left_front_enB,
+                MotorPlugin(*this, PluginId::MOTOR_LEFT_FRONT_PLUGIN, MotorLocation::LEFT_FRONT, left_front_enB,
                         left_front_in3, left_front_in4, LEFT_LED_FORWARD, LEFT_LED_REVERSE),
                 //
-                MotorPlugin(PluginId::MOTOR_RIGHT_REAR_PLUGIN, MotorLocation::RIGHT_REAR, right_rear_enB,
+                MotorPlugin(*this, PluginId::MOTOR_RIGHT_REAR_PLUGIN, MotorLocation::RIGHT_REAR, right_rear_enB,
                         right_rear_in3, right_rear_in4, DISABLED_LED, DISABLED_LED),
                 //
-                MotorPlugin(PluginId::MOTOR_LEFT_REAR_PLUGIN, MotorLocation::LEFT_REAR, left_rear_enA, left_rear_in2,
-                        left_rear_in1, DISABLED_LED, DISABLED_LED) };
+                MotorPlugin(*this, PluginId::MOTOR_LEFT_REAR_PLUGIN, MotorLocation::LEFT_REAR, left_rear_enA,
+                        left_rear_in2, left_rear_in1, DISABLED_LED, DISABLED_LED) };
 
         PidPlugin pid_controls[MOTOR_COUNT] =
         { PidPlugin(PluginId::PID_RIGHT_FRONT_PLUGIN, motors[0]), PidPlugin(PluginId::PID_LEFT_FRONT_PLUGIN, motors[1]),

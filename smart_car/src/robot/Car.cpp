@@ -230,9 +230,9 @@ void Car::set_desired_velocity (const MotorLocation motor, const float velocity)
     pid_controls[static_cast<int>(motor)].set_desired_velocity(velocity);
 }
 
-MotorDirection Car::get_drive_direction (const MotorLocation motor) const
+float Car::get_measured_velocity (const MotorLocation motor)
 {
-    return motors[static_cast<int>(motor)].get_direction();
+    return pid_controls[static_cast<int>(motor)].get_measured_velocity();
 }
 
 ClockPlugin* Car::get_clock_plugin () const

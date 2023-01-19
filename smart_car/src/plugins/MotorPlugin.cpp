@@ -9,6 +9,7 @@
 
 #include "../logging/RobotAppender.hpp"
 #include "smart_car.hpp"
+#include "../robot/Car.hpp"
 #include "../robot/speed_counter.hpp"
 
 #include "../logging/Logger.hpp"
@@ -63,10 +64,10 @@ std::ostream& operator<< (std::ostream &lhs, const MotorPlugin &motor)
     return lhs << "#[motor " << motor.location << " " << motor.speed << "]";
 }
 
-MotorPlugin::MotorPlugin (const PluginId id, const MotorLocation location, int enable, int forward, int reverse,
-        int forward_led, int reverse_led) :
-        location(location), enable_pin(enable), forward_pin(forward), reverse_pin(reverse), forward_led(forward_led), reverse_led(
-                reverse_led), Plugin(id)
+MotorPlugin::MotorPlugin (Car &car, const PluginId id, const MotorLocation location, int enable, int forward,
+        int reverse, int forward_led, int reverse_led) :
+        car(car), location(location), enable_pin(enable), forward_pin(forward), reverse_pin(reverse), forward_led(
+                forward_led), reverse_led(reverse_led), Plugin(id)
 {
 }
 
@@ -141,7 +142,7 @@ void MotorPlugin::set_speed (const int speed)
     }
 }
 
-void MotorPlugin::set_limit (const unsigned long limit,  const int value)
+void MotorPlugin::set_limit (const unsigned long limit, const int value)
 {
     set_speed_counter_limit(location, limit, enable_pin, value);
 }
@@ -168,9 +169,9 @@ void MotorPlugin::drive_forward (const int _speed)
         digitalWrite(reverse_pin, LOW);
         digitalWrite(forward_pin, HIGH);
         analogWrite(enable_pin, _speed);
-        cout << location << "_" << direction << ": " << speed << " " << location
-//                << "_mps: " << measured_velocity
-//                << " cve: " << cumulative_velocity_error
+        const float measured_velocity = car.get_measured_velocity(location);
+        logger.info(__LINE__) << location << "_" << direction << ": " << speed << " " << location << "_mps: "
+                << measured_velocity
                 << std::endl;
     }
 }
@@ -192,10 +193,9 @@ void MotorPlugin::drive_reverse (const int _speed)
         digitalWrite(forward_pin, LOW);
         digitalWrite(reverse_pin, HIGH);
         analogWrite(enable_pin, -speed);
-        cout << location << "_" << direction << ": " << speed << " " << location
-//                << "_mps: " << measured_velocity
-//                << " cve: " << cumulative_velocity_error
-                << std::endl;
+        const float measured_velocity = car.get_measured_velocity(location);
+        logger.info(__LINE__) << location << "_" << direction << ": " << speed << " " << location << "_mps: "
+                << measured_velocity << std::endl;
     }
 }
 
@@ -216,9 +216,8 @@ void MotorPlugin::drive_zero_speed ()
         digitalWrite(forward_pin, LOW);
         digitalWrite(reverse_pin, LOW);
         analogWrite(enable_pin, LOW);
-        cout << "drive " << location << " " << direction << " at " << speed << " power "
-//                << measured_velocity << " mps"
-//                << " cve: " << cumulative_velocity_error
+        const float measured_velocity = car.get_measured_velocity(location);
+        logger.info(__LINE__) << location << "_" << direction << ": " << speed << " mps: " << measured_velocity
                 << std::endl;
     }
 }

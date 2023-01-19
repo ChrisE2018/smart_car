@@ -35,11 +35,11 @@ class PidPlugin: public Plugin
         const MotorLocation location;
 
         // Support for speed encoders
-        static constexpr int minimum_cycle_ms = 100;
-        static constexpr int minimum_speed_ticks = 10;
+        static constexpr int minimum_cycle_ms = 10;
+        static constexpr int minimum_speed_ticks = 4;
 
-        static constexpr float k0 = 0.45 * SPEED_FULL;
-        static constexpr float k1 = 0.15; //0.30;
+        static constexpr float k0 = 1.0 * SPEED_FULL;
+        static constexpr float k1 = 0.30;
         static constexpr float k2 = -0.01;
         static constexpr float k3 = 0; //0.15;
         static constexpr float k4 = 0; //0.2;

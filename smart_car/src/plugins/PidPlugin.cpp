@@ -86,7 +86,7 @@ float PidPlugin::get_velocity_error () const
 
 int PidPlugin::get_preferred_interval () const
 {
-    return 100;
+    return 1;
 }
 
 int PidPlugin::get_expected_us () const
@@ -117,13 +117,13 @@ void PidPlugin::cycle ()
         speed_counter = measured_speed_counter;
         const double measured_distance = speed_ticks * count_to_meters;
         measured_velocity = measured_distance / delta_seconds;
-        if (abs(measured_velocity) > 0)
-        {
-            logger.data() << F("/motor/") << stringify(location).c_str() << F("/delta_seconds,") << delta_seconds
-                    << F(",speed_counter,") << speed_counter << F(",measured_velocity,") << measured_velocity
-                    << F(",measured_distance,") << measured_distance << F(",raw_speed_ticks,") << raw_speed_ticks
-                    << std::endl;
-        }
+//        if (abs(measured_velocity) > 0)
+//        {
+//            logger.data() << F("/motor/") << stringify(location).c_str() << F("/delta_seconds,") << delta_seconds
+//                    << F(",speed_counter,") << speed_counter << F(",measured_velocity,") << measured_velocity
+//                    << F(",measured_distance,") << measured_distance << F(",raw_speed_ticks,") << raw_speed_ticks
+//                    << std::endl;
+//        }
         if (get_state() == Plugin::ENABLE)
         {
             const float previous_velocity_error = velocity_error;
@@ -136,9 +136,9 @@ void PidPlugin::cycle ()
                             + smallness * velocity_error * k3);
             // No reversing
             const float control = desired_velocity >= 0.0f ? std::max(0.0f, control_raw) : std::min(0.0f, control_raw);
-            logger.data() << F("/motor/") << stringify(location).c_str() << F("/velocity_error,") << velocity_error
-                    << F(",cumulative_velocity_error,") << cumulative_velocity_error << F(",velocity_error_rate,")
-                    << velocity_error_rate << F(",smallness,") << smallness << F(",control,") << control << std::endl;
+//            logger.data() << F("/motor/") << stringify(location).c_str() << F("/velocity_error,") << velocity_error
+//                    << F(",cumulative_velocity_error,") << cumulative_velocity_error << F(",velocity_error_rate,")
+//                    << velocity_error_rate << F(",smallness,") << smallness << F(",control,") << control << std::endl;
             motor_plugin.set_speed(control);
         }
         last_cycle_ms = now;
