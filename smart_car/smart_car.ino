@@ -38,8 +38,8 @@ void setup ()
     car = new Car();
     TimeSource &time_source = *car->get_clock_plugin();
     StandardFormatter *formatter = new StandardFormatter(time_source);
-    robot_appender = new RobotAppender(*formatter, time_source, Level::info);
-    usb_appender = new UsbAppender(*formatter, Level::info);
+    robot_appender = new RobotAppender(Level::info, *formatter, time_source);
+    usb_appender = new UsbAppender(Level::info, *formatter);
     Logger::ROOT->add_appender(robot_appender);
     robot_appender->open_logfile();
     car->setup();

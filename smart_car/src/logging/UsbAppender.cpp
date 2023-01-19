@@ -7,14 +7,14 @@
 
 #include "UsbAppender.hpp"
 
-UsbAppender::UsbAppender (Formatter &formatter, const Level level) :
-        Appender(formatter), level(level)
+UsbAppender::UsbAppender (const Level level, Formatter &formatter) :
+        Appender(level, formatter)
 {
 }
 
 void UsbAppender::append (const Level _level, const char *message)
 {
-    if (static_cast<int>(_level) <= static_cast<int>(level))
+    if (static_cast<int>(_level) <= static_cast<int>(get_level()))
     {
         Serial.println(message);
     }

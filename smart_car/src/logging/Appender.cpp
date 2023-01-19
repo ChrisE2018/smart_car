@@ -7,9 +7,19 @@
 
 #include "Appender.hpp"
 
-Appender::Appender (Formatter &formatter) :
-        formatter(formatter)
+Appender::Appender (const Level level, Formatter &formatter) :
+        level(level), formatter(formatter)
 {
+}
+
+Level Appender::get_level () const
+{
+    return level;
+}
+
+void Appender::set_level (const Level _level)
+{
+    level = _level;
 }
 
 void Appender::append (const Logger *logger, const Level level, const int line, const char *message)

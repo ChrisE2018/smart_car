@@ -7,6 +7,7 @@
 
 #include "Car.hpp"
 #include "../logging/RobotAppender.hpp"
+#include "../logging/UsbAppender.hpp"
 #include "smart_car.hpp"
 
 #include "../plugins/ClockPlugin.hpp"
@@ -23,6 +24,7 @@
 extern HardwareSerial Serial;
 
 extern RobotAppender *robot_appender;
+extern UsbAppender *usb_appender;
 
 Car::Car () :
         logger(__FILE__, Level::debug), serial_parser(Serial), bluetooth_parser(Serial3), clock_plugin(
@@ -149,6 +151,7 @@ void Car::command_cycle ()
         }
         if (bluetooth_parser.has_input())
         {
+            usb_appender->set_level(Level::none);
             robot_appender->enable_usb_logger(false);
             robot_appender->enable_bluetooth_logger(true);
             bluetooth_parser.handle_command(*this);

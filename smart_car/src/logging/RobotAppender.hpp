@@ -18,7 +18,7 @@ class Car;
 class RobotAppender: public Appender
 {
     public:
-        RobotAppender (Formatter &formatter, TimeSource &time_source, const Level level);
+        RobotAppender (const Level level, Formatter &formatter, TimeSource &time_source);
         virtual ~RobotAppender () = default;
         void append (const Level level, const char *const message);
         void append_usb (const char *const message);
@@ -40,7 +40,6 @@ class RobotAppender: public Appender
 
     private:
         TimeSource &time_source;
-        const Level level;
 
         // For file access on micro SD card
         const int chipSelect = 53;

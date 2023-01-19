@@ -24,6 +24,8 @@ const char* stringify (const Level level)
             return "debug";
         case Level::data:
             return "data";
+        case Level::none:
+            return "none";
         default:
             return "?level?";
     }

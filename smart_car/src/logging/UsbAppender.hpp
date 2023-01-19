@@ -12,11 +12,8 @@
 class UsbAppender: public Appender
 {
     public:
-        UsbAppender (Formatter &formatter, const Level level);
+        UsbAppender (const Level level, Formatter &formatter);
         virtual ~UsbAppender () = default;
         virtual void append (const Level level, const char *message) override;
-
-    private:
-        const Level level;
 };
 

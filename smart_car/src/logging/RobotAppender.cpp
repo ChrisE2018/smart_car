@@ -10,14 +10,14 @@
 #include "RobotAppender.hpp"
 #include "UnixTime.hpp"
 
-RobotAppender::RobotAppender (Formatter &formatter, TimeSource &time_source, const Level level) :
-        Appender(formatter), time_source(time_source), level(level)
+RobotAppender::RobotAppender (const Level level, Formatter &formatter, TimeSource &time_source) :
+        Appender(level, formatter), time_source(time_source)
 {
 }
 
 void RobotAppender::append (const Level _level, const char *const message)
 {
-    if (static_cast<int>(_level) <= static_cast<int>(level))
+    if (static_cast<int>(_level) <= static_cast<int>(get_level()))
     {
         if (usb_logger)
         {
