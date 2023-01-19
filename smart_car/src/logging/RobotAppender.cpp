@@ -84,14 +84,13 @@ void RobotAppender::log_data_p (const char *format, ...)
     vsnprintf_P(buffer + n, buffer_size - n, format, args);
     append_file(buffer, false);
     va_end(args);
-
 }
 
 void RobotAppender::get_logfile ()
 {
     const time_t t = get_unixtime(car);
     struct tm *const lt = localtime(&t);
-    const int size = snprintf(log_filename, filename_size, "LOGS/Y%4d/M%02d/D%02d/", 2000 + lt->tm_year, lt->tm_mon + 1,
+    const int size = snprintf(log_filename, filename_size, "LOGS/Y%4d/M%02d/D%02d/", 1900 + lt->tm_year, lt->tm_mon + 1,
             lt->tm_mday);
     SD.mkdir(log_filename);
     snprintf(log_filename + size, filename_size - size, "L%02d-%02d.TXT", lt->tm_hour, lt->tm_min);
@@ -123,6 +122,32 @@ void RobotAppender::open_logfile ()
         }
     }
 }
+
+bool RobotAppender::log_data (String folder, String filename, const char *message)
+{
+    folder.toUpperCase();
+    filename.toUpperCase();
+    SD.mkdir(folder);
+    char buf[32];
+    snprintf(buf, 32, "%s/%s", folder.c_str(), filename.c_str());
+    File stream = SD.open(buf, FILE_WRITE);
+    if (stream)
+    {
+        Serial.print(F("Opened "));
+        Serial.println(buf);
+        stream.println(message);
+        stream.flush();
+        stream.close();
+        return true;
+    }
+    else
+    {
+        Serial.print(F("Open failed "));
+        Serial.println(buf);
+        return false;
+    }
+}
+
 void RobotAppender::flush ()
 {
     if (log_file)

@@ -10,11 +10,7 @@
 #include <Wire.h>
 
 ClockPlugin::ClockPlugin () :
-                Plugin(PluginId::CLOCK_PLUGIN)
-{
-}
-
-bool ClockPlugin::setup ()
+        Plugin(PluginId::CLOCK_PLUGIN)
 {
     if (enable_clock)
     {
@@ -23,6 +19,13 @@ bool ClockPlugin::setup ()
         // Send sketch compiling time to Arduino
 //        clock.setDateTime(__DATE__, __TIME__);
         is_setup = true;
+    }
+}
+
+bool ClockPlugin::setup ()
+{
+    if (is_setup)
+    {
         return true;
     }
     else

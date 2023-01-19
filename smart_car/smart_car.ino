@@ -38,6 +38,7 @@ void setup ()
     car->demo_drive_leds();
     setup_speed_counter();
     print_heap_state();
+    robot_appender->log_data("/STARTUP", "TEST.TXT", "starting");
     Serial.print(F("C++ version "));
     Serial.println(__cplusplus);
     Serial.println(F("Ready"));

@@ -15,18 +15,17 @@ class Car;
 #define LOG_DATA(fmt, args...) robot_appender->log_data_p((const char *)F(fmt), args);
 #define FLUSH_DATA(fmt, args...) robot_appender->flush();
 
-class RobotAppender : public Appender
+class RobotAppender: public Appender
 {
     public:
         RobotAppender (Car &car, const Level level);
         virtual ~RobotAppender () = default;
-        virtual void append (const Logger *const logger, const Level level, const int line,
-                const char *const message);
+        virtual void append (const Logger *const logger, const Level level, const int line, const char *const message);
         void append (const Level level, const char *const message);
         void append_usb (const char *const message);
         void append_bluetooth (const char *const message);
-        void append_file (const char *const message, const bool flush=false);
-        void log_data_p(const char *format, ...);
+        void append_file (const char *const message, const bool flush = false);
+        void log_data_p (const char *format, ...);
         void open_logfile ();
         void flush ();
         void close ();
@@ -38,6 +37,7 @@ class RobotAppender : public Appender
         bool is_file_logger ();
         bool get_logger_state (const String &mode) const;
         void set_logger_state (const String &mode, const String &state);
+        bool log_data (String folder, String filename, const char *message);
 
     private:
         Car &car;
