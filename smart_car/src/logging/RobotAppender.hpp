@@ -20,12 +20,12 @@ class RobotAppender: public Appender
     public:
         RobotAppender (Car &car, const Level level);
         virtual ~RobotAppender () = default;
-        virtual void append (const Logger *const logger, const Level level, const int line, const char *const message);
+        //virtual void append (const Logger *const logger, const Level level, const int line, const char *const message);
         void append (const Level level, const char *const message);
         void append_usb (const char *const message);
         void append_bluetooth (const char *const message);
         void append_file (const char *const message, const bool flush = false);
-        void log_data_p (const char *format, ...);
+//        void log_data_p (const char *format, ...);
         void open_logfile ();
         void flush ();
         void close ();
@@ -49,8 +49,6 @@ class RobotAppender: public Appender
         static const int filename_size = 32;
         char log_filename[filename_size];
         File log_file;
-        static const int buffer_size = 256;
-        char buffer[buffer_size];
 
         bool usb_logger = true;
         bool bluetooth_logger = true;

@@ -17,16 +17,16 @@ RobotAppender::RobotAppender (Car &car, const Level level) :
 {
 }
 
-void RobotAppender::append (const Logger *const logger, const Level level, const int line, const char *const message)
-{
-    const time_t t = get_unixtime(car);
-    struct tm *const lt = localtime(&t);
-    const int ms = millis() % 1000;
-    snprintf(buffer, buffer_size, "%s.%03d [%s %s:%d] %s", isotime(lt), ms, stringify(level),
-            logger->get_short_name().c_str(), line, message);
-    buffer[buffer_size - 1] = '\0';
-    append(level, buffer);
-}
+//void RobotAppender::append (const Logger *const logger, const Level level, const int line, const char *const message)
+//{
+//    const time_t t = get_unixtime(car);
+//    struct tm *const lt = localtime(&t);
+//    const int ms = millis() % 1000;
+//    snprintf(buffer, buffer_size, "%s.%03d [%s %s:%d] %s", isotime(lt), ms, stringify(level),
+//            logger->get_short_name().c_str(), line, message);
+//    buffer[buffer_size - 1] = '\0';
+//    append(level, buffer);
+//}
 
 void RobotAppender::append (const Level _level, const char *const message)
 {
@@ -73,18 +73,18 @@ void RobotAppender::append_file (const char *const message, const bool flush = f
     }
 }
 
-void RobotAppender::log_data_p (const char *format, ...)
-{
-    va_list args;
-    va_start(args, format);
-    const time_t t = get_unixtime(car);
-    struct tm *const lt = localtime(&t);
-    const int ms = millis() % 1000;
-    const int n = snprintf(buffer, buffer_size, "%s.%03d", isotime(lt), ms);
-    vsnprintf_P(buffer + n, buffer_size - n, format, args);
-    append_file(buffer, false);
-    va_end(args);
-}
+//void RobotAppender::log_data_p (const char *format, ...)
+//{
+//    va_list args;
+//    va_start(args, format);
+//    const time_t t = get_unixtime(car);
+//    struct tm *const lt = localtime(&t);
+//    const int ms = millis() % 1000;
+//    const int n = snprintf(buffer, buffer_size, "%s.%03d", isotime(lt), ms);
+//    vsnprintf_P(buffer + n, buffer_size - n, format, args);
+//    append_file(buffer, false);
+//    va_end(args);
+//}
 
 void RobotAppender::get_logfile ()
 {
@@ -128,7 +128,7 @@ bool RobotAppender::log_data (String folder, String filename, const char *messag
     folder.toUpperCase();
     filename.toUpperCase();
     SD.mkdir(folder);
-    const int buf_size = 32;
+    constexpr int buf_size = 32;
     char buf[buf_size];
     snprintf(buf, buf_size, "%s/%s", folder.c_str(), filename.c_str());
     File stream = SD.open(buf, FILE_WRITE);
@@ -160,8 +160,9 @@ bool RobotAppender::save_data (String folder, String filename, const char *messa
     folder.toUpperCase();
     filename.toUpperCase();
     SD.mkdir(folder);
-    char buf[32];
-    snprintf(buf, 32, "%s/%s", folder.c_str(), filename.c_str());
+    constexpr int buf_size = 32;
+    char buf[buf_size];
+    snprintf(buf, buf_size, "%s/%s", folder.c_str(), filename.c_str());
     File stream = SD.open(buf, FILE_WRITE);
     if (stream)
     {

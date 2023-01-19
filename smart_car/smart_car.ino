@@ -5,6 +5,9 @@
 #include "src/robot/heap.hpp"
 #include "src/logging/Logger.hpp"
 #include "src/logging/RobotAppender.hpp"
+#include "src/logging/StandardFormatter.hpp"
+#include "src/logging/TimeSource.hpp"
+#include "src/plugins/ClockPlugin.hpp"
 
 /* Program for robot car. */
 
@@ -30,6 +33,9 @@ void setup ()
     Serial3.begin(9600);
     car = new Car();
     robot_appender = new RobotAppender(*car, Level::debug);
+    ClockPlugin *clock_plugin = car->get_clock_plugin();
+    StandardFormatter *formatter = new StandardFormatter(*clock_plugin);
+    robot_appender->set_formatter(formatter);
     Logger::ROOT->add_appender(robot_appender);
     robot_appender->open_logfile();
     car->setup();
