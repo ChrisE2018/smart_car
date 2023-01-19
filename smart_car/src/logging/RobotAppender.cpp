@@ -128,6 +128,38 @@ bool RobotAppender::log_data (String folder, String filename, const char *messag
     folder.toUpperCase();
     filename.toUpperCase();
     SD.mkdir(folder);
+    const int buf_size = 32;
+    char buf[buf_size];
+    snprintf(buf, buf_size, "%s/%s", folder.c_str(), filename.c_str());
+    File stream = SD.open(buf, FILE_WRITE);
+    if (stream)
+    {
+        Serial.print(F("Opened "));
+        Serial.println(buf);
+
+        const time_t t = get_unixtime(car);
+        struct tm *const lt = localtime(&t);
+        const int ms = millis() % 1000;
+        const int n = snprintf(buf, buf_size, "%s.%03d ", isotime(lt), ms);
+        stream.print(buf);
+        stream.println(message);
+        stream.flush();
+        stream.close();
+        return true;
+    }
+    else
+    {
+        Serial.print(F("Open failed "));
+        Serial.println(buf);
+        return false;
+    }
+}
+
+bool RobotAppender::save_data (String folder, String filename, const char *message)
+{
+    folder.toUpperCase();
+    filename.toUpperCase();
+    SD.mkdir(folder);
     char buf[32];
     snprintf(buf, 32, "%s/%s", folder.c_str(), filename.c_str());
     File stream = SD.open(buf, FILE_WRITE);

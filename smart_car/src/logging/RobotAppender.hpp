@@ -38,6 +38,7 @@ class RobotAppender: public Appender
         bool get_logger_state (const String &mode) const;
         void set_logger_state (const String &mode, const String &state);
         bool log_data (String folder, String filename, const char *message);
+        bool save_data (String folder, String filename, const char *message);
 
     private:
         Car &car;

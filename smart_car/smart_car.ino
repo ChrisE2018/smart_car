@@ -26,8 +26,6 @@ static unsigned long cycle_count = 0;
 void setup ()
 {
     Serial.begin(9600);
-    Serial.println(F("RIGHT: 0 RIGHT_mps: 0"));
-    Serial.println(F("LEFT: 0 LEFT_mps: 0"));
     Serial.println(F("Smart car"));
     Serial3.begin(9600);
     car = new Car();
@@ -37,13 +35,15 @@ void setup ()
     car->setup();
     car->demo_drive_leds();
     setup_speed_counter();
-    print_heap_state();
-    robot_appender->log_data("/STARTUP", "TEST.TXT", "starting");
+    const int heap_buffer_size = 100;
+    char heap_buffer[heap_buffer_size];
+    get_heap_state(heap_buffer, heap_buffer_size);
+    robot_appender->log_data("/HISTORY", "STARTUP.TXT", heap_buffer);
     Serial.print(F("C++ version "));
     Serial.println(__cplusplus);
     Serial.println(F("Ready"));
     Serial.println();
-//    robot_appender->enable_usb_logger(false);
+    // Don't send to bluetooth unless it is active
     robot_appender->enable_bluetooth_logger(false);
 }
 

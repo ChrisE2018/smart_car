@@ -10,5 +10,6 @@
 #pragma once
 
 void print_heap_state ();
+void get_heap_state (char *buffer, size_t size);
 unsigned long get_free_ram ();
 unsigned long get_heap_address ();
