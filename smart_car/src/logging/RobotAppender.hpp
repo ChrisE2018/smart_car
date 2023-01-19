@@ -8,7 +8,7 @@
 #pragma once
 
 #include "Appender.hpp"
-#include "../robot/car.hpp"
+#include "TimeSource.hpp"
 #include <SD.h>
 class Car;
 
@@ -18,14 +18,12 @@ class Car;
 class RobotAppender: public Appender
 {
     public:
-        RobotAppender (Car &car, const Level level);
+        RobotAppender (Formatter &formatter, TimeSource &time_source, const Level level);
         virtual ~RobotAppender () = default;
-        //virtual void append (const Logger *const logger, const Level level, const int line, const char *const message);
         void append (const Level level, const char *const message);
         void append_usb (const char *const message);
         void append_bluetooth (const char *const message);
         void append_file (const char *const message, const bool flush = false);
-//        void log_data_p (const char *format, ...);
         void open_logfile ();
         void flush ();
         void close ();
@@ -41,7 +39,7 @@ class RobotAppender: public Appender
         bool save_data (String folder, String filename, const char *message);
 
     private:
-        Car &car;
+        TimeSource &time_source;
         const Level level;
 
         // For file access on micro SD card
@@ -57,4 +55,3 @@ class RobotAppender: public Appender
         void get_logfile ();
 };
 
-extern RobotAppender *robot_appender;

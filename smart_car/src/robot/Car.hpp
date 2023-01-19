@@ -49,10 +49,10 @@ class Car: public Executor
         void set_right_speed (const int speed);
         void set_left_speed (const int speed);
         int get_drive_speed (const MotorLocation motor) const;
-        float get_measured_velocity (const MotorLocation motor) const;
         float get_desired_velocity (const MotorLocation motor) const;
         void set_desired_velocity (const MotorLocation motor, const float velocity);
-        float get_measured_velocity (const MotorLocation motor);
+        float get_measured_velocity (const MotorLocation motor) const;
+        float get_cumulative_velocity_error (const MotorLocation motor) const;
 
         ClockPlugin* get_clock_plugin () const;
         DrivePlugin* get_forward_plugin () const;

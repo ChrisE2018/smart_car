@@ -41,11 +41,6 @@ unsigned long PidPlugin::get_speed_counter () const
     return speed_counter;
 }
 
-float PidPlugin::get_measured_velocity () const
-{
-    return measured_velocity;
-}
-
 float PidPlugin::get_desired_velocity () const
 {
     return desired_velocity;
@@ -57,8 +52,18 @@ void PidPlugin::set_desired_velocity (const float _desired_velocity)
     if (desired_velocity != _desired_velocity)
     {
         desired_velocity = _desired_velocity;
-        cumulative_velocity_error = 0;
+        cumulative_velocity_error = _desired_velocity;
     }
+}
+
+float PidPlugin::get_measured_velocity () const
+{
+    return measured_velocity;
+}
+
+float PidPlugin::get_cumulative_velocity_error () const
+{
+    return cumulative_velocity_error;
 }
 
 void PidPlugin::enter_state (const int state)

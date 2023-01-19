@@ -7,24 +7,14 @@
 
 #include "Appender.hpp"
 
-Appender::Appender ()
+Appender::Appender (Formatter &formatter) :
+        formatter(formatter)
 {
-}
-
-void Appender::set_formatter (Formatter *const _formatter)
-{
-    formatter = _formatter;
 }
 
 void Appender::append (const Logger *logger, const Level level, const int line, const char *message)
 {
-    if (formatter == nullptr)
-    {
-        append(level, message);
-    }
-    else
-    {
-        formatter->format(buffer, buffer_size, logger, level, line, message);
-        append(level, buffer);
-    }
+    formatter.format(buffer, buffer_size, logger, level, line, message);
+    buffer[buffer_size - 1] = '\0';
+    append(level, buffer);
 }

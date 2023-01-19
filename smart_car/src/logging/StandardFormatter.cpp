@@ -8,10 +8,10 @@
 #include "StandardFormatter.hpp"
 #include "UnixTime.hpp"
 
-StandardFormatter::StandardFormatter (TimeSource &time_source) : Formatter(), time_source(time_source)
+StandardFormatter::StandardFormatter (TimeSource &time_source) :
+        Formatter(), time_source(time_source)
 {
 }
-
 
 void StandardFormatter::format (char *buffer, const size_t buffer_size, const Logger *const logger, const Level level,
         const int line, const char *const message)

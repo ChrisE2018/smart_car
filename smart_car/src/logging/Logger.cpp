@@ -36,17 +36,17 @@ static char Logger::buffer[Logger::buffer_size];
 static LogBuffer Logger::stream;
 
 Logger::Logger (const String name) :
-                Logger(Logger::ROOT, name, Level::info)
+        Logger(Logger::ROOT, name, Level::info)
 {
 }
 
 Logger::Logger (const String name, const Level level) :
-                Logger(Logger::ROOT, name, level)
+        Logger(Logger::ROOT, name, level)
 {
 }
 
 Logger::Logger (Logger *parent, const String name, const Level level) :
-                parent(parent), name(name), short_name(shorten(name)), level(level)
+        parent(parent), name(name), short_name(shorten(name)), level(level)
 {
 }
 
@@ -83,7 +83,13 @@ const Level Logger::get_level () const
 
 void Logger::add_appender (Appender *const appender)
 {
-    appenders.push_back(appender);
+    if (appender != nullptr)
+    {
+        if (std::find(appenders.begin(), appenders.end(), appender) == appenders.end())
+        {
+            appenders.push_back(appender);
+        }
+    }
 }
 
 LogBuffer& Logger::info ()

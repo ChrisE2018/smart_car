@@ -19,9 +19,10 @@ class PidPlugin: public Plugin
         friend std::ostream& operator<< (std::ostream &lhs, const PidPlugin &motor);
         MotorLocation get_location () const;
         unsigned long get_speed_counter () const;
-        float get_measured_velocity () const;
         float get_desired_velocity () const;
         void set_desired_velocity (const float desired_velocity);
+        float get_measured_velocity () const;
+        float get_cumulative_velocity_error () const;
         virtual void enter_state (const int state) override;
         void drive_stop ();
         float get_velocity_error () const;
@@ -35,12 +36,12 @@ class PidPlugin: public Plugin
         const MotorLocation location;
 
         // Support for speed encoders
-        static constexpr int minimum_cycle_ms = 10;
-        static constexpr int minimum_speed_ticks = 4;
+        static constexpr int minimum_cycle_ms = 100;    // When stopped
+        static constexpr int minimum_speed_ticks = 4;   // When moving
 
-        static constexpr float k0 = 1.0 * SPEED_FULL;
-        static constexpr float k1 = 0.30;
-        static constexpr float k2 = -0.01;
+        static constexpr float k0 = 0.25 * SPEED_FULL;
+        static constexpr float k1 = 1.0;
+        static constexpr float k2 = 0;//-0.01;
         static constexpr float k3 = 0; //0.15;
         static constexpr float k4 = 0; //0.2;
 

@@ -22,6 +22,8 @@
 // For some reason this does not always resolve.
 extern HardwareSerial Serial;
 
+extern RobotAppender *robot_appender;
+
 Car::Car () :
         logger(__FILE__, Level::debug), serial_parser(Serial), bluetooth_parser(Serial3), clock_plugin(
                 new ClockPlugin()), forward_plugin(
@@ -215,11 +217,6 @@ int Car::get_drive_speed (const MotorLocation motor) const
     return motors[static_cast<int>(motor)].get_speed();
 }
 
-float Car::get_measured_velocity (const MotorLocation motor) const
-{
-    return pid_controls[static_cast<int>(motor)].get_measured_velocity();
-}
-
 float Car::get_desired_velocity (const MotorLocation motor) const
 {
     return pid_controls[static_cast<int>(motor)].get_desired_velocity();
@@ -230,9 +227,14 @@ void Car::set_desired_velocity (const MotorLocation motor, const float velocity)
     pid_controls[static_cast<int>(motor)].set_desired_velocity(velocity);
 }
 
-float Car::get_measured_velocity (const MotorLocation motor)
+float Car::get_measured_velocity (const MotorLocation motor) const
 {
     return pid_controls[static_cast<int>(motor)].get_measured_velocity();
+}
+
+float Car::get_cumulative_velocity_error (const MotorLocation motor) const
+{
+    return pid_controls[static_cast<int>(motor)].get_cumulative_velocity_error();
 }
 
 ClockPlugin* Car::get_clock_plugin () const

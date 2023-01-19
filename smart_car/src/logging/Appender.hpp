@@ -13,14 +13,14 @@
 class Appender
 {
     public:
-        Appender ();
+        Appender (Formatter &formatter);
         virtual ~Appender () = default;
-        void set_formatter (Formatter *const formatter);
         virtual void append (const Logger *logger, const Level level, const int line, const char *message);
         virtual void append (const Level level, const char *message);
+
     private:
-        static const int buffer_size = 256;
+        static const int buffer_size = 128;
         char buffer[buffer_size];
-        Formatter *formatter = nullptr;
+        Formatter &formatter;
 };
 

@@ -13,8 +13,11 @@
 #include "../robot/speed_counter.hpp"
 
 #include "../logging/Logger.hpp"
+#include "../logging/UsbAppender.hpp"
 
-static Logger logger(__FILE__, Level::info);
+extern UsbAppender *usb_appender;
+
+static Logger logger(nullptr, __FILE__, Level::info);
 
 const std::string stringify (const MotorDirection direction)
 {
@@ -73,6 +76,7 @@ MotorPlugin::MotorPlugin (Car &car, const PluginId id, const MotorLocation locat
 
 bool MotorPlugin::setup ()
 {
+    logger.add_appender(usb_appender);
     pinMode(enable_pin, OUTPUT);
     pinMode(forward_pin, OUTPUT);
     pinMode(reverse_pin, OUTPUT);
@@ -170,9 +174,9 @@ void MotorPlugin::drive_forward (const int _speed)
         digitalWrite(forward_pin, HIGH);
         analogWrite(enable_pin, _speed);
         const float measured_velocity = car.get_measured_velocity(location);
-        logger.info(__LINE__) << location << "_" << direction << ": " << speed << " " << location << "_mps: "
-                << measured_velocity
-                << std::endl;
+        const float cve = car.get_cumulative_velocity_error(location);
+        logger.info(__LINE__) << location << "_" << direction << ": " << speed << " " << " mps: " << measured_velocity
+                << " cve: " << cve << std::endl;
     }
 }
 
@@ -194,8 +198,9 @@ void MotorPlugin::drive_reverse (const int _speed)
         digitalWrite(reverse_pin, HIGH);
         analogWrite(enable_pin, -speed);
         const float measured_velocity = car.get_measured_velocity(location);
+        const float cve = car.get_cumulative_velocity_error(location);
         logger.info(__LINE__) << location << "_" << direction << ": " << speed << " " << location << "_mps: "
-                << measured_velocity << std::endl;
+                << measured_velocity << " cve: " << cve << std::endl;
     }
 }
 
@@ -217,7 +222,8 @@ void MotorPlugin::drive_zero_speed ()
         digitalWrite(reverse_pin, LOW);
         analogWrite(enable_pin, LOW);
         const float measured_velocity = car.get_measured_velocity(location);
+        const float cve = car.get_cumulative_velocity_error(location);
         logger.info(__LINE__) << location << "_" << direction << ": " << speed << " mps: " << measured_velocity
-                << std::endl;
+                << " cve: " << cve << std::endl;
     }
 }
