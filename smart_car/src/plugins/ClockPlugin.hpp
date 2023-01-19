@@ -10,8 +10,9 @@
 #include "Plugin.hpp"
 #include <DS3231.h>
 #include <ctime>
+#include "../logging/TimeSource.hpp"
 
-class ClockPlugin : public Plugin
+class ClockPlugin : public Plugin, public TimeSource
 {
     public:
         ClockPlugin ();

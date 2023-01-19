@@ -41,6 +41,7 @@ void UltrasoundPlugin::cycle ()
     {
         // This method is not const and includes a 25 ms delay.
         // That line has been commented out in the library routine.
+        // https://www.physicsclassroom.com/class/sound/Lesson-2/The-Speed-of-Sound
         distance = sr04.Distance();
         if (state == BLOCKING)
         {

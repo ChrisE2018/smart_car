@@ -7,6 +7,7 @@
 
 #include "Car.hpp"
 #include "../logging/RobotAppender.hpp"
+#include "../logging/UsbAppender.hpp"
 #include "smart_car.hpp"
 
 #include "../plugins/ClockPlugin.hpp"
@@ -21,6 +22,9 @@
 
 // For some reason this does not always resolve.
 extern HardwareSerial Serial;
+
+extern RobotAppender *robot_appender;
+extern UsbAppender *usb_appender;
 
 Car::Car () :
         logger(__FILE__, Level::debug), serial_parser(Serial), bluetooth_parser(Serial3), clock_plugin(
@@ -147,6 +151,7 @@ void Car::command_cycle ()
         }
         if (bluetooth_parser.has_input())
         {
+            usb_appender->set_level(Level::none);
             robot_appender->enable_usb_logger(false);
             robot_appender->enable_bluetooth_logger(true);
             bluetooth_parser.handle_command(*this);
@@ -215,11 +220,6 @@ int Car::get_drive_speed (const MotorLocation motor) const
     return motors[static_cast<int>(motor)].get_speed();
 }
 
-float Car::get_measured_velocity (const MotorLocation motor) const
-{
-    return pid_controls[static_cast<int>(motor)].get_measured_velocity();
-}
-
 float Car::get_desired_velocity (const MotorLocation motor) const
 {
     return pid_controls[static_cast<int>(motor)].get_desired_velocity();
@@ -230,9 +230,14 @@ void Car::set_desired_velocity (const MotorLocation motor, const float velocity)
     pid_controls[static_cast<int>(motor)].set_desired_velocity(velocity);
 }
 
-MotorDirection Car::get_drive_direction (const MotorLocation motor) const
+float Car::get_measured_velocity (const MotorLocation motor) const
 {
-    return motors[static_cast<int>(motor)].get_direction();
+    return pid_controls[static_cast<int>(motor)].get_measured_velocity();
+}
+
+float Car::get_cumulative_velocity_error (const MotorLocation motor) const
+{
+    return pid_controls[static_cast<int>(motor)].get_cumulative_velocity_error();
 }
 
 ClockPlugin* Car::get_clock_plugin () const

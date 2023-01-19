@@ -2,7 +2,7 @@
 //This is a automatic generated file
 //Please do not modify this file
 //If you touch this file your change will be overwritten during the next build
-//This file has been generated on 2023-01-17 11:55:56
+//This file has been generated on 2023-01-19 16:44:25
 
 #include "Arduino.h"
 #include "Arduino.h"
@@ -12,6 +12,10 @@
 #include "src/robot/heap.hpp"
 #include "src/logging/Logger.hpp"
 #include "src/logging/RobotAppender.hpp"
+#include "src/logging/UsbAppender.hpp"
+#include "src/logging/StandardFormatter.hpp"
+#include "src/logging/TimeSource.hpp"
+#include "src/plugins/ClockPlugin.hpp"
 
 void setup () ;
 void loop () ;

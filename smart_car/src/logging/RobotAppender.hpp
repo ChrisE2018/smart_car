@@ -8,25 +8,22 @@
 #pragma once
 
 #include "Appender.hpp"
-#include "../robot/car.hpp"
+#include "TimeSource.hpp"
 #include <SD.h>
 class Car;
 
 #define LOG_DATA(fmt, args...) robot_appender->log_data_p((const char *)F(fmt), args);
 #define FLUSH_DATA(fmt, args...) robot_appender->flush();
 
-class RobotAppender : public Appender
+class RobotAppender: public Appender
 {
     public:
-        RobotAppender (Car &car, const Level level);
+        RobotAppender (const Level level, Formatter &formatter, TimeSource &time_source);
         virtual ~RobotAppender () = default;
-        virtual void append (const Logger *const logger, const Level level, const int line,
-                const char *const message);
         void append (const Level level, const char *const message);
         void append_usb (const char *const message);
         void append_bluetooth (const char *const message);
-        void append_file (const char *const message, const bool flush=false);
-        void log_data_p(const char *format, ...);
+        void append_file (const char *const message, const bool flush = false);
         void open_logfile ();
         void flush ();
         void close ();
@@ -38,18 +35,17 @@ class RobotAppender : public Appender
         bool is_file_logger ();
         bool get_logger_state (const String &mode) const;
         void set_logger_state (const String &mode, const String &state);
+        bool log_data (String folder, String filename, const char *message);
+        bool save_data (String folder, String filename, const char *message);
 
     private:
-        Car &car;
-        const Level level;
+        TimeSource &time_source;
 
         // For file access on micro SD card
         const int chipSelect = 53;
         static const int filename_size = 32;
         char log_filename[filename_size];
         File log_file;
-        static const int buffer_size = 256;
-        char buffer[buffer_size];
 
         bool usb_logger = true;
         bool bluetooth_logger = true;
@@ -58,4 +54,3 @@ class RobotAppender : public Appender
         void get_logfile ();
 };
 
-extern RobotAppender *robot_appender;

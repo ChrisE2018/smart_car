@@ -21,10 +21,20 @@ void print_heap_state ()
     const unsigned long free_ram = get_free_ram();
     const unsigned long sp = SP;
     const unsigned long ramend = RAMEND;
-    LOG_INFO(logger,
-            "Heap Usage: %lu / %lu Stack Size: %lu Free RAM: %lu [Stack %lu:%lu Heap %lu:%lu]",
-            heap_size, heap_size + free_ram, stack_size, free_ram, initial_stack_address, sp,
-            ramend, heap_address);
+    LOG_INFO(logger, "Heap Usage: %lu / %lu Stack Size: %lu Free RAM: %lu [Stack %lu:%lu Heap %lu:%lu]", heap_size,
+            heap_size + free_ram, stack_size, free_ram, initial_stack_address, sp, ramend, heap_address);
+}
+
+void get_heap_state (char *buffer, size_t size)
+{
+    const unsigned long heap_address = get_heap_address();
+    const unsigned long heap_size = RAMEND - heap_address;
+    const long stack_size = initial_stack_address - SP;
+    const unsigned long free_ram = get_free_ram();
+    const unsigned long sp = SP;
+    const unsigned long ramend = RAMEND;
+    snprintf(buffer, size, "Heap Usage: %lu / %lu Stack Size: %lu Free RAM: %lu [Stack %lu:%lu Heap %lu:%lu]",
+            heap_size, heap_size + free_ram, stack_size, free_ram, initial_stack_address, sp, ramend, heap_address);
 }
 
 unsigned long get_free_ram ()

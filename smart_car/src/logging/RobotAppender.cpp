@@ -10,27 +10,14 @@
 #include "RobotAppender.hpp"
 #include "UnixTime.hpp"
 
-RobotAppender *robot_appender = nullptr;
-
-RobotAppender::RobotAppender (Car &car, const Level level) :
-        car(car), level(level)
+RobotAppender::RobotAppender (const Level level, Formatter &formatter, TimeSource &time_source) :
+        Appender(level, formatter), time_source(time_source)
 {
-}
-
-void RobotAppender::append (const Logger *const logger, const Level level, const int line, const char *const message)
-{
-    const time_t t = get_unixtime(car);
-    struct tm *const lt = localtime(&t);
-    const int ms = millis() % 1000;
-    snprintf(buffer, buffer_size, "%s.%03d [%s %s:%d] %s", isotime(lt), ms, stringify(level),
-            logger->get_short_name().c_str(), line, message);
-    buffer[buffer_size - 1] = '\0';
-    append(level, buffer);
 }
 
 void RobotAppender::append (const Level _level, const char *const message)
 {
-    if (static_cast<int>(_level) <= static_cast<int>(level))
+    if (static_cast<int>(_level) <= static_cast<int>(get_level()))
     {
         if (usb_logger)
         {
@@ -73,25 +60,11 @@ void RobotAppender::append_file (const char *const message, const bool flush = f
     }
 }
 
-void RobotAppender::log_data_p (const char *format, ...)
-{
-    va_list args;
-    va_start(args, format);
-    const time_t t = get_unixtime(car);
-    struct tm *const lt = localtime(&t);
-    const int ms = millis() % 1000;
-    const int n = snprintf(buffer, buffer_size, "%s.%03d", isotime(lt), ms);
-    vsnprintf_P(buffer + n, buffer_size - n, format, args);
-    append_file(buffer, false);
-    va_end(args);
-
-}
-
 void RobotAppender::get_logfile ()
 {
-    const time_t t = get_unixtime(car);
+    const time_t t = time_source.get_unixtime();
     struct tm *const lt = localtime(&t);
-    const int size = snprintf(log_filename, filename_size, "LOGS/Y%4d/M%02d/D%02d/", 2000 + lt->tm_year, lt->tm_mon + 1,
+    const int size = snprintf(log_filename, filename_size, "LOGS/Y%4d/M%02d/D%02d/", 1900 + lt->tm_year, lt->tm_mon + 1,
             lt->tm_mday);
     SD.mkdir(log_filename);
     snprintf(log_filename + size, filename_size - size, "L%02d-%02d.TXT", lt->tm_hour, lt->tm_min);
@@ -123,6 +96,65 @@ void RobotAppender::open_logfile ()
         }
     }
 }
+
+bool RobotAppender::log_data (String folder, String filename, const char *message)
+{
+    folder.toUpperCase();
+    filename.toUpperCase();
+    SD.mkdir(folder);
+    constexpr int buf_size = 32;
+    char buf[buf_size];
+    snprintf(buf, buf_size, "%s/%s", folder.c_str(), filename.c_str());
+    File stream = SD.open(buf, FILE_WRITE);
+    if (stream)
+    {
+        Serial.print(F("Opened "));
+        Serial.println(buf);
+
+        const time_t t = time_source.get_unixtime();
+        struct tm *const lt = localtime(&t);
+        const int ms = millis() % 1000;
+        const int n = snprintf(buf, buf_size, "%s.%03d ", isotime(lt), ms);
+        stream.print(buf);
+        stream.println(message);
+        stream.flush();
+        stream.close();
+        return true;
+    }
+    else
+    {
+        Serial.print(F("Open failed "));
+        Serial.println(buf);
+        return false;
+    }
+}
+
+bool RobotAppender::save_data (String folder, String filename, const char *message)
+{
+    folder.toUpperCase();
+    filename.toUpperCase();
+    SD.mkdir(folder);
+    constexpr int buf_size = 32;
+    char buf[buf_size];
+    snprintf(buf, buf_size, "%s/%s", folder.c_str(), filename.c_str());
+    File stream = SD.open(buf, FILE_WRITE);
+    if (stream)
+    {
+        Serial.print(F("Opened "));
+        Serial.println(buf);
+        stream.println(message);
+        stream.flush();
+        stream.close();
+        return true;
+    }
+    else
+    {
+        Serial.print(F("Open failed "));
+        Serial.println(buf);
+        return false;
+    }
+}
+
 void RobotAppender::flush ()
 {
     if (log_file)

@@ -12,8 +12,10 @@
 void setup_speed_counter ();
 
 // 55 mm wheels = 0.55 meters
+// Wheel perimeter = 172.78759594743863 mm
 // 20 encoder slots per revolution
 // meters-per-micro = PI * diameter / encoder_slots
+// Distance moved per wheel encoder tick = 8.639379797371932 mm = 0.008639379797371931 m
 constexpr double count_to_meters = M_PI * 0.055 / 20.0;
 
 unsigned long get_speed_counter_value (const MotorLocation location);

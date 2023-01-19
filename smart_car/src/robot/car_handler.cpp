@@ -166,8 +166,8 @@ void Car::execute_command (const std::vector<String> &words)
             const float total_micros = plugin->get_total_micros();
             if (cycle_count > 0)
             {
-                logger.info(__LINE__) << plugin << F(" average ") << total_micros / cycle_count << F(" / ")
-                        << plugin->get_expected_us() << F(" us expected over ") << cycle_count << F(" cycles")
+                 logger.info(__LINE__) << plugin << F(" average ") << total_micros / cycle_count << F(" / ")
+                        << plugin->get_expected_us() << F(" us expected")
                         << std::endl;
             }
             else

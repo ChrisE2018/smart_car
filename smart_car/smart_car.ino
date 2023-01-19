@@ -5,6 +5,10 @@
 #include "src/robot/heap.hpp"
 #include "src/logging/Logger.hpp"
 #include "src/logging/RobotAppender.hpp"
+#include "src/logging/UsbAppender.hpp"
+#include "src/logging/StandardFormatter.hpp"
+#include "src/logging/TimeSource.hpp"
+#include "src/plugins/ClockPlugin.hpp"
 
 /* Program for robot car. */
 
@@ -21,28 +25,36 @@ std::ohserialstream cout1(Serial3);
 static Car *car;
 static unsigned long cycle_count = 0;
 
+RobotAppender *robot_appender = nullptr;
+UsbAppender *usb_appender = nullptr;
+
 /* Control program. */
 
 void setup ()
 {
-    Serial.begin(9600);
-    Serial.println(F("RIGHT: 0 RIGHT_mps: 0"));
-    Serial.println(F("LEFT: 0 LEFT_mps: 0"));
+    Serial.begin(115200);
     Serial.println(F("Smart car"));
-    Serial3.begin(9600);
+    Serial3.begin(115200);
     car = new Car();
-    robot_appender = new RobotAppender(*car, Level::debug);
+    TimeSource &time_source = *car->get_clock_plugin();
+    StandardFormatter *formatter = new StandardFormatter(time_source);
+    robot_appender = new RobotAppender(Level::info, *formatter, time_source);
+    usb_appender = new UsbAppender(Level::info, *formatter);
     Logger::ROOT->add_appender(robot_appender);
     robot_appender->open_logfile();
     car->setup();
     car->demo_drive_leds();
     setup_speed_counter();
-    print_heap_state();
+    const int heap_buffer_size = 100;
+    char heap_buffer[heap_buffer_size];
+    get_heap_state(heap_buffer, heap_buffer_size);
+    robot_appender->log_data("/HISTORY", "STARTUP.TXT", heap_buffer);
+    Serial.println(heap_buffer);
     Serial.print(F("C++ version "));
     Serial.println(__cplusplus);
     Serial.println(F("Ready"));
     Serial.println();
-//    robot_appender->enable_usb_logger(false);
+    // Don't send to bluetooth unless it is active
     robot_appender->enable_bluetooth_logger(false);
 }
 
