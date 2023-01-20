@@ -13,9 +13,9 @@
 #include "../robot/speed_counter.hpp"
 
 #include "../logging/Logger.hpp"
-#include "../logging/UsbAppender.hpp"
+#include "../logging/SerialAppender.hpp"
 
-extern UsbAppender *usb_appender;
+extern SerialAppender *usb_appender;
 
 static Logger logger(nullptr, __FILE__, Level::info);
 

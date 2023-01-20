@@ -17,7 +17,7 @@ RobotAppender::RobotAppender (const Level level, Formatter &formatter, TimeSourc
 
 void RobotAppender::append (const Level _level, const char *const message)
 {
-    if (static_cast<int>(_level) <= static_cast<int>(get_level()))
+    if (static_cast<int>(_level) <= static_cast<int>(level))
     {
         if (usb_logger)
         {
@@ -33,7 +33,6 @@ void RobotAppender::append (const Level _level, const char *const message)
         if (file_logger)
         {
             log_file.println(message);
-            //log_file.flush();
         }
     }
 }
@@ -48,15 +47,11 @@ void RobotAppender::append_bluetooth (const char *const message)
     Serial3.println(message);
 }
 
-void RobotAppender::append_file (const char *const message, const bool flush = false)
+void RobotAppender::append_file (const char *const message)
 {
     if (log_file)
     {
         log_file.println(message);
-        if (flush)
-        {
-            log_file.flush();
-        }
     }
 }
 

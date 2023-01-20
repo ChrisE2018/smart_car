@@ -5,7 +5,7 @@
 #include "src/robot/heap.hpp"
 #include "src/logging/Logger.hpp"
 #include "src/logging/RobotAppender.hpp"
-#include "src/logging/UsbAppender.hpp"
+#include "src/logging/SerialAppender.hpp"
 #include "src/logging/StandardFormatter.hpp"
 #include "src/logging/TimeSource.hpp"
 #include "src/plugins/ClockPlugin.hpp"
@@ -26,7 +26,7 @@ static Car *car;
 static unsigned long cycle_count = 0;
 
 RobotAppender *robot_appender = nullptr;
-UsbAppender *usb_appender = nullptr;
+SerialAppender *usb_appender = nullptr;
 
 /* Control program. */
 
@@ -39,7 +39,7 @@ void setup ()
     TimeSource &time_source = *car->get_clock_plugin();
     StandardFormatter *formatter = new StandardFormatter(time_source);
     robot_appender = new RobotAppender(Level::info, *formatter, time_source);
-    usb_appender = new UsbAppender(Level::info, *formatter);
+    usb_appender = new SerialAppender(Level::info, *formatter);
     Logger::ROOT->add_appender(robot_appender);
     robot_appender->open_logfile();
     car->setup();

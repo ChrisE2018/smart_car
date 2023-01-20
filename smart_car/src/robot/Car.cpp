@@ -7,7 +7,7 @@
 
 #include "Car.hpp"
 #include "../logging/RobotAppender.hpp"
-#include "../logging/UsbAppender.hpp"
+#include "../logging/SerialAppender.hpp"
 #include "smart_car.hpp"
 
 #include "../plugins/ClockPlugin.hpp"
@@ -24,7 +24,7 @@
 extern HardwareSerial Serial;
 
 extern RobotAppender *robot_appender;
-extern UsbAppender *usb_appender;
+extern SerialAppender *usb_appender;
 
 Car::Car () :
         logger(__FILE__, Level::debug), serial_parser(Serial), bluetooth_parser(Serial3), clock_plugin(

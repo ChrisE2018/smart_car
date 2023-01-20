@@ -12,7 +12,7 @@
 #include "src/robot/heap.hpp"
 #include "src/logging/Logger.hpp"
 #include "src/logging/RobotAppender.hpp"
-#include "src/logging/UsbAppender.hpp"
+#include "src/logging/SerialAppender.hpp"
 #include "src/logging/StandardFormatter.hpp"
 #include "src/logging/TimeSource.hpp"
 #include "src/plugins/ClockPlugin.hpp"
