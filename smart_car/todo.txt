@@ -6,6 +6,7 @@
 * GoalPlugin move to location accurately
 * Don't call sr04.Distance from Ultrasound plugin. Copy and modify the source instead. 
 Only care about short distances so set a low timeout.
+* Delegate logging and logging_p method from Logger to LogBuffer and eliminate Logger.buffer
 
 PHYSICAL
 * Work on GPS

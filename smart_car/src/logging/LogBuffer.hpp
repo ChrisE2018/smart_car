@@ -11,19 +11,20 @@
 #include <iostream>
 #include <string>
 #include <WString.h>
+#include "Level.hpp"
 
 class Logger;
-enum class Level
-;
-
-std::ostream& operator<< (std::ostream &lhs, const __FlashStringHelper *pstr);
 
 // http://www.angelikalanger.com/Articles/C++Report/IOStreamsDerivation/IOStreamsDerivation.html
 // https://gcc.gnu.org/onlinedocs/libstdc++/manual/streambufs.html
+std::ostream& operator<< (std::ostream &lhs, const __FlashStringHelper *pstr);
 
-class LogBuffer : private std::streambuf, public std::ostream
+class LogBuffer: private std::streambuf, public std::ostream
 {
     public:
+        // Share the private buffer to save sram
+//        friend void Logger::logging (const Level _level, const int line, const char *format, ...);
+//        friend void Logger::logging_p (const Level _level, const int line, const char *format, ...);
         LogBuffer ();
         void reset ();
         void set_logger (Logger *const logger);

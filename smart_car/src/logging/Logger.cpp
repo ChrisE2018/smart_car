@@ -7,29 +7,9 @@
 
 #include "Appender.hpp"
 #include "Logger.hpp"
+#include "LogBuffer.hpp"
 
 #include <WString.h>
-
-const char* stringify (const Level level)
-{
-    switch (level)
-    {
-        case Level::error:
-            return "error";
-        case Level::warning:
-            return "warning";
-        case Level::info:
-            return "info";
-        case Level::debug:
-            return "debug";
-        case Level::data:
-            return "data";
-        case Level::none:
-            return "none";
-        default:
-            return "?level?";
-    }
-}
 
 static Logger *Logger::ROOT = new Logger(nullptr, "root", Level::debug);
 

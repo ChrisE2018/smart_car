@@ -9,16 +9,10 @@
 
 #include <Arduino.h>
 #include <vector>
+#include "Level.hpp"
 #include "LogBuffer.hpp"
 
 class Appender;
-
-enum class Level
-{
-    error, warning, info, debug, data, none
-};
-
-const char* stringify (const Level level);
 
 #define LOG_ERROR(logger, fmt, args...) logger.logging_p(Level::error, __LINE__, (const char *)F(fmt), args);
 #define LOG_WARNING(logger, fmt, args...) logger.logging_p(Level::warning, __LINE__, (const char *)F(fmt), args);

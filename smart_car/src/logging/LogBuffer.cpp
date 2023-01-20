@@ -5,10 +5,10 @@
  *      Author: cre
  */
 
-#include "LogBuffer.hpp"
 #include <locale>
 #include <cstdio>
 #include <streambuf>
+#include "LogBuffer.hpp"
 #include "Logger.hpp"
 
 static char LogBuffer::buffer[LogBuffer::buffer_size];
@@ -30,7 +30,7 @@ std::ostream& operator<< (std::ostream &lhs, const __FlashStringHelper *pstr)
 }
 
 LogBuffer::LogBuffer () :
-                logger(nullptr), level(Level::info), std::ios(0), std::ostream(this)
+        logger(nullptr), level(Level::info), std::ios(0), std::ostream(this)
 {
 }
 
@@ -60,12 +60,12 @@ void LogBuffer::reset ()
     buffer[pos] = '\0';
 }
 
-void LogBuffer::set_logger(Logger *const _logger)
+void LogBuffer::set_logger (Logger *const _logger)
 {
     logger = _logger;
 }
 
-void LogBuffer::set_level(const Level _level)
+void LogBuffer::set_level (const Level _level)
 {
     level = _level;
 }
