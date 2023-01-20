@@ -51,6 +51,6 @@ class RobotAppender: public Appender
         bool bluetooth_logger = true;
         bool file_logger = true;
 
-        void get_logfile ();
+        void set_log_pathname ();
 };
 

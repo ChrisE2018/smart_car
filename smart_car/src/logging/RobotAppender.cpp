@@ -55,16 +55,6 @@ void RobotAppender::append_file (const char *const message)
     }
 }
 
-void RobotAppender::get_logfile ()
-{
-    const time_t t = time_source.get_unixtime();
-    struct tm *const lt = localtime(&t);
-    const int size = snprintf(log_filename, filename_size, "LOGS/Y%4d/M%02d/D%02d/", 1900 + lt->tm_year, lt->tm_mon + 1,
-            lt->tm_mday);
-    SD.mkdir(log_filename);
-    snprintf(log_filename + size, filename_size - size, "L%02d-%02d.TXT", lt->tm_hour, lt->tm_min);
-}
-
 void RobotAppender::open_logfile ()
 {
     Serial.println(F("Initializing SD card"));
@@ -76,7 +66,7 @@ void RobotAppender::open_logfile ()
     else
     {
         Serial.println(F("SD card initialized"));
-        get_logfile();
+        set_log_pathname();
         log_file = SD.open(log_filename, FILE_WRITE);
         if (log_file)
         {
@@ -90,6 +80,16 @@ void RobotAppender::open_logfile ()
             Serial.println(log_filename);
         }
     }
+}
+
+void RobotAppender::set_log_pathname ()
+{
+    const time_t t = time_source.get_unixtime();
+    struct tm *const lt = localtime(&t);
+    const int size = snprintf(log_filename, filename_size, "LOGS/Y%4d/M%02d/D%02d/", 1900 + lt->tm_year, lt->tm_mon + 1,
+            lt->tm_mday);
+    SD.mkdir(log_filename);
+    snprintf(log_filename + size, filename_size - size, "L%02d-%02d.TXT", lt->tm_hour, lt->tm_min);
 }
 
 bool RobotAppender::log_data (String folder, String filename, const char *message)
