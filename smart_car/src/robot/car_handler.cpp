@@ -8,7 +8,6 @@
 #include "Car.hpp"
 #include "Heap.hpp"
 #include "../logging/Logger.hpp"
-#include "../logging/RobotAppender.hpp"
 #include "../plugins/DrivePlugin.hpp"
 #include "../plugins/GoalPlugin.hpp"
 #include "../plugins/KalmanPlugin.hpp"

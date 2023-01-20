@@ -7,7 +7,6 @@
 
 #include "MotorPlugin.hpp"
 
-#include "../logging/RobotAppender.hpp"
 #include "smart_car.hpp"
 #include "../robot/Car.hpp"
 #include "../robot/speed_counter.hpp"

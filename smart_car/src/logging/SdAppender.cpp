@@ -1,63 +1,32 @@
 /*
- * RobotAppender.cpp
+ * SdAppender.cpp
  *
- *  Created on: Jan 5, 2023
+ *  Created on: Jan 20, 2023
  *      Author: cre
  */
 
-#include <stdio.h>
-#include <SPI.h>
-#include "RobotAppender.hpp"
+#include "SdAppender.hpp"
 
 namespace logging
 {
 
-RobotAppender::RobotAppender (const Level level, Formatter &formatter, TimeSource &time_source) :
+SdAppender::SdAppender (const Level level, Formatter &formatter, TimeSource &time_source) :
         Appender(level, formatter), time_source(time_source)
 {
 }
 
-void RobotAppender::append (const Level _level, const char *const message)
+void SdAppender::append (const Level _level, const char *const message)
 {
     if (static_cast<int>(_level) <= static_cast<int>(level))
     {
-        if (usb_logger)
-        {
-            Serial.println(message);
-        }
-        if (bluetooth_logger)
-        {
-            Serial3.println(message);
-        }
-    }
-    if (log_file)
-    {
-        if (file_logger)
+        if (log_file)
         {
             log_file.println(message);
         }
     }
 }
 
-void RobotAppender::append_usb (const char *const message)
-{
-    Serial.println(message);
-}
-
-void RobotAppender::append_bluetooth (const char *const message)
-{
-    Serial3.println(message);
-}
-
-void RobotAppender::append_file (const char *const message)
-{
-    if (log_file)
-    {
-        log_file.println(message);
-    }
-}
-
-void RobotAppender::open_logfile ()
+void SdAppender::open_logfile ()
 {
     Serial.println(F("Initializing SD card"));
 
@@ -84,7 +53,7 @@ void RobotAppender::open_logfile ()
     }
 }
 
-void RobotAppender::set_log_pathname ()
+void SdAppender::set_log_pathname ()
 {
     const time_t t = time_source.get_unixtime();
     struct tm *const lt = localtime(&t);
@@ -94,7 +63,23 @@ void RobotAppender::set_log_pathname ()
     snprintf(log_filename + size, filename_size - size, "L%02d-%02d.TXT", lt->tm_hour, lt->tm_min);
 }
 
-bool RobotAppender::log_data (String folder, String filename, const char *message)
+void SdAppender::flush ()
+{
+    if (log_file)
+    {
+        log_file.flush();
+    }
+}
+
+void SdAppender::close ()
+{
+    if (log_file)
+    {
+        log_file.close();
+    }
+}
+
+bool SdAppender::log_data (String folder, String filename, const char *message)
 {
     folder.toUpperCase();
     filename.toUpperCase();
@@ -126,7 +111,7 @@ bool RobotAppender::log_data (String folder, String filename, const char *messag
     }
 }
 
-bool RobotAppender::save_data (String folder, String filename, const char *message)
+bool SdAppender::save_data (String folder, String filename, const char *message)
 {
     folder.toUpperCase();
     filename.toUpperCase();
@@ -151,89 +136,4 @@ bool RobotAppender::save_data (String folder, String filename, const char *messa
         return false;
     }
 }
-
-void RobotAppender::flush ()
-{
-    if (log_file)
-    {
-        log_file.flush();
-    }
-}
-
-void RobotAppender::close ()
-{
-    if (log_file)
-    {
-        log_file.close();
-    }
-}
-
-void RobotAppender::enable_usb_logger (const bool enable)
-{
-    usb_logger = enable;
-}
-
-void RobotAppender::enable_bluetooth_logger (const bool enable)
-{
-    bluetooth_logger = enable;
-}
-
-void RobotAppender::enable_file_logger (const bool enable)
-{
-    file_logger = enable;
-}
-
-bool RobotAppender::get_logger_state (const String &mode) const
-{
-    if (mode == F("usb"))
-    {
-        return usb_logger;
-    }
-    else if (mode == F("bluetooth"))
-    {
-        return bluetooth_logger;
-    }
-    else if (mode == F("file"))
-    {
-        return file_logger;
-    }
-    return false;
-}
-
-void RobotAppender::set_logger_state (const String &mode, const String &state)
-{
-    bool enable = false;
-    if (state == F("on") || state == F("true"))
-    {
-        enable = true;
-    }
-    if (mode == F("usb"))
-    {
-        usb_logger = enable;
-    }
-    else if (mode == F("bluetooth"))
-    {
-        bluetooth_logger = enable;
-    }
-    else if (mode == F("file"))
-    {
-        file_logger = enable;
-    }
-}
-
-bool RobotAppender::is_usb_logger ()
-{
-    return usb_logger;
-}
-
-bool RobotAppender::is_bluetooth_logger ()
-{
-    return bluetooth_logger;
-}
-
-bool RobotAppender::is_file_logger ()
-{
-    return file_logger;
-}
-
 }

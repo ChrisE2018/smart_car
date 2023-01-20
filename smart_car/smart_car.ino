@@ -4,7 +4,7 @@
 #include "src/robot/speed_counter.hpp"
 #include "src/robot/heap.hpp"
 #include "src/logging/Logger.hpp"
-#include "src/logging/RobotAppender.hpp"
+#include "src/logging/SdAppender.hpp"
 #include "src/logging/SerialAppender.hpp"
 #include "src/logging/StandardFormatter.hpp"
 #include "src/logging/TimeSource.hpp"
@@ -25,8 +25,9 @@ std::ohserialstream cout1(Serial3);
 static Car *car;
 static unsigned long cycle_count = 0;
 
-logging::RobotAppender *robot_appender = nullptr;
+logging::SdAppender *sd_appender = nullptr;
 logging::SerialAppender *usb_appender = nullptr;
+logging::SerialAppender *bluetooth_appender = nullptr;
 
 /* Control program. */
 
@@ -38,24 +39,27 @@ void setup ()
     car = new Car();
     logging::TimeSource &time_source = *car->get_clock_plugin();
     logging::StandardFormatter *formatter = new logging::StandardFormatter(time_source);
-    robot_appender = new logging::RobotAppender(logging::Level::info, *formatter, time_source);
-    usb_appender = new logging::SerialAppender(logging::Level::info, *formatter);
-    logging::Logger::ROOT->add_appender(robot_appender);
-    robot_appender->open_logfile();
+    usb_appender = new logging::SerialAppender(Serial, logging::Level::info, *formatter);
+    bluetooth_appender = new logging::SerialAppender(Serial3, logging::Level::info, *formatter);
+    sd_appender = new logging::SdAppender(logging::Level::info, *formatter, time_source);
+    logging::Logger::ROOT->add_appender(usb_appender);
+    logging::Logger::ROOT->add_appender(bluetooth_appender);
+    logging::Logger::ROOT->add_appender(sd_appender);
+    sd_appender->open_logfile();
     car->setup();
     car->demo_drive_leds();
     setup_speed_counter();
     const int heap_buffer_size = 100;
     char heap_buffer[heap_buffer_size];
     get_heap_state(heap_buffer, heap_buffer_size);
-    robot_appender->log_data("/HISTORY", "STARTUP.TXT", heap_buffer);
+    //robot_appender->log_data("/HISTORY", "STARTUP.TXT", heap_buffer);
     Serial.println(heap_buffer);
     Serial.print(F("C++ version "));
     Serial.println(__cplusplus);
     Serial.println(F("Ready"));
     Serial.println();
     // Don't send to bluetooth unless it is active
-    robot_appender->enable_bluetooth_logger(false);
+    bluetooth_appender->set_level(logging::Level::none);
 }
 
 // @see https://forum.arduino.cc/t/constant-run-time-of-a-loop/568829/2
