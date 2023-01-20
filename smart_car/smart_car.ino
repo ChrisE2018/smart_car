@@ -41,7 +41,7 @@ void setup ()
     logging::StandardFormatter *formatter = new logging::StandardFormatter(time_source);
     usb_appender = new logging::SerialAppender(Serial, logging::Level::info, *formatter);
     bluetooth_appender = new logging::SerialAppender(Serial3, logging::Level::info, *formatter);
-    sd_appender = new logging::SdAppender(logging::Level::info, *formatter, time_source);
+    sd_appender = new logging::SdAppender(PIN_53_SS, logging::Level::info, *formatter, time_source);
     logging::Logger::ROOT->add_appender(usb_appender);
     logging::Logger::ROOT->add_appender(bluetooth_appender);
     logging::Logger::ROOT->add_appender(sd_appender);

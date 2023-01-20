@@ -164,8 +164,7 @@ void Car::execute_command (const std::vector<String> &words)
             if (cycle_count > 0)
             {
                 logger.info(__LINE__) << plugin << F(" average ") << total_micros / cycle_count << F(" / ")
-                        << plugin->get_expected_us() << F(" us expected")
-                        << std::endl;
+                        << plugin->get_expected_us() << F(" us expected") << std::endl;
             }
             else
             {
@@ -183,7 +182,6 @@ void Car::execute_command (const std::vector<String> &words)
         {
             desired_velocity = words[1].toFloat();
         }
-//        set_mode(Mode::COMMAND_MODE);
         pid_controls[static_cast<int>(MotorLocation::RIGHT_FRONT)].set_desired_velocity(desired_velocity);
     }
     else if (command == F("rr"))
@@ -230,8 +228,8 @@ void Car::execute_command (const std::vector<String> &words)
                 logger.info(__LINE__) << plugin << std::endl;
             }
         }
-        logger.info(__LINE__) << "Cycle average " << cycle_average << " micros = " << (cycle_average / 1000.0) << " ms"
-                << std::endl;
+        logger.info(__LINE__) << F("Cycle average ") << cycle_average << F(" micros = ") << (cycle_average / 1000.0)
+                << F(" ms") << std::endl;
     }
     else if (command == F("wall"))
     {
