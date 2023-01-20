@@ -9,6 +9,9 @@
 #include <SPI.h>
 #include "RobotAppender.hpp"
 
+namespace logging
+{
+
 RobotAppender::RobotAppender (const Level level, Formatter &formatter, TimeSource &time_source) :
         Appender(level, formatter), time_source(time_source)
 {
@@ -231,4 +234,6 @@ bool RobotAppender::is_bluetooth_logger ()
 bool RobotAppender::is_file_logger ()
 {
     return file_logger;
+}
+
 }

@@ -9,6 +9,9 @@
 
 #include "Logger.hpp"
 
+namespace logging
+{
+
 class Formatter
 {
     public:
@@ -18,3 +21,4 @@ class Formatter
                 const int line, const char *const message);
 };
 
+}

@@ -11,7 +11,7 @@
 #include "../logging/Logger.hpp"
 #include "../robot/Car.hpp"
 
-static Logger logger(__FILE__, Level::info);
+static logging::Logger logger(__FILE__, logging::Level::info);
 
 DrivePlugin::DrivePlugin (const PluginId id, Car &car, const int duration, const MotorDirection right_motor_direction,
         const MotorDirection left_motor_direction) :

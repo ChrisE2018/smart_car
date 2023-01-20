@@ -25,8 +25,8 @@ std::ohserialstream cout1(Serial3);
 static Car *car;
 static unsigned long cycle_count = 0;
 
-RobotAppender *robot_appender = nullptr;
-SerialAppender *usb_appender = nullptr;
+logging::RobotAppender *robot_appender = nullptr;
+logging::SerialAppender *usb_appender = nullptr;
 
 /* Control program. */
 
@@ -36,11 +36,11 @@ void setup ()
     Serial.println(F("Smart car"));
     Serial3.begin(115200);
     car = new Car();
-    TimeSource &time_source = *car->get_clock_plugin();
-    StandardFormatter *formatter = new StandardFormatter(time_source);
-    robot_appender = new RobotAppender(Level::info, *formatter, time_source);
-    usb_appender = new SerialAppender(Level::info, *formatter);
-    Logger::ROOT->add_appender(robot_appender);
+    logging::TimeSource &time_source = *car->get_clock_plugin();
+    logging::StandardFormatter *formatter = new logging::StandardFormatter(time_source);
+    robot_appender = new logging::RobotAppender(logging::Level::info, *formatter, time_source);
+    usb_appender = new logging::SerialAppender(logging::Level::info, *formatter);
+    logging::Logger::ROOT->add_appender(robot_appender);
     robot_appender->open_logfile();
     car->setup();
     car->demo_drive_leds();

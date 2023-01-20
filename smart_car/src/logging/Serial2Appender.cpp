@@ -7,6 +7,9 @@
 
 #include "Serial2Appender.hpp"
 
+namespace logging
+{
+
 Serial2Appender::Serial2Appender (const Level level, Formatter &formatter) :
         Appender(level, formatter)
 {
@@ -20,3 +23,4 @@ void Serial2Appender::append (const Level _level, const char *message)
     }
 }
 
+}

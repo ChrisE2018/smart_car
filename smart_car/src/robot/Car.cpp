@@ -23,11 +23,11 @@
 // For some reason this does not always resolve.
 extern HardwareSerial Serial;
 
-extern RobotAppender *robot_appender;
-extern SerialAppender *usb_appender;
+extern logging::RobotAppender *robot_appender;
+extern logging::SerialAppender *usb_appender;
 
 Car::Car () :
-        logger(__FILE__, Level::debug), serial_parser(Serial), bluetooth_parser(Serial3), clock_plugin(
+        logger(__FILE__, logging::Level::debug), serial_parser(Serial), bluetooth_parser(Serial3), clock_plugin(
                 new ClockPlugin()), forward_plugin(
                 new DrivePlugin(PluginId::FORWARD_PLUGIN, *this, 500, MotorDirection::FORWARD,
                         MotorDirection::FORWARD)), goal_plugin(new GoalPlugin(*this)), mpu_plugin(new MpuPlugin()), kalman_plugin(
@@ -151,7 +151,7 @@ void Car::command_cycle ()
         }
         if (bluetooth_parser.has_input())
         {
-            usb_appender->set_level(Level::none);
+            usb_appender->set_level(logging::Level::none);
             robot_appender->enable_usb_logger(false);
             robot_appender->enable_bluetooth_logger(true);
             bluetooth_parser.handle_command(*this);

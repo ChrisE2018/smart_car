@@ -7,6 +7,9 @@
 
 #include "Level.hpp"
 
+namespace logging
+{
+
 const char* stringify (const Level level)
 {
     switch (level)
@@ -28,3 +31,4 @@ const char* stringify (const Level level)
     }
 }
 
+}

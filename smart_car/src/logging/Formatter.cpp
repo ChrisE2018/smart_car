@@ -7,6 +7,9 @@
 
 #include "Formatter.hpp"
 
+namespace logging
+{
+
 Formatter::Formatter ()
 {
 }
@@ -15,4 +18,6 @@ void Formatter::format (char *buffer, const size_t buffer_size, const Logger *co
         const int line, const char *const message)
 {
     strlcpy(buffer, message, buffer_size);
+}
+
 }

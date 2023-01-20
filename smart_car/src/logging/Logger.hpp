@@ -12,13 +12,16 @@
 #include "Level.hpp"
 #include "LogBuffer.hpp"
 
+namespace logging
+{
+
 class Appender;
 
-#define LOG_ERROR(logger, fmt, args...) logger.logging_p(Level::error, __LINE__, (const char *)F(fmt), args);
-#define LOG_WARNING(logger, fmt, args...) logger.logging_p(Level::warning, __LINE__, (const char *)F(fmt), args);
-#define LOG_INFO(logger, fmt, args...) logger.logging_p(Level::info, __LINE__, (const char *)F(fmt), args);
-#define LOG_DEBUG(logger, fmt, args...) logger.logging_p(Level::debug, __LINE__, (const char *)F(fmt), args);
-#define LOG_DATA(logger, fmt, args...) logger.logging_p(Level::data, __LINE__, (const char *)F(fmt), args);
+#define LOG_ERROR(logger, fmt, args...) logger.logging_p(logging::Level::error, __LINE__, (const char *)F(fmt), args);
+#define LOG_WARNING(logger, fmt, args...) logger.logging_p(logging::Level::warning, __LINE__, (const char *)F(fmt), args);
+#define LOG_INFO(logger, fmt, args...) logger.logging_p(logging::Level::info, __LINE__, (const char *)F(fmt), args);
+#define LOG_DEBUG(logger, fmt, args...) logger.logging_p(logging::Level::debug, __LINE__, (const char *)F(fmt), args);
+#define LOG_DATA(logger, fmt, args...) logger.logging_p(logging::Level::data, __LINE__, (const char *)F(fmt), args);
 
 class Logger
 {
@@ -62,3 +65,4 @@ class Logger
         const String shorten (const String name);
 };
 
+}

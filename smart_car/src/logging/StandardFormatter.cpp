@@ -7,6 +7,9 @@
 
 #include "StandardFormatter.hpp"
 
+namespace logging
+{
+
 StandardFormatter::StandardFormatter (TimeSource &time_source) :
         Formatter(), time_source(time_source)
 {
@@ -23,3 +26,4 @@ void StandardFormatter::format (char *buffer, const size_t buffer_size, const Lo
     buffer[buffer_size - 1] = '\0';
 }
 
+}

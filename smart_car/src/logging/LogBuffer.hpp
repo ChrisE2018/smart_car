@@ -13,6 +13,9 @@
 #include <WString.h>
 #include "Level.hpp"
 
+namespace logging
+{
+
 class Logger;
 
 std::ostream& operator<< (std::ostream &lhs, const __FlashStringHelper *pstr);
@@ -35,3 +38,5 @@ class LogBuffer: private std::streambuf, public std::ostream
         void flush ();
         void reset ();
 };
+
+}

@@ -7,6 +7,9 @@
 
 #include "Appender.hpp"
 
+namespace logging
+{
+
 Appender::Appender (const Level level, Formatter &formatter) :
         level(level), formatter(formatter)
 {
@@ -27,4 +30,6 @@ void Appender::append (const Logger *logger, const Level level, const int line, 
     formatter.format(buffer, buffer_size, logger, level, line, message);
     buffer[buffer_size - 1] = '\0';
     append(level, buffer);
+}
+
 }

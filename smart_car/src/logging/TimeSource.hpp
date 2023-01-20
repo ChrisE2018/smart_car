@@ -9,6 +9,9 @@
 
 #include <time.h>
 
+namespace logging
+{
+
 class TimeSource
 {
     public:
@@ -18,3 +21,4 @@ class TimeSource
         virtual time_t get_unixtime();
 };
 
+}

@@ -10,6 +10,10 @@
 #include "Appender.hpp"
 #include "TimeSource.hpp"
 #include <SD.h>
+
+namespace logging
+{
+
 class Car;
 
 #define LOG_DATA(fmt, args...) robot_appender->log_data_p((const char *)F(fmt), args);
@@ -54,3 +58,4 @@ class RobotAppender: public Appender
         void set_log_pathname ();
 };
 
+}

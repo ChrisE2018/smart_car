@@ -15,9 +15,9 @@
 #include "../logging/Logger.hpp"
 #include "../logging/SerialAppender.hpp"
 
-extern SerialAppender *usb_appender;
+extern logging::SerialAppender *usb_appender;
 
-static Logger logger(nullptr, __FILE__, Level::info);
+static logging::Logger logger(nullptr, __FILE__, logging::Level::info);
 
 const std::string stringify (const MotorDirection direction)
 {

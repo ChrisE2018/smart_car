@@ -12,7 +12,7 @@
 #include <ctime>
 #include "../logging/TimeSource.hpp"
 
-class ClockPlugin : public Plugin, public TimeSource
+class ClockPlugin : public Plugin, public logging::TimeSource
 {
     public:
         ClockPlugin ();

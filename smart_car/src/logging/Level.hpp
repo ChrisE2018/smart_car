@@ -7,6 +7,9 @@
 
 #pragma once
 
+namespace logging
+{
+
 enum class Level
 {
     error, warning, info, debug, data, none
@@ -14,3 +17,4 @@ enum class Level
 
 const char* stringify (const Level level);
 
+}

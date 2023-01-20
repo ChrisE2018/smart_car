@@ -11,6 +11,9 @@
 #include "Formatter.hpp"
 #include "TimeSource.hpp"
 
+namespace logging
+{
+
 class StandardFormatter : public Formatter
 {
     public:
@@ -22,4 +25,6 @@ class StandardFormatter : public Formatter
     private:
         TimeSource &time_source;
 };
+
+}
 

@@ -9,6 +9,9 @@
 
 #include "Appender.hpp"
 
+namespace logging
+{
+
 class SerialAppender: public Appender
 {
     public:
@@ -17,3 +20,4 @@ class SerialAppender: public Appender
         virtual void append (const Level level, const char *message) override;
 };
 
+}

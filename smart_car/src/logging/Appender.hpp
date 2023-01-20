@@ -10,6 +10,9 @@
 #include "Logger.hpp"
 #include "Formatter.hpp"
 
+namespace logging
+{
+
 class Appender
 {
     public:
@@ -29,3 +32,4 @@ class Appender
         Formatter &formatter;
 };
 
+}

@@ -14,7 +14,7 @@
 #include "smart_car.hpp"
 #include "../logging/Logger.hpp"
 
-static Logger logger(__FILE__, Level::info);
+static logging::Logger logger(__FILE__, logging::Level::info);
 
 GoalPlugin::GoalPlugin (Car &car) :
         Plugin(PluginId::GOAL_PLUGIN), car(car)

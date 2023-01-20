@@ -7,6 +7,9 @@
 
 #include "TimeSource.hpp"
 
+namespace logging
+{
+
 TimeSource::TimeSource ()
 {
 }
@@ -14,4 +17,6 @@ TimeSource::TimeSource ()
 time_t TimeSource::get_unixtime()
 {
     return 0;
+}
+
 }

@@ -11,6 +11,9 @@
 #include "LogBuffer.hpp"
 #include "Logger.hpp"
 
+namespace logging
+{
+
 std::ostream& operator<< (std::ostream &lhs, const __FlashStringHelper *pstr)
 {
     PGM_P p = reinterpret_cast<PGM_P>(pstr);
@@ -61,4 +64,6 @@ void LogBuffer::set_logger (Logger *const _logger, const Level _level, const int
     logger = _logger;
     level = _level;
     line = _line;
+}
+
 }

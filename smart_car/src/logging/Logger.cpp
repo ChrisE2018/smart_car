@@ -11,6 +11,9 @@
 
 #include <WString.h>
 
+namespace logging
+{
+
 static Logger *Logger::ROOT = new Logger(nullptr, "root", Level::debug);
 
 static char Logger::buffer[Logger::buffer_size];
@@ -165,3 +168,6 @@ void Logger::append (const Logger *logger, const Level _level, const int line, c
         parent->append(logger, _level, line, message);
     }
 }
+
+}
+
