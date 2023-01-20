@@ -22,6 +22,9 @@ class Appender;
 
 class Logger
 {
+        // Share the private buffer to save sram
+        friend LogBuffer;
+
     public:
         static Logger *ROOT;
         Logger (const String name);
@@ -43,6 +46,7 @@ class Logger
     private:
         static const int buffer_size = 128;
         static char buffer[buffer_size];
+        static int pos;
         // LogBuffer uses a lot of sram so we only want one instance
         static LogBuffer stream;
         Logger *const parent;

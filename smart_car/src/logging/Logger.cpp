@@ -15,6 +15,8 @@ static Logger *Logger::ROOT = new Logger(nullptr, "root", Level::debug);
 
 static char Logger::buffer[Logger::buffer_size];
 
+static int Logger::pos = 0;
+
 static LogBuffer Logger::stream;
 
 Logger::Logger (const String name) :
@@ -76,41 +78,31 @@ void Logger::add_appender (Appender *const appender)
 
 LogBuffer& Logger::info ()
 {
-    stream.set_logger(this);
-    stream.set_level(Level::info);
-    stream.set_line(0);
+    stream.set_logger(this, Level::info, 0);
     return stream;
 }
 
 LogBuffer& Logger::debug ()
 {
-    stream.set_logger(this);
-    stream.set_level(Level::debug);
-    stream.set_line(0);
+    stream.set_logger(this, Level::debug, 0);
     return stream;
 }
 
 LogBuffer& Logger::data ()
 {
-    stream.set_logger(this);
-    stream.set_level(Level::data);
-    stream.set_line(0);
+    stream.set_logger(this, Level::data, 0);
     return stream;
 }
 
 LogBuffer& Logger::info (const int line)
 {
-    stream.set_logger(this);
-    stream.set_level(Level::info);
-    stream.set_line(line);
+    stream.set_logger(this, Level::info, line);
     return stream;
 }
 
 LogBuffer& Logger::debug (const int line)
 {
-    stream.set_logger(this);
-    stream.set_level(Level::debug);
-    stream.set_line(line);
+    stream.set_logger(this, Level::debug, line);
     return stream;
 }
 

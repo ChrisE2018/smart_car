@@ -11,10 +11,6 @@
 #include "LogBuffer.hpp"
 #include "Logger.hpp"
 
-static char LogBuffer::buffer[LogBuffer::buffer_size];
-
-static int LogBuffer::pos = 0;
-
 std::ostream& operator<< (std::ostream &lhs, const __FlashStringHelper *pstr)
 {
     PGM_P p = reinterpret_cast<PGM_P>(pstr);
@@ -36,41 +32,33 @@ LogBuffer::LogBuffer () :
 
 std::streambuf::int_type LogBuffer::overflow (const std::streambuf::int_type c)
 {
-    if (c == '\n' || c == EOF || pos + 1 >= buffer_size)
+    if (c == '\n' || c == EOF || Logger::pos + 1 >= Logger::buffer_size)
     {
         flush();
     }
     else if (c != '\r')
     {
-        buffer[pos++] = c;
+        Logger::buffer[Logger::pos++] = c;
     }
-    buffer[pos] = '\0';
+    Logger::buffer[Logger::pos] = '\0';
     return c;
 }
 
 void LogBuffer::flush ()
 {
-    logger->append(logger, level, line, buffer);
+    logger->append(logger, level, line, Logger::buffer);
     reset();
 }
 
 void LogBuffer::reset ()
 {
-    pos = 0;
-    buffer[pos] = '\0';
+    Logger::pos = 0;
+    Logger::buffer[0] = '\0';
 }
 
-void LogBuffer::set_logger (Logger *const _logger)
+void LogBuffer::set_logger (Logger *const _logger, const Level _level, const int _line)
 {
     logger = _logger;
-}
-
-void LogBuffer::set_level (const Level _level)
-{
     level = _level;
-}
-
-void LogBuffer::set_line (const int _line)
-{
     line = _line;
 }
