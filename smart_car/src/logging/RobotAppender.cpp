@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <SPI.h>
 #include "RobotAppender.hpp"
-#include "UnixTime.hpp"
 
 RobotAppender::RobotAppender (const Level level, Formatter &formatter, TimeSource &time_source) :
         Appender(level, formatter), time_source(time_source)

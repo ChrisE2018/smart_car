@@ -6,7 +6,6 @@
  */
 
 #include "StandardFormatter.hpp"
-#include "UnixTime.hpp"
 
 StandardFormatter::StandardFormatter (TimeSource &time_source) :
         Formatter(), time_source(time_source)
