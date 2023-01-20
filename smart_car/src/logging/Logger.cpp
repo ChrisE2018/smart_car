@@ -76,6 +76,18 @@ void Logger::add_appender (Appender *const appender)
     }
 }
 
+LogBuffer& Logger::error ()
+{
+    stream.set_logger(this, Level::error, 0);
+    return stream;
+}
+
+LogBuffer& Logger::warning ()
+{
+    stream.set_logger(this, Level::warning, 0);
+    return stream;
+}
+
 LogBuffer& Logger::info ()
 {
     stream.set_logger(this, Level::info, 0);
@@ -91,6 +103,18 @@ LogBuffer& Logger::debug ()
 LogBuffer& Logger::data ()
 {
     stream.set_logger(this, Level::data, 0);
+    return stream;
+}
+
+LogBuffer& Logger::error (const int line)
+{
+    stream.set_logger(this, Level::error, line);
+    return stream;
+}
+
+LogBuffer& Logger::warning (const int line)
+{
+    stream.set_logger(this, Level::warning, line);
     return stream;
 }
 
@@ -113,8 +137,8 @@ void Logger::logging (const Level _level, const int line, const char *format, ..
         va_list args;
         va_start(args, format);
         vsnprintf(buffer, buffer_size, format, args);
-        append(this, _level, line, buffer);
         va_end(args);
+        append(this, _level, line, buffer);
     }
 }
 
@@ -125,19 +149,19 @@ void Logger::logging_p (const Level _level, const int line, const char *format, 
         va_list args;
         va_start(args, format);
         vsnprintf_P(buffer, buffer_size, format, args);
-        append(this, _level, line, buffer);
         va_end(args);
+        append(this, _level, line, buffer);
     }
 }
 
-void Logger::append (const Logger *logger, const Level level, const int line, const char *message)
+void Logger::append (const Logger *logger, const Level _level, const int line, const char *message)
 {
     for (Appender *appender : appenders)
     {
-        appender->append(logger, level, line, message);
+        appender->append(logger, _level, line, message);
     }
     if (parent != nullptr)
     {
-        parent->append(logger, level, line, message);
+        parent->append(logger, _level, line, message);
     }
 }

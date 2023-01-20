@@ -34,9 +34,13 @@ class Logger
         const String get_short_name () const;
         const Level get_level () const;
         void add_appender (Appender *const appender);
+        LogBuffer& error ();
+        LogBuffer& warning ();
         LogBuffer& info ();
         LogBuffer& debug ();
         LogBuffer& data ();
+        LogBuffer& error (const int line);
+        LogBuffer& warning (const int line);
         LogBuffer& info (const int line);
         LogBuffer& debug (const int line);
         void logging (const Level level, const int line, const char *format, ...);
