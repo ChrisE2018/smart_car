@@ -2,11 +2,10 @@
 * New sketch to figure out plotter
 * auto_velocity sometimes stops at drive RIGHT STOP at 0 power 0.00 mps (but did not cancel)
 * auto_velocity sometimes races in reverse
-* Dynamic control over cyclic_plugins list
-* GoalPlugin move to location accurately
+* Dynamic control over cyclic_plugins list depending on mode/command/goal
+* Make GoalPlugin move to location accurately
 * Don't call sr04.Distance from Ultrasound plugin. Copy and modify the source instead. 
 Only care about short distances so set a low timeout.
-* Delegate logging and logging_p method from Logger to LogBuffer and eliminate Logger.buffer
 
 PHYSICAL
 * Work on GPS
@@ -66,3 +65,6 @@ DONE DONE DONE
 1/18/2023
 * Use state for PidPlugin::auto_velocity flag 
 * Fully test GoalPlugin angle commands
+
+1/20/2023
+* Delegate logging and logging_p method from Logger to LogBuffer and eliminate Logger.buffer

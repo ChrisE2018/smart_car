@@ -15,10 +15,10 @@
 
 class Logger;
 
-// http://www.angelikalanger.com/Articles/C++Report/IOStreamsDerivation/IOStreamsDerivation.html
-// https://gcc.gnu.org/onlinedocs/libstdc++/manual/streambufs.html
 std::ostream& operator<< (std::ostream &lhs, const __FlashStringHelper *pstr);
 
+// http://www.angelikalanger.com/Articles/C++Report/IOStreamsDerivation/IOStreamsDerivation.html
+// https://gcc.gnu.org/onlinedocs/libstdc++/manual/streambufs.html
 class LogBuffer: private std::streambuf, public std::ostream
 {
     public:

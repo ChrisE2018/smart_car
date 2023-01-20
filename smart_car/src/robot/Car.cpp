@@ -66,8 +66,8 @@ Car::~Car ()
 
 std::ostream& operator<< (std::ostream &lhs, const Car &car)
 {
-    return lhs << "#[car " << car.mode << " " << car.kalman_plugin->get_x() << ", " << car.kalman_plugin->get_y()
-            << " ang " << car.kalman_plugin->get_angle() << "]";
+    return lhs << F("#[car ") << car.mode << F(" ") << car.kalman_plugin->get_x() << F(", ") << car.kalman_plugin->get_y()
+            << F(" ang ") << car.kalman_plugin->get_angle() << F("]");
 }
 
 void Car::setup ()

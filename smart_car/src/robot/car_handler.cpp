@@ -136,7 +136,6 @@ void Car::execute_command (const std::vector<String> &words)
         {
             desired_velocity = words[1].toFloat();
         }
-//        set_mode(Mode::COMMAND_MODE);
         pid_controls[static_cast<int>(MotorLocation::LEFT_FRONT)].set_desired_velocity(desired_velocity);
     }
     else if (command == F("lr"))
@@ -146,7 +145,6 @@ void Car::execute_command (const std::vector<String> &words)
         {
             desired_velocity = words[1].toFloat();
         }
-//        set_mode(Mode::COMMAND_MODE);
         pid_controls[static_cast<int>(MotorLocation::LEFT_REAR)].set_desired_velocity(desired_velocity);
     }
     else if (command == F("mpu"))
