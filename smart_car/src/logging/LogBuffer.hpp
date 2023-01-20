@@ -11,35 +11,27 @@
 #include <iostream>
 #include <string>
 #include <WString.h>
+#include "Level.hpp"
 
 class Logger;
-enum class Level
-;
 
 std::ostream& operator<< (std::ostream &lhs, const __FlashStringHelper *pstr);
 
 // http://www.angelikalanger.com/Articles/C++Report/IOStreamsDerivation/IOStreamsDerivation.html
 // https://gcc.gnu.org/onlinedocs/libstdc++/manual/streambufs.html
-
-class LogBuffer : private std::streambuf, public std::ostream
+class LogBuffer: private std::streambuf, public std::ostream
 {
     public:
         LogBuffer ();
-        void reset ();
-        void set_logger (Logger *const logger);
-        void set_level (const Level level);
-        void set_line (const int line);
+        void set_logger (Logger *const logger, const Level level, const int line);
 
     protected:
         virtual std::streambuf::int_type overflow (const std::streambuf::int_type c) override;
 
     private:
-        static const int buffer_size = 128;
-        static char buffer[buffer_size];
-        static int pos;
         Logger *logger;
         Level level;
         int line = 0;
-
         void flush ();
+        void reset ();
 };

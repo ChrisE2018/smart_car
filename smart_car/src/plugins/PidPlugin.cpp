@@ -20,8 +20,8 @@ PidPlugin::PidPlugin (const PluginId id, MotorPlugin &motor_plugin) :
 
 std::ostream& operator<< (std::ostream &lhs, const PidPlugin &motor)
 {
-    return lhs << "#[pid " << motor.location << " " << motor.measured_velocity << " m/s err=" << motor.velocity_error
-            << "]";
+    return lhs << F("#[pid ") << motor.location << F(" ") << motor.measured_velocity << F(" m/s err=") << motor.velocity_error
+            << F("]");
 }
 
 bool PidPlugin::setup ()

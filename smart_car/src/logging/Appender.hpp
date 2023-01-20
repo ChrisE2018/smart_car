@@ -20,10 +20,12 @@ class Appender
         virtual void append (const Logger *logger, const Level level, const int line, const char *message);
         virtual void append (const Level level, const char *message);
 
-    private:
+    protected:
         Level level;
         static const int buffer_size = 128;
         char buffer[buffer_size];
+
+    private:
         Formatter &formatter;
 };
 

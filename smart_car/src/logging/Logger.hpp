@@ -9,16 +9,10 @@
 
 #include <Arduino.h>
 #include <vector>
+#include "Level.hpp"
 #include "LogBuffer.hpp"
 
 class Appender;
-
-enum class Level
-{
-    error, warning, info, debug, data, none
-};
-
-const char* stringify (const Level level);
 
 #define LOG_ERROR(logger, fmt, args...) logger.logging_p(Level::error, __LINE__, (const char *)F(fmt), args);
 #define LOG_WARNING(logger, fmt, args...) logger.logging_p(Level::warning, __LINE__, (const char *)F(fmt), args);
@@ -28,6 +22,9 @@ const char* stringify (const Level level);
 
 class Logger
 {
+        // Share the private buffer to save sram
+        friend LogBuffer;
+
     public:
         static Logger *ROOT;
         Logger (const String name);
@@ -37,9 +34,13 @@ class Logger
         const String get_short_name () const;
         const Level get_level () const;
         void add_appender (Appender *const appender);
+        LogBuffer& error ();
+        LogBuffer& warning ();
         LogBuffer& info ();
         LogBuffer& debug ();
         LogBuffer& data ();
+        LogBuffer& error (const int line);
+        LogBuffer& warning (const int line);
         LogBuffer& info (const int line);
         LogBuffer& debug (const int line);
         void logging (const Level level, const int line, const char *format, ...);
@@ -49,6 +50,7 @@ class Logger
     private:
         static const int buffer_size = 128;
         static char buffer[buffer_size];
+        static int pos;
         // LogBuffer uses a lot of sram so we only want one instance
         static LogBuffer stream;
         Logger *const parent;
