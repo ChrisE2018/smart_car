@@ -9,7 +9,7 @@
 #include "smart_car.hpp"
 #include "../robot/Car.hpp"
 #include "MotorPlugin.hpp"
-#include "../logging/Logger.hpp"
+#include "Logger.hpp"
 
 static logging::Logger logger(__FILE__, logging::Level::info);
 

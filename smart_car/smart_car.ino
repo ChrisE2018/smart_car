@@ -1,14 +1,16 @@
 #include "Arduino.h"
-#include "src/robot/Car.hpp"
-#include "smart_car.hpp"
-#include "src/robot/speed_counter.hpp"
-#include "src/robot/heap.hpp"
+
 #include "Logger.hpp"
 #include "SdAppender.hpp"
 #include "SerialAppender.hpp"
-#include "StandardFormatter.hpp"
 #include "TimeSource.hpp"
+#include "TimestampFormatter.hpp"
+
+#include "src/robot/Car.hpp"
+#include "src/robot/speed_counter.hpp"
+#include "src/robot/heap.hpp"
 #include "src/plugins/ClockPlugin.hpp"
+#include "smart_car.hpp"
 
 /* Program for robot car. */
 
@@ -25,6 +27,7 @@ std::ohserialstream cout1(Serial3);
 static Car *car;
 static unsigned long cycle_count = 0;
 
+logging::TimestampFormatter *formatter = nullptr;
 logging::SdAppender *sd_appender = nullptr;
 logging::SerialAppender *usb_appender = nullptr;
 logging::SerialAppender *bluetooth_appender = nullptr;
@@ -38,13 +41,13 @@ void setup ()
     Serial3.begin(115200);
     car = new Car();
     logging::TimeSource &time_source = *car->get_clock_plugin();
-    logging::StandardFormatter *formatter = new logging::StandardFormatter(time_source);
+    formatter = new logging::TimestampFormatter(time_source);
     usb_appender = new logging::SerialAppender(Serial, logging::Level::info, *formatter);
     bluetooth_appender = new logging::SerialAppender(Serial3, logging::Level::info, *formatter);
     sd_appender = new logging::SdAppender(PIN_53_SS, logging::Level::info, *formatter, time_source);
-    logging::Logger::ROOT->add_appender(usb_appender);
-    logging::Logger::ROOT->add_appender(bluetooth_appender);
-    logging::Logger::ROOT->add_appender(sd_appender);
+    logging::Logger::root->add_appender(usb_appender);
+    logging::Logger::root->add_appender(bluetooth_appender);
+    logging::Logger::root->add_appender(sd_appender);
     sd_appender->open_logfile();
     car->setup();
     car->demo_drive_leds();

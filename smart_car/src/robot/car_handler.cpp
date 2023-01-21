@@ -5,9 +5,10 @@
  *      Author: cre
  */
 
+#include "Logger.hpp"
+
 #include "Car.hpp"
-#include "Heap.hpp"
-#include "../logging/Logger.hpp"
+#include "../robot/Heap.hpp"
 #include "../plugins/DrivePlugin.hpp"
 #include "../plugins/GoalPlugin.hpp"
 #include "../plugins/KalmanPlugin.hpp"
