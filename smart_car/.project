@@ -67,11 +67,6 @@
 			<location>/Users/cre/Documents/Arduino/libraries/I2Cdev</location>
 		</link>
 		<link>
-			<name>libraries/Logging</name>
-			<type>2</type>
-			<location>/Users/cre/Documents/Arduino/libraries/Logging</location>
-		</link>
-		<link>
 			<name>libraries/MPU6050</name>
 			<type>2</type>
 			<location>/Users/cre/Documents/Arduino/libraries/MPU6050</location>
@@ -95,6 +90,11 @@
 			<name>libraries/Wire</name>
 			<type>2</type>
 			<locationURI>ECLIPSE_HOME/arduinoPlugin/packages/arduino/hardware/avr/1.8.6/libraries/Wire</locationURI>
+		</link>
+		<link>
+			<name>libraries/logging</name>
+			<type>2</type>
+			<location>/Users/cre/Documents/Arduino/libraries/logging</location>
 		</link>
 	</linkedResources>
 </projectDescription>
