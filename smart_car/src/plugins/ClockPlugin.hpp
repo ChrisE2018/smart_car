@@ -10,7 +10,7 @@
 #include "Plugin.hpp"
 #include <DS3231.h>
 #include <ctime>
-#include "../logging/TimeSource.hpp"
+#include "TimeSource.hpp"
 
 class ClockPlugin : public Plugin, public logging::TimeSource
 {

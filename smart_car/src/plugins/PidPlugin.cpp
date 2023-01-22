@@ -8,7 +8,7 @@
 #include <Arduino.h>
 #include "PidPlugin.hpp"
 #include "../robot/Car.hpp"
-#include "../logging/Logger.hpp"
+#include "Logger.hpp"
 #include "../robot/speed_counter.hpp"
 
 static logging::Logger logger(__FILE__, logging::Level::info);

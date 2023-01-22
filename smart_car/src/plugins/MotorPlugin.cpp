@@ -11,8 +11,8 @@
 #include "../robot/Car.hpp"
 #include "../robot/speed_counter.hpp"
 
-#include "../logging/Logger.hpp"
-#include "../logging/SerialAppender.hpp"
+#include "Logger.hpp"
+#include "SerialAppender.hpp"
 
 extern logging::SerialAppender *usb_appender;
 

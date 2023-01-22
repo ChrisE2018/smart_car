@@ -12,7 +12,7 @@
 #include "KalmanPlugin.hpp"
 #include "MpuPlugin.hpp"
 #include "smart_car.hpp"
-#include "../logging/Logger.hpp"
+#include "Logger.hpp"
 
 static logging::Logger logger(__FILE__, logging::Level::info);
 

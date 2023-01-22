@@ -6,7 +6,7 @@
  */
 
 #include "Car.hpp"
-#include "../logging/SerialAppender.hpp"
+#include "SerialAppender.hpp"
 #include "smart_car.hpp"
 
 #include "../plugins/ClockPlugin.hpp"

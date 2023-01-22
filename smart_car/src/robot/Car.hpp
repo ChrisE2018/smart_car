@@ -9,7 +9,7 @@
 
 #include <arduino.h>
 #include <vector>
-#include "../logging/Logger.hpp"
+#include "Logger.hpp"
 #include "../plugins/MotorPlugin.hpp"
 #include "../plugins/PidPlugin.hpp"
 #include "Mode.hpp"
