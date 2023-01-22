@@ -192,7 +192,6 @@ void Car::execute_command (const std::vector<String> &words)
         {
             desired_velocity = words[1].toFloat();
         }
-//        set_mode(Mode::COMMAND_MODE);
         pid_controls[static_cast<int>(MotorLocation::RIGHT_REAR)].set_desired_velocity(desired_velocity);
     }
     else if (command == F("reset"))
