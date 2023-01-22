@@ -6,8 +6,7 @@
  */
 
 #include "Car.hpp"
-#include "../logging/RobotAppender.hpp"
-#include "../logging/SerialAppender.hpp"
+#include "SerialAppender.hpp"
 #include "smart_car.hpp"
 
 #include "../plugins/ClockPlugin.hpp"
@@ -23,11 +22,11 @@
 // For some reason this does not always resolve.
 extern HardwareSerial Serial;
 
-extern RobotAppender *robot_appender;
-extern SerialAppender *usb_appender;
+extern logging::SerialAppender *usb_appender;
+extern logging::SerialAppender *bluetooth_appender;
 
 Car::Car () :
-        logger(__FILE__, Level::debug), serial_parser(Serial), bluetooth_parser(Serial3), clock_plugin(
+        logger(__FILE__, logging::Level::debug), serial_parser(Serial), bluetooth_parser(Serial3), clock_plugin(
                 new ClockPlugin()), forward_plugin(
                 new DrivePlugin(PluginId::FORWARD_PLUGIN, *this, 500, MotorDirection::FORWARD,
                         MotorDirection::FORWARD)), goal_plugin(new GoalPlugin(*this)), mpu_plugin(new MpuPlugin()), kalman_plugin(
@@ -136,29 +135,21 @@ void Car::cycle ()
 
 void Car::command_cycle ()
 {
-    if (robot_appender == nullptr)
+    if (serial_parser.has_input())
     {
+        usb_appender->set_level(logging::Level::info);
+        bluetooth_appender->set_level(logging::Level::none);
         serial_parser.handle_command(*this);
+    }
+    if (bluetooth_parser.has_input())
+    {
+        usb_appender->set_level(logging::Level::none);
+        usb_appender->set_level(logging::Level::none);
+        bluetooth_appender->set_level(logging::Level::info);
         bluetooth_parser.handle_command(*this);
     }
-    else
-    {
-        if (serial_parser.has_input())
-        {
-            robot_appender->enable_usb_logger(true);
-            robot_appender->enable_bluetooth_logger(false);
-            serial_parser.handle_command(*this);
-        }
-        if (bluetooth_parser.has_input())
-        {
-            usb_appender->set_level(Level::none);
-            robot_appender->enable_usb_logger(false);
-            robot_appender->enable_bluetooth_logger(true);
-            bluetooth_parser.handle_command(*this);
-        }
-        robot_appender->flush();
-    }
 }
+
 void Car::demo_drive_leds ()
 {
     int duration = 150;

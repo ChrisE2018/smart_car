@@ -9,9 +9,9 @@
 #include "smart_car.hpp"
 #include "../robot/Car.hpp"
 #include "MotorPlugin.hpp"
-#include "../logging/Logger.hpp"
+#include "Logger.hpp"
 
-static Logger logger(__FILE__, Level::info);
+static logging::Logger logger(__FILE__, logging::Level::info);
 
 UltrasoundPlugin::UltrasoundPlugin (Car &car) :
         car(car), Plugin(PluginId::ULTRASOUND_PLUGIN), sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)

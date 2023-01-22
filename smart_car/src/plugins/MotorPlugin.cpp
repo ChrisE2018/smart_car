@@ -7,17 +7,16 @@
 
 #include "MotorPlugin.hpp"
 
-#include "../logging/RobotAppender.hpp"
 #include "smart_car.hpp"
 #include "../robot/Car.hpp"
 #include "../robot/speed_counter.hpp"
 
-#include "../logging/Logger.hpp"
-#include "../logging/SerialAppender.hpp"
+#include "Logger.hpp"
+#include "SerialAppender.hpp"
 
-extern SerialAppender *usb_appender;
+extern logging::SerialAppender *usb_appender;
 
-static Logger logger(nullptr, __FILE__, Level::info);
+static logging::Logger logger(nullptr, __FILE__, logging::Level::info);
 
 const std::string stringify (const MotorDirection direction)
 {

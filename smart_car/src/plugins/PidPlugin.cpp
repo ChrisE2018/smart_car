@@ -8,10 +8,10 @@
 #include <Arduino.h>
 #include "PidPlugin.hpp"
 #include "../robot/Car.hpp"
-#include "../logging/Logger.hpp"
+#include "Logger.hpp"
 #include "../robot/speed_counter.hpp"
 
-static Logger logger(__FILE__, Level::info);
+static logging::Logger logger(__FILE__, logging::Level::info);
 
 PidPlugin::PidPlugin (const PluginId id, MotorPlugin &motor_plugin) :
         Plugin(id), motor_plugin(motor_plugin), location(motor_plugin.get_location())

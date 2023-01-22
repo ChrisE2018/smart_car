@@ -9,7 +9,7 @@
 
 #include <arduino.h>
 #include <vector>
-#include "../logging/Logger.hpp"
+#include "Logger.hpp"
 #include "../plugins/MotorPlugin.hpp"
 #include "../plugins/PidPlugin.hpp"
 #include "Mode.hpp"
@@ -67,7 +67,7 @@ class Car: public Executor
         WallPlugin* get_wall_plugin () const;
 
     private:
-        Logger logger;
+        logging::Logger logger;
         unsigned long cycle_count = 0;
         unsigned long total_cycle_us = 0;
 
