@@ -28,12 +28,6 @@ std::ostream& operator<< (std::ostream &lhs, const Car &car)
             << F(" ang ") << kalman_plugin.get_angle() << F("]");
 }
 
-void Car::setup ()
-{
-    logger.info(__LINE__) << F("Testing info logging") << std::endl;
-    logger.debug(__LINE__) << F("Testing debug logging") << std::endl;
-}
-
 void Car::set_mode (const Mode _mode)
 {
     mode = _mode;

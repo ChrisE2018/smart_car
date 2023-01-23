@@ -21,7 +21,6 @@ class Car: public Executor
         Car ();
         friend std::ostream& operator<< (std::ostream &os, const Car &car);
 
-        void setup ();
         void set_mode (const Mode mode);
         void cycle ();
         void demo_drive_leds ();

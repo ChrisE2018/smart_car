@@ -36,6 +36,7 @@ void setup ()
 {
     Serial.begin(115200);
     Serial.println(F("Smart car"));
+
     Serial3.begin(115200);
 
     clock_plugin.begin();
@@ -50,14 +51,15 @@ void setup ()
     sd_appender->open_logfile();
 
     setup_robot();
-    car.setup();
-    car.demo_drive_leds();
     setup_speed_counter();
+    car.demo_drive_leds();
     const int heap_buffer_size = 100;
     char heap_buffer[heap_buffer_size];
     get_heap_state(heap_buffer, heap_buffer_size);
-    //sd_appender->log_data("/HISTORY", "STARTUP.TXT", heap_buffer);
     Serial.println(heap_buffer);
+    get_heap_state(heap_buffer, heap_buffer_size);
+    Serial.println(heap_buffer);
+    //sd_appender->log_data("/HISTORY", "STARTUP.TXT", heap_buffer);
     Serial.print(F("C++ version "));
     Serial.println(__cplusplus);
     Serial.println(F("Ready"));

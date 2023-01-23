@@ -7,19 +7,6 @@
 
 #include "Robot.hpp"
 
-Plug plug;
-
-ClockPlugin clock_plugin;
-DrivePlugin forward_plugin(PluginId::FORWARD_PLUGIN, 500, MotorDirection::FORWARD, MotorDirection::FORWARD);
-DrivePlugin reverse_plugin(PluginId::REVERSE_PLUGIN, 500, MotorDirection::REVERSE, MotorDirection::REVERSE);
-GoalPlugin goal_plugin;
-MpuPlugin mpu_plugin;
-
-KalmanPlugin kalman_plugin;
-OdomPlugin odom_plugin;
-UltrasoundPlugin ultrasound_plugin;
-WallPlugin wall_plugin;
-
 // Left side
 static constexpr int left_rear_in1 = PIN_49_DIG; // yellow = in1
 static constexpr int left_rear_in2 = PIN_48_DIG; // orange = in2
@@ -36,12 +23,24 @@ static constexpr int right_rear_in4 = PIN_40_DIG; // gray = in4
 static constexpr int right_front_enA = PIN_5_PWM; // gray = enA
 static constexpr int right_rear_enB = PIN_6_PWM; // green = enB
 
-static constexpr int DISABLED_LED = 99;
-
 static constexpr int RIGHT_LED_FORWARD = PIN_22_DIG; // red led right
 static constexpr int RIGHT_LED_REVERSE = PIN_24_DIG; // green led right
 static constexpr int LEFT_LED_FORWARD = PIN_26_DIG; // red led left
 static constexpr int LEFT_LED_REVERSE = PIN_28_DIG; // green led left
+
+Plug plug;
+
+ClockPlugin clock_plugin;
+DrivePlugin forward_plugin(PluginId::FORWARD_PLUGIN, 500, MotorDirection::FORWARD, MotorDirection::FORWARD);
+DrivePlugin reverse_plugin(PluginId::REVERSE_PLUGIN, 500, MotorDirection::REVERSE, MotorDirection::REVERSE);
+GoalPlugin goal_plugin;
+MpuPlugin mpu_plugin;
+
+KalmanPlugin kalman_plugin;
+OdomPlugin odom_plugin;
+UltrasoundPlugin ultrasound_plugin;
+WallPlugin wall_plugin;
+
 MotorPlugin motors[MOTOR_COUNT] =
 { MotorPlugin(PluginId::MOTOR_RIGHT_FRONT_PLUGIN, MotorLocation::RIGHT_FRONT, right_front_enA, right_front_in2,
         right_front_in1, RIGHT_LED_FORWARD, RIGHT_LED_REVERSE),

@@ -11,16 +11,18 @@
 #include "Plugin.hpp"
 #include <ostream>
 
-const int SPEED_FULL = 255;
-const int SPEED_Q3 = 196;
-const int SPEED_175 = 175;
-const int SPEED_160 = 160;
-const int SPEED_150 = 150;
-const int SPEED_HALF = 128;
-const int SPEED_100 = 100;
-const int SPEED_Q1 = 64;
-const int SPEED_CRAWL = 32;
-const int SPEED_STOP = 0;
+constexpr int SPEED_FULL = 255;
+constexpr int SPEED_Q3 = 196;
+constexpr int SPEED_175 = 175;
+constexpr int SPEED_160 = 160;
+constexpr int SPEED_150 = 150;
+constexpr int SPEED_HALF = 128;
+constexpr int SPEED_100 = 100;
+constexpr int SPEED_Q1 = 64;
+constexpr int SPEED_CRAWL = 32;
+constexpr int SPEED_STOP = 0;
+
+constexpr int DISABLED_LED = 99;
 
 enum MotorDirection : unsigned char
 {
@@ -56,8 +58,6 @@ class MotorPlugin: public Plugin
         void set_delta_limit (const unsigned long delta, const int value);
 
     private:
-        static constexpr int DISABLED_LED = 99;
-
         const MotorLocation location;
         const int enable_pin;
         const int forward_pin;
