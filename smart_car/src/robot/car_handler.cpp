@@ -16,6 +16,14 @@
 #include "../plugins/OdomPlugin.hpp"
 #include "../plugins/UltrasoundPlugin.hpp"
 
+extern DrivePlugin forward_plugin;
+extern DrivePlugin reverse_plugin;
+extern GoalPlugin goal_plugin;
+extern KalmanPlugin kalman_plugin;
+extern MpuPlugin mpu_plugin;
+extern OdomPlugin odom_plugin;
+extern UltrasoundPlugin ultrasound_plugin;
+
 /** Execute a command from the user.
  @param words Command string broken into words.
  */
@@ -30,7 +38,7 @@ void Car::execute_command (const std::vector<String> &words)
         {
             set_mode(Mode::GOAL_MODE);
             const float goal = words[1].toFloat();
-            goal_plugin->set_goal(goal);
+            goal_plugin.set_goal(goal);
         }
     }
     else if (command == F("b"))
@@ -46,10 +54,10 @@ void Car::execute_command (const std::vector<String> &words)
             duration = words[2].toInt();
         }
         set_mode(Mode::COMMAND_MODE);
-        reverse_plugin->set_duration(duration);
-        reverse_plugin->set_motor_speed(speed);
-        reverse_plugin->set_state(Plugin::ENABLE);
-        forward_plugin->set_state(Plugin::DISABLE);
+        reverse_plugin.set_duration(duration);
+        reverse_plugin.set_motor_speed(speed);
+        reverse_plugin.set_state(Plugin::ENABLE);
+        forward_plugin.set_state(Plugin::DISABLE);
     }
     else if (command == F("bb"))
     {
@@ -64,7 +72,7 @@ void Car::execute_command (const std::vector<String> &words)
     }
     else if (command == F("calibrate"))
     {
-        mpu_plugin->calibrate();
+        mpu_plugin.calibrate();
     }
     else if (command == F("c"))
     {
@@ -78,7 +86,7 @@ void Car::execute_command (const std::vector<String> &words)
     }
     else if (command == F("distance"))
     {
-        ultrasound_plugin->set_trace(!ultrasound_plugin->is_trace());
+        ultrasound_plugin.set_trace(!ultrasound_plugin.is_trace());
     }
     else if (command == F("f"))
     {
@@ -93,10 +101,10 @@ void Car::execute_command (const std::vector<String> &words)
             duration = words[2].toInt();
         }
         set_mode(Mode::COMMAND_MODE);
-        forward_plugin->set_duration(duration);
-        forward_plugin->set_motor_speed(speed);
-        forward_plugin->set_state(Plugin::ENABLE);
-        reverse_plugin->set_state(Plugin::DISABLE);
+        forward_plugin.set_duration(duration);
+        forward_plugin.set_motor_speed(speed);
+        forward_plugin.set_state(Plugin::ENABLE);
+        reverse_plugin.set_state(Plugin::DISABLE);
     }
     else if (command == F("ff"))
     {
@@ -114,7 +122,7 @@ void Car::execute_command (const std::vector<String> &words)
         if (n > 2)
         {
             set_mode(Mode::GOAL_MODE);
-            goal_plugin->set_goal(words[1].toFloat(), words[2].toFloat());
+            goal_plugin.set_goal(words[1].toFloat(), words[2].toFloat());
         }
     }
     else if (command == F("heap"))
@@ -123,7 +131,7 @@ void Car::execute_command (const std::vector<String> &words)
     }
     else if (command == F("kalman"))
     {
-        kalman_plugin->set_trace(!kalman_plugin->is_trace());
+        kalman_plugin.set_trace(!kalman_plugin.is_trace());
     }
     else if (command == F("led"))
     {
@@ -149,11 +157,11 @@ void Car::execute_command (const std::vector<String> &words)
     }
     else if (command == F("mpu"))
     {
-        mpu_plugin->set_trace(!mpu_plugin->is_trace());
+        mpu_plugin.set_trace(!mpu_plugin.is_trace());
     }
     else if (command == "odom")
     {
-        odom_plugin->set_trace(!odom_plugin->is_trace());
+        odom_plugin.set_trace(!odom_plugin.is_trace());
     }
     else if (command == "plugins")
     {
@@ -239,8 +247,8 @@ void Car::execute_command (const std::vector<String> &words)
     else if (command == F("zero"))
     {
         set_mode(Mode::COMMAND_MODE);
-        kalman_plugin->reset();
-        odom_plugin->reset();
+        kalman_plugin.reset();
+        odom_plugin.reset();
     }
     else if (command == F("?"))
     {
@@ -255,14 +263,14 @@ void Car::execute_command (const std::vector<String> &words)
 void Car::help_command ()
 {
     logger.info(__LINE__) << F("Robot ") << *this << std::endl;
-    long d = ultrasound_plugin->get_distance();
+    long d = ultrasound_plugin.get_distance();
     logger.info(__LINE__) << F("Distance ") << d << F(" cm") << std::endl;
 
-    const BLA::Matrix<Nstate> &state = kalman_plugin->get_state();
+    const BLA::Matrix<Nstate> &state = kalman_plugin.get_state();
     logger.info(__LINE__) << F("Position ") << state(0) << F(", ") << state(1) << F(" angle ") << state(2)
             << F(" Velocity ") << state(3) << F(", ") << state(4) << F(" angle ") << state(5) << F(" Acceleration ")
             << state(6) << F(", ") << state(7) << F(" angle ") << state(8) << std::endl;
-    logger.info(__LINE__) << F("Angle: ") << kalman_plugin->get_angle() << std::endl;
+    logger.info(__LINE__) << F("Angle: ") << kalman_plugin.get_angle() << std::endl;
 
     LOG_INFO(logger, "Plugins %d", plugins.size());
     if (cycle_count > 0)

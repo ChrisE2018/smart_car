@@ -11,10 +11,12 @@
 #include "MotorPlugin.hpp"
 #include "Logger.hpp"
 
+extern Car car;
+
 static logging::Logger logger(__FILE__, logging::Level::info);
 
-UltrasoundPlugin::UltrasoundPlugin (Car &car) :
-        car(car), Plugin(PluginId::ULTRASOUND_PLUGIN), sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)
+UltrasoundPlugin::UltrasoundPlugin () :
+        Plugin(PluginId::ULTRASOUND_PLUGIN), sr04(ULTRASOUND_ECHO, ULTRASOUND_TRIGGER)
 {
     set_state(Plugin::DISABLE);
 }

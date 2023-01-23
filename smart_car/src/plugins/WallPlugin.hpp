@@ -14,12 +14,11 @@ class Car;
 class WallPlugin : public Plugin
 {
     public:
-        WallPlugin (Car &car);
+        WallPlugin ();
         virtual void enter_state (const int state) override;
         virtual void cycle () override;
 
     private:
-        Car &car;
         int speed = 0;
 };
 

@@ -9,7 +9,16 @@
 #include "src/robot/Car.hpp"
 #include "src/robot/speed_counter.hpp"
 #include "src/robot/heap.hpp"
+#include "src/plugins/Plug.hpp"
 #include "src/plugins/ClockPlugin.hpp"
+#include "src/plugins/DrivePlugin.hpp"
+#include "src/plugins/GoalPlugin.hpp"
+#include "src/plugins/KalmanPlugin.hpp"
+#include "src/plugins/MpuPlugin.hpp"
+#include "src/plugins/OdomPlugin.hpp"
+#include "src/plugins/UltrasoundPlugin.hpp"
+#include "src/plugins/WallPlugin.hpp"
+
 #include "smart_car.hpp"
 
 /* Program for robot car. */
@@ -24,7 +33,20 @@ std::ohserialstream cout(Serial);
 // tx3 14 blue to 22 (near side)
 std::ohserialstream cout1(Serial3);
 
-static Car *car;
+Plug plug;
+
+ClockPlugin clock_plugin;
+DrivePlugin forward_plugin(PluginId::FORWARD_PLUGIN, 500, MotorDirection::FORWARD, MotorDirection::FORWARD);
+DrivePlugin reverse_plugin(PluginId::REVERSE_PLUGIN, 500, MotorDirection::REVERSE, MotorDirection::REVERSE);
+GoalPlugin goal_plugin;
+MpuPlugin mpu_plugin;
+
+KalmanPlugin kalman_plugin;
+OdomPlugin odom_plugin;
+UltrasoundPlugin ultrasound_plugin;
+WallPlugin wall_plugin;
+
+Car car;
 static unsigned long cycle_count = 0;
 
 logging::TimestampFormatter *formatter = nullptr;
@@ -39,23 +61,31 @@ void setup ()
     Serial.begin(115200);
     Serial.println(F("Smart car"));
     Serial3.begin(115200);
-    car = new Car();
-    logging::TimeSource &time_source = *car->get_clock_plugin();
-    formatter = new logging::TimestampFormatter(time_source);
+    plug.add_plugin(&clock_plugin);
+    plug.add_plugin(&forward_plugin);
+    plug.add_plugin(&reverse_plugin);
+    plug.add_plugin(&goal_plugin);
+    plug.add_plugin(&mpu_plugin);
+    plug.add_plugin(&kalman_plugin);
+    plug.add_plugin(&odom_plugin);
+    plug.add_plugin(&ultrasound_plugin);
+    plug.add_plugin(&wall_plugin);
+
+    formatter = new logging::TimestampFormatter(clock_plugin);
     usb_appender = new logging::SerialAppender(Serial, logging::Level::info, *formatter);
     bluetooth_appender = new logging::SerialAppender(Serial3, logging::Level::info, *formatter);
-    sd_appender = new logging::SdAppender(PIN_53_SS, logging::Level::info, *formatter, time_source);
+    sd_appender = new logging::SdAppender(PIN_53_SS, logging::Level::info, *formatter, clock_plugin);
     logging::Logger::root->add_appender(usb_appender);
     logging::Logger::root->add_appender(bluetooth_appender);
     logging::Logger::root->add_appender(sd_appender);
     sd_appender->open_logfile();
-    car->setup();
-    car->demo_drive_leds();
+    car.setup();
+    car.demo_drive_leds();
     setup_speed_counter();
     const int heap_buffer_size = 100;
     char heap_buffer[heap_buffer_size];
     get_heap_state(heap_buffer, heap_buffer_size);
-    //robot_appender->log_data("/HISTORY", "STARTUP.TXT", heap_buffer);
+    //sd_appender->log_data("/HISTORY", "STARTUP.TXT", heap_buffer);
     Serial.println(heap_buffer);
     Serial.print(F("C++ version "));
     Serial.println(__cplusplus);
@@ -72,7 +102,8 @@ void loop ()
     if (cycle != cycle_count)
     {
         cycle_count = cycle;
-        car->cycle();
+        car.cycle();
+        plug.cycle();
     }
 }
 

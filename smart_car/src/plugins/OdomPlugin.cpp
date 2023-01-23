@@ -11,8 +11,10 @@
 // This is needed or the matrices won't print
 using namespace BLA;
 
-OdomPlugin::OdomPlugin (Car &car) :
-        Plugin(PluginId::ODOM_PLUGIN), car(car), t(0)
+extern Car car;
+
+OdomPlugin::OdomPlugin () :
+        Plugin(PluginId::ODOM_PLUGIN),  t(0)
 {
 
 }

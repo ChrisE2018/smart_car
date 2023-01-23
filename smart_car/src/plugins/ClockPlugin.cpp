@@ -12,6 +12,10 @@
 ClockPlugin::ClockPlugin () :
         Plugin(PluginId::CLOCK_PLUGIN)
 {
+}
+
+bool ClockPlugin::setup ()
+{
     if (enable_clock)
     {
         cout << "Initialize RTC module" << std::endl;
@@ -20,10 +24,6 @@ ClockPlugin::ClockPlugin () :
 //        clock.setDateTime(__DATE__, __TIME__);
         is_setup = true;
     }
-}
-
-bool ClockPlugin::setup ()
-{
     if (is_setup)
     {
         return true;

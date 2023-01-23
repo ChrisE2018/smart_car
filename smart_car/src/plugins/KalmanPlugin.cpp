@@ -14,6 +14,9 @@
 // This is needed or the matrices won't print
 using namespace BLA;
 
+extern Car car;
+extern MpuPlugin mpu_plugin;
+
 //------------------------------------
 /****       KALMAN PARAMETERS    ****/
 //------------------------------------
@@ -26,8 +29,8 @@ using namespace BLA;
 #define m2 0.01
 #define m3 0.01
 
-KalmanPlugin::KalmanPlugin (Car &car) :
-        Plugin(PluginId::KALMAN_PLUGIN), car(car)
+KalmanPlugin::KalmanPlugin () :
+        Plugin(PluginId::KALMAN_PLUGIN)
 {
 }
 
@@ -101,11 +104,10 @@ void KalmanPlugin::cycle ()
         // Convert from mps to radians per second
 //        const float angular_velocity = (left_velocity - right_velocity) * angular_meters_2_angular_radians; // Clockwise
         // Get yaw and acceleration from MPU
-        MpuPlugin *const mpu_plugin = car.get_mpu_plugin();
-        const float mpu_yaw = mpu_plugin->get_yaw();  // clockwise
+        const float mpu_yaw = mpu_plugin.get_yaw();  // clockwise
         // Verify that mpu_Ax and mpu_Ay are in the right frame of reference
-        const float mpu_Ax = mpu_plugin->get_Ax();
-        const float mpu_Ay = mpu_plugin->get_Ay();
+        const float mpu_Ax = mpu_plugin.get_Ax();
+        const float mpu_Ay = mpu_plugin.get_Ay();
 
 //        Serial.print(F("("));
 //        Serial.print(left_velocity);

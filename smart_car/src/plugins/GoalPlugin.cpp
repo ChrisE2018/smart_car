@@ -14,10 +14,14 @@
 #include "smart_car.hpp"
 #include "Logger.hpp"
 
+extern Car car;
+extern KalmanPlugin kalman_plugin;
+extern MpuPlugin mpu_plugin;
+
 static logging::Logger logger(__FILE__, logging::Level::info);
 
-GoalPlugin::GoalPlugin (Car &car) :
-        Plugin(PluginId::GOAL_PLUGIN), car(car)
+GoalPlugin::GoalPlugin () :
+        Plugin(PluginId::GOAL_PLUGIN)
 {
 }
 
@@ -56,8 +60,8 @@ void GoalPlugin::cycle ()
     const int state = get_state();
     if (state != DISABLE)
     {
-//        const float measured_angle = car.get_kalman_plugin()->get_angle();
-        const float measured_angle = car.get_mpu_plugin()->get_yaw();
+//        const float measured_angle = kalman_plugin.get_angle();
+        const float measured_angle = mpu_plugin.get_yaw();
 
         if (!is_overflow(measured_angle))
         {
@@ -67,8 +71,8 @@ void GoalPlugin::cycle ()
             }
             else if (state == ADJUST_POSITION)
             {
-                const float measured_x = car.get_kalman_plugin()->get_x();
-                const float measured_y = car.get_kalman_plugin()->get_y();
+                const float measured_x = kalman_plugin.get_x();
+                const float measured_y = kalman_plugin.get_y();
                 position_cycle(normalize_angle(measured_angle), measured_x, measured_y, goal_x, goal_y);
             }
         }

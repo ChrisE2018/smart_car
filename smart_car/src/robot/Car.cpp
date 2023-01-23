@@ -21,24 +21,18 @@
 
 // For some reason this does not always resolve.
 extern HardwareSerial Serial;
+extern DrivePlugin forward_plugin;
+extern DrivePlugin reverse_plugin;
+extern GoalPlugin goal_plugin;
+extern KalmanPlugin kalman_plugin;
+extern WallPlugin wall_plugin;
 
 extern logging::SerialAppender *usb_appender;
 extern logging::SerialAppender *bluetooth_appender;
 
 Car::Car () :
-        logger(__FILE__, logging::Level::debug), serial_parser(Serial), bluetooth_parser(Serial3), clock_plugin(
-                new ClockPlugin()), forward_plugin(
-                new DrivePlugin(PluginId::FORWARD_PLUGIN, *this, 500, MotorDirection::FORWARD,
-                        MotorDirection::FORWARD)), goal_plugin(new GoalPlugin(*this)), mpu_plugin(new MpuPlugin()), kalman_plugin(
-                new KalmanPlugin(*this)), odom_plugin(new OdomPlugin(*this)), reverse_plugin(
-                new DrivePlugin(PluginId::REVERSE_PLUGIN, *this, 500, MotorDirection::REVERSE,
-                        MotorDirection::REVERSE)), ultrasound_plugin(new UltrasoundPlugin(*this)), wall_plugin(
-                new WallPlugin(*this))
+        logger(__FILE__, logging::Level::debug), serial_parser(Serial), bluetooth_parser(Serial3)
 {
-    available_plugins.push_back(clock_plugin);
-    available_plugins.push_back(forward_plugin);
-    available_plugins.push_back(goal_plugin);
-    available_plugins.push_back(reverse_plugin);
     available_plugins.push_back(&motors[static_cast<int>(MotorLocation::RIGHT_FRONT)]);
     available_plugins.push_back(&motors[static_cast<int>(MotorLocation::LEFT_FRONT)]);
     available_plugins.push_back(&motors[static_cast<int>(MotorLocation::RIGHT_REAR)]);
@@ -47,11 +41,6 @@ Car::Car () :
     available_plugins.push_back(&pid_controls[static_cast<int>(MotorLocation::LEFT_FRONT)]);
     available_plugins.push_back(&pid_controls[static_cast<int>(MotorLocation::RIGHT_REAR)]);
     available_plugins.push_back(&pid_controls[static_cast<int>(MotorLocation::LEFT_REAR)]);
-    available_plugins.push_back(mpu_plugin);
-    available_plugins.push_back(kalman_plugin);
-    available_plugins.push_back(odom_plugin);
-    available_plugins.push_back(ultrasound_plugin);
-    available_plugins.push_back(wall_plugin);
 }
 
 Car::~Car ()
@@ -65,8 +54,8 @@ Car::~Car ()
 
 std::ostream& operator<< (std::ostream &lhs, const Car &car)
 {
-    return lhs << F("#[car ") << car.mode << F(" ") << car.kalman_plugin->get_x() << F(", ") << car.kalman_plugin->get_y()
-            << F(" ang ") << car.kalman_plugin->get_angle() << F("]");
+    return lhs << F("#[car ") << car.mode << F(" ") << kalman_plugin.get_x() << F(", ") << kalman_plugin.get_y()
+            << F(" ang ") << kalman_plugin.get_angle() << F("]");
 }
 
 void Car::setup ()
@@ -102,19 +91,19 @@ void Car::set_mode (const Mode _mode)
     {
         case Mode::COMMAND_MODE:
             all_stop();
-            wall_plugin->set_state(Plugin::DISABLE);
+            wall_plugin.set_state(Plugin::DISABLE);
             break;
         case Mode::DEMO_MODE:
             all_stop();
-            wall_plugin->set_state(Plugin::DISABLE);
+            wall_plugin.set_state(Plugin::DISABLE);
             break;
         case Mode::GOAL_MODE:
             all_stop();
-            wall_plugin->set_state(Plugin::DISABLE);
+            wall_plugin.set_state(Plugin::DISABLE);
             break;
         case Mode::WALL_MODE:
             all_stop();
-            wall_plugin->set_state(Plugin::ENABLE);
+            wall_plugin.set_state(Plugin::ENABLE);
             break;
     }
 }
@@ -169,9 +158,9 @@ void Car::all_stop ()
     {
         pid_controls[motor].drive_stop();
     }
-    forward_plugin->set_state(Plugin::DISABLE);
-    reverse_plugin->set_state(Plugin::DISABLE);
-    goal_plugin->set_state(Plugin::DISABLE);
+    forward_plugin.set_state(Plugin::DISABLE);
+    reverse_plugin.set_state(Plugin::DISABLE);
+    goal_plugin.set_state(Plugin::DISABLE);
 }
 
 const MotorPlugin& Car::get_motor (const MotorLocation motor) const
@@ -231,41 +220,6 @@ float Car::get_cumulative_velocity_error (const MotorLocation motor) const
     return pid_controls[static_cast<int>(motor)].get_cumulative_velocity_error();
 }
 
-ClockPlugin* Car::get_clock_plugin () const
-{
-    return clock_plugin;
-}
-
-DrivePlugin* Car::get_forward_plugin () const
-{
-    return forward_plugin;
-}
-
-GoalPlugin* Car::get_goal_plugin () const
-{
-    return goal_plugin;
-}
-
-DrivePlugin* Car::get_reverse_plugin () const
-{
-    return reverse_plugin;
-}
-
-MpuPlugin* Car::get_mpu_plugin () const
-{
-    return mpu_plugin;
-}
-
-KalmanPlugin* Car::get_kalman_plugin () const
-{
-    return kalman_plugin;
-}
-
-OdomPlugin* Car::get_odom_plugin () const
-{
-    return odom_plugin;
-}
-
 const PidPlugin& Car::get_pid_plugin (const MotorLocation location) const
 {
     return pid_controls[static_cast<int>(location)];
@@ -276,28 +230,10 @@ PidPlugin& Car::get_pid_plugin (const MotorLocation location)
     return pid_controls[static_cast<int>(location)];
 }
 
-UltrasoundPlugin* Car::get_ultrasound_plugin () const
-{
-    return ultrasound_plugin;
-}
-
-WallPlugin* Car::get_wall_plugin () const
-{
-    return wall_plugin;
-}
-
 Plugin* Car::get_plugin (const PluginId id) const
 {
     switch (id)
     {
-        case PluginId::CLOCK_PLUGIN:
-            return clock_plugin;
-        case PluginId::FORWARD_PLUGIN:
-            return forward_plugin;
-        case PluginId::GOAL_PLUGIN:
-            return goal_plugin;
-        case PluginId::KALMAN_PLUGIN:
-            return kalman_plugin;
         case PluginId::MOTOR_RIGHT_FRONT_PLUGIN:
             return &motors[static_cast<int>(MotorLocation::RIGHT_FRONT)];
         case PluginId::MOTOR_LEFT_FRONT_PLUGIN:
@@ -306,16 +242,6 @@ Plugin* Car::get_plugin (const PluginId id) const
             return &motors[static_cast<int>(MotorLocation::RIGHT_REAR)];
         case PluginId::MOTOR_LEFT_REAR_PLUGIN:
             return &motors[static_cast<int>(MotorLocation::LEFT_REAR)];
-        case PluginId::MPU_PLUGIN:
-            return mpu_plugin;
-        case PluginId::ODOM_PLUGIN:
-            return odom_plugin;
-        case PluginId::REVERSE_PLUGIN:
-            return reverse_plugin;
-        case PluginId::ULTRASOUND_PLUGIN:
-            return ultrasound_plugin;
-        case PluginId::WALL_PLUGIN:
-            return wall_plugin;
         default:
             return nullptr;
     }

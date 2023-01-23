@@ -16,7 +16,7 @@ class Car;
 class OdomPlugin: public Plugin
 {
     public:
-        OdomPlugin (Car &car);
+        OdomPlugin ();
         bool setup () override;
         virtual int get_preferred_interval () const override;
         virtual int get_expected_us () const;
@@ -25,7 +25,6 @@ class OdomPlugin: public Plugin
         void update_transforms (const float angle);
 
     private:
-        Car &car;
         long t = 0;
         float dt = 0;
         float right_velocity = 0;

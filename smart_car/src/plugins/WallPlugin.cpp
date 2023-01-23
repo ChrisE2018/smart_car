@@ -9,8 +9,11 @@
 #include "WallPlugin.hpp"
 #include "UltrasoundPlugin.hpp"
 
-WallPlugin::WallPlugin (Car &car) :
-        Plugin(PluginId::WALL_PLUGIN), car(car)
+extern Car car;
+extern UltrasoundPlugin ultrasound_plugin;
+
+WallPlugin::WallPlugin () :
+        Plugin(PluginId::WALL_PLUGIN)
 {
 }
 
@@ -27,8 +30,7 @@ void WallPlugin::cycle ()
 {
     if (get_state() == Plugin::ENABLE)
     {
-        UltrasoundPlugin *ultrasound_plugin = car.get_ultrasound_plugin();
-        const long d = ultrasound_plugin->get_distance();
+        const long d = ultrasound_plugin.get_distance();
         Serial.print(F("Distance "));
         Serial.print(d);
         Serial.println(F(" cm"));

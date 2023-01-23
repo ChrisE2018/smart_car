@@ -11,11 +11,13 @@
 #include "Logger.hpp"
 #include "../robot/Car.hpp"
 
+extern Car car;
+
 static logging::Logger logger(__FILE__, logging::Level::info);
 
-DrivePlugin::DrivePlugin (const PluginId id, Car &car, const int duration, const MotorDirection right_motor_direction,
+DrivePlugin::DrivePlugin (const PluginId id, const int duration, const MotorDirection right_motor_direction,
         const MotorDirection left_motor_direction) :
-        Plugin(id), car(car), duration(duration), right_motor_direction(right_motor_direction), left_motor_direction(
+        Plugin(id), duration(duration), right_motor_direction(right_motor_direction), left_motor_direction(
                 left_motor_direction)
 {
 }

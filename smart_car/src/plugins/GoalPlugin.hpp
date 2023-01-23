@@ -9,14 +9,12 @@
 
 #include "Plugin.hpp"
 
-class Car;
-
-class GoalPlugin : public Plugin
+class GoalPlugin: public Plugin
 {
     public:
         static constexpr int ADJUST_ANGLE = 3;
         static constexpr int ADJUST_POSITION = 4;
-        GoalPlugin (Car &Car);
+        GoalPlugin ();
 
         void set_goal (const float angle);
         void set_goal (const float x, const float y);
@@ -38,7 +36,6 @@ class GoalPlugin : public Plugin
     private:
         static constexpr float rotation_perimeter = M_PI * 0.17; // meters
 
-        Car &car;
         const float angle_tolerance = 0.05;
         const float angle_desired_velocity = 1.0;
         const float medium_speed_angle = 0.3;
@@ -52,10 +49,10 @@ class GoalPlugin : public Plugin
         float goal_x = 0;
         float goal_y = 0;
         void angle_cycle (const float measured_angle, const float desired_angle);
-        void position_cycle (const float measured_angle, const float measured_x,
-                const float measured_y, const float desired_x, const float desired_y);
-        void position_step (const float measured_angle, const float measured_x,
-                const float measured_y, const float desired_x, const float desired_y);
+        void position_cycle (const float measured_angle, const float measured_x, const float measured_y,
+                const float desired_x, const float desired_y);
+        void position_step (const float measured_angle, const float measured_x, const float measured_y,
+                const float desired_x, const float desired_y);
 
         int get_angle_speed (const float desired_angle);
         int get_position_speed (const float distance);

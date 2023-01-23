@@ -20,7 +20,7 @@ class Car;
 class KalmanPlugin: public Plugin
 {
     public:
-        KalmanPlugin (Car &car);
+        KalmanPlugin ();
         bool setup () override;
         virtual int get_preferred_interval () const;
         virtual int get_expected_us () const;
@@ -39,8 +39,6 @@ class KalmanPlugin: public Plugin
         const BLA::Matrix<Nstate>& get_state () const;
 
     private:
-
-        Car &car;
         unsigned long t = 0;
         float dt = 0;
         // Px, Py, Pa, Vx, Vy, Va, Ax, Ay, Aa

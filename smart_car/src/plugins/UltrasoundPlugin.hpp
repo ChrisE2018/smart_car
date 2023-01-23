@@ -21,7 +21,7 @@ class UltrasoundPlugin: public Plugin
     public:
         static constexpr int READING = 2;
         static constexpr int BLOCKING = 3;
-        UltrasoundPlugin (Car &car);
+        UltrasoundPlugin ();
         virtual int get_preferred_interval () const;
         virtual int get_expected_us () const;
         long get_distance () const;
@@ -29,7 +29,6 @@ class UltrasoundPlugin: public Plugin
         virtual void trace () override;
 
     private:
-        Car &car;
         SR04 sr04;
         long distance = 0;
         static constexpr int blocking_distance = 10; // centimeters

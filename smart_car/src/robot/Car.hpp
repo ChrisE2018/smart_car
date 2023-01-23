@@ -16,7 +16,6 @@
 #include "Parser.hpp"
 #include "board_pins.hpp"
 
-class ClockPlugin;
 class DemoPlugin;
 class DrivePlugin;
 class GoalPlugin;
@@ -54,17 +53,8 @@ class Car: public Executor
         float get_measured_velocity (const MotorLocation motor) const;
         float get_cumulative_velocity_error (const MotorLocation motor) const;
 
-        ClockPlugin* get_clock_plugin () const;
-        DrivePlugin* get_forward_plugin () const;
-        GoalPlugin* get_goal_plugin () const;
-        DrivePlugin* get_reverse_plugin () const;
-        MpuPlugin* get_mpu_plugin () const;
-        KalmanPlugin* get_kalman_plugin () const;
-        OdomPlugin* get_odom_plugin () const;
         const PidPlugin& get_pid_plugin (const MotorLocation location) const;
         PidPlugin& get_pid_plugin (const MotorLocation location);
-        UltrasoundPlugin* get_ultrasound_plugin () const;
-        WallPlugin* get_wall_plugin () const;
 
     private:
         logging::Logger logger;
@@ -73,16 +63,6 @@ class Car: public Executor
 
         Parser serial_parser;
         Parser bluetooth_parser;
-
-        ClockPlugin *const clock_plugin;
-        DrivePlugin *const forward_plugin;
-        GoalPlugin *const goal_plugin;
-        MpuPlugin *const mpu_plugin;
-        KalmanPlugin *const kalman_plugin;
-        OdomPlugin *const odom_plugin;
-        DrivePlugin *const reverse_plugin;
-        UltrasoundPlugin *const ultrasound_plugin;
-        WallPlugin *const wall_plugin;
 
         std::vector<Plugin*> available_plugins;
         std::vector<Plugin*> plugins;

@@ -9,12 +9,11 @@
 
 #include "Plugin.hpp"
 #include "MotorPlugin.hpp"
-class Car;
 
 class DrivePlugin: public Plugin
 {
     public:
-        DrivePlugin (const PluginId id, Car &car, const int duration, const MotorDirection right_motor_direction,
+        DrivePlugin (const PluginId id, const int duration, const MotorDirection right_motor_direction,
                 const MotorDirection left_motor_direction);
 
         virtual void enter_state (const int state);
@@ -28,7 +27,6 @@ class DrivePlugin: public Plugin
         void set_motor_speed (const int speed);
 
     private:
-        Car &car;
         int duration;
         unsigned long deadline = 0;
         MotorDirection right_motor_direction;
