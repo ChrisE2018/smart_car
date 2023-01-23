@@ -22,7 +22,7 @@ void ClockPlugin::begin ()
         {
             cout << "Initialize RTC module" << std::endl;
             // Send sketch compiling time to Arduino
-    //        clock.setDateTime(__DATE__, __TIME__);
+            //        clock.setDateTime(__DATE__, __TIME__);
             is_setup = true;
         }
         else
@@ -50,7 +50,7 @@ bool ClockPlugin::is_cyclic () const
     return false;
 }
 
-time_t ClockPlugin::get_unixtime ()
+time_t ClockPlugin::unixtime ()
 {
     if (is_setup)
     {

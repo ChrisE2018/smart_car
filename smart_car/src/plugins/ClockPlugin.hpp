@@ -19,7 +19,7 @@ class ClockPlugin: public Plugin, public logging::TimeSource
         void begin ();
         bool setup () override;
         virtual bool is_cyclic () const override;
-        time_t get_unixtime ();
+        virtual time_t unixtime () override;
 
     private:
         const bool enable_clock = true;
