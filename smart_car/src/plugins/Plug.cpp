@@ -23,8 +23,6 @@ std::ostream& operator<< (std::ostream &lhs, const Plug &plug)
 
 void Plug::add_plugin (Plugin *plugin)
 {
-    Serial.println(F("_add_plugin_"));
-
     logger.info(__LINE__) << F("add_plugin ") << plugin << std::endl;
     available_plugins.push_back(plugin);
     if (plugin->setup())

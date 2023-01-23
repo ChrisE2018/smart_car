@@ -18,11 +18,17 @@ void ClockPlugin::begin ()
 {
     if (enable_clock)
     {
-        cout << "Initialize RTC module" << std::endl;
-        clock.begin();
-        // Send sketch compiling time to Arduino
-//        clock.setDateTime(__DATE__, __TIME__);
-        is_setup = true;
+        if (clock.begin())
+        {
+            cout << "Initialize RTC module" << std::endl;
+            // Send sketch compiling time to Arduino
+    //        clock.setDateTime(__DATE__, __TIME__);
+            is_setup = true;
+        }
+        else
+        {
+            cout << "Clock setup failed" << std::endl;
+        }
     }
 }
 
@@ -54,6 +60,7 @@ time_t ClockPlugin::get_unixtime ()
     }
     else
     {
+        cout << "Clock not enabled" << std::endl;
         return 0;
     }
 }
