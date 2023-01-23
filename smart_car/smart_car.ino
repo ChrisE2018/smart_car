@@ -38,7 +38,7 @@ void setup ()
 {
     Serial.begin(115200);
     Serial.println(F("Smart car"));
-    Serial3.begin(115200);
+    Serial3.begin(9600);
     car = new Car();
     logging::TimeSource &time_source = *car->get_clock_plugin();
     formatter = new logging::TimestampFormatter(time_source);
