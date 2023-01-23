@@ -14,7 +14,7 @@ ClockPlugin::ClockPlugin () :
 {
 }
 
-bool ClockPlugin::setup ()
+void ClockPlugin::begin ()
 {
     if (enable_clock)
     {
@@ -24,6 +24,10 @@ bool ClockPlugin::setup ()
 //        clock.setDateTime(__DATE__, __TIME__);
         is_setup = true;
     }
+}
+
+bool ClockPlugin::setup ()
+{
     if (is_setup)
     {
         return true;

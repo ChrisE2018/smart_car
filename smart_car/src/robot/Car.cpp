@@ -9,23 +9,10 @@
 #include "SerialAppender.hpp"
 #include "smart_car.hpp"
 
-#include "../plugins/ClockPlugin.hpp"
-#include "../plugins/DrivePlugin.hpp"
-#include "../plugins/GoalPlugin.hpp"
-#include "../plugins/KalmanPlugin.hpp"
-#include "../plugins/MpuPlugin.hpp"
-#include "../plugins/OdomPlugin.hpp"
-#include "../plugins/PidPlugin.hpp"
-#include "../plugins/UltrasoundPlugin.hpp"
-#include "../plugins/WallPlugin.hpp"
+#include "../plugins/Robot.hpp"
 
 // For some reason this does not always resolve.
 extern HardwareSerial Serial;
-extern DrivePlugin forward_plugin;
-extern DrivePlugin reverse_plugin;
-extern GoalPlugin goal_plugin;
-extern KalmanPlugin kalman_plugin;
-extern WallPlugin wall_plugin;
 
 extern logging::SerialAppender *usb_appender;
 extern logging::SerialAppender *bluetooth_appender;

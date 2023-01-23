@@ -6,18 +6,7 @@
 #include "TimeSource.hpp"
 #include "TimestampFormatter.hpp"
 
-#include "src/robot/Car.hpp"
-#include "src/robot/speed_counter.hpp"
-#include "src/robot/heap.hpp"
-#include "src/plugins/Plug.hpp"
-#include "src/plugins/ClockPlugin.hpp"
-#include "src/plugins/DrivePlugin.hpp"
-#include "src/plugins/GoalPlugin.hpp"
-#include "src/plugins/KalmanPlugin.hpp"
-#include "src/plugins/MpuPlugin.hpp"
-#include "src/plugins/OdomPlugin.hpp"
-#include "src/plugins/UltrasoundPlugin.hpp"
-#include "src/plugins/WallPlugin.hpp"
+#include "src/plugins/Robot.hpp"
 
 #include "smart_car.hpp"
 
@@ -33,20 +22,6 @@ std::ohserialstream cout(Serial);
 // tx3 14 blue to 22 (near side)
 std::ohserialstream cout1(Serial3);
 
-Plug plug;
-
-ClockPlugin clock_plugin;
-DrivePlugin forward_plugin(PluginId::FORWARD_PLUGIN, 500, MotorDirection::FORWARD, MotorDirection::FORWARD);
-DrivePlugin reverse_plugin(PluginId::REVERSE_PLUGIN, 500, MotorDirection::REVERSE, MotorDirection::REVERSE);
-GoalPlugin goal_plugin;
-MpuPlugin mpu_plugin;
-
-KalmanPlugin kalman_plugin;
-OdomPlugin odom_plugin;
-UltrasoundPlugin ultrasound_plugin;
-WallPlugin wall_plugin;
-
-Car car;
 static unsigned long cycle_count = 0;
 
 logging::TimestampFormatter *formatter = nullptr;
@@ -61,15 +36,8 @@ void setup ()
     Serial.begin(115200);
     Serial.println(F("Smart car"));
     Serial3.begin(115200);
-    plug.add_plugin(&clock_plugin);
-    plug.add_plugin(&forward_plugin);
-    plug.add_plugin(&reverse_plugin);
-    plug.add_plugin(&goal_plugin);
-    plug.add_plugin(&mpu_plugin);
-    plug.add_plugin(&kalman_plugin);
-    plug.add_plugin(&odom_plugin);
-    plug.add_plugin(&ultrasound_plugin);
-    plug.add_plugin(&wall_plugin);
+
+    clock_plugin.begin();
 
     formatter = new logging::TimestampFormatter(clock_plugin);
     usb_appender = new logging::SerialAppender(Serial, logging::Level::info, *formatter);
@@ -79,6 +47,8 @@ void setup ()
     logging::Logger::root->add_appender(bluetooth_appender);
     logging::Logger::root->add_appender(sd_appender);
     sd_appender->open_logfile();
+
+    setup_robot();
     car.setup();
     car.demo_drive_leds();
     setup_speed_counter();
