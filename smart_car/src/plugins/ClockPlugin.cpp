@@ -5,8 +5,8 @@
  *      Author: cre
  */
 
+#include <Arduino.h>
 #include "ClockPlugin.hpp"
-#include "smart_car.hpp"
 #include <Wire.h>
 
 ClockPlugin::ClockPlugin () :
@@ -20,14 +20,14 @@ void ClockPlugin::begin ()
     {
         if (clock.begin())
         {
-            cout << "Initialize RTC module" << std::endl;
+            Serial.println(F("Initialized clock"));
             // Send sketch compiling time to Arduino
             //        clock.setDateTime(__DATE__, __TIME__);
             is_setup = true;
         }
         else
         {
-            cout << "Clock setup failed" << std::endl;
+            Serial.println(F("Clock setup failed"));
         }
     }
 }
@@ -40,7 +40,6 @@ bool ClockPlugin::setup ()
     }
     else
     {
-        cout << "Disabled RTC module" << std::endl;
         return false;
     }
 }
@@ -60,7 +59,6 @@ time_t ClockPlugin::unixtime ()
     }
     else
     {
-        cout << "Clock not enabled" << std::endl;
         return 0;
     }
 }
