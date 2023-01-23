@@ -1,6 +1,7 @@
 #include "Arduino.h"
 
 #include "Logger.hpp"
+#include "src/robot/heap.hpp"
 #include "src/logging/SdAppender.hpp"
 #include "SerialAppender.hpp"
 #include "TimeSource.hpp"

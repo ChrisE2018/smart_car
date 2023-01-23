@@ -6,12 +6,9 @@
  */
 
 #include "UltrasoundPlugin.hpp"
+#include "Robot.hpp"
 #include "smart_car.hpp"
-#include "../robot/Car.hpp"
-#include "MotorPlugin.hpp"
 #include "Logger.hpp"
-
-extern Car car;
 
 static logging::Logger logger(__FILE__, logging::Level::info);
 
@@ -52,7 +49,7 @@ void UltrasoundPlugin::cycle ()
                 bool did_stop = false;
                 for (int m = 0; m < MOTOR_COUNT; m++)
                 {
-                    PidPlugin &motor = car.get_pid_plugin(static_cast<MotorLocation>(m));
+                    PidPlugin &motor = get_pid_plugin(static_cast<MotorLocation>(m));
                     // Only stop if moving forward toward the obstacle.
                     if (motor.get_measured_velocity() > 0)
                     {

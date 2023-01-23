@@ -6,16 +6,10 @@
  */
 
 #include "KalmanPlugin.hpp"
-
-#include "../robot/Car.hpp"
-#include "MotorPlugin.hpp"
-#include "MpuPlugin.hpp"
+#include "Robot.hpp"
 
 // This is needed or the matrices won't print
 using namespace BLA;
-
-extern Car car;
-extern MpuPlugin mpu_plugin;
 
 //------------------------------------
 /****       KALMAN PARAMETERS    ****/
@@ -93,8 +87,8 @@ void KalmanPlugin::cycle ()
         // Rotation from body to world for current angle
         update_transforms(state(2));
 
-        const float right_velocity = car.get_pid_plugin(MotorLocation::RIGHT_FRONT).get_measured_velocity();
-        const float left_velocity = car.get_pid_plugin(MotorLocation::LEFT_FRONT).get_measured_velocity();
+        const float right_velocity = get_pid_plugin(MotorLocation::RIGHT_FRONT).get_measured_velocity();
+        const float left_velocity = get_pid_plugin(MotorLocation::LEFT_FRONT).get_measured_velocity();
 
         const BLA::Matrix<2> body_velocity =
         { (right_velocity + left_velocity) * 0.5, 0 };

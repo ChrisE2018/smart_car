@@ -6,12 +6,9 @@
  */
 
 #include "smart_car.hpp"
-#include "DrivePlugin.hpp"
+#include "Robot.hpp"
 
 #include "Logger.hpp"
-#include "../robot/Car.hpp"
-
-extern Car car;
 
 static logging::Logger logger(__FILE__, logging::Level::info);
 

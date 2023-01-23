@@ -9,14 +9,9 @@
 #include "../robot/robot_math.hpp"
 #include "../robot/speed_counter.hpp"
 #include "GoalPlugin.hpp"
-#include "KalmanPlugin.hpp"
-#include "MpuPlugin.hpp"
+#include "Robot.hpp"
 #include "smart_car.hpp"
 #include "Logger.hpp"
-
-extern Car car;
-extern KalmanPlugin kalman_plugin;
-extern MpuPlugin mpu_plugin;
 
 static logging::Logger logger(__FILE__, logging::Level::info);
 
@@ -119,10 +114,10 @@ void GoalPlugin::angle_cycle (const float measured_angle, const float desired_an
         const float yaw_perimeter_meters = abs(measured_angle) * rotation_perimeter / 2.0 * M_PI; // meters
         const unsigned long delta_ticks = yaw_perimeter_meters / (2.0 * count_to_meters);
         logger.info(__LINE__) << "perimeter " << yaw_perimeter_meters << " speed ticks " << delta_ticks << std::endl;
-        car.get_motor(RIGHT_FRONT).set_delta_limit(delta_ticks, 0);
-        car.get_motor(RIGHT_REAR).set_delta_limit(delta_ticks, 0);
-        car.get_motor(LEFT_FRONT).set_delta_limit(delta_ticks, 0);
-        car.get_motor(LEFT_REAR).set_delta_limit(delta_ticks, 0);
+        get_motor(RIGHT_FRONT).set_delta_limit(delta_ticks, 0);
+        get_motor(RIGHT_REAR).set_delta_limit(delta_ticks, 0);
+        get_motor(LEFT_FRONT).set_delta_limit(delta_ticks, 0);
+        get_motor(LEFT_REAR).set_delta_limit(delta_ticks, 0);
     }
 }
 

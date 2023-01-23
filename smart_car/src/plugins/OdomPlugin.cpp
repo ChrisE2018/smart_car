@@ -5,16 +5,14 @@
  *      Author: cre
  */
 
-#include "../robot/Car.hpp"
 #include "OdomPlugin.hpp"
+#include "../plugins/Robot.hpp"
 
 // This is needed or the matrices won't print
 using namespace BLA;
 
-extern Car car;
-
 OdomPlugin::OdomPlugin () :
-        Plugin(PluginId::ODOM_PLUGIN),  t(0)
+        Plugin(PluginId::ODOM_PLUGIN), t(0)
 {
 
 }
@@ -57,8 +55,8 @@ void OdomPlugin::cycle ()
     const long now = millis();
     dt = (now - t) * 0.001;
 
-    right_velocity = car.get_pid_plugin(MotorLocation::RIGHT_FRONT).get_measured_velocity();
-    left_velocity = car.get_pid_plugin(MotorLocation::LEFT_FRONT).get_measured_velocity();
+    right_velocity = get_pid_plugin(MotorLocation::RIGHT_FRONT).get_measured_velocity();
+    left_velocity = get_pid_plugin(MotorLocation::LEFT_FRONT).get_measured_velocity();
 
     // clockwise
     const float angular_velocity = left_velocity - right_velocity;

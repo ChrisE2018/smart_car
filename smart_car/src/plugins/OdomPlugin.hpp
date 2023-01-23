@@ -11,8 +11,6 @@
 #include <BasicLinearAlgebra.h>
 #include "Plugin.hpp"
 
-class Car;
-
 class OdomPlugin: public Plugin
 {
     public:

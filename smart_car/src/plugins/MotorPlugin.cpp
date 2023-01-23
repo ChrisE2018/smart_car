@@ -6,10 +6,9 @@
  */
 
 #include "MotorPlugin.hpp"
+#include "Robot.hpp"
 
 #include "smart_car.hpp"
-#include "../robot/Car.hpp"
-#include "../robot/speed_counter.hpp"
 
 #include "Logger.hpp"
 #include "SerialAppender.hpp"
@@ -66,10 +65,10 @@ std::ostream& operator<< (std::ostream &lhs, const MotorPlugin &motor)
     return lhs << "#[motor " << motor.location << " " << motor.speed << "]";
 }
 
-MotorPlugin::MotorPlugin (Car &car, const PluginId id, const MotorLocation location, int enable, int forward,
-        int reverse, int forward_led, int reverse_led) :
-        car(car), location(location), enable_pin(enable), forward_pin(forward), reverse_pin(reverse), forward_led(
-                forward_led), reverse_led(reverse_led), Plugin(id)
+MotorPlugin::MotorPlugin (const PluginId id, const MotorLocation location, int enable, int forward, int reverse,
+        int forward_led, int reverse_led) :
+        location(location), enable_pin(enable), forward_pin(forward), reverse_pin(reverse), forward_led(forward_led), reverse_led(
+                reverse_led), Plugin(id)
 {
 }
 

@@ -20,23 +20,6 @@ extern logging::SerialAppender *bluetooth_appender;
 Car::Car () :
         logger(__FILE__, logging::Level::debug), serial_parser(Serial), bluetooth_parser(Serial3)
 {
-    available_plugins.push_back(&motors[static_cast<int>(MotorLocation::RIGHT_FRONT)]);
-    available_plugins.push_back(&motors[static_cast<int>(MotorLocation::LEFT_FRONT)]);
-    available_plugins.push_back(&motors[static_cast<int>(MotorLocation::RIGHT_REAR)]);
-    available_plugins.push_back(&motors[static_cast<int>(MotorLocation::LEFT_REAR)]);
-    available_plugins.push_back(&pid_controls[static_cast<int>(MotorLocation::RIGHT_FRONT)]);
-    available_plugins.push_back(&pid_controls[static_cast<int>(MotorLocation::LEFT_FRONT)]);
-    available_plugins.push_back(&pid_controls[static_cast<int>(MotorLocation::RIGHT_REAR)]);
-    available_plugins.push_back(&pid_controls[static_cast<int>(MotorLocation::LEFT_REAR)]);
-}
-
-Car::~Car ()
-{
-    for (Plugin *plugin : plugins)
-    {
-        delete plugin;
-    }
-    plugins.clear();
 }
 
 std::ostream& operator<< (std::ostream &lhs, const Car &car)
@@ -47,25 +30,6 @@ std::ostream& operator<< (std::ostream &lhs, const Car &car)
 
 void Car::setup ()
 {
-    LOG_INFO(logger, "Attempting setup of %d available plugins", available_plugins.size());
-    for (Plugin *const plugin : available_plugins)
-    {
-        if (plugin->setup())
-        {
-            logger.info(__LINE__) << F("Setup ") << plugin << std::endl;
-            plugins.push_back(plugin);
-            plugin->enter_state(Plugin::DISABLE);
-            if (plugin->is_cyclic())
-            {
-                cyclic_plugins.push_back(plugin);
-            }
-        }
-        else
-        {
-            logger.info(__LINE__) << F("Disabled ") << plugin << std::endl;
-        }
-    }
-
     logger.info(__LINE__) << F("Testing info logging") << std::endl;
     logger.debug(__LINE__) << F("Testing debug logging") << std::endl;
 }
@@ -99,10 +63,6 @@ void Car::cycle ()
 {
     const unsigned long cycle_start_us = micros();
 
-    for (Plugin *const plugin : cyclic_plugins)
-    {
-        plugin->major_cycle();
-    }
     command_cycle();
 
     total_cycle_us += (micros() - cycle_start_us);
@@ -148,16 +108,6 @@ void Car::all_stop ()
     forward_plugin.set_state(Plugin::DISABLE);
     reverse_plugin.set_state(Plugin::DISABLE);
     goal_plugin.set_state(Plugin::DISABLE);
-}
-
-const MotorPlugin& Car::get_motor (const MotorLocation motor) const
-{
-    return motors[static_cast<int>(motor)];
-}
-
-MotorPlugin& Car::get_motor (const MotorLocation motor)
-{
-    return motors[static_cast<int>(motor)];
 }
 
 void Car::drive_stop (const MotorLocation motor)
@@ -207,29 +157,3 @@ float Car::get_cumulative_velocity_error (const MotorLocation motor) const
     return pid_controls[static_cast<int>(motor)].get_cumulative_velocity_error();
 }
 
-const PidPlugin& Car::get_pid_plugin (const MotorLocation location) const
-{
-    return pid_controls[static_cast<int>(location)];
-}
-
-PidPlugin& Car::get_pid_plugin (const MotorLocation location)
-{
-    return pid_controls[static_cast<int>(location)];
-}
-
-Plugin* Car::get_plugin (const PluginId id) const
-{
-    switch (id)
-    {
-        case PluginId::MOTOR_RIGHT_FRONT_PLUGIN:
-            return &motors[static_cast<int>(MotorLocation::RIGHT_FRONT)];
-        case PluginId::MOTOR_LEFT_FRONT_PLUGIN:
-            return &motors[static_cast<int>(MotorLocation::LEFT_FRONT)];
-        case PluginId::MOTOR_RIGHT_REAR_PLUGIN:
-            return &motors[static_cast<int>(MotorLocation::RIGHT_REAR)];
-        case PluginId::MOTOR_LEFT_REAR_PLUGIN:
-            return &motors[static_cast<int>(MotorLocation::LEFT_REAR)];
-        default:
-            return nullptr;
-    }
-}

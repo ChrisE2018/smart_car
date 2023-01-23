@@ -5,12 +5,8 @@
  *      Author: cre
  */
 
-#include "../robot/Car.hpp"
 #include "WallPlugin.hpp"
-#include "UltrasoundPlugin.hpp"
-
-extern Car car;
-extern UltrasoundPlugin ultrasound_plugin;
+#include "Robot.hpp"
 
 WallPlugin::WallPlugin () :
         Plugin(PluginId::WALL_PLUGIN)

@@ -14,8 +14,6 @@
 const int ULTRASOUND_TRIGGER = 12;  // blue
 const int ULTRASOUND_ECHO = 11;     // green
 
-class Car;
-
 class UltrasoundPlugin: public Plugin
 {
     public:

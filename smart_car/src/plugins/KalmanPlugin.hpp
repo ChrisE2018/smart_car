@@ -11,8 +11,6 @@
 #include <BasicLinearAlgebra.h>
 #include "Plugin.hpp"
 
-class Car;
-
 // Dimensions of the matrices
 #define Nstate 9 // length of the state vector
 #define Nobs 9   // length of the measurement vector

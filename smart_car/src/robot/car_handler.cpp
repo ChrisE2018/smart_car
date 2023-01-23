@@ -9,20 +9,7 @@
 
 #include "Car.hpp"
 #include "../robot/Heap.hpp"
-#include "../plugins/DrivePlugin.hpp"
-#include "../plugins/GoalPlugin.hpp"
-#include "../plugins/KalmanPlugin.hpp"
-#include "../plugins/MpuPlugin.hpp"
-#include "../plugins/OdomPlugin.hpp"
-#include "../plugins/UltrasoundPlugin.hpp"
-
-extern DrivePlugin forward_plugin;
-extern DrivePlugin reverse_plugin;
-extern GoalPlugin goal_plugin;
-extern KalmanPlugin kalman_plugin;
-extern MpuPlugin mpu_plugin;
-extern OdomPlugin odom_plugin;
-extern UltrasoundPlugin ultrasound_plugin;
+#include "../plugins/Robot.hpp"
 
 /** Execute a command from the user.
  @param words Command string broken into words.
@@ -165,8 +152,8 @@ void Car::execute_command (const std::vector<String> &words)
     }
     else if (command == "plugins")
     {
-        LOG_INFO(logger, "Plugins %d / %d enabled", plugins.size(), available_plugins.size());
-        for (Plugin *const plugin : plugins)
+        LOG_INFO(logger, "Plugins %d / %d enabled", plug.get_plugins().size(), plug.get_available_plugins().size());
+        for (Plugin *const plugin : plug.get_plugins())
         {
             const long cycle_count = plugin->get_cycle_count();
             const float total_micros = plugin->get_total_micros();
@@ -205,7 +192,7 @@ void Car::execute_command (const std::vector<String> &words)
     else if (command == F("reset"))
     {
         all_stop();
-        for (Plugin *plugin : plugins)
+        for (Plugin *plugin : plug.get_plugins())
         {
             plugin->reset();
         }
@@ -218,9 +205,10 @@ void Car::execute_command (const std::vector<String> &words)
     }
     else if (command == F("schedule"))
     {
-        LOG_INFO(logger, "Plugins %d / %d are cyclic", cyclic_plugins.size(), available_plugins.size());
+        LOG_INFO(logger, "Plugins %d / %d are cyclic", plug.get_cyclic_plugins().size(),
+                plug.get_available_plugins().size());
         float cycle_average = 0;
-        for (Plugin *const plugin : cyclic_plugins)
+        for (Plugin *const plugin : plug.get_cyclic_plugins())
         {
             const long cycle_count = plugin->get_cycle_count();
             const float total_micros = plugin->get_total_micros();
@@ -272,7 +260,7 @@ void Car::help_command ()
             << state(6) << F(", ") << state(7) << F(" angle ") << state(8) << std::endl;
     logger.info(__LINE__) << F("Angle: ") << kalman_plugin.get_angle() << std::endl;
 
-    LOG_INFO(logger, "Plugins %d", plugins.size());
+    LOG_INFO(logger, "Plugins %d", plug.get_plugins().size());
     if (cycle_count > 0)
     {
         const float f_total_micros = total_cycle_us;

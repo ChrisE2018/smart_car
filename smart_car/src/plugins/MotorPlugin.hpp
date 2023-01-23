@@ -11,8 +11,6 @@
 #include "Plugin.hpp"
 #include <ostream>
 
-class Car;
-
 const int SPEED_FULL = 255;
 const int SPEED_Q3 = 196;
 const int SPEED_175 = 175;
@@ -43,7 +41,7 @@ std::ostream& operator<< (std::ostream &lhs, MotorLocation location);
 class MotorPlugin: public Plugin
 {
     public:
-        MotorPlugin (Car &car, const PluginId id, const MotorLocation location, int enable, int forward, int reverse,
+        MotorPlugin (const PluginId id, const MotorLocation location, int enable, int forward, int reverse,
                 int forward_led, int reverse_led);
 
         friend std::ostream& operator<< (std::ostream &lhs, const MotorPlugin &motor);
@@ -54,13 +52,12 @@ class MotorPlugin: public Plugin
         MotorDirection get_direction () const;
         int get_speed () const;
         void set_speed (const int speed);
-        void set_limit(const unsigned long limit, const int value);
-        void set_delta_limit(const unsigned long delta, const int value);
+        void set_limit (const unsigned long limit, const int value);
+        void set_delta_limit (const unsigned long delta, const int value);
 
     private:
         static constexpr int DISABLED_LED = 99;
 
-        Car &car;
         const MotorLocation location;
         const int enable_pin;
         const int forward_pin;
