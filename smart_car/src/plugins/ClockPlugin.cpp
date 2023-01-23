@@ -40,7 +40,7 @@ bool ClockPlugin::is_cyclic () const
     return false;
 }
 
-time_t ClockPlugin::get_unixtime ()
+time_t ClockPlugin::unixtime ()
 {
     if (is_setup)
     {

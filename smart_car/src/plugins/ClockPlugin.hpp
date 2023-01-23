@@ -12,13 +12,13 @@
 #include <ctime>
 #include "TimeSource.hpp"
 
-class ClockPlugin : public Plugin, public logging::TimeSource
+class ClockPlugin: public Plugin, public logging::TimeSource
 {
     public:
         ClockPlugin ();
         bool setup () override;
         virtual bool is_cyclic () const override;
-        time_t get_unixtime ();
+        virtual time_t unixtime () override;
 
     private:
         const bool enable_clock = true;
