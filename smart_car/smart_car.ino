@@ -1,7 +1,7 @@
 #include "Arduino.h"
 
 #include "Logger.hpp"
-#include "src/logging/SdAppender.hpp"
+#include "SdAppender.hpp"
 #include "SerialAppender.hpp"
 #include "TimeSource.hpp"
 #include "TimestampFormatter.hpp"
@@ -40,11 +40,11 @@ void setup ()
     Serial.println(F("Smart car"));
     Serial3.begin(9600);
     car = new Car();
-    logging::TimeSource &time_source = *car->get_clock_plugin();
+    logging::TimeSource *const time_source = car->get_clock_plugin();
     formatter = new logging::TimestampFormatter(time_source);
-    usb_appender = new logging::SerialAppender(Serial, logging::Level::info, *formatter);
-    bluetooth_appender = new logging::SerialAppender(Serial3, logging::Level::info, *formatter);
-    sd_appender = new logging::SdAppender(PIN_53_SS, logging::Level::info, *formatter, time_source);
+    usb_appender = new logging::SerialAppender(Serial, logging::Level::info, formatter);
+    bluetooth_appender = new logging::SerialAppender(Serial3, logging::Level::info, formatter);
+    sd_appender = new logging::SdAppender(PIN_53_SS, logging::Level::info, formatter, time_source);
     logging::Logger::root->add_appender(usb_appender);
     logging::Logger::root->add_appender(bluetooth_appender);
     logging::Logger::root->add_appender(sd_appender);

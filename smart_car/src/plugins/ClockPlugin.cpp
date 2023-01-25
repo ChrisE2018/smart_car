@@ -14,11 +14,12 @@ ClockPlugin::ClockPlugin () :
 {
     if (enable_clock)
     {
-        cout << "Initialize RTC module" << std::endl;
-        clock.begin();
-        // Send sketch compiling time to Arduino
+        if (clock.begin())
+        {
+            // Send sketch compiling time to Arduino
 //        clock.setDateTime(__DATE__, __TIME__);
-        is_setup = true;
+            is_setup = true;
+        }
     }
 }
 
