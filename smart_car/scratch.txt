@@ -2,3 +2,9 @@
 
 2023-01-19 07:45:56.221 
 Heap Usage: 3506 / 6887 Stack Size: 106 Free RAM: 3381 [Stack 8684:8578 Heap 8703:5197]
+
+
+1/24/2023
+avrdude: verifying ...
+avrdude: 68800 bytes of flash verified
+Heap Usage: 3696 / 7140 Stack Size: 233 Free RAM: 3444 [Stack 8684:8451 Heap 8703:5007]

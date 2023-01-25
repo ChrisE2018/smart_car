@@ -17,7 +17,7 @@
 						<toolChain id="io.sloeber.core.toolChain.release.1168115064" name="Arduino Toolchain (Sloeber edition)" superClass="io.sloeber.core.toolChain.release">
 							<targetPlatform archList="all" binaryParser="org.eclipse.cdt.core.ELF" id="io.sloeber.targetplatform.413726108" name="Arduino Target" osList="all" superClass="io.sloeber.targetplatform"/>
 							<builder buildPath="${workspace_loc:/smart_car}/Release" id="io.sloeber.sketch.builder.619739703" keepEnvironmentInBuildfile="false" name="Arduino sketch builder" parallelBuildOn="false" superClass="io.sloeber.sketch.builder"/>
-							<tool command="${recipe.cpp.o.pattern} -felide-constructors" id="io.sloeber.tool.sketch.compiler.cpp.1656611882" name="Arduino C++ Compiler" superClass="io.sloeber.tool.sketch.compiler.cpp">
+							<tool command="${recipe.cpp.o.pattern} -felide-constructors -Wall -Wextra -pedantic" id="io.sloeber.tool.sketch.compiler.cpp.1656611882" name="Arduino C++ Compiler" superClass="io.sloeber.tool.sketch.compiler.cpp">
 								<option IS_BUILTIN_EMPTY="false" IS_VALUE_EMPTY="false" id="io.sloeber.compiler.cpp.sketch.option.incpath.1320551797" name="Include Paths (-I)" superClass="io.sloeber.compiler.cpp.sketch.option.incpath" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/smart_car/core/variant}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}}&quot;"/>
