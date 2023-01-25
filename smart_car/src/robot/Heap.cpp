@@ -7,7 +7,7 @@
 
 #include <Arduino.h>
 #include "Heap.hpp"
-#include "../logging/Logger.hpp"
+#include "Logger.hpp"
 
 static logging::Logger logger(__FILE__, logging::Level::info);
 
