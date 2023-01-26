@@ -25,17 +25,6 @@ bool OdomPlugin::setup ()
     state =
     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 
-//    // x, y, a, dx, dy, da
-//    obs =
-//    { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-//    time_update =
-//    { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, //
-//            0.0, 0.0, 0.0, 0.0, 1.0, 0.0, //
-//            0.0, 0.0, 0.0, 0.0, 0.0, 1.0, //
-//            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, //
-//            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, //
-//            0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-
     t = millis();
     return true;
 }
@@ -66,20 +55,17 @@ void OdomPlugin::cycle ()
     const BLA::Matrix<2> body_velocity =
     { (right_velocity + left_velocity) * 0.5, 0.0 };
     update_transforms(state(2));
+
+    // See https://en.wikipedia.org/wiki/Differential_wheeled_robot for a better formula
     const BLA::Matrix<2> world_velocity = body_2_world * body_velocity;
     const float dx = world_velocity(0);
     const float dy = world_velocity(1);
-//    obs =
-//    { state(0), state(1), state(2), (state(3) + dx) * 0.5, (state(4) + dy) * 0.5, (state(5) + angular_velocity) * 0.5 };
-//
-//    state = (state + obs) * 0.5;
 
     // Combine with observed velocity values
     state(3) = (state(3) + dx) * 0.5;
     state(4) = (state(4) + dy) * 0.5;
     state(5) = (state(5) + angular_velocity) * 0.5;
 
-//    state = state + time_update * state * dt;
     // Integrate velocity and add to position
     state(0) = state(0) + state(3) * dt;
     state(1) = state(1) + state(4) * dt;

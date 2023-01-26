@@ -33,9 +33,6 @@ class OdomPlugin: public Plugin
 
         // x, y, angle, dx, dy, da
         BLA::Matrix<6> state;
-        // dx, dy, da
-//        BLA::Matrix<6> obs;
-//        BLA::Matrix<6, 6> time_update;   // time update
 
         BLA::Matrix<2, 2> body_2_world;
         BLA::Matrix<2, 2> world_2_body;
