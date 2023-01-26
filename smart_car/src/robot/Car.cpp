@@ -127,14 +127,15 @@ void Car::cycle ()
     {
         plugin->major_cycle();
     }
-    command_cycle();
 
     total_cycle_us += (micros() - cycle_start_us);
     cycle_count++;
+    command_cycle();
 }
 
 void Car::command_cycle ()
 {
+    const unsigned long cycle_start_us = micros();
     if (serial_parser.has_input())
     {
         usb_appender->set_level(logging::Level::info);
@@ -148,6 +149,8 @@ void Car::command_cycle ()
         bluetooth_appender->set_level(logging::Level::info);
         bluetooth_parser.handle_command(*this);
     }
+    total_command_cycle_us += (micros() - cycle_start_us);
+    command_cycle_count++;
 }
 
 void Car::demo_drive_leds ()

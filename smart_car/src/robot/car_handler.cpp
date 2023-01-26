@@ -158,13 +158,16 @@ void Car::execute_command (const std::vector<String> &words)
     else if (command == "plugins")
     {
         LOG_INFO(logger, "Plugins %d / %d enabled", plugins.size(), available_plugins.size());
+        float total_average = 0.0;
         for (Plugin *const plugin : plugins)
         {
             const long cycle_count = plugin->get_cycle_count();
             const float total_micros = plugin->get_total_micros();
             if (cycle_count > 0)
             {
-                logger.info(__LINE__) << plugin << F(" average ") << total_micros / cycle_count << F(" / ")
+                const float average = total_micros / cycle_count;
+                total_average += average;
+                logger.info(__LINE__) << plugin << F(" average ") << average << F(" / ")
                         << plugin->get_expected_us() << F(" us expected") << std::endl;
             }
             else
@@ -172,9 +175,14 @@ void Car::execute_command (const std::vector<String> &words)
                 logger.info(__LINE__) << plugin << std::endl;
             }
         }
-        const float f_total_micros = total_cycle_us;
+        float overall_average = total_cycle_us / (float) cycle_count;
+        logger.info(__LINE__) << F("Total average ") << total_average << F(" ~= ") << overall_average << std::endl;
         logger.info(__LINE__) << F("Cycle count ") << cycle_count << F(" total cycle micros ") << total_cycle_us
-                << F(" average micros per cycle ") << f_total_micros / cycle_count << std::endl;
+                << F(" average micros per cycle ") << overall_average << std::endl;
+
+        logger.info(__LINE__) << F("Command cycle count ") << command_cycle_count << F(" total cycle micros ")
+                << total_command_cycle_us << F(" average micros per cycle ")
+                << (total_command_cycle_us / (float) command_cycle_count) << std::endl;
     }
     else if (command == F("rf"))
     {

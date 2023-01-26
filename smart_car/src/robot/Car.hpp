@@ -70,6 +70,8 @@ class Car: public Executor
         logging::Logger logger;
         unsigned long cycle_count = 0;
         unsigned long total_cycle_us = 0;
+        unsigned long command_cycle_count = 0;
+        unsigned long total_command_cycle_us = 0;
 
         Parser serial_parser;
         Parser bluetooth_parser;

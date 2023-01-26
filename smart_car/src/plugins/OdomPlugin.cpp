@@ -8,7 +8,7 @@
 #include "../robot/Car.hpp"
 #include "OdomPlugin.hpp"
 
-// This is needed or the matrices won't print
+// This is needed to make matrices print
 using namespace BLA;
 
 OdomPlugin::OdomPlugin (Car &car) :
@@ -25,19 +25,19 @@ bool OdomPlugin::setup ()
     state =
     { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 
-    // x, y, a, dx, dy, da
-    obs =
-    { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
-    time_update =
-    { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, //
-            0.0, 0.0, 0.0, 0.0, 1.0, 0.0, //
-            0.0, 0.0, 0.0, 0.0, 0.0, 1.0, //
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, //
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, //
-            0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+//    // x, y, a, dx, dy, da
+//    obs =
+//    { 0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
+//    time_update =
+//    { 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, //
+//            0.0, 0.0, 0.0, 0.0, 1.0, 0.0, //
+//            0.0, 0.0, 0.0, 0.0, 0.0, 1.0, //
+//            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, //
+//            0.0, 0.0, 0.0, 0.0, 0.0, 0.0, //
+//            0.0, 0.0, 0.0, 0.0, 0.0, 0.0 };
 
     t = millis();
-    return false;
+    return true;
 }
 
 int OdomPlugin::get_preferred_interval () const
@@ -47,19 +47,21 @@ int OdomPlugin::get_preferred_interval () const
 
 int OdomPlugin::get_expected_us () const
 {
-    return 1200;
+    return 400;
 }
 
 void OdomPlugin::cycle ()
 {
-    const long now = millis();
+    const unsigned long now = millis();
     dt = (now - t) * 0.001;
+    t = now;
 
     right_velocity = car.get_pid_plugin(MotorLocation::RIGHT_FRONT).get_measured_velocity();
     left_velocity = car.get_pid_plugin(MotorLocation::LEFT_FRONT).get_measured_velocity();
 
     // clockwise
-    const float angular_velocity = left_velocity - right_velocity;
+    // https://en.wikipedia.org/wiki/Differential_wheeled_robot
+    const float angular_velocity = (left_velocity - right_velocity) / 0.13;
 
     const BLA::Matrix<2> body_velocity =
     { (right_velocity + left_velocity) * 0.5, 0.0 };
@@ -67,20 +69,27 @@ void OdomPlugin::cycle ()
     const BLA::Matrix<2> world_velocity = body_2_world * body_velocity;
     const float dx = world_velocity(0);
     const float dy = world_velocity(1);
-    obs =
-    { state(0), state(1), state(2), dx, dy, angular_velocity };
+//    obs =
+//    { state(0), state(1), state(2), (state(3) + dx) * 0.5, (state(4) + dy) * 0.5, (state(5) + angular_velocity) * 0.5 };
+//
+//    state = (state + obs) * 0.5;
 
-    state = (state + obs) * 0.5;
+    // Combine with observed velocity values
+    state(3) = (state(3) + dx) * 0.5;
+    state(4) = (state(4) + dy) * 0.5;
+    state(5) = (state(5) + angular_velocity) * 0.5;
 
-    state = state + time_update * state * dt;
-
-    t = now;
+//    state = state + time_update * state * dt;
+    // Integrate velocity and add to position
+    state(0) = state(0) + state(3) * dt;
+    state(1) = state(1) + state(4) * dt;
+    state(2) = state(2) + state(5) * dt;
 }
 
 void OdomPlugin::trace ()
 {
     // PRINT RESULTS: measures and estimated state
-    Serial << "Odom State: " << state << " dt: " << dt << " Obs: " << obs << " rm: " << right_velocity << " lm: "
+    Serial << "Odom State: " << state << " dt: " << dt << " rm: " << right_velocity << " lm: "
             << left_velocity << " b2w" << body_2_world << "\n";
 }
 
