@@ -12,7 +12,7 @@
 using namespace BLA;
 
 OdomPlugin::OdomPlugin (Car &car) :
-        Plugin(PluginId::ODOM_PLUGIN), car(car), t(0)
+        Plugin(PluginId::ODOM_PLUGIN), car(car)
 {
 
 }
@@ -36,7 +36,7 @@ int OdomPlugin::get_preferred_interval () const
 
 int OdomPlugin::get_expected_us () const
 {
-    return 400;
+    return 450;
 }
 
 void OdomPlugin::cycle ()
@@ -50,16 +50,17 @@ void OdomPlugin::cycle ()
 
     // clockwise
     // https://en.wikipedia.org/wiki/Differential_wheeled_robot
-    const float angular_velocity = (left_velocity - right_velocity) / 0.13;
+    angular_velocity = (left_velocity - right_velocity) / 0.13;
+    body_velocity = (left_velocity + right_velocity) * 0.5;
 
-    const BLA::Matrix<2> body_velocity =
-    { (right_velocity + left_velocity) * 0.5, 0.0 };
-    update_transforms(state(2));
+    const float angle = state(2);
+
+    const float sin_angle = sin(angle);
+    const float cos_angle = cos(angle);
 
     // See https://en.wikipedia.org/wiki/Differential_wheeled_robot for a better formula
-    const BLA::Matrix<2> world_velocity = body_2_world * body_velocity;
-    const float dx = world_velocity(0);
-    const float dy = world_velocity(1);
+    const float dx = body_velocity * cos_angle;
+    const float dy = -body_velocity * sin_angle;
 
     // Combine with observed velocity values
     state(3) = (state(3) + dx) * 0.5;
@@ -75,18 +76,6 @@ void OdomPlugin::cycle ()
 void OdomPlugin::trace ()
 {
     // PRINT RESULTS: measures and estimated state
-    Serial << "Odom State: " << state << " dt: " << dt << " rm: " << right_velocity << " lm: "
-            << left_velocity << " b2w" << body_2_world << "\n";
-}
-
-void OdomPlugin::update_transforms (const float angle)
-{
-    const float sin_angle = sin(angle);
-    const float cos_angle = cos(angle);
-    // Counterclockwise
-    body_2_world =
-    { cos_angle, -sin_angle, sin_angle, cos_angle };
-    // Clockwise
-    world_2_body =
-    { cos_angle, sin_angle, -sin_angle, cos_angle };
+    Serial << "Odom State: " << state << " dt: " << dt << " rm: " << right_velocity << " lm: " << left_velocity
+            << " body velocity " << body_velocity << " angular velocity " << angular_velocity << "\n";
 }

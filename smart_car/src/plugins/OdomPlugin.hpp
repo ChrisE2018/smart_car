@@ -22,7 +22,6 @@ class OdomPlugin: public Plugin
         virtual int get_expected_us () const;
         void cycle () override;
         void trace () override;
-        void update_transforms (const float angle);
 
     private:
         Car &car;
@@ -30,10 +29,9 @@ class OdomPlugin: public Plugin
         float dt = 0;
         float right_velocity = 0;
         float left_velocity = 0;
+        float angular_velocity = 0;
+        float body_velocity = 0;
 
-        // x, y, angle, dx, dy, da
+        // x, y, angle, dx, dy, dangle
         BLA::Matrix<6> state;
-
-        BLA::Matrix<2, 2> body_2_world;
-        BLA::Matrix<2, 2> world_2_body;
 };
