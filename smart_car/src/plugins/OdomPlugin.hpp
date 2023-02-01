@@ -27,6 +27,8 @@ class OdomPlugin: public Plugin
         Car &car;
         unsigned long t = 0;
         float dt = 0;
+        float right_distance = 0;
+        float left_distance = 0;
         float right_velocity = 0;
         float left_velocity = 0;
         float angular_velocity = 0;

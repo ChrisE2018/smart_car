@@ -41,6 +41,11 @@ unsigned long PidPlugin::get_speed_counter () const
     return speed_counter;
 }
 
+float PidPlugin::get_measured_distance () const
+{
+    return speed_counter * count_to_meters;
+}
+
 float PidPlugin::get_desired_velocity () const
 {
     return desired_velocity;

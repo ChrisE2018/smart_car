@@ -20,6 +20,11 @@ static unsigned long speed_counter_left_front = 0;
 static unsigned long speed_counter_right_rear = 0;
 static unsigned long speed_counter_left_rear = 0;
 
+static unsigned long speed_counter_right_front_micros = 0;
+static unsigned long speed_counter_left_front_micros = 0;
+static unsigned long speed_counter_right_rear_micros = 0;
+static unsigned long speed_counter_left_rear_micros = 0;
+
 static unsigned long right_front_limit = 0;
 static unsigned long left_front_limit = 0;
 static unsigned long right_rear_limit = 0;
@@ -38,6 +43,7 @@ static int left_rear_value = 0;
 static void isr_right_front ()
 {
     speed_counter_right_front++;
+    speed_counter_right_front_micros = micros();
     // Limit value zero will never match since speed counter increments before comparison.
     if (speed_counter_right_front == right_front_limit)
     {
@@ -48,6 +54,7 @@ static void isr_right_front ()
 static void isr_left_front ()
 {
     speed_counter_left_front++;
+    speed_counter_left_front_micros = micros();
     // Limit value zero will never match since speed counter increments before comparison.
     if (speed_counter_left_front == left_front_limit)
     {
@@ -58,6 +65,7 @@ static void isr_left_front ()
 static void isr_right_rear ()
 {
     speed_counter_right_rear++;
+    speed_counter_right_rear_micros = micros();
     // Limit value zero will never match since speed counter increments before comparison.
     if (speed_counter_right_rear == right_rear_limit)
     {
@@ -68,6 +76,7 @@ static void isr_right_rear ()
 static void isr_left_rear ()
 {
     speed_counter_left_rear++;
+    speed_counter_left_rear_micros = micros();
     // Limit value zero will never match since speed counter increments before comparison.
     if (speed_counter_left_rear == left_rear_limit)
     {
@@ -95,6 +104,23 @@ unsigned long get_speed_counter_value (const MotorLocation location)
             return speed_counter_right_rear;
         case LEFT_REAR:
             return speed_counter_left_rear;
+        default:
+            return 0;
+    }
+}
+
+unsigned long get_speed_counter_micros (const MotorLocation location)
+{
+    switch (location)
+    {
+        case RIGHT_FRONT:
+            return speed_counter_right_front_micros;
+        case LEFT_FRONT:
+            return speed_counter_left_front_micros;
+        case RIGHT_REAR:
+            return speed_counter_right_rear_micros;
+        case LEFT_REAR:
+            return speed_counter_left_rear_micros;
         default:
             return 0;
     }

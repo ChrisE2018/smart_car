@@ -19,6 +19,7 @@ class PidPlugin: public Plugin
         friend std::ostream& operator<< (std::ostream &lhs, const PidPlugin &motor);
         MotorLocation get_location () const;
         unsigned long get_speed_counter () const;
+        float get_measured_distance () const;
         float get_desired_velocity () const;
         void set_desired_velocity (const float desired_velocity);
         float get_measured_velocity () const;
