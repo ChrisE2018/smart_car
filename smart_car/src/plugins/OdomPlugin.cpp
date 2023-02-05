@@ -90,3 +90,8 @@ void OdomPlugin::trace ()
     Serial << "Odom State: " << state << " dt: " << dt << " rm: " << right_velocity << " lm: " << left_velocity
             << " body velocity " << body_velocity << " angular velocity " << angular_velocity << "\n";
 }
+
+void OdomPlugin::get_measured_state (State &result) const
+{
+    result.set(state(0), state(1), state(2), state(3), state(4), state(5));
+}

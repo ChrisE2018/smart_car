@@ -10,6 +10,7 @@
 #include <Arduino.h>
 #include <BasicLinearAlgebra.h>
 #include "Plugin.hpp"
+#include "../robot/State.hpp"
 
 class Car;
 
@@ -22,6 +23,7 @@ class OdomPlugin: public Plugin
         virtual int get_expected_us () const;
         void cycle () override;
         void trace () override;
+        void get_measured_state(State &result) const;
 
     private:
         Car &car;

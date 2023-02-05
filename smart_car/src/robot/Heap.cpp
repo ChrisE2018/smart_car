@@ -40,17 +40,25 @@ void get_heap_state (char *buffer, size_t size)
 unsigned long get_free_ram ()
 {
     char *const heap_var = (char*) malloc(sizeof(char));
-    const unsigned long heap_address = (unsigned long) heap_var;
-    free(heap_var);
+    if (heap_var != nullptr)
+    {
+        const unsigned long heap_address = (unsigned long) heap_var;
+        free(heap_var);
 
-    return SP - heap_address;
+        return SP - heap_address;
+    }
+    return 0;
 }
 
 unsigned long get_heap_address ()
 {
     char *const heap_var = (char*) malloc(sizeof(char));
-    const unsigned long heap_address = (unsigned long) heap_var;
-    free(heap_var);
-    return heap_address;
+    if (heap_var != nullptr)
+    {
+        const unsigned long heap_address = (unsigned long) heap_var;
+        free(heap_var);
+        return heap_address;
+    }
+    return 0;
 }
 

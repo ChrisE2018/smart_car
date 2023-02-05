@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2023 by Christopher Eliot.
+ *
  * board_pins.hpp
  *
  *  Created on: Jan 17, 2023

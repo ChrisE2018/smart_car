@@ -8,9 +8,8 @@
 #include "../robot/Car.hpp"
 #include "../robot/robot_math.hpp"
 #include "../robot/speed_counter.hpp"
+#include "../robot/State.hpp"
 #include "GoalPlugin.hpp"
-#include "KalmanPlugin.hpp"
-#include "MpuPlugin.hpp"
 #include "smart_car.hpp"
 #include "Logger.hpp"
 
@@ -56,8 +55,9 @@ void GoalPlugin::cycle ()
     const int state = get_state();
     if (state != DISABLE)
     {
-//        const float measured_angle = car.get_kalman_plugin()->get_angle();
-        const float measured_angle = car.get_mpu_plugin()->get_yaw();
+        State measured_state;
+        car.get_measured_state(measured_state);
+        const float measured_angle = measured_state.get_angle();
 
         if (!is_overflow(measured_angle))
         {
@@ -67,8 +67,8 @@ void GoalPlugin::cycle ()
             }
             else if (state == ADJUST_POSITION)
             {
-                const float measured_x = car.get_kalman_plugin()->get_x();
-                const float measured_y = car.get_kalman_plugin()->get_y();
+                const float measured_x = measured_state.get_x();
+                const float measured_y = measured_state.get_y();
                 position_cycle(normalize_angle(measured_angle), measured_x, measured_y, goal_x, goal_y);
             }
         }

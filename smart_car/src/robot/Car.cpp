@@ -65,8 +65,8 @@ Car::~Car ()
 
 std::ostream& operator<< (std::ostream &lhs, const Car &car)
 {
-    return lhs << F("#[car ") << car.mode << F(" ") << car.kalman_plugin->get_x() << F(", ") << car.kalman_plugin->get_y()
-            << F(" ang ") << car.kalman_plugin->get_angle() << F("]");
+    return lhs << F("#[car ") << car.mode << F(" ") << car.kalman_plugin->get_x() << F(", ")
+            << car.kalman_plugin->get_y() << F(" ang ") << car.kalman_plugin->get_angle() << F("]");
 }
 
 void Car::setup ()
@@ -232,6 +232,16 @@ float Car::get_measured_velocity (const MotorLocation motor) const
 float Car::get_cumulative_velocity_error (const MotorLocation motor) const
 {
     return pid_controls[static_cast<int>(motor)].get_cumulative_velocity_error();
+}
+
+void Car::get_measured_state (State &result) const
+{
+    odom_plugin->get_measured_state(result);
+}
+
+void Car::get_desired_state (State &result) const
+{
+
 }
 
 ClockPlugin* Car::get_clock_plugin () const

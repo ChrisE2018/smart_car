@@ -31,7 +31,7 @@ class GoalPlugin : public Plugin
          * D = diagonal wheel distance
          * a^2 + b^2 == D^2
          * 290 = D^2
-         * D = 17 // cm
+         * D = 17 cm == 0.17 meters
          * Assume it is a circle
          * P = 53.4 cm = perimeter = pi * D = distance wheels move in one full circle in place
          */

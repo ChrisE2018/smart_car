@@ -15,6 +15,7 @@
 #include "Mode.hpp"
 #include "Parser.hpp"
 #include "board_pins.hpp"
+#include "State.hpp"
 
 class ClockPlugin;
 class DemoPlugin;
@@ -53,6 +54,9 @@ class Car: public Executor
         void set_desired_velocity (const MotorLocation motor, const float velocity);
         float get_measured_velocity (const MotorLocation motor) const;
         float get_cumulative_velocity_error (const MotorLocation motor) const;
+
+        void get_measured_state(State &result) const;
+        void get_desired_state(State &result) const;
 
         ClockPlugin* get_clock_plugin () const;
         DrivePlugin* get_forward_plugin () const;
@@ -136,3 +140,4 @@ class Car: public Executor
         Plugin* get_plugin (const PluginId id) const;
 };
 
+extern Car *car;

@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2023 by Christopher Eliot.
+ *
  * car_handler.cpp
  *
  *  Created on: Jan 13, 2023
@@ -167,7 +169,7 @@ void Car::execute_command (const std::vector<String> &words)
             {
                 const float average = total_micros / cycle_count;
                 total_average += average;
-                logger.info(__LINE__) << plugin << F(" average ") << average << F(" / ")
+                logger.info(__LINE__) << plugin << F(" size ") << sizeof(*plugin) << F(" average ") << average << F(" / ")
                         << plugin->get_expected_us() << F(" us expected") << std::endl;
             }
             else

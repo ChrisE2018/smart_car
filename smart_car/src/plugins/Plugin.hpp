@@ -73,9 +73,9 @@ class Plugin
     private:
         static int INSTANCE;
         const PluginId id;
+        bool enable_trace = false;
         const int instance;
         int state = DISABLE;
-        bool enable_trace = false;
         unsigned long cycle_count = 0;
         unsigned long overrun_count = 0;
         unsigned long cycle_start_micros = 0;

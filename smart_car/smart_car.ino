@@ -24,7 +24,7 @@ std::ohserialstream cout(Serial);
 // tx3 14 blue to 22 (near side)
 std::ohserialstream cout1(Serial3);
 
-static Car *car;
+Car *car;
 static unsigned long cycle_count = 0;
 
 logging::TimestampFormatter *formatter = nullptr;
