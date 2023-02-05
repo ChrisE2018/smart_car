@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2023 by Christopher Eliot.
+ *
  * PidPlugin.cpp
  *
  *  Created on: Jan 17, 2023

@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2023 by Christopher Eliot.
+ *
  * MpuPlugin.hpp
  *
  *  Created on: Dec 31, 2022

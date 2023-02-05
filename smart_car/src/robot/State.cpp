@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2023 by Christopher Eliot.
+ *
  * State.cpp
  *
  *  Created on: Feb 2, 2023

@@ -1,5 +1,7 @@
 /*
- * Enum.hpp
+ * Copyright (c) 2023 by Christopher Eliot.
+ *
+ * Mode.hpp
  *
  *  Created on: Dec 26, 2022
  *      Author: cre

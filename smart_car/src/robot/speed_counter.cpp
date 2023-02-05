@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2023 by Christopher Eliot.
+ *
  * speed_counter.cpp
  *
  *  Created on: Jan 9, 2023

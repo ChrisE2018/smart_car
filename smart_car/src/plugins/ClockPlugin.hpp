@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2023 by Christopher Eliot.
+ *
  * ClockPlugin.hpp
  *
  *  Created on: Dec 28, 2022

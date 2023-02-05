@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2023 by Christopher Eliot.
+ *
  * Executor.cpp
  *
  *  Created on: Dec 23, 2022

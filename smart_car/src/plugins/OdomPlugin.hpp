@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2023 by Christopher Eliot.
+ *
  * OdomPlugin.hpp
  *
  *  Created on: Dec 31, 2022

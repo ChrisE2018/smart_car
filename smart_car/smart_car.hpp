@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2023 by Christopher Eliot.
+ *
  * smart_car.hpp
  *
  *  Created on: Dec 27, 2022

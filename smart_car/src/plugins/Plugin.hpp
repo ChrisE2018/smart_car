@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2023 by Christopher Eliot.
+ *
  * Plugin.hpp
  *
  *  Created on: Dec 23, 2022

@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2023 by Christopher Eliot.
+ *
  * GoalPlugin.hpp
  *
  *  Created on: Jan 1, 2023

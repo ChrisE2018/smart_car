@@ -1,4 +1,6 @@
 /*
+ * Copyright (c) 2023 by Christopher Eliot.
+ *
  * WallMode.cpp
  *
  *  Created on: Dec 26, 2022

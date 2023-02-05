@@ -1,3 +1,7 @@
+/*
+ * Copyright (c) 2023 by Christopher Eliot.
+ */
+
 #include "Arduino.h"
 
 #include "Logger.hpp"

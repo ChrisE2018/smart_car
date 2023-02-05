@@ -1,5 +1,7 @@
 /*
- * math.cpp
+ * Copyright (c) 2023 by Christopher Eliot.
+ *
+ * robot_math.cpp
  *
  *  Created on: Jan 1, 2023
  *      Author: cre
