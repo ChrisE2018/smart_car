@@ -28,6 +28,7 @@ std::ohserialstream cout(Serial);
 // tx3 14 blue to 22 (near side)
 std::ohserialstream cout1(Serial3);
 
+ClockPlugin *clock_plugin;
 Car *car;
 static unsigned long cycle_count = 0;
 
@@ -43,6 +44,7 @@ void setup ()
     Serial.begin(115200);
     Serial.println(F("Smart car"));
     Serial3.begin(9600);
+    clock_plugin = new ClockPlugin();
     car = new Car();
     logging::TimeSource *const time_source = car->get_clock_plugin();
     formatter = new logging::TimestampFormatter(time_source);

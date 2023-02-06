@@ -11,7 +11,6 @@
 #include "SerialAppender.hpp"
 #include "smart_car.hpp"
 
-#include "../plugins/ClockPlugin.hpp"
 #include "../plugins/DrivePlugin.hpp"
 #include "../plugins/GoalPlugin.hpp"
 #include "../plugins/KalmanPlugin.hpp"
@@ -28,8 +27,7 @@ extern logging::SerialAppender *usb_appender;
 extern logging::SerialAppender *bluetooth_appender;
 
 Car::Car () :
-        logger(__FILE__, logging::Level::debug), serial_parser(Serial), bluetooth_parser(Serial3), clock_plugin(
-                new ClockPlugin()), forward_plugin(
+        logger(__FILE__, logging::Level::debug), serial_parser(Serial), bluetooth_parser(Serial3), forward_plugin(
                 new DrivePlugin(PluginId::FORWARD_PLUGIN, *this, 500, MotorDirection::FORWARD,
                         MotorDirection::FORWARD)), goal_plugin(new GoalPlugin(*this)), mpu_plugin(new MpuPlugin()), kalman_plugin(
                 new KalmanPlugin(*this)), odom_plugin(new OdomPlugin(*this)), reverse_plugin(

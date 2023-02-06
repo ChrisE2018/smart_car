@@ -14,12 +14,12 @@
 #include "Logger.hpp"
 #include "../plugins/MotorPlugin.hpp"
 #include "../plugins/PidPlugin.hpp"
+#include "../plugins/ClockPlugin.hpp"
 #include "Mode.hpp"
 #include "Parser.hpp"
 #include "board_pins.hpp"
 #include "State.hpp"
 
-class ClockPlugin;
 class DemoPlugin;
 class DrivePlugin;
 class GoalPlugin;
@@ -30,6 +30,8 @@ class UltrasoundPlugin;
 class WallPlugin;
 
 const int MOTOR_COUNT = 4;
+
+extern ClockPlugin *clock_plugin;
 
 class Car: public Executor
 {
@@ -82,7 +84,6 @@ class Car: public Executor
         Parser serial_parser;
         Parser bluetooth_parser;
 
-        ClockPlugin *const clock_plugin;
         DrivePlugin *const forward_plugin;
         GoalPlugin *const goal_plugin;
         MpuPlugin *const mpu_plugin;
